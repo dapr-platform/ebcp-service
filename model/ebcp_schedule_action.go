@@ -26,7 +26,7 @@ Table: o_ebcp_schedule_action
 
 JSON Sample
 -------------------------------------
-{    "id": "frFcKsIWSIGseciHEAMyZYjZM",    "action_type": 68,    "target_id": "TIAKsdYqcPbRCyneTXbUjTipJ",    "operation_details": "OIelrGUygwXfDewRAcxWngUCf"}
+{    "id": "WlhgTWwFxqDxvCXyLCeEEqNZM",    "action_type": 87,    "target_id": "tthPqXcEqrfOKwYXJWIKGRIZd",    "operation_details": "sUgUhaVKjsQLhxBPwsVAHvpoD"}
 
 
 

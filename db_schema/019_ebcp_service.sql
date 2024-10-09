@@ -56,7 +56,8 @@ CREATE TABLE o_ebcp_exhibition_room(
                                        exhibition_hall_id VARCHAR(32) NOT NULL, -- 所属展馆ID
                                        status INTEGER NOT NULL, -- 展厅状态（1: 正常, 2: 未使用, 3: 维修）
                                        remarks VARCHAR(255), -- 备注
-                                       PRIMARY KEY (id)
+                                       PRIMARY KEY (id),
+                                       FOREIGN KEY (exhibition_hall_id) REFERENCES o_ebcp_exhibition_hall(id)
 );
 
 COMMENT ON TABLE o_ebcp_exhibition_room IS '展厅表';
@@ -102,7 +103,7 @@ CREATE TABLE o_ebcp_exhibition_item(
                                        updated_by VARCHAR(32) NOT NULL,
                                        updated_time TIMESTAMP NOT NULL,
                                        name VARCHAR(255) NOT NULL, -- 展项名称
-                                       exhibition_hall_id VARCHAR(32) NOT NULL, -- 所属展馆ID
+                                       exhibition_area_id VARCHAR(32) NOT NULL, -- 所属展区ID
                                        type VARCHAR(50), -- 展项类型（多媒体、静态）
                                        status INTEGER NOT NULL, -- 展项状态（1: 启动, 2: 停止, 3: 故障）
                                        remarks VARCHAR(255), -- 备注
@@ -116,7 +117,7 @@ COMMENT ON COLUMN o_ebcp_exhibition_item.created_time IS '创建时间';
 COMMENT ON COLUMN o_ebcp_exhibition_item.updated_by IS '更新人';
 COMMENT ON COLUMN o_ebcp_exhibition_item.updated_time IS '更新时间';
 COMMENT ON COLUMN o_ebcp_exhibition_item.name IS '展项名称';
-COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_hall_id IS '所属展馆ID';
+COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_area_id IS '所属展区ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.type IS '展项类型';
 COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '展项状态';
 COMMENT ON COLUMN o_ebcp_exhibition_item.remarks IS '备注';
@@ -147,7 +148,6 @@ COMMENT ON COLUMN o_ebcp_schedule_task.action_id IS '关联动作表';
 COMMENT ON COLUMN o_ebcp_schedule_task.status IS '调度任务状态';
 COMMENT ON COLUMN o_ebcp_schedule_task.remarks IS '备注';
 
-
 CREATE TABLE o_ebcp_schedule_time(
                                      id VARCHAR(32) NOT NULL, -- 时间配置唯一标识
                                      type INTEGER NOT NULL, -- 时间类型 (1: 节假日, 2: 工作日, 3: 闭馆日)
@@ -175,20 +175,128 @@ COMMENT ON COLUMN o_ebcp_schedule_action.id IS '动作唯一标识';
 COMMENT ON COLUMN o_ebcp_schedule_action.action_type IS '动作类型';
 COMMENT ON COLUMN o_ebcp_schedule_action.target_id IS '目标设备或展项';
 COMMENT ON COLUMN o_ebcp_schedule_action.operation_details IS '操作细节';
+
+CREATE VIEW v_ebcp_exhibition_hall_details AS
+SELECT 
+    eh.id AS id,
+    eh.name AS hall_name,
+    eh.description AS hall_description,
+    json_agg(
+        json_build_object(
+            'room_id', er.id,
+            'room_name', er.name,
+            'room_location', er.location,
+            'room_status', er.status,
+            'areas', (
+                SELECT json_agg(
+                    json_build_object(
+                        'area_id', ea.id,
+                        'area_name', ea.name,
+                        'current_exhibition_name', ea.current_exhibition_name
+                    )
+                )
+                FROM o_ebcp_exhibition_area ea
+                WHERE ea.exhibition_room_id = er.id
+            )
+        )
+    ) AS rooms
+FROM 
+    o_ebcp_exhibition_hall eh
+LEFT JOIN 
+    o_ebcp_exhibition_room er ON er.exhibition_hall_id = eh.id
+GROUP BY 
+    eh.id, eh.name, eh.description;
+
+COMMENT ON VIEW v_ebcp_exhibition_hall_details IS '展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）';
+
+CREATE VIEW v_ebcp_exhibition_area_details AS
+SELECT 
+    ea.id AS id,
+    ea.name AS area_name,
+    ea.current_exhibition_name,
+    ea.exhibition_room_id,
+    json_agg(
+        json_build_object(
+            'item_id', ei.id,
+            'item_name', ei.name,
+            'item_status', ei.status,
+            'item_type', ei.type,
+            'item_remarks', ei.remarks
+        )
+    ) AS exhibition_items
+FROM 
+    o_ebcp_exhibition_area ea
+LEFT JOIN 
+    o_ebcp_exhibition_item ei ON ei.exhibition_area_id = ea.id
+GROUP BY 
+    ea.id, ea.name, ea.current_exhibition_name, ea.exhibition_room_id;
+
+COMMENT ON VIEW v_ebcp_exhibition_area_details IS '展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注';
+
+-- Insert sample data for o_ebcp_device
+INSERT INTO o_ebcp_device (id, created_by, created_time, updated_by, updated_time, name, type, control_interface, status)
+VALUES 
+('DEV001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Camera 1', 1, 'HTTP', 1),
+('DEV002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Projector 1', 2, 'RS232', 1),
+('DEV003', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Light 1', 3, 'DMX', 1);
+
+-- Insert sample data for o_ebcp_exhibition_hall
+INSERT INTO o_ebcp_exhibition_hall (id, created_by, created_time, updated_by, updated_time, name, description)
+VALUES 
+('HALL001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Main Exhibition Hall', 'Our primary exhibition space'),
+('HALL002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Science Wing', 'Dedicated to scientific exhibits');
+
+-- Insert sample data for o_ebcp_exhibition_room
+INSERT INTO o_ebcp_exhibition_room (id, created_by, created_time, updated_by, updated_time, name, location, status, exhibition_hall_id, remarks)
+VALUES 
+('ROOM001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Dinosaur Room', 'First Floor', 1, 'HALL001', 'Features prehistoric exhibits'),
+('ROOM002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Space Exploration', 'Second Floor', 1, 'HALL002', 'Showcases space technology');
+
+-- Insert sample data for o_ebcp_exhibition_area
+INSERT INTO o_ebcp_exhibition_area (id, created_by, created_time, updated_by, updated_time, name, current_exhibition_name, exhibition_room_id, remarks)
+VALUES 
+('AREA001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Jurassic Period', 'Dinosaurs of the Jurassic', 'ROOM001', 'Focus on Jurassic era dinosaurs'),
+('AREA002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Mars Exploration', 'Journey to the Red Planet', 'ROOM002', 'Interactive Mars rover display');
+
+-- Insert sample data for o_ebcp_exhibition_item
+INSERT INTO o_ebcp_exhibition_item (id, created_by, created_time, updated_by, updated_time, name, status, type, remarks, exhibition_area_id)
+VALUES 
+('ITEM001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'T-Rex Skeleton', 1, 'static', 'Life-size replica', 'AREA001'),
+('ITEM002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Mars Rover Model', 1, 'interactive', 'Interactive display', 'AREA002');
+
+-- Insert sample data for o_ebcp_schedule_task
+INSERT INTO o_ebcp_schedule_task (id, created_by, created_time, updated_by, updated_time, name, time_setting_id, action_id, status, remarks)
+VALUES 
+('TASK001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Daily Opening', 'TIME001', 'ACTION001', 1, 'Tasks for opening the exhibition'),
+('TASK002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Daily Closing', 'TIME002', 'ACTION002', 1, 'Tasks for closing the exhibition');
+
+-- Insert sample data for o_ebcp_schedule_time
+INSERT INTO o_ebcp_schedule_time (id, type, specific_time, repeat_pattern)
+VALUES 
+('TIME001', 2, NULL, 'DAILY'),
+('TIME002', 2, NULL, 'DAILY');
+
+-- Insert sample data for o_ebcp_schedule_action
+INSERT INTO o_ebcp_schedule_action (id, action_type, target_id, operation_details)
+VALUES 
+('ACTION001', 1, 'DEV001', 'start_recording'),
+('ACTION002', 2, 'DEV002', 'power_off');
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
-DROP TABLE IF EXISTS o_ebcp_device cascade ;
-DROP TABLE IF EXISTS o_ebcp_exhibition_hall cascade ;
-DROP TABLE IF EXISTS o_ebcp_exhibition_room cascade ;
-DROP TABLE IF EXISTS o_ebcp_exhibition_area cascade ;
-DROP TABLE IF EXISTS o_ebcp_exhibition_item cascade ;
-DROP TABLE IF EXISTS o_ebcp_schedule_task cascade ;
-DROP TABLE IF EXISTS o_ebcp_schedule_time cascade ;
-DROP TABLE IF EXISTS o_ebcp_schedule_action cascade ;
+DROP VIEW IF EXISTS v_ebcp_exhibition_hall_details CASCADE;
+DROP VIEW IF EXISTS v_ebcp_exhibition_area_details CASCADE;
 
-
+DROP TABLE IF EXISTS o_ebcp_exhibition_item CASCADE;
+DROP TABLE IF EXISTS o_ebcp_exhibition_area CASCADE;
+DROP TABLE IF EXISTS o_ebcp_exhibition_room CASCADE;
+DROP TABLE IF EXISTS o_ebcp_exhibition_hall CASCADE;
+DROP TABLE IF EXISTS o_ebcp_device CASCADE;
+DROP TABLE IF EXISTS o_ebcp_schedule_task CASCADE;
+DROP TABLE IF EXISTS o_ebcp_schedule_time CASCADE;
+DROP TABLE IF EXISTS o_ebcp_schedule_action CASCADE;
 
 -- +goose StatementEnd

@@ -26,7 +26,7 @@ Table: o_ebcp_schedule_time
 
 JSON Sample
 -------------------------------------
-{    "id": "LkIXRcIHyPQJApoKinOTSAfdX",    "type": 1,    "specific_time": 78,    "repeat_pattern": "CncSrFlTSFXQMGpgCxYuEBRrD"}
+{    "id": "mlutdnvkBbWuAFHMujmLJmZNh",    "type": 88,    "specific_time": 10,    "repeat_pattern": "vACGWpZKqCtNRuXLghMretEbk"}
 
 
 

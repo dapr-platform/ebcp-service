@@ -24,7 +24,7 @@ Table: o_ebcp_exhibition_item
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] exhibition_hall_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] exhibition_area_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] type                                           VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
 [ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 9] remarks                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
@@ -32,7 +32,7 @@ Table: o_ebcp_exhibition_item
 
 JSON Sample
 -------------------------------------
-{    "id": "NtsGROonJfVnluVOMKyUBwPhx",    "created_by": "rqZrLIPKEohSovbqvOKgQnsZW",    "created_time": 86,    "updated_by": "pvcUqtfOcjFLCZgKTdeKeYXmW",    "updated_time": 68,    "name": "qDisESIJBAUyhBhILBcfoefRJ",    "exhibition_hall_id": "EvDGZvVPbxoATNQmbjcXBwyVK",    "type": "KYELobiwBiXUSXvJdSqMcahjQ",    "status": 27,    "remarks": "KxtYEMKcedKiKEfuAPNeZvCgL"}
+{    "id": "VKMNmByfEGyYSOagyjVbjbtym",    "created_by": "VlIAMmEiZHnClpLWIxblwPnYW",    "created_time": 49,    "updated_by": "MxBBKQOKnNtDEJiPnOjtOuSQt",    "updated_time": 43,    "name": "nhfLMHZONcGOAefkrleDZQFkZ",    "exhibition_area_id": "xeLrXWwvISATkSfQQXDDXMsFR",    "type": "jolSPrvnYkJFoLNDRbwjeHbki",    "status": 70,    "remarks": "bqxsuIkaBLaNUFTPVuoxnIBLS"}
 
 
 
@@ -51,7 +51,7 @@ var (
 
 	Ebcp_exhibition_item_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_item_FIELD_NAME_exhibition_hall_id = "exhibition_hall_id"
+	Ebcp_exhibition_item_FIELD_NAME_exhibition_area_id = "exhibition_area_id"
 
 	Ebcp_exhibition_item_FIELD_NAME_type = "type"
 
@@ -68,7 +68,7 @@ type Ebcp_exhibition_item struct {
 	UpdatedBy        string           `json:"updated_by"`         //更新人
 	UpdatedTime      common.LocalTime `json:"updated_time"`       //更新时间
 	Name             string           `json:"name"`               //展项名称
-	ExhibitionHallID string           `json:"exhibition_hall_id"` //所属展馆ID
+	ExhibitionAreaID string           `json:"exhibition_area_id"` //所属展区ID
 	Type             string           `json:"type"`               //展项类型
 	Status           int32            `json:"status"`             //展项状态
 	Remarks          string           `json:"remarks"`            //备注
@@ -207,8 +207,8 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "exhibition_hall_id",
-			Comment:            `所属展馆ID`,
+			Name:               "exhibition_area_id",
+			Comment:            `所属展区ID`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -218,10 +218,10 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ExhibitionHallID",
+			GoFieldName:        "ExhibitionAreaID",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_hall_id",
-			ProtobufFieldName:  "exhibition_hall_id",
+			JSONFieldName:      "exhibition_area_id",
+			ProtobufFieldName:  "exhibition_area_id",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
