@@ -27,7 +27,7 @@ Table: v_ebcp_exhibition_area_details
 
 JSON Sample
 -------------------------------------
-{    "id": "qFPyHaxHHZJiTylSfJuJCqfno",    "area_name": "PZSeOBivytADCvMdaIhuMaQEU",    "current_exhibition_name": "ioWRRjkHARaLxEggNDTWXAGCT",    "exhibition_room_id": "geCwnILQsOeNjbETyOjaJsSWg",    "exhibition_items": 72}
+{    "id": "bVPUBUlASQIKpOJZhBprIrqIF",    "area_name": "PwgwctDmNYLFwbwFfyoGbIOUR",    "current_exhibition_name": "HZFCJEpbDLcOpMgHXSrHKtYes",    "exhibition_room_id": "GtiPKsxVWnTWSOTIcWCrOqnqf",    "exhibition_items": 22}
 
 
 Comments

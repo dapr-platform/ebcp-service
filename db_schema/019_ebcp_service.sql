@@ -81,6 +81,8 @@ CREATE TABLE o_ebcp_exhibition_area(
                                        name VARCHAR(255) NOT NULL, -- 展区名称
                                        exhibition_room_id VARCHAR(32) NOT NULL, -- 所属展厅ID
                                        current_exhibition_name VARCHAR(255), -- 当前展览名称
+                                       current_exhibition_start_time TIMESTAMP, -- 当前展览开始时间
+                                       current_exhibition_end_time TIMESTAMP, -- 当前展览结束时间
                                        remarks VARCHAR(255), -- 备注
                                        PRIMARY KEY (id)
 );
@@ -94,6 +96,8 @@ COMMENT ON COLUMN o_ebcp_exhibition_area.updated_time IS '更新时间';
 COMMENT ON COLUMN o_ebcp_exhibition_area.name IS '展区名称';
 COMMENT ON COLUMN o_ebcp_exhibition_area.exhibition_room_id IS '所属展厅ID';
 COMMENT ON COLUMN o_ebcp_exhibition_area.current_exhibition_name IS '当前展览名称';
+COMMENT ON COLUMN o_ebcp_exhibition_area.current_exhibition_start_time IS '当前展览开始时间';
+COMMENT ON COLUMN o_ebcp_exhibition_area.current_exhibition_end_time IS '当前展览结束时间';
 COMMENT ON COLUMN o_ebcp_exhibition_area.remarks IS '备注';
 
 CREATE TABLE o_ebcp_exhibition_item(
@@ -104,7 +108,7 @@ CREATE TABLE o_ebcp_exhibition_item(
                                        updated_time TIMESTAMP NOT NULL,
                                        name VARCHAR(255) NOT NULL, -- 展项名称
                                        exhibition_area_id VARCHAR(32) NOT NULL, -- 所属展区ID
-                                       type VARCHAR(50), -- 展项类型（多媒体、静态）
+                                       type VARCHAR(50), -- 展项类型（多媒体、static）
                                        status INTEGER NOT NULL, -- 展项状态（1: 启动, 2: 停止, 3: 故障）
                                        remarks VARCHAR(255), -- 备注
                                        PRIMARY KEY (id)
@@ -214,7 +218,10 @@ SELECT
     ea.id AS id,
     ea.name AS area_name,
     ea.current_exhibition_name,
+    ea.current_exhibition_start_time,
+    ea.current_exhibition_end_time,
     ea.exhibition_room_id,
+    er.location,
     json_agg(
         json_build_object(
             'item_id', ei.id,
@@ -228,59 +235,80 @@ FROM
     o_ebcp_exhibition_area ea
 LEFT JOIN 
     o_ebcp_exhibition_item ei ON ei.exhibition_area_id = ea.id
+LEFT JOIN 
+    o_ebcp_exhibition_room er ON er.id = ea.exhibition_room_id
 GROUP BY 
-    ea.id, ea.name, ea.current_exhibition_name, ea.exhibition_room_id;
+    ea.id, ea.name, ea.current_exhibition_name, ea.exhibition_room_id,ea.current_exhibition_start_time,ea.current_exhibition_end_time, er.location;
 
 COMMENT ON VIEW v_ebcp_exhibition_area_details IS '展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注';
 
--- Insert sample data for o_ebcp_device
-INSERT INTO o_ebcp_device (id, created_by, created_time, updated_by, updated_time, name, type, control_interface, status)
-VALUES 
-('DEV001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Camera 1', 1, 'HTTP', 1),
-('DEV002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Projector 1', 2, 'RS232', 1),
-('DEV003', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Light 1', 3, 'DMX', 1);
-
--- Insert sample data for o_ebcp_exhibition_hall
+-- 插入展馆数据
 INSERT INTO o_ebcp_exhibition_hall (id, created_by, created_time, updated_by, updated_time, name, description)
-VALUES 
-('HALL001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Main Exhibition Hall', 'Our primary exhibition space'),
-('HALL002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Science Wing', 'Dedicated to scientific exhibits');
+VALUES ('EH001', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '中国革命军事博物馆', '展示中国革命军事历史的重要场所');
 
--- Insert sample data for o_ebcp_exhibition_room
-INSERT INTO o_ebcp_exhibition_room (id, created_by, created_time, updated_by, updated_time, name, location, status, exhibition_hall_id, remarks)
+-- 插入展厅数据
+INSERT INTO o_ebcp_exhibition_room (id, created_by, created_time, updated_by, updated_time, name, location, exhibition_hall_id, status, remarks)
 VALUES 
-('ROOM001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Dinosaur Room', 'First Floor', 1, 'HALL001', 'Features prehistoric exhibits'),
-('ROOM002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Space Exploration', 'Second Floor', 1, 'HALL002', 'Showcases space technology');
+('ER001', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '第一展厅', '博物馆东翼', 'EH001', 1, '革命战争史'),
+('ER002', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '第二展厅', '博物馆西翼', 'EH001', 1, '现代国防建设');
 
--- Insert sample data for o_ebcp_exhibition_area
-INSERT INTO o_ebcp_exhibition_area (id, created_by, created_time, updated_by, updated_time, name, current_exhibition_name, exhibition_room_id, remarks)
+-- 插入展区数据
+INSERT INTO o_ebcp_exhibition_area (id, created_by, created_time, updated_by, updated_time, name, exhibition_room_id, current_exhibition_name, current_exhibition_start_time, current_exhibition_end_time, remarks)
 VALUES 
-('AREA001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Jurassic Period', 'Dinosaurs of the Jurassic', 'ROOM001', 'Focus on Jurassic era dinosaurs'),
-('AREA002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Mars Exploration', 'Journey to the Red Planet', 'ROOM002', 'Interactive Mars rover display');
+('EA001', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '一展区', 'ER001', '鸦片战争与太平天国运动', '2023-01-01', '2023-12-31', '19世纪中期重大历史事件'),
+('EA002', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '二展区', 'ER001', '辛亥革命与北伐战争', '2023-01-01', '2023-12-31', '20世纪初期重要革命'),
+('EA003', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '三展区', 'ER001', '抗日战争', '2023-01-01', '2023-12-31', '中国人民抗击日本侵略'),
+('EA004', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '一展区', 'ER002', '解放战争', '2023-01-01', '2023-12-31', '国共内战时期'),
+('EA005', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '二展区', 'ER002', '抗美援朝', '2023-01-01', '2023-12-31', '保家卫国的伟大战争'),
+('EA006', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '三展区', 'ER002', '现代化国防建设', '2023-01-01', '2023-12-31', '中国国防现代化进程');
 
--- Insert sample data for o_ebcp_exhibition_item
-INSERT INTO o_ebcp_exhibition_item (id, created_by, created_time, updated_by, updated_time, name, status, type, remarks, exhibition_area_id)
+-- 插入展项数据
+INSERT INTO o_ebcp_exhibition_item (id, created_by, created_time, updated_by, updated_time, name, exhibition_area_id, type, status, remarks)
 VALUES 
-('ITEM001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'T-Rex Skeleton', 1, 'static', 'Life-size replica', 'AREA001'),
-('ITEM002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Mars Rover Model', 1, 'interactive', 'Interactive display', 'AREA002');
+-- 第一展厅一展区
+('EI001', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '林则徐销烟', 'EA001', 'static', 1, '鸦片战争时期重要事件'),
+('EI002', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '虎门销烟多媒体展示', 'EA001', 'interactive', 1, '虎门销烟场景重现'),
+('EI003', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '第一次鸦片战争地图', 'EA001', 'static', 1, '战争进程地图'),
+('EI004', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '太平天国运动领袖介绍', 'EA001', 'static', 1, '洪秀全等人物介绍'),
+('EI005', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '天京事变影像资料', 'EA001', 'interactive', 1, '太平天国内部冲突'),
 
--- Insert sample data for o_ebcp_schedule_task
-INSERT INTO o_ebcp_schedule_task (id, created_by, created_time, updated_by, updated_time, name, time_setting_id, action_id, status, remarks)
-VALUES 
-('TASK001', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Daily Opening', 'TIME001', 'ACTION001', 1, 'Tasks for opening the exhibition'),
-('TASK002', 'SYSTEM', CURRENT_TIMESTAMP, 'SYSTEM', CURRENT_TIMESTAMP, 'Daily Closing', 'TIME002', 'ACTION002', 1, 'Tasks for closing the exhibition');
+-- 第一展厅二展区
+('EI006', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '武昌起义纪念碑', 'EA002', 'static', 1, '辛亥革命起点'),
+('EI007', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '北伐战争路线图', 'EA002', 'interactive', 1, '互动式战争进程展示'),
+('EI008', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '孙中山先生遗物', 'EA002', 'static', 1, '革命先驱生平展示'),
+('EI009', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '黄埔军校成立影像', 'EA002', 'interactive', 1, '军事教育发展历程'),
+('EI010', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '北伐军誓师大会场景', 'EA002', 'static', 1, '北伐战争重要时刻'),
 
--- Insert sample data for o_ebcp_schedule_time
-INSERT INTO o_ebcp_schedule_time (id, type, specific_time, repeat_pattern)
-VALUES 
-('TIME001', 2, NULL, 'DAILY'),
-('TIME002', 2, NULL, 'DAILY');
+-- 第一展厅三展区
+('EI011', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '卢沟桥事变沙盘', 'EA003', 'static', 1, '全面抗战爆发'),
+('EI012', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '平型关大捷多媒体', 'EA003', 'interactive', 1, '抗日战争重大胜利'),
+('EI013', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '南京大屠杀遇难同胞纪念墙', 'EA003', 'static', 1, '勿忘国耻'),
+('EI014', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '百团大战战役过程', 'EA003', 'interactive', 1, '抗日战争重要战役'),
+('EI015', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '抗日英雄事迹展', 'EA003', 'static', 1, '杨靖宇等抗日英雄事迹'),
 
--- Insert sample data for o_ebcp_schedule_action
-INSERT INTO o_ebcp_schedule_action (id, action_type, target_id, operation_details)
-VALUES 
-('ACTION001', 1, 'DEV001', 'start_recording'),
-('ACTION002', 2, 'DEV002', 'power_off');
+-- 第二展厅一展区
+('EI016', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '渡江战役场景重现', 'EA004', 'interactive', 1, '解放战争关键战役'),
+('EI017', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '解放军武器装备展', 'EA004', 'static', 1, '解放战争时期武器'),
+('EI018', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '辽沈战役沙盘', 'EA004', 'static', 1, '三大战役之一'),
+('EI019', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '淮海战役影像资料', 'EA004', 'interactive', 1, '决定性战役过程'),
+('EI020', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '解放战争英雄事迹', 'EA004', 'static', 1, '刘伯承等将领事迹'),
+
+-- 第二展厅二展区
+('EI021', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '抗美援朝出国作战部队誓师', 'EA005', 'static', 1, '志愿军出征场景'),
+('EI022', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '上甘岭战役多媒体', 'EA005', 'interactive', 1, '抗美援朝重要战役'),
+('EI023', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '志愿军装备展示', 'EA005', 'static', 1, '抗美援朝时期武器装备'),
+('EI024', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '抗美援朝英雄事迹', 'EA005', 'static', 1, '黄继光等英雄事迹'),
+('EI025', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '停战协定签署场景', 'EA005', 'interactive', 1, '抗美援朝胜利'),
+
+-- 第二展厅三展区
+('EI026', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '现代化陆军装备展', 'EA006', 'static', 1, '陆军现代化成果'),
+('EI027', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '海军发展历程', 'EA006', 'interactive', 1, '海军建设成就'),
+('EI028', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '空军装备模型展', 'EA006', 'static', 1, '空军现代化装备'),
+('EI029', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '火箭军发展历程', 'EA006', 'interactive', 1, '战略导弹部队建设'),
+('EI030', 'admin', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, '国防科技创新成果展', 'EA006', 'static', 1, '军事科技最新成果');
+
+
+
 
 -- +goose StatementEnd
 
