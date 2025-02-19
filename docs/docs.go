@@ -15,14 +15,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/ebcp-device": {
+        "/ebcp-camera": {
             "get": {
                 "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -76,14 +76,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "type",
-                        "name": "type",
+                        "description": "device_no",
+                        "name": "device_no",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "control_interface",
-                        "name": "control_interface",
+                        "description": "main_stream_url",
+                        "name": "main_stream_url",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sub_stream_url",
+                        "name": "sub_stream_url",
                         "in": "query"
                     },
                     {
@@ -107,7 +113,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Ebcp_device"
+                                                "$ref": "#/definitions/model.Ebcp_camera"
                                             }
                                         }
                                     }
@@ -132,7 +138,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -142,7 +148,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ebcp_device"
+                            "$ref": "#/definitions/model.Ebcp_camera"
                         }
                     }
                 ],
@@ -158,7 +164,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_device"
+                                            "$ref": "#/definitions/model.Ebcp_camera"
                                         }
                                     }
                                 }
@@ -174,7 +180,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-device/batch-delete": {
+        "/ebcp-camera/batch-delete": {
             "post": {
                 "description": "batch delete",
                 "consumes": [
@@ -184,7 +190,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -217,7 +223,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-device/batch-upsert": {
+        "/ebcp-camera/batch-upsert": {
             "post": {
                 "description": "batch update",
                 "consumes": [
@@ -227,7 +233,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -261,71 +267,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-device/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_device"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-device/page": {
+        "/ebcp-camera/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -387,14 +336,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "type",
-                        "name": "type",
+                        "description": "device_no",
+                        "name": "device_no",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "control_interface",
-                        "name": "control_interface",
+                        "description": "main_stream_url",
+                        "name": "main_stream_url",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sub_stream_url",
+                        "name": "sub_stream_url",
                         "in": "query"
                     },
                     {
@@ -426,7 +381,7 @@ const docTemplate = `{
                                                         "items": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_device"
+                                                                "$ref": "#/definitions/model.Ebcp_camera"
                                                             }
                                                         }
                                                     }
@@ -447,14 +402,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-device/{id}": {
+        "/ebcp-camera/{id}": {
             "delete": {
                 "description": "delete",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_device"
+                    "摄像头"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -478,7 +433,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_device"
+                                            "$ref": "#/definitions/model.Ebcp_camera"
                                         }
                                     }
                                 }
@@ -501,7 +456,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -563,6 +518,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_exhibition_name",
                         "name": "current_exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_start_time",
+                        "name": "current_exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_end_time",
+                        "name": "current_exhibition_end_time",
                         "in": "query"
                     },
                     {
@@ -611,7 +578,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -660,7 +627,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area_details"
+                    "展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -696,8 +663,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "current_exhibition_start_time",
+                        "name": "current_exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_end_time",
+                        "name": "current_exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "exhibition_room_id",
                         "name": "exhibition_room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "location",
                         "in": "query"
                     },
                     {
@@ -736,200 +721,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area_details"
-                ],
-                "summary": "save",
-                "parameters": [
-                    {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_exhibition_area_details"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_area_details"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area-details/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area_details"
-                ],
-                "summary": "batch delete",
-                "parameters": [
-                    {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area-details/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area_details"
-                ],
-                "summary": "batch update",
-                "parameters": [
-                    {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area-details/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area_details"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
             }
         },
         "/ebcp-exhibition-area-details/page": {
@@ -939,7 +730,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area_details"
+                    "展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -983,8 +774,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "current_exhibition_start_time",
+                        "name": "current_exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_end_time",
+                        "name": "current_exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "exhibition_room_id",
                         "name": "exhibition_room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location",
+                        "name": "location",
                         "in": "query"
                     },
                     {
@@ -1037,53 +846,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-area-details/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area_details"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_area_details"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-area/batch-delete": {
             "post": {
                 "description": "batch delete",
@@ -1094,7 +856,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -1137,7 +899,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -1171,63 +933,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-area/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_area"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-area/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
@@ -1235,7 +940,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -1305,6 +1010,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_exhibition_name",
                         "name": "current_exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_start_time",
+                        "name": "current_exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_exhibition_end_time",
+                        "name": "current_exhibition_end_time",
                         "in": "query"
                     },
                     {
@@ -1364,7 +1081,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_area"
+                    "展区"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -1411,7 +1128,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -1465,8 +1182,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     }
                 ],
@@ -1509,7 +1226,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -1558,7 +1275,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall_details"
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -1628,200 +1345,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall_details"
-                ],
-                "summary": "save",
-                "parameters": [
-                    {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_exhibition_hall_details"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_hall_details"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-hall-details/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall_details"
-                ],
-                "summary": "batch delete",
-                "parameters": [
-                    {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-hall-details/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall_details"
-                ],
-                "summary": "batch update",
-                "parameters": [
-                    {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-hall-details/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall_details"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
             }
         },
         "/ebcp-exhibition-hall-details/page": {
@@ -1831,7 +1354,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall_details"
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -1923,53 +1446,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-hall-details/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall_details"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_hall_details"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-hall/batch-delete": {
             "post": {
                 "description": "batch delete",
@@ -1980,7 +1456,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -2023,7 +1499,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -2057,63 +1533,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-hall/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_hall"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-hall/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
@@ -2121,7 +1540,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -2183,8 +1602,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "description",
-                        "name": "description",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     }
                 ],
@@ -2238,7 +1657,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_hall"
+                    "展馆"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -2285,7 +1704,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -2401,7 +1820,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -2453,7 +1872,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -2496,7 +1915,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -2530,63 +1949,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-item/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_item"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-item/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
@@ -2594,7 +1956,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -2729,7 +2091,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_item"
+                    "展项"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -2776,7 +2138,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -2892,7 +2254,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -2944,7 +2306,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -2987,7 +2349,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -3021,63 +2383,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_exhibition_room"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/ebcp-exhibition-room/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
@@ -3085,7 +2390,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -3220,7 +2525,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_exhibition_room"
+                    "展厅"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -3260,433 +2565,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-action": {
+        "/ebcp-item-device-relation": {
             "get": {
                 "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "query objects",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "action_type",
-                        "name": "action_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "target_id",
-                        "name": "target_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "operation_details",
-                        "name": "operation_details",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Ebcp_schedule_action"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "save",
-                "parameters": [
-                    {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_schedule_action"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_action"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-action/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "batch delete",
-                "parameters": [
-                    {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-action/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "batch update",
-                "parameters": [
-                    {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-action/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-action/page": {
-            "get": {
-                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "page query",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "current page",
-                        "name": "_page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page size",
-                        "name": "_page_size",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "action_type",
-                        "name": "action_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "target_id",
-                        "name": "target_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "operation_details",
-                        "name": "operation_details",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_schedule_action"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-action/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_action"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_action"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-task": {
-            "get": {
-                "description": "query objects",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -3734,32 +2620,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "name",
-                        "name": "name",
+                        "description": "exhibition_item_id",
+                        "name": "exhibition_item_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "time_setting_id",
-                        "name": "time_setting_id",
+                        "description": "device_type",
+                        "name": "device_type",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "action_id",
-                        "name": "action_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "status",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "remarks",
-                        "name": "remarks",
+                        "description": "device_id",
+                        "name": "device_id",
                         "in": "query"
                     }
                 ],
@@ -3777,7 +2651,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Ebcp_schedule_task"
+                                                "$ref": "#/definitions/model.Ebcp_item_device_relation"
                                             }
                                         }
                                     }
@@ -3802,7 +2676,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -3812,7 +2686,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ebcp_schedule_task"
+                            "$ref": "#/definitions/model.Ebcp_item_device_relation"
                         }
                     }
                 ],
@@ -3828,7 +2702,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_task"
+                                            "$ref": "#/definitions/model.Ebcp_item_device_relation"
                                         }
                                     }
                                 }
@@ -3844,7 +2718,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-task/batch-delete": {
+        "/ebcp-item-device-relation/batch-delete": {
             "post": {
                 "description": "batch delete",
                 "consumes": [
@@ -3854,7 +2728,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -3887,7 +2761,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-task/batch-upsert": {
+        "/ebcp-item-device-relation/batch-upsert": {
             "post": {
                 "description": "batch update",
                 "consumes": [
@@ -3897,7 +2771,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -3931,71 +2805,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-task/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_task"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-task/page": {
+        "/ebcp-item-device-relation/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -4051,32 +2868,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "name",
-                        "name": "name",
+                        "description": "exhibition_item_id",
+                        "name": "exhibition_item_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "time_setting_id",
-                        "name": "time_setting_id",
+                        "description": "device_type",
+                        "name": "device_type",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "action_id",
-                        "name": "action_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "status",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "remarks",
-                        "name": "remarks",
+                        "description": "device_id",
+                        "name": "device_id",
                         "in": "query"
                     }
                 ],
@@ -4102,7 +2907,7 @@ const docTemplate = `{
                                                         "items": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_schedule_task"
+                                                                "$ref": "#/definitions/model.Ebcp_item_device_relation"
                                                             }
                                                         }
                                                     }
@@ -4123,14 +2928,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-task/{id}": {
+        "/ebcp-item-device-relation/{id}": {
             "delete": {
                 "description": "delete",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_task"
+                    "展项关联配置"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -4154,7 +2959,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_task"
+                                            "$ref": "#/definitions/model.Ebcp_item_device_relation"
                                         }
                                     }
                                 }
@@ -4170,14 +2975,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-time": {
+        "/ebcp-item-schedule": {
             "get": {
                 "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -4201,20 +3006,50 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "type",
-                        "name": "type",
+                        "description": "created_by",
+                        "name": "created_by",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "specific_time",
-                        "name": "specific_time",
+                        "description": "created_time",
+                        "name": "created_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "repeat_pattern",
-                        "name": "repeat_pattern",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_item_id",
+                        "name": "exhibition_item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "schedule_time",
+                        "name": "schedule_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "task_type",
+                        "name": "task_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "cycle_type",
+                        "name": "cycle_type",
                         "in": "query"
                     }
                 ],
@@ -4232,7 +3067,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Ebcp_schedule_time"
+                                                "$ref": "#/definitions/model.Ebcp_item_schedule"
                                             }
                                         }
                                     }
@@ -4257,7 +3092,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -4267,7 +3102,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ebcp_schedule_time"
+                            "$ref": "#/definitions/model.Ebcp_item_schedule"
                         }
                     }
                 ],
@@ -4283,7 +3118,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_time"
+                                            "$ref": "#/definitions/model.Ebcp_item_schedule"
                                         }
                                     }
                                 }
@@ -4299,7 +3134,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-time/batch-delete": {
+        "/ebcp-item-schedule/batch-delete": {
             "post": {
                 "description": "batch delete",
                 "consumes": [
@@ -4309,7 +3144,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -4342,7 +3177,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-time/batch-upsert": {
+        "/ebcp-item-schedule/batch-upsert": {
             "post": {
                 "description": "batch update",
                 "consumes": [
@@ -4352,7 +3187,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -4386,71 +3221,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-time/groupby": {
-            "get": {
-                "description": "GroupBy, for example,  _select=level, then return  {level_val1:sum1,level_val2:sum2}, _where can input status=0",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Ebcp_schedule_time"
-                ],
-                "summary": "GroupBy",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "_where",
-                        "name": "_where",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": true
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-schedule-time/page": {
+        "/ebcp-item-schedule/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -4482,20 +3260,50 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "type",
-                        "name": "type",
+                        "description": "created_by",
+                        "name": "created_by",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "specific_time",
-                        "name": "specific_time",
+                        "description": "created_time",
+                        "name": "created_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "repeat_pattern",
-                        "name": "repeat_pattern",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_item_id",
+                        "name": "exhibition_item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "schedule_time",
+                        "name": "schedule_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "task_type",
+                        "name": "task_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "cycle_type",
+                        "name": "cycle_type",
                         "in": "query"
                     }
                 ],
@@ -4521,7 +3329,7 @@ const docTemplate = `{
                                                         "items": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_schedule_time"
+                                                                "$ref": "#/definitions/model.Ebcp_item_schedule"
                                                             }
                                                         }
                                                     }
@@ -4542,14 +3350,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-schedule-time/{id}": {
+        "/ebcp-item-schedule/{id}": {
             "delete": {
                 "description": "delete",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Ebcp_schedule_time"
+                    "展项定时任务"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -4573,7 +3381,417 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_schedule_time"
+                                            "$ref": "#/definitions/model.Ebcp_item_schedule"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_player"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "save",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "save",
+                "parameters": [
+                    {
+                        "description": "object",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Ebcp_player"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_player"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/batch-delete": {
+            "post": {
+                "description": "batch delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "batch delete",
+                "parameters": [
+                    {
+                        "description": "id array",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/batch-upsert": {
+            "post": {
+                "description": "batch update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "batch update",
+                "parameters": [
+                    {
+                        "description": "objects array",
+                        "name": "entities",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_player"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}": {
+            "delete": {
+                "description": "delete",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "实例id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_player"
                                         }
                                     }
                                 }
@@ -4618,43 +3836,47 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Ebcp_device": {
+        "model.Ebcp_camera": {
             "type": "object",
             "properties": {
-                "control_interface": {
-                    "description": "中控接口类型",
-                    "type": "string"
-                },
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "device_no": {
+                    "description": "设备编号",
                     "type": "string"
                 },
                 "id": {
-                    "description": "设备唯一标识",
+                    "description": "id",
+                    "type": "string"
+                },
+                "main_stream_url": {
+                    "description": "主码流URL",
                     "type": "string"
                 },
                 "name": {
-                    "description": "设备名称",
+                    "description": "摄像头名称",
                     "type": "string"
                 },
                 "status": {
-                    "description": "设备状态",
+                    "description": "状态(1: 正常, 2: 故障)",
                     "type": "integer"
                 },
-                "type": {
-                    "description": "设备类型",
-                    "type": "integer"
+                "sub_stream_url": {
+                    "description": "辅码流URL",
+                    "type": "string"
                 },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
@@ -4663,15 +3885,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "current_exhibition_end_time": {
+                    "description": "当前展览结束时间",
                     "type": "string"
                 },
                 "current_exhibition_name": {
                     "description": "当前展览名称",
+                    "type": "string"
+                },
+                "current_exhibition_start_time": {
+                    "description": "当前展览开始时间",
                     "type": "string"
                 },
                 "exhibition_room_id": {
@@ -4679,7 +3909,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "description": "展区唯一标识",
+                    "description": "id",
                     "type": "string"
                 },
                 "name": {
@@ -4691,11 +3921,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
@@ -4707,8 +3937,16 @@ const docTemplate = `{
                     "description": "area_name",
                     "type": "string"
                 },
+                "current_exhibition_end_time": {
+                    "description": "current_exhibition_end_time",
+                    "type": "string"
+                },
                 "current_exhibition_name": {
                     "description": "current_exhibition_name",
+                    "type": "string"
+                },
+                "current_exhibition_start_time": {
+                    "description": "current_exhibition_start_time",
                     "type": "string"
                 },
                 "exhibition_items": {
@@ -4721,6 +3959,10 @@ const docTemplate = `{
                 "id": {
                     "description": "id",
                     "type": "string"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
                 }
             }
         },
@@ -4728,31 +3970,31 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "展馆描述",
+                    "description": "created_time",
                     "type": "string"
                 },
                 "id": {
-                    "description": "展馆唯一标识",
+                    "description": "id",
                     "type": "string"
                 },
                 "name": {
                     "description": "展馆名称",
                     "type": "string"
                 },
+                "remarks": {
+                    "description": "备注",
+                    "type": "string"
+                },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
@@ -4781,11 +4023,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
+                    "description": "created_time",
                     "type": "string"
                 },
                 "exhibition_area_id": {
@@ -4793,7 +4035,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "description": "展项唯一标识",
+                    "description": "id",
                     "type": "string"
                 },
                 "name": {
@@ -4805,19 +4047,19 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "展项状态",
+                    "description": "状态（1: 启动, 2: 停止, 3: 故障）",
                     "type": "integer"
                 },
                 "type": {
-                    "description": "展项类型",
+                    "description": "展项类型（多媒体、static）",
                     "type": "string"
                 },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
@@ -4826,11 +4068,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
+                    "description": "created_time",
                     "type": "string"
                 },
                 "exhibition_hall_id": {
@@ -4838,7 +4080,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "description": "展厅唯一标识",
+                    "description": "id",
                     "type": "string"
                 },
                 "location": {
@@ -4854,103 +4096,131 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "展厅状态",
+                    "description": "状态（1: 正常, 2: 未使用, 3: 维修）",
                     "type": "integer"
                 },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
         },
-        "model.Ebcp_schedule_action": {
+        "model.Ebcp_item_device_relation": {
             "type": "object",
             "properties": {
-                "action_type": {
-                    "description": "动作类型",
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "动作唯一标识",
-                    "type": "string"
-                },
-                "operation_details": {
-                    "description": "操作细节",
-                    "type": "string"
-                },
-                "target_id": {
-                    "description": "目标设备或展项",
-                    "type": "string"
-                }
-            }
-        },
-        "model.Ebcp_schedule_task": {
-            "type": "object",
-            "properties": {
-                "action_id": {
-                    "description": "关联动作表",
-                    "type": "string"
-                },
                 "created_by": {
-                    "description": "创建人",
+                    "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
-                    "description": "创建时间",
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "device_id": {
+                    "description": "关联设备ID",
+                    "type": "string"
+                },
+                "device_type": {
+                    "description": "关联设备类型(1: 播放设备, 2: 摄像头, 3: 照明回路)",
+                    "type": "integer"
+                },
+                "exhibition_item_id": {
+                    "description": "展项ID",
                     "type": "string"
                 },
                 "id": {
-                    "description": "调度任务唯一标识",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "调度任务名称",
-                    "type": "string"
-                },
-                "remarks": {
-                    "description": "备注",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "调度任务状态",
-                    "type": "integer"
-                },
-                "time_setting_id": {
-                    "description": "关联时间配置表",
+                    "description": "id",
                     "type": "string"
                 },
                 "updated_by": {
-                    "description": "更新人",
+                    "description": "updated_by",
                     "type": "string"
                 },
                 "updated_time": {
-                    "description": "更新时间",
+                    "description": "updated_time",
                     "type": "string"
                 }
             }
         },
-        "model.Ebcp_schedule_time": {
+        "model.Ebcp_item_schedule": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "时间配置唯一标识",
+                "created_by": {
+                    "description": "created_by",
                     "type": "string"
                 },
-                "repeat_pattern": {
-                    "description": "重复模式",
+                "created_time": {
+                    "description": "created_time",
                     "type": "string"
                 },
-                "specific_time": {
-                    "description": "具体时间",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "时间类型",
+                "cycle_type": {
+                    "description": "循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)",
                     "type": "integer"
+                },
+                "exhibition_item_id": {
+                    "description": "展项ID",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "schedule_time": {
+                    "description": "任务时间",
+                    "type": "string"
+                },
+                "task_type": {
+                    "description": "任务类型(1: 启动, 2: 停止)",
+                    "type": "integer"
+                },
+                "updated_by": {
+                    "description": "updated_by",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "updated_time",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_player": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "description": "created_by",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "ip_address": {
+                    "description": "IP地址",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "设备名称",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "integer"
+                },
+                "updated_by": {
+                    "description": "updated_by",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "updated_time",
+                    "type": "string"
                 }
             }
         }
