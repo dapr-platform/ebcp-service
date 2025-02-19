@@ -24,12 +24,12 @@ Table: o_ebcp_exhibition_hall
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] description                                    TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 6] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "gbyqrqPSAyTVEquupZwfgksdl",    "created_by": "MmmNIFMOkRBeZeFnKFOmCKiWu",    "created_time": 27,    "updated_by": "LVdJjJVQbEsyugOYxhxiQOxiR",    "updated_time": 75,    "name": "UaKvGMkNTxxRAGyeLpedcGYeR",    "description": "IXeMvoevELksRsEHjyOYVpENN"}
+{    "id": "jLmAkabTRHFsdXUDgQiFDWcbB",    "created_by": "qjWukAhiLINKaofFUkBEpZGbs",    "created_time": 15,    "updated_by": "sedYGxHItvHCQOfFPHebPqEAQ",    "updated_time": 49,    "name": "UKmRbWJOxIXuRyHphTIxfespe",    "remarks": "PULkNltjAWdRInhhSkvdKAeVN"}
 
 
 
@@ -48,18 +48,24 @@ var (
 
 	Ebcp_exhibition_hall_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_hall_FIELD_NAME_description = "description"
+	Ebcp_exhibition_hall_FIELD_NAME_remarks = "remarks"
 )
 
 // Ebcp_exhibition_hall struct is a row record of the o_ebcp_exhibition_hall table in the  database
 type Ebcp_exhibition_hall struct {
-	ID          string           `json:"id"`           //展馆唯一标识
-	CreatedBy   string           `json:"created_by"`   //创建人
-	CreatedTime common.LocalTime `json:"created_time"` //创建时间
-	UpdatedBy   string           `json:"updated_by"`   //更新人
-	UpdatedTime common.LocalTime `json:"updated_time"` //更新时间
-	Name        string           `json:"name"`         //展馆名称
-	Description string           `json:"description"`  //展馆描述
+	ID string `json:"id"` //id
+
+	CreatedBy string `json:"created_by"` //created_by
+
+	CreatedTime common.LocalTime `json:"created_time"` //created_time
+
+	UpdatedBy string `json:"updated_by"` //updated_by
+
+	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
+
+	Name string `json:"name"` //展馆名称
+
+	Remarks string `json:"remarks"` //备注
 
 }
 
@@ -70,7 +76,7 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              0,
 			Name:               "id",
-			Comment:            `展馆唯一标识`,
+			Comment:            `id`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -91,7 +97,7 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              1,
 			Name:               "created_by",
-			Comment:            `创建人`,
+			Comment:            `created_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -112,7 +118,7 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              2,
 			Name:               "created_time",
-			Comment:            `创建时间`,
+			Comment:            `created_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -133,7 +139,7 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              3,
 			Name:               "updated_by",
-			Comment:            `更新人`,
+			Comment:            `updated_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -154,7 +160,7 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              4,
 			Name:               "updated_time",
-			Comment:            `更新时间`,
+			Comment:            `updated_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -195,8 +201,8 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "description",
-			Comment:            `展馆描述`,
+			Name:               "remarks",
+			Comment:            `备注`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -206,10 +212,10 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "TEXT",
 			ColumnLength:       -1,
-			GoFieldName:        "Description",
+			GoFieldName:        "Remarks",
 			GoFieldType:        "string",
-			JSONFieldName:      "description",
-			ProtobufFieldName:  "description",
+			JSONFieldName:      "remarks",
+			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},

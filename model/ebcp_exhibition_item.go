@@ -25,14 +25,14 @@ Table: o_ebcp_exhibition_item
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] exhibition_area_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] type                                           VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 9] remarks                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 7] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[ 9] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "FmKvEaFWFiHZjiESNpNEYTbZN",    "created_by": "jULkGumhTMvjwgjJqZmXUMQAp",    "created_time": 45,    "updated_by": "LgHAtrKOhXhtYPDYdCuiYJAOS",    "updated_time": 80,    "name": "uNemjStxsqdchmRBRkJuLYDdD",    "exhibition_area_id": "NKpSHECdiTqZWJEIKYkMNjeBh",    "type": "PorGJhLunumBqMcIMumQnyHOt",    "status": 52,    "remarks": "yohrFtPaSBonDjQvAXtqdVder"}
+{    "id": "tWrNWbnLowcNynGlWlcGHIGav",    "created_by": "sjfSYyDbxfVEtfRsMDcxWkJaD",    "created_time": 79,    "updated_by": "dpmgwxwdFEesilxDJViZTKWvF",    "updated_time": 22,    "name": "qklYeZPrpgJYAPFrRKucKniEG",    "exhibition_area_id": "DYHMvdnYxenqGQLdpDuNTdERB",    "type": "EMerewjWRZwjeUFtbYRFIPGiT",    "status": 8,    "remarks": "iAvsNQOCIDrvyBNBTHnmeMNHc"}
 
 
 
@@ -62,16 +62,25 @@ var (
 
 // Ebcp_exhibition_item struct is a row record of the o_ebcp_exhibition_item table in the  database
 type Ebcp_exhibition_item struct {
-	ID               string           `json:"id"`                 //展项唯一标识
-	CreatedBy        string           `json:"created_by"`         //创建人
-	CreatedTime      common.LocalTime `json:"created_time"`       //创建时间
-	UpdatedBy        string           `json:"updated_by"`         //更新人
-	UpdatedTime      common.LocalTime `json:"updated_time"`       //更新时间
-	Name             string           `json:"name"`               //展项名称
-	ExhibitionAreaID string           `json:"exhibition_area_id"` //所属展区ID
-	Type             string           `json:"type"`               //展项类型
-	Status           int32            `json:"status"`             //展项状态
-	Remarks          string           `json:"remarks"`            //备注
+	ID string `json:"id"` //id
+
+	CreatedBy string `json:"created_by"` //created_by
+
+	CreatedTime common.LocalTime `json:"created_time"` //created_time
+
+	UpdatedBy string `json:"updated_by"` //updated_by
+
+	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
+
+	Name string `json:"name"` //展项名称
+
+	ExhibitionAreaID string `json:"exhibition_area_id"` //所属展区ID
+
+	Type string `json:"type"` //展项类型（多媒体、static）
+
+	Status int32 `json:"status"` //状态（1: 启动, 2: 停止, 3: 故障）
+
+	Remarks string `json:"remarks"` //备注
 
 }
 
@@ -82,7 +91,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              0,
 			Name:               "id",
-			Comment:            `展项唯一标识`,
+			Comment:            `id`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -103,7 +112,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              1,
 			Name:               "created_by",
-			Comment:            `创建人`,
+			Comment:            `created_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -124,7 +133,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              2,
 			Name:               "created_time",
-			Comment:            `创建时间`,
+			Comment:            `created_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -145,7 +154,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              3,
 			Name:               "updated_by",
-			Comment:            `更新人`,
+			Comment:            `updated_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -166,7 +175,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              4,
 			Name:               "updated_time",
-			Comment:            `更新时间`,
+			Comment:            `updated_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -229,9 +238,9 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              7,
 			Name:               "type",
-			Comment:            `展项类型`,
+			Comment:            `展项类型（多媒体、static）`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(50)",
 			IsPrimaryKey:       false,
@@ -250,7 +259,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              8,
 			Name:               "status",
-			Comment:            `展项状态`,
+			Comment:            `状态（1: 启动, 2: 停止, 3: 故障）`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -274,13 +283,13 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			Comment:            `备注`,
 			Notes:              ``,
 			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
 			GoFieldName:        "Remarks",
 			GoFieldType:        "string",
 			JSONFieldName:      "remarks",

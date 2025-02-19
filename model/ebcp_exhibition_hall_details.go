@@ -26,7 +26,7 @@ Table: v_ebcp_exhibition_hall_details
 
 JSON Sample
 -------------------------------------
-{    "id": "lDcAZBluASVqAJvqBsDivYuFO",    "hall_name": "rBxbhNsmyHQXnBIcUHNWHHeHB",    "hall_description": "NLATGbxvSlyEPQGxatlNywNib",    "rooms": 91}
+{    "id": "mTbwUDwHEuAAUjXMabQoYTKvs",    "hall_name": "ovVyfsCwVJrWMcDOncAxemxNA",    "hall_description": "SFdPbkIwhnXXJJpvtfImtlNBu",    "rooms": 28}
 
 
 Comments
@@ -51,10 +51,13 @@ var (
 
 // Ebcp_exhibition_hall_details struct is a row record of the v_ebcp_exhibition_hall_details table in the  database
 type Ebcp_exhibition_hall_details struct {
-	ID              string `json:"id"`               //id
-	HallName        string `json:"hall_name"`        //hall_name
+	ID string `json:"id"` //id
+
+	HallName string `json:"hall_name"` //hall_name
+
 	HallDescription string `json:"hall_description"` //hall_description
-	Rooms           any    `json:"rooms"`            //rooms
+
+	Rooms any `json:"rooms"` //rooms
 
 }
 

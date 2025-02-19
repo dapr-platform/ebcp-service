@@ -21,13 +21,16 @@ Table: v_ebcp_exhibition_area_details
 [ 0] id                                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] area_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 2] current_exhibition_name                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 3] exhibition_room_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] exhibition_items                               JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[ 3] current_exhibition_start_time                  TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] current_exhibition_end_time                    TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 5] exhibition_room_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] location                                       VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 7] exhibition_items                               JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "bVPUBUlASQIKpOJZhBprIrqIF",    "area_name": "PwgwctDmNYLFwbwFfyoGbIOUR",    "current_exhibition_name": "HZFCJEpbDLcOpMgHXSrHKtYes",    "exhibition_room_id": "GtiPKsxVWnTWSOTIcWCrOqnqf",    "exhibition_items": 22}
+{    "id": "vKYsAwQxYHcuWEXpHwvjaRqUn",    "area_name": "YhAraynapCepuYkVqrYxjZqYP",    "current_exhibition_name": "tqwfMrseoCGWiZZkPjbkWFyLJ",    "current_exhibition_start_time": 88,    "current_exhibition_end_time": 12,    "exhibition_room_id": "AUGaYskRALEIGTmEQmGVtLCRh",    "location": "UfVkZmShKFXbIvMAjusiwtSNr",    "exhibition_items": 63}
 
 
 Comments
@@ -47,18 +50,34 @@ var (
 
 	Ebcp_exhibition_area_details_FIELD_NAME_current_exhibition_name = "current_exhibition_name"
 
+	Ebcp_exhibition_area_details_FIELD_NAME_current_exhibition_start_time = "current_exhibition_start_time"
+
+	Ebcp_exhibition_area_details_FIELD_NAME_current_exhibition_end_time = "current_exhibition_end_time"
+
 	Ebcp_exhibition_area_details_FIELD_NAME_exhibition_room_id = "exhibition_room_id"
+
+	Ebcp_exhibition_area_details_FIELD_NAME_location = "location"
 
 	Ebcp_exhibition_area_details_FIELD_NAME_exhibition_items = "exhibition_items"
 )
 
 // Ebcp_exhibition_area_details struct is a row record of the v_ebcp_exhibition_area_details table in the  database
 type Ebcp_exhibition_area_details struct {
-	ID                    string `json:"id"`                      //id
-	AreaName              string `json:"area_name"`               //area_name
+	ID string `json:"id"` //id
+
+	AreaName string `json:"area_name"` //area_name
+
 	CurrentExhibitionName string `json:"current_exhibition_name"` //current_exhibition_name
-	ExhibitionRoomID      string `json:"exhibition_room_id"`      //exhibition_room_id
-	ExhibitionItems       any    `json:"exhibition_items"`        //exhibition_items
+
+	CurrentExhibitionStartTime common.LocalTime `json:"current_exhibition_start_time"` //current_exhibition_start_time
+
+	CurrentExhibitionEndTime common.LocalTime `json:"current_exhibition_end_time"` //current_exhibition_end_time
+
+	ExhibitionRoomID string `json:"exhibition_room_id"` //exhibition_room_id
+
+	Location string `json:"location"` //location
+
+	ExhibitionItems any `json:"exhibition_items"` //exhibition_items
 
 }
 
@@ -133,6 +152,48 @@ Warning table: v_ebcp_exhibition_area_details primary key column id is nullable 
 
 		&ColumnInfo{
 			Index:              3,
+			Name:               "current_exhibition_start_time",
+			Comment:            `current_exhibition_start_time`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "TIMESTAMP",
+			DatabaseTypePretty: "TIMESTAMP",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TIMESTAMP",
+			ColumnLength:       -1,
+			GoFieldName:        "CurrentExhibitionStartTime",
+			GoFieldType:        "common.LocalTime",
+			JSONFieldName:      "current_exhibition_start_time",
+			ProtobufFieldName:  "current_exhibition_start_time",
+			ProtobufType:       "uint64",
+			ProtobufPos:        4,
+		},
+
+		&ColumnInfo{
+			Index:              4,
+			Name:               "current_exhibition_end_time",
+			Comment:            `current_exhibition_end_time`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "TIMESTAMP",
+			DatabaseTypePretty: "TIMESTAMP",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TIMESTAMP",
+			ColumnLength:       -1,
+			GoFieldName:        "CurrentExhibitionEndTime",
+			GoFieldType:        "common.LocalTime",
+			JSONFieldName:      "current_exhibition_end_time",
+			ProtobufFieldName:  "current_exhibition_end_time",
+			ProtobufType:       "uint64",
+			ProtobufPos:        5,
+		},
+
+		&ColumnInfo{
+			Index:              5,
 			Name:               "exhibition_room_id",
 			Comment:            `exhibition_room_id`,
 			Notes:              ``,
@@ -149,11 +210,32 @@ Warning table: v_ebcp_exhibition_area_details primary key column id is nullable 
 			JSONFieldName:      "exhibition_room_id",
 			ProtobufFieldName:  "exhibition_room_id",
 			ProtobufType:       "string",
-			ProtobufPos:        4,
+			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
-			Index:              4,
+			Index:              6,
+			Name:               "location",
+			Comment:            `location`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(255)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       255,
+			GoFieldName:        "Location",
+			GoFieldType:        "string",
+			JSONFieldName:      "location",
+			ProtobufFieldName:  "location",
+			ProtobufType:       "string",
+			ProtobufPos:        7,
+		},
+
+		&ColumnInfo{
+			Index:              7,
 			Name:               "exhibition_items",
 			Comment:            `exhibition_items`,
 			Notes:              ``,
@@ -170,7 +252,7 @@ Warning table: v_ebcp_exhibition_area_details primary key column id is nullable 
 			JSONFieldName:      "exhibition_items",
 			ProtobufFieldName:  "exhibition_items",
 			ProtobufType:       "string",
-			ProtobufPos:        5,
+			ProtobufPos:        8,
 		},
 	},
 }

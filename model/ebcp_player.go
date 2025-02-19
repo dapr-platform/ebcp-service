@@ -17,51 +17,45 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_exhibition_room
+Table: o_ebcp_player
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] location                                       VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 7] exhibition_hall_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[ 9] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 6] ip_address                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 7] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "rCoFopTExUCFtVeIyqPZLPaRq",    "created_by": "DTEaSXDqHlnJMAAytXoaOQoIH",    "created_time": 44,    "updated_by": "uxjjvfaWVQLwknSgcKQjIhQvi",    "updated_time": 10,    "name": "iBWZERUncyvARHTqwgEmRokVx",    "location": "kguyMwqdTamWwRNPPffgECPLn",    "exhibition_hall_id": "dlBKTgQjFbMAJMtbDHosiBRGl",    "status": 0,    "remarks": "WBnnPdjdpjjdqxIsCuobashuG"}
+{    "id": "WwhwsgdtIeLuNJywoJeetkdAQ",    "created_by": "rWTZKvhMhsorFGXSwLLlRQAnS",    "created_time": 49,    "updated_by": "ArDtlZmBkoeomhWXMEyAcfotc",    "updated_time": 54,    "name": "QfCPPPtQEgbwBWoEKnYwwIuSN",    "ip_address": "jmpTVmRMfrCGGsccIEqvVQGxU",    "port": 53}
 
 
 
 */
 
 var (
-	Ebcp_exhibition_room_FIELD_NAME_id = "id"
+	Ebcp_player_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_room_FIELD_NAME_created_by = "created_by"
+	Ebcp_player_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_exhibition_room_FIELD_NAME_created_time = "created_time"
+	Ebcp_player_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_exhibition_room_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_player_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_exhibition_room_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_player_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_exhibition_room_FIELD_NAME_name = "name"
+	Ebcp_player_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_room_FIELD_NAME_location = "location"
+	Ebcp_player_FIELD_NAME_ip_address = "ip_address"
 
-	Ebcp_exhibition_room_FIELD_NAME_exhibition_hall_id = "exhibition_hall_id"
-
-	Ebcp_exhibition_room_FIELD_NAME_status = "status"
-
-	Ebcp_exhibition_room_FIELD_NAME_remarks = "remarks"
+	Ebcp_player_FIELD_NAME_port = "port"
 )
 
-// Ebcp_exhibition_room struct is a row record of the o_ebcp_exhibition_room table in the  database
-type Ebcp_exhibition_room struct {
+// Ebcp_player struct is a row record of the o_ebcp_player table in the  database
+type Ebcp_player struct {
 	ID string `json:"id"` //id
 
 	CreatedBy string `json:"created_by"` //created_by
@@ -72,20 +66,16 @@ type Ebcp_exhibition_room struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Name string `json:"name"` //展厅名称
+	Name string `json:"name"` //设备名称
 
-	Location string `json:"location"` //展厅位置
+	IPAddress string `json:"ip_address"` //IP地址
 
-	ExhibitionHallID string `json:"exhibition_hall_id"` //所属展馆ID
-
-	Status int32 `json:"status"` //状态（1: 正常, 2: 未使用, 3: 维修）
-
-	Remarks string `json:"remarks"` //备注
+	Port int32 `json:"port"` //端口
 
 }
 
-var Ebcp_exhibition_roomTableInfo = &TableInfo{
-	Name: "o_ebcp_exhibition_room",
+var Ebcp_playerTableInfo = &TableInfo{
+	Name: "o_ebcp_player",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
@@ -196,7 +186,7 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              5,
 			Name:               "name",
-			Comment:            `展厅名称`,
+			Comment:            `设备名称`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -216,10 +206,10 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "location",
-			Comment:            `展厅位置`,
+			Name:               "ip_address",
+			Comment:            `IP地址`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
@@ -227,39 +217,18 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "Location",
+			GoFieldName:        "IPAddress",
 			GoFieldType:        "string",
-			JSONFieldName:      "location",
-			ProtobufFieldName:  "location",
+			JSONFieldName:      "ip_address",
+			ProtobufFieldName:  "ip_address",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
 			Index:              7,
-			Name:               "exhibition_hall_id",
-			Comment:            `所属展馆ID`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "ExhibitionHallID",
-			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_hall_id",
-			ProtobufFieldName:  "exhibition_hall_id",
-			ProtobufType:       "string",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "status",
-			Comment:            `状态（1: 正常, 2: 未使用, 3: 维修）`,
+			Name:               "port",
+			Comment:            `端口`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -269,57 +238,36 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "INT4",
 			ColumnLength:       -1,
-			GoFieldName:        "Status",
+			GoFieldName:        "Port",
 			GoFieldType:        "int32",
-			JSONFieldName:      "status",
-			ProtobufFieldName:  "status",
+			JSONFieldName:      "port",
+			ProtobufFieldName:  "port",
 			ProtobufType:       "int32",
-			ProtobufPos:        9,
-		},
-
-		&ColumnInfo{
-			Index:              9,
-			Name:               "remarks",
-			Comment:            `备注`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TEXT",
-			DatabaseTypePretty: "TEXT",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TEXT",
-			ColumnLength:       -1,
-			GoFieldName:        "Remarks",
-			GoFieldType:        "string",
-			JSONFieldName:      "remarks",
-			ProtobufFieldName:  "remarks",
-			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        8,
 		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_exhibition_room) TableName() string {
-	return "o_ebcp_exhibition_room"
+func (e *Ebcp_player) TableName() string {
+	return "o_ebcp_player"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_exhibition_room) BeforeSave() error {
+func (e *Ebcp_player) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_exhibition_room) Prepare() {
+func (e *Ebcp_player) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_exhibition_room) Validate(action Action) error {
+func (e *Ebcp_player) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_exhibition_room) TableInfo() *TableInfo {
-	return Ebcp_exhibition_roomTableInfo
+func (e *Ebcp_player) TableInfo() *TableInfo {
+	return Ebcp_playerTableInfo
 }

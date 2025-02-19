@@ -17,68 +17,76 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_device
+Table: o_ebcp_item_schedule
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] type                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 7] control_interface                              VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
-[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 5] exhibition_item_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] schedule_time                                  TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
+[ 7] task_type                                      INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 8] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "UsfLGZQmNIncwZBZYpFQoKZwK",    "created_by": "ieaEVjaNlLknYlAANmPmXIXbw",    "created_time": 33,    "updated_by": "DCrvdsucAfDMYYsDqDVKqDctP",    "updated_time": 7,    "name": "qqMQHdYhUWkYRDJQQnsHbGbLE",    "type": 45,    "control_interface": "SlWOOHtGYKZMMZWJkbHmQvLRd",    "status": 60}
+{    "id": "tfaefKLDFmvTfBHsMHyfxlDex",    "created_by": "agjiCSRLZmwdIWKynrBIBPubs",    "created_time": 39,    "updated_by": "aBKJRWDMNnrExxlhkCQLfegwO",    "updated_time": 99,    "exhibition_item_id": "WRnoXEwPXKGWIyFPpjuNhVEjc",    "schedule_time": "2283-04-23T10:58:21.924170636+08:00",    "task_type": 5,    "cycle_type": 16}
 
 
 
 */
 
 var (
-	Ebcp_device_FIELD_NAME_id = "id"
+	Ebcp_item_schedule_FIELD_NAME_id = "id"
 
-	Ebcp_device_FIELD_NAME_created_by = "created_by"
+	Ebcp_item_schedule_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_device_FIELD_NAME_created_time = "created_time"
+	Ebcp_item_schedule_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_device_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_item_schedule_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_device_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_item_schedule_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_device_FIELD_NAME_name = "name"
+	Ebcp_item_schedule_FIELD_NAME_exhibition_item_id = "exhibition_item_id"
 
-	Ebcp_device_FIELD_NAME_type = "type"
+	Ebcp_item_schedule_FIELD_NAME_schedule_time = "schedule_time"
 
-	Ebcp_device_FIELD_NAME_control_interface = "control_interface"
+	Ebcp_item_schedule_FIELD_NAME_task_type = "task_type"
 
-	Ebcp_device_FIELD_NAME_status = "status"
+	Ebcp_item_schedule_FIELD_NAME_cycle_type = "cycle_type"
 )
 
-// Ebcp_device struct is a row record of the o_ebcp_device table in the  database
-type Ebcp_device struct {
-	ID               string           `json:"id"`                //设备唯一标识
-	CreatedBy        string           `json:"created_by"`        //创建人
-	CreatedTime      common.LocalTime `json:"created_time"`      //创建时间
-	UpdatedBy        string           `json:"updated_by"`        //更新人
-	UpdatedTime      common.LocalTime `json:"updated_time"`      //更新时间
-	Name             string           `json:"name"`              //设备名称
-	Type             int32            `json:"type"`              //设备类型
-	ControlInterface string           `json:"control_interface"` //中控接口类型
-	Status           int32            `json:"status"`            //设备状态
+// Ebcp_item_schedule struct is a row record of the o_ebcp_item_schedule table in the  database
+type Ebcp_item_schedule struct {
+	ID string `json:"id"` //id
+
+	CreatedBy string `json:"created_by"` //created_by
+
+	CreatedTime common.LocalTime `json:"created_time"` //created_time
+
+	UpdatedBy string `json:"updated_by"` //updated_by
+
+	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
+
+	ExhibitionItemID string `json:"exhibition_item_id"` //展项ID
+
+	ScheduleTime time.Time `json:"schedule_time"` //任务时间
+
+	TaskType int32 `json:"task_type"` //任务类型(1: 启动, 2: 停止)
+
+	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
 
 }
 
-var Ebcp_deviceTableInfo = &TableInfo{
-	Name: "o_ebcp_device",
+var Ebcp_item_scheduleTableInfo = &TableInfo{
+	Name: "o_ebcp_item_schedule",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
 			Index:              0,
 			Name:               "id",
-			Comment:            `设备唯一标识`,
+			Comment:            `id`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -99,7 +107,7 @@ var Ebcp_deviceTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              1,
 			Name:               "created_by",
-			Comment:            `创建人`,
+			Comment:            `created_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -120,7 +128,7 @@ var Ebcp_deviceTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              2,
 			Name:               "created_time",
-			Comment:            `创建时间`,
+			Comment:            `created_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -141,7 +149,7 @@ var Ebcp_deviceTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              3,
 			Name:               "updated_by",
-			Comment:            `更新人`,
+			Comment:            `updated_by`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -162,7 +170,7 @@ var Ebcp_deviceTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              4,
 			Name:               "updated_time",
-			Comment:            `更新时间`,
+			Comment:            `updated_time`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -182,71 +190,50 @@ var Ebcp_deviceTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "name",
-			Comment:            `设备名称`,
+			Name:               "exhibition_item_id",
+			Comment:            `展项ID`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "Name",
+			ColumnLength:       32,
+			GoFieldName:        "ExhibitionItemID",
 			GoFieldType:        "string",
-			JSONFieldName:      "name",
-			ProtobufFieldName:  "name",
+			JSONFieldName:      "exhibition_item_id",
+			ProtobufFieldName:  "exhibition_item_id",
 			ProtobufType:       "string",
 			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "type",
-			Comment:            `设备类型`,
+			Name:               "schedule_time",
+			Comment:            `任务时间`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "INT4",
-			DatabaseTypePretty: "INT4",
+			DatabaseTypeName:   "TIME",
+			DatabaseTypePretty: "TIME",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "INT4",
+			ColumnType:         "TIME",
 			ColumnLength:       -1,
-			GoFieldName:        "Type",
-			GoFieldType:        "int32",
-			JSONFieldName:      "type",
-			ProtobufFieldName:  "type",
-			ProtobufType:       "int32",
+			GoFieldName:        "ScheduleTime",
+			GoFieldType:        "time.Time",
+			JSONFieldName:      "schedule_time",
+			ProtobufFieldName:  "schedule_time",
+			ProtobufType:       "google.protobuf.Timestamp",
 			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
 			Index:              7,
-			Name:               "control_interface",
-			Comment:            `中控接口类型`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(100)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       100,
-			GoFieldName:        "ControlInterface",
-			GoFieldType:        "string",
-			JSONFieldName:      "control_interface",
-			ProtobufFieldName:  "control_interface",
-			ProtobufType:       "string",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "status",
-			Comment:            `设备状态`,
+			Name:               "task_type",
+			Comment:            `任务类型(1: 启动, 2: 停止)`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -256,10 +243,31 @@ var Ebcp_deviceTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "INT4",
 			ColumnLength:       -1,
-			GoFieldName:        "Status",
+			GoFieldName:        "TaskType",
 			GoFieldType:        "int32",
-			JSONFieldName:      "status",
-			ProtobufFieldName:  "status",
+			JSONFieldName:      "task_type",
+			ProtobufFieldName:  "task_type",
+			ProtobufType:       "int32",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "cycle_type",
+			Comment:            `循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "CycleType",
+			GoFieldType:        "int32",
+			JSONFieldName:      "cycle_type",
+			ProtobufFieldName:  "cycle_type",
 			ProtobufType:       "int32",
 			ProtobufPos:        9,
 		},
@@ -267,25 +275,25 @@ var Ebcp_deviceTableInfo = &TableInfo{
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_device) TableName() string {
-	return "o_ebcp_device"
+func (e *Ebcp_item_schedule) TableName() string {
+	return "o_ebcp_item_schedule"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_device) BeforeSave() error {
+func (e *Ebcp_item_schedule) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_device) Prepare() {
+func (e *Ebcp_item_schedule) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_device) Validate(action Action) error {
+func (e *Ebcp_item_schedule) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_device) TableInfo() *TableInfo {
-	return Ebcp_deviceTableInfo
+func (e *Ebcp_item_schedule) TableInfo() *TableInfo {
+	return Ebcp_item_scheduleTableInfo
 }

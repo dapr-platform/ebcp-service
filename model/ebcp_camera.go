@@ -17,51 +17,51 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_exhibition_room
+Table: o_ebcp_camera
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] location                                       VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 7] exhibition_hall_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[ 9] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 6] device_no                                      VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 7] main_stream_url                                VARCHAR(1024)        null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 1024    default: []
+[ 8] sub_stream_url                                 VARCHAR(1024)        null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 1024    default: []
+[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "rCoFopTExUCFtVeIyqPZLPaRq",    "created_by": "DTEaSXDqHlnJMAAytXoaOQoIH",    "created_time": 44,    "updated_by": "uxjjvfaWVQLwknSgcKQjIhQvi",    "updated_time": 10,    "name": "iBWZERUncyvARHTqwgEmRokVx",    "location": "kguyMwqdTamWwRNPPffgECPLn",    "exhibition_hall_id": "dlBKTgQjFbMAJMtbDHosiBRGl",    "status": 0,    "remarks": "WBnnPdjdpjjdqxIsCuobashuG"}
+{    "id": "COSpBXLNvsTrnpuuVCXkfCjiN",    "created_by": "vNgZwYGDelsFemSqyrXgTmMZQ",    "created_time": 65,    "updated_by": "YGCEAdFPkFHOMCEGSDsushCMs",    "updated_time": 44,    "name": "HKFpLVSpFmOJmAQLFZnRxQraD",    "device_no": "AMaXfvsFiliunVsCAnrSWiEbu",    "main_stream_url": "ZfYjOXxfXEYOXHIRqjZjDXAbJ",    "sub_stream_url": "OWDPUqcdysxpkECxvgQeXYEhJ",    "status": 14}
 
 
 
 */
 
 var (
-	Ebcp_exhibition_room_FIELD_NAME_id = "id"
+	Ebcp_camera_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_room_FIELD_NAME_created_by = "created_by"
+	Ebcp_camera_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_exhibition_room_FIELD_NAME_created_time = "created_time"
+	Ebcp_camera_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_exhibition_room_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_camera_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_exhibition_room_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_camera_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_exhibition_room_FIELD_NAME_name = "name"
+	Ebcp_camera_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_room_FIELD_NAME_location = "location"
+	Ebcp_camera_FIELD_NAME_device_no = "device_no"
 
-	Ebcp_exhibition_room_FIELD_NAME_exhibition_hall_id = "exhibition_hall_id"
+	Ebcp_camera_FIELD_NAME_main_stream_url = "main_stream_url"
 
-	Ebcp_exhibition_room_FIELD_NAME_status = "status"
+	Ebcp_camera_FIELD_NAME_sub_stream_url = "sub_stream_url"
 
-	Ebcp_exhibition_room_FIELD_NAME_remarks = "remarks"
+	Ebcp_camera_FIELD_NAME_status = "status"
 )
 
-// Ebcp_exhibition_room struct is a row record of the o_ebcp_exhibition_room table in the  database
-type Ebcp_exhibition_room struct {
+// Ebcp_camera struct is a row record of the o_ebcp_camera table in the  database
+type Ebcp_camera struct {
 	ID string `json:"id"` //id
 
 	CreatedBy string `json:"created_by"` //created_by
@@ -72,20 +72,20 @@ type Ebcp_exhibition_room struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Name string `json:"name"` //展厅名称
+	Name string `json:"name"` //摄像头名称
 
-	Location string `json:"location"` //展厅位置
+	DeviceNo string `json:"device_no"` //设备编号
 
-	ExhibitionHallID string `json:"exhibition_hall_id"` //所属展馆ID
+	MainStreamURL string `json:"main_stream_url"` //主码流URL
 
-	Status int32 `json:"status"` //状态（1: 正常, 2: 未使用, 3: 维修）
+	SubStreamURL string `json:"sub_stream_url"` //辅码流URL
 
-	Remarks string `json:"remarks"` //备注
+	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
 
 }
 
-var Ebcp_exhibition_roomTableInfo = &TableInfo{
-	Name: "o_ebcp_exhibition_room",
+var Ebcp_cameraTableInfo = &TableInfo{
+	Name: "o_ebcp_camera",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
@@ -196,7 +196,7 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              5,
 			Name:               "name",
-			Comment:            `展厅名称`,
+			Comment:            `摄像头名称`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -216,10 +216,10 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "location",
-			Comment:            `展厅位置`,
+			Name:               "device_no",
+			Comment:            `设备编号`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
@@ -227,39 +227,60 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "Location",
+			GoFieldName:        "DeviceNo",
 			GoFieldType:        "string",
-			JSONFieldName:      "location",
-			ProtobufFieldName:  "location",
+			JSONFieldName:      "device_no",
+			ProtobufFieldName:  "device_no",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
 			Index:              7,
-			Name:               "exhibition_hall_id",
-			Comment:            `所属展馆ID`,
+			Name:               "main_stream_url",
+			Comment:            `主码流URL`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
+			DatabaseTypePretty: "VARCHAR(1024)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "ExhibitionHallID",
+			ColumnLength:       1024,
+			GoFieldName:        "MainStreamURL",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_hall_id",
-			ProtobufFieldName:  "exhibition_hall_id",
+			JSONFieldName:      "main_stream_url",
+			ProtobufFieldName:  "main_stream_url",
 			ProtobufType:       "string",
 			ProtobufPos:        8,
 		},
 
 		&ColumnInfo{
 			Index:              8,
+			Name:               "sub_stream_url",
+			Comment:            `辅码流URL`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(1024)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       1024,
+			GoFieldName:        "SubStreamURL",
+			GoFieldType:        "string",
+			JSONFieldName:      "sub_stream_url",
+			ProtobufFieldName:  "sub_stream_url",
+			ProtobufType:       "string",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
 			Name:               "status",
-			Comment:            `状态（1: 正常, 2: 未使用, 3: 维修）`,
+			Comment:            `状态(1: 正常, 2: 故障)`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -274,52 +295,31 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        9,
-		},
-
-		&ColumnInfo{
-			Index:              9,
-			Name:               "remarks",
-			Comment:            `备注`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TEXT",
-			DatabaseTypePretty: "TEXT",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TEXT",
-			ColumnLength:       -1,
-			GoFieldName:        "Remarks",
-			GoFieldType:        "string",
-			JSONFieldName:      "remarks",
-			ProtobufFieldName:  "remarks",
-			ProtobufType:       "string",
 			ProtobufPos:        10,
 		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_exhibition_room) TableName() string {
-	return "o_ebcp_exhibition_room"
+func (e *Ebcp_camera) TableName() string {
+	return "o_ebcp_camera"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_exhibition_room) BeforeSave() error {
+func (e *Ebcp_camera) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_exhibition_room) Prepare() {
+func (e *Ebcp_camera) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_exhibition_room) Validate(action Action) error {
+func (e *Ebcp_camera) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_exhibition_room) TableInfo() *TableInfo {
-	return Ebcp_exhibition_roomTableInfo
+func (e *Ebcp_camera) TableInfo() *TableInfo {
+	return Ebcp_cameraTableInfo
 }
