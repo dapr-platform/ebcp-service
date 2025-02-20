@@ -1,5 +1,18 @@
 basePath: /swagger/ebcp-service
 definitions:
+  api.WindowParams:
+    properties:
+      fullscreen:
+        type: boolean
+      height:
+        type: integer
+      width:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
   common.Page:
     properties:
       items: {}
@@ -2551,6 +2564,236 @@ paths:
           schema:
             $ref: '#/definitions/common.Response'
       summary: delete
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/pause:
+    post:
+      description: Pause playback on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Pause playback
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/play-by-index/{index}:
+    post:
+      description: Play resource by index on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Resource Index
+        in: path
+        name: index
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Play resource by index
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/play-current:
+    post:
+      description: Play current resource on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Play current resource
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/play-next:
+    post:
+      description: Play next resource on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Play next resource
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/play-prev:
+    post:
+      description: Play previous resource on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Play previous resource
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/resume:
+    post:
+      description: Resume playback on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Resume playback
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/set-visibility/{visible}:
+    post:
+      description: Set visibility on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Visibility
+        in: path
+        name: visible
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Set visibility
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/set-volume/{volume}:
+    post:
+      description: Set volume on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Volume (0-100)
+        in: path
+        name: volume
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Set volume
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/set-window:
+    post:
+      consumes:
+      - application/json
+      description: Set window position and size on specified player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Window Parameters
+        in: body
+        name: window
+        required: true
+        schema:
+          $ref: '#/definitions/api.WindowParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Set window
       tags:
       - 播放设备
   /ebcp-player/batch-delete:
