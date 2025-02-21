@@ -1,6 +1,7 @@
 package client
 
 import (
+	"bytes"
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
@@ -14,24 +15,35 @@ import (
 const (
 	// Protocol constants
 	ProtocolHeader  uint32 = 0x55CC55CC
-	ProtocolVersion uint16 = 0x0100
+	ProtocolVersion uint16 = 0x0001
 
 	// Command tags
-	TagPlayCurrent   uint16 = 24000
-	TagPlayPrev      uint16 = 24002
-	TagPlayNext      uint16 = 24003
-	TagPlayByIndex   uint16 = 24004
-	TagPause         uint16 = 24005
-	TagResume        uint16 = 24006
-	TagStop          uint16 = 24007
-	TagSetVolume     uint16 = 24014
-	TagSetWindow     uint16 = 24016
-	TagSetVisibility uint16 = 24018
+	TagGetProgramList uint16 = 129
+	TagFadeProgram    uint16 = 131
+	TagCutProgram     uint16 = 132
+	TagPauseProgram   uint16 = 133
+	TagPlayProgram    uint16 = 271
+	TagStopProgram    uint16 = 272
 
 	// Connection constants
 	reconnectInterval = 5 * time.Second
 	connectTimeout    = 5 * time.Second
+
+	bufferSize = 655360
 )
+
+// Program represents a program in the player
+type Program struct {
+	ID      uint32
+	Name    string
+	IsEmpty bool
+}
+
+// ProgramListResponse represents response of GetProgramList
+type ProgramListResponse struct {
+	TotalCount int
+	Programs   []Program
+}
 
 // PlayerClient represents a client to control media player
 type PlayerClient struct {
@@ -42,13 +54,73 @@ type PlayerClient struct {
 	closed    bool
 	connected bool
 	connChan  chan bool // Channel to signal connection status
+
+	// Channels for async communication
+	sendChan    chan *commandRequest
+	responseBuf *responseBuffer
+}
+
+// commandRequest represents a command to be sent
+type commandRequest struct {
+	tag      uint16
+	data     []byte
+	respChan chan *commandResponse
+}
+
+// commandResponse represents a response from the server
+type commandResponse struct {
+	data []byte
+	err  error
+}
+
+// responseBuffer manages received data
+type responseBuffer struct {
+	mu       sync.Mutex
+	data     []byte
+	ready    chan struct{}
+	lastRead time.Time
+}
+
+// newResponseBuffer creates a new response buffer
+func newResponseBuffer() *responseBuffer {
+	return &responseBuffer{
+		ready:    make(chan struct{}, 1),
+		lastRead: time.Now(),
+	}
+}
+
+// append adds data to the buffer
+func (rb *responseBuffer) append(data []byte) {
+	rb.mu.Lock()
+	rb.data = append(rb.data, data...)
+	rb.lastRead = time.Now()
+	rb.mu.Unlock()
+}
+
+// isComplete checks if the response is complete (no new data for 1 second)
+func (rb *responseBuffer) isComplete() bool {
+	rb.mu.Lock()
+	defer rb.mu.Unlock()
+	return len(rb.data) > 0 && time.Since(rb.lastRead) >= time.Second
+}
+
+// get retrieves and clears the buffer
+func (rb *responseBuffer) get() []byte {
+	rb.mu.Lock()
+	defer rb.mu.Unlock()
+	data := rb.data
+	rb.data = nil
+	rb.lastRead = time.Now()
+	return data
 }
 
 // NewTCPClient creates a new TCP client
 func NewTCPClient(addr string) (*PlayerClient, error) {
 	client := &PlayerClient{
-		addr:     addr,
-		connChan: make(chan bool, 1),
+		addr:        addr,
+		connChan:    make(chan bool, 1),
+		sendChan:    make(chan *commandRequest),
+		responseBuf: newResponseBuffer(),
 	}
 
 	// Try initial connection
@@ -58,6 +130,10 @@ func NewTCPClient(addr string) (*PlayerClient, error) {
 
 	// Start connection manager goroutine
 	go client.maintainConnection()
+
+	// Start send/receive goroutines
+	go client.sendLoop()
+	go client.receiveLoop()
 
 	return client, nil
 }
@@ -116,31 +192,6 @@ func (c *PlayerClient) handleConnectionFailure() {
 	c.mu.Unlock()
 }
 
-// waitForConnection waits for connection to be established
-func (c *PlayerClient) waitForConnection(timeout time.Duration) error {
-	timer := time.NewTimer(timeout)
-	defer timer.Stop()
-
-	select {
-	case <-c.connChan:
-		return nil
-	case <-timer.C:
-		return errors.New("connection timeout")
-	}
-}
-
-// Close closes the connection
-func (c *PlayerClient) Close() error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	c.closed = true
-	if c.conn != nil {
-		return c.conn.Close()
-	}
-	return nil
-}
-
 // buildPacket builds a protocol packet
 func (c *PlayerClient) buildPacket(tag uint16, data []byte) []byte {
 	contentLen := len(data)
@@ -182,14 +233,56 @@ func bytesToHexString(data []byte) string {
 	return strings.ToUpper(strings.Join(parts, " "))
 }
 
-// sendCommand sends command and returns response
-func (c *PlayerClient) sendCommand(tag uint16, data []byte) (bool, uint64, error) {
-	// Set timeout for the entire operation
-	deadline := time.Now().Add(connectTimeout)
+// sendLoop handles sending commands
+func (c *PlayerClient) sendLoop() {
+	for {
+		select {
+		case req := <-c.sendChan:
+			if req == nil {
+				return // Channel closed
+			}
+
+			c.mu.RLock()
+			conn := c.conn
+			connected := c.connected
+			c.mu.RUnlock()
+
+			if !connected || conn == nil {
+				req.respChan <- &commandResponse{err: errors.New("not connected")}
+				continue
+			}
+
+			packet := c.buildPacket(req.tag, req.data)
+			fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
+
+			_, err := conn.Write(packet)
+			if err != nil {
+				c.handleConnectionFailure()
+				req.respChan <- &commandResponse{err: err}
+				continue
+			}
+
+			// Wait for response
+			select {
+			case <-c.responseBuf.ready:
+				resp := c.responseBuf.get()
+				req.respChan <- &commandResponse{data: resp}
+			case <-time.After(10 * time.Second): // Increased timeout for large responses
+				req.respChan <- &commandResponse{err: errors.New("response timeout")}
+			}
+		}
+	}
+}
+
+// receiveLoop handles receiving data
+func (c *PlayerClient) receiveLoop() {
+	tempBuf := make([]byte, bufferSize)
+	checkTicker := time.NewTicker(100 * time.Millisecond) // Check completion every 100ms
+	defer checkTicker.Stop()
 
 	for {
-		if time.Now().After(deadline) {
-			return false, 0, errors.New("operation timeout")
+		if c.closed {
+			return
 		}
 
 		c.mu.RLock()
@@ -197,123 +290,210 @@ func (c *PlayerClient) sendCommand(tag uint16, data []byte) (bool, uint64, error
 		connected := c.connected
 		c.mu.RUnlock()
 
-		// If not connected, wait for connection
 		if !connected || conn == nil {
 			time.Sleep(time.Second)
 			continue
 		}
 
-		// Set deadline for this attempt
+		// Set a read deadline to prevent blocking forever
 		if tcpConn, ok := conn.(*net.TCPConn); ok {
-			tcpConn.SetDeadline(time.Now().Add(time.Second * 3))
+			tcpConn.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
 		}
 
-		packet := c.buildPacket(tag, data)
-		fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
+		select {
+		case <-checkTicker.C:
+			// Check if we have a complete response
+			if c.responseBuf.isComplete() {
+				select {
+				case c.responseBuf.ready <- struct{}{}:
+				default:
+				}
+			}
+		default:
+			n, err := conn.Read(tempBuf)
+			if err != nil {
+				if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+					// Timeout is expected, continue checking for completion
+					continue
+				}
+				c.handleConnectionFailure()
+				continue
+			}
 
-		_, err := conn.Write(packet)
-		if err != nil {
-			c.handleConnectionFailure()
-			continue
+			if n > 0 {
+				c.responseBuf.append(tempBuf[:n])
+				fmt.Printf("Received %d bytes\n", n)
+			}
 		}
-
-		// Read response
-		resp := make([]byte, 1024)
-		n, err := conn.Read(resp)
-		if err != nil {
-			c.handleConnectionFailure()
-			continue
-		}
-
-		fmt.Printf("Received packet: %s\n", bytesToHexString(resp[:n]))
-
-		if n < 17 { // Minimum response size
-			c.handleConnectionFailure()
-			continue
-		}
-
-		success := resp[16] == 1
-		var resourceID uint64
-		if n >= 25 {
-			resourceID = binary.LittleEndian.Uint64(resp[17:25])
-		}
-
-		return success, resourceID, nil
 	}
 }
 
-// PlayCurrent plays current resource
-func (c *PlayerClient) PlayCurrent() (bool, uint64, error) {
-	return c.sendCommand(TagPlayCurrent, nil)
-}
-
-// PlayPrev plays previous resource
-func (c *PlayerClient) PlayPrev() (bool, uint64, error) {
-	return c.sendCommand(TagPlayPrev, nil)
-}
-
-// PlayNext plays next resource
-func (c *PlayerClient) PlayNext() (bool, uint64, error) {
-	return c.sendCommand(TagPlayNext, nil)
-}
-
-// PlayByIndex plays resource by index
-func (c *PlayerClient) PlayByIndex(index uint64) (bool, uint64, error) {
-	data := make([]byte, 8)
-	binary.LittleEndian.PutUint64(data, index)
-	return c.sendCommand(TagPlayByIndex, data)
-}
-
-// Pause pauses current playback
-func (c *PlayerClient) Pause() (bool, uint64, error) {
-	return c.sendCommand(TagPause, nil)
-}
-
-// Resume resumes playback
-func (c *PlayerClient) Resume() (bool, uint64, error) {
-	return c.sendCommand(TagResume, nil)
-}
-
-// Stop stops playback
-func (c *PlayerClient) Stop() (bool, uint64, error) {
-	return c.sendCommand(TagStop, nil)
-}
-
-// SetVolume sets volume level (0-100)
-func (c *PlayerClient) SetVolume(volume uint16) (bool, error) {
-	if volume > 100 {
-		return false, errors.New("volume must be between 0 and 100")
+// sendCommand sends command and returns response
+func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
+	respChan := make(chan *commandResponse, 1)
+	req := &commandRequest{
+		tag:      tag,
+		data:     data,
+		respChan: respChan,
 	}
 
-	data := make([]byte, 2)
-	binary.LittleEndian.PutUint16(data, volume)
+	// Send request
+	c.sendChan <- req
 
-	success, _, err := c.sendCommand(TagSetVolume, data)
-	return success, err
+	// Wait for response with timeout
+	select {
+	case resp := <-respChan:
+		if resp.err != nil {
+			return nil, fmt.Errorf("command failed: %v", resp.err)
+		}
+
+		// Verify response
+		if len(resp.data) < 16 {
+			return nil, errors.New("response too short")
+		}
+
+		packetHeader := binary.LittleEndian.Uint32(resp.data[0:4])
+		tlvTag := binary.LittleEndian.Uint16(resp.data[12:14])
+		fmt.Printf("Packet verification: header=0x%08X, TLV tag=%d\n", packetHeader, tlvTag)
+
+		return resp.data, nil
+	case <-time.After(10 * time.Second): // Overall timeout
+		return nil, errors.New("command timeout")
+	}
 }
 
-// SetWindow sets window position and size
-func (c *PlayerClient) SetWindow(x, y, width, height uint16, fullscreen bool) (bool, error) {
-	data := make([]byte, 9)
-	binary.LittleEndian.PutUint16(data[0:], x)
-	binary.LittleEndian.PutUint16(data[2:], y)
-	binary.LittleEndian.PutUint16(data[4:], width)
-	binary.LittleEndian.PutUint16(data[6:], height)
-	if fullscreen {
-		data[8] = 1
+// GetProgramList gets the program list
+func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
+	// Send empty data for query
+	resp, err := c.sendCommand(TagGetProgramList, nil)
+	if err != nil {
+		return nil, fmt.Errorf("GetProgramList failed: %v", err)
 	}
 
-	success, _, err := c.sendCommand(TagSetWindow, data)
-	return success, err
+	// Each program comes in a separate packet
+	// Each packet: CC 55 CC 55 + version(2) + sequence(2) + tag(2) + length(2) + TLV
+	const (
+		headerSize       = 12 // CC 55 CC 55 + version + sequence + tag + length
+		tlvHeaderSize    = 4  // TLV tag(2) + length(2)
+		programCountSize = 4  // Program count is 2 bytes
+		programIndexSize = 4
+		programIdSize    = 4
+		programNameSize  = 128
+		isEmptySize      = 1
+	)
+
+	// First packet contains the program count
+	if len(resp) < headerSize+tlvHeaderSize+programCountSize {
+		return nil, fmt.Errorf("response too short for header and program count")
+	}
+
+	// Get program count from first packet
+	programCount := int(binary.LittleEndian.Uint16(resp[16:18]))
+	fmt.Printf("Program count: %d\n", programCount)
+
+	// Create result structure
+	result := &ProgramListResponse{
+		TotalCount: programCount,
+		Programs:   make([]Program, 0, programCount),
+	}
+
+	// Process each packet
+	offset := 0
+	for i := 0; i < programCount; i++ {
+		// Find next packet start
+		for offset < len(resp)-4 {
+			if resp[offset] == 0xCC && resp[offset+1] == 0x55 &&
+				resp[offset+2] == 0xCC && resp[offset+3] == 0x55 {
+				break
+			}
+			offset++
+		}
+
+		// Verify we have enough data for a complete packet
+		packetStart := offset
+		if packetStart+headerSize+tlvHeaderSize+programCountSize+
+			programIndexSize+programIdSize+programNameSize+isEmptySize > len(resp) {
+			return nil, fmt.Errorf("incomplete packet data at program %d", i)
+		}
+
+		// Skip header and TLV header
+		dataStart := packetStart + headerSize + tlvHeaderSize + programCountSize
+
+		// Read program data
+		program := Program{
+			ID:      binary.LittleEndian.Uint32(resp[dataStart+programIndexSize : dataStart+programIndexSize+programIdSize]),
+			IsEmpty: resp[dataStart+programIndexSize+programIdSize+programNameSize] == 0,
+		}
+
+		// Read null-terminated program name
+		nameBytes := resp[dataStart+programIndexSize+programIdSize : dataStart+programIndexSize+programIdSize+programNameSize]
+		nullPos := bytes.IndexByte(nameBytes, 0)
+		if nullPos != -1 {
+			program.Name = string(nameBytes[:nullPos])
+		} else {
+			program.Name = string(bytes.TrimRight(nameBytes, "\x00"))
+		}
+
+		result.Programs = append(result.Programs, program)
+
+		// Move to next packet
+		offset = packetStart + headerSize + tlvHeaderSize + programCountSize +
+			programIndexSize + programIdSize + programNameSize + isEmptySize
+	}
+
+	return result, nil
 }
 
-// SetVisibility sets window visibility
-func (c *PlayerClient) SetVisibility(visible bool) (bool, error) {
-	data := make([]byte, 2)
-	if visible {
-		binary.LittleEndian.PutUint16(data, 1)
-	}
+// FadeProgram fades to specified program
+func (c *PlayerClient) FadeProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagFadeProgram, data)
+	return err
+}
 
-	success, _, err := c.sendCommand(TagSetVisibility, data)
-	return success, err
+// CutProgram cuts to specified program
+func (c *PlayerClient) CutProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagCutProgram, data)
+	return err
+}
+
+// PauseProgram pauses specified program
+func (c *PlayerClient) PauseProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagPauseProgram, data)
+	return err
+}
+
+// PlayProgram plays specified program
+func (c *PlayerClient) PlayProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagPlayProgram, data)
+	return err
+}
+
+// StopProgram stops specified program
+func (c *PlayerClient) StopProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagStopProgram, data)
+	return err
+}
+
+// Close closes the connection and stops all goroutines
+func (c *PlayerClient) Close() error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.closed = true
+	close(c.sendChan) // Signal sendLoop to stop
+
+	if c.conn != nil {
+		return c.conn.Close()
+	}
+	return nil
 }

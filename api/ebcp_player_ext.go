@@ -11,26 +11,23 @@ import (
 
 func InitEbcp_playerExtRoute(r chi.Router) {
 	// Register player control routes
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play-current", PlayCurrentHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play-prev", PlayPrevHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play-next", PlayNextHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play-by-index/{index}", PlayByIndexHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/pause", PauseHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/resume", ResumeHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/set-volume/{volume}", SetVolumeHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/set-window", SetWindowHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/set-visibility/{visible}", SetVisibilityHandler)
+	r.Get(common.BASE_CONTEXT+"/ebcp-player/{id}/program-list", GetProgramListHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/fade/{programId}", FadeProgramHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/cut/{programId}", CutProgramHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/pause/{programId}", PauseProgramHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play/{programId}", PlayProgramHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/stop/{programId}", StopProgramHandler)
 }
 
-// @Summary Play current resource
-// @Description Play current resource on specified player
+// @Summary Get program list
+// @Description Get program list from specified player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/play-current [post]
-func PlayCurrentHandler(w http.ResponseWriter, r *http.Request) {
+// @Router /ebcp-player/{id}/program-list [get]
+func GetProgramListHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	client := service.GetPlayerClient(id)
 	if client == nil {
@@ -38,90 +35,31 @@ func PlayCurrentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	success, resourceID, err := client.PlayCurrent()
+	programs, err := client.GetProgramList()
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
 
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
+	common.HttpSuccess(w, common.OK.WithData(programs))
 }
 
-// @Summary Play previous resource
-// @Description Play previous resource on specified player
+// @Summary Fade to program
+// @Description Fade to specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
+// @Param programId path string true "Program ID"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/play-prev [post]
-func PlayPrevHandler(w http.ResponseWriter, r *http.Request) {
+// @Router /ebcp-player/{id}/fade/{programId} [post]
+func FadeProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
+	programIdStr := chi.URLParam(r, "programId")
 
-	success, resourceID, err := client.PlayPrev()
+	programId, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
-		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
-		return
-	}
-
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
-}
-
-// @Summary Play next resource
-// @Description Play next resource on specified player
-// @Tags 播放设备
-// @Param id path string true "Player ID"
-// @Produce json
-// @Success 200 {object} common.Response "Success"
-// @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/play-next [post]
-func PlayNextHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
-
-	success, resourceID, err := client.PlayNext()
-	if err != nil {
-		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
-		return
-	}
-
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
-}
-
-// @Summary Play resource by index
-// @Description Play resource by index on specified player
-// @Tags 播放设备
-// @Param id path string true "Player ID"
-// @Param index path int true "Resource Index"
-// @Produce json
-// @Success 200 {object} common.Response "Success"
-// @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/play-by-index/{index} [post]
-func PlayByIndexHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	indexStr := chi.URLParam(r, "index")
-
-	index, err := strconv.ParseUint(indexStr, 10, 64)
-	if err != nil {
-		common.HttpResult(w, common.ErrParam.AppendMsg("invalid index"))
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
 	}
 
@@ -131,90 +69,31 @@ func PlayByIndexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	success, resourceID, err := client.PlayByIndex(index)
+	err = client.FadeProgram(uint32(programId))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
 
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
+	common.HttpSuccess(w, common.OK)
 }
 
-// @Summary Pause playback
-// @Description Pause playback on specified player
+// @Summary Cut to program
+// @Description Cut to specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
+// @Param programId path string true "Program ID"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/pause [post]
-func PauseHandler(w http.ResponseWriter, r *http.Request) {
+// @Router /ebcp-player/{id}/cut/{programId} [post]
+func CutProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
+	programIdStr := chi.URLParam(r, "programId")
 
-	success, resourceID, err := client.Pause()
+	programId, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
-		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
-		return
-	}
-
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
-}
-
-// @Summary Resume playback
-// @Description Resume playback on specified player
-// @Tags 播放设备
-// @Param id path string true "Player ID"
-// @Produce json
-// @Success 200 {object} common.Response "Success"
-// @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/resume [post]
-func ResumeHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
-
-	success, resourceID, err := client.Resume()
-	if err != nil {
-		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
-		return
-	}
-
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success":    success,
-		"resourceId": resourceID,
-	}))
-}
-
-// @Summary Set volume
-// @Description Set volume on specified player
-// @Tags 播放设备
-// @Param id path string true "Player ID"
-// @Param volume path int true "Volume (0-100)"
-// @Produce json
-// @Success 200 {object} common.Response "Success"
-// @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/set-volume/{volume} [post]
-func SetVolumeHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	volumeStr := chi.URLParam(r, "volume")
-
-	volume, err := strconv.ParseUint(volumeStr, 10, 64)
-	if err != nil || volume > 100 {
-		common.HttpResult(w, common.ErrParam.AppendMsg("invalid volume"))
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
 	}
 
@@ -224,41 +103,31 @@ func SetVolumeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	success, err := client.SetVolume(uint16(volume))
+	err = client.CutProgram(uint32(programId))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
 
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success": success,
-	}))
+	common.HttpSuccess(w, common.OK)
 }
 
-type WindowParams struct {
-	X          int32 `json:"x"`
-	Y          int32 `json:"y"`
-	Width      int32 `json:"width"`
-	Height     int32 `json:"height"`
-	Fullscreen bool  `json:"fullscreen"`
-}
-
-// @Summary Set window
-// @Description Set window position and size on specified player
+// @Summary Pause program
+// @Description Pause specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
-// @Accept json
-// @Param window body WindowParams true "Window Parameters"
+// @Param programId path string true "Program ID"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/set-window [post]
-func SetWindowHandler(w http.ResponseWriter, r *http.Request) {
-
+// @Router /ebcp-player/{id}/pause/{programId} [post]
+func PauseProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	var params WindowParams
-	if err := common.ReadRequestBody(r, &params); err != nil {
-		common.HttpResult(w, common.ErrParam.AppendMsg(err.Error()))
+	programIdStr := chi.URLParam(r, "programId")
+
+	programId, err := strconv.ParseUint(programIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
 	}
 
@@ -268,33 +137,31 @@ func SetWindowHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	success, err := client.SetWindow(uint16(params.X), uint16(params.Y), uint16(params.Width), uint16(params.Height), params.Fullscreen)
+	err = client.PauseProgram(uint32(programId))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
 
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success": success,
-	}))
+	common.HttpSuccess(w, common.OK)
 }
 
-// @Summary Set visibility
-// @Description Set visibility on specified player
+// @Summary Play program
+// @Description Play specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
-// @Param visible path bool true "Visibility"
+// @Param programId path string true "Program ID"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-player/{id}/set-visibility/{visible} [post]
-func SetVisibilityHandler(w http.ResponseWriter, r *http.Request) {
+// @Router /ebcp-player/{id}/play/{programId} [post]
+func PlayProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	visibleStr := chi.URLParam(r, "visible")
+	programIdStr := chi.URLParam(r, "programId")
 
-	visible, err := strconv.ParseBool(visibleStr)
+	programId, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
-		common.HttpResult(w, common.ErrParam.AppendMsg("invalid visibility value"))
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
 	}
 
@@ -304,13 +171,45 @@ func SetVisibilityHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	success, err := client.SetVisibility(visible)
+	err = client.PlayProgram(uint32(programId))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
 
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{
-		"success": success,
-	}))
+	common.HttpSuccess(w, common.OK)
+}
+
+// @Summary Stop program
+// @Description Stop specified program on player
+// @Tags 播放设备
+// @Param id path string true "Player ID"
+// @Param programId path string true "Program ID"
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-player/{id}/stop/{programId} [post]
+func StopProgramHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	programIdStr := chi.URLParam(r, "programId")
+
+	programId, err := strconv.ParseUint(programIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
+		return
+	}
+
+	client := service.GetPlayerClient(id)
+	if client == nil {
+		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
+		return
+	}
+
+	err = client.StopProgram(uint32(programId))
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+
+	common.HttpSuccess(w, common.OK)
 }

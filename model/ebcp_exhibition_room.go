@@ -32,7 +32,7 @@ Table: o_ebcp_exhibition_room
 
 JSON Sample
 -------------------------------------
-{    "id": "rCoFopTExUCFtVeIyqPZLPaRq",    "created_by": "DTEaSXDqHlnJMAAytXoaOQoIH",    "created_time": 44,    "updated_by": "uxjjvfaWVQLwknSgcKQjIhQvi",    "updated_time": 10,    "name": "iBWZERUncyvARHTqwgEmRokVx",    "location": "kguyMwqdTamWwRNPPffgECPLn",    "exhibition_hall_id": "dlBKTgQjFbMAJMtbDHosiBRGl",    "status": 0,    "remarks": "WBnnPdjdpjjdqxIsCuobashuG"}
+{    "id": "qPkDrTykmcGRIaPDwYIdlKuha",    "created_by": "AkmESPURQNleVvPpbFKvdQiNY",    "created_time": 19,    "updated_by": "QOfpyuWRqFAAsUAJHWIIKhAIG",    "updated_time": 53,    "name": "OKZRnoWAXbGboYwgHFaxfTqtV",    "location": "jlRQXeUDvPNLBQwwJyXKVXocc",    "exhibition_hall_id": "mLiLujUOPnmpwXhahWQmdUmIx",    "status": 60,    "remarks": "aqptSqcUnQnsHsvjVhDZtAAfS"}
 
 
 
