@@ -3807,16 +3807,184 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-player/{id}/pause": {
+        "/ebcp-player/{id}/cut/{programId}": {
             "post": {
-                "description": "Pause playback on specified player",
+                "description": "Cut to specified program on player",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "播放设备"
                 ],
-                "summary": "Pause playback",
+                "summary": "Cut to program",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/fade/{programId}": {
+            "post": {
+                "description": "Fade to specified program on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Fade to program",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/pause/{programId}": {
+            "post": {
+                "description": "Pause specified program on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Pause program",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/play/{programId}": {
+            "post": {
+                "description": "Play specified program on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Play program",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/program-list": {
+            "get": {
+                "description": "Get program list from specified player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Get program list",
                 "parameters": [
                     {
                         "type": "string",
@@ -3842,16 +4010,16 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-player/{id}/play-by-index/{index}": {
+        "/ebcp-player/{id}/stop/{programId}": {
             "post": {
-                "description": "Play resource by index on specified player",
+                "description": "Stop specified program on player",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "播放设备"
                 ],
-                "summary": "Play resource by index",
+                "summary": "Stop program",
                 "parameters": [
                     {
                         "type": "string",
@@ -3861,282 +4029,11 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
-                        "description": "Resource Index",
-                        "name": "index",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/play-current": {
-            "post": {
-                "description": "Play current resource on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Play current resource",
-                "parameters": [
-                    {
                         "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
+                        "description": "Program ID",
+                        "name": "programId",
                         "in": "path",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/play-next": {
-            "post": {
-                "description": "Play next resource on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Play next resource",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/play-prev": {
-            "post": {
-                "description": "Play previous resource on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Play previous resource",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/resume": {
-            "post": {
-                "description": "Resume playback on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Resume playback",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/set-visibility/{visible}": {
-            "post": {
-                "description": "Set visibility on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Set visibility",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "Visibility",
-                        "name": "visible",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/set-volume/{volume}": {
-            "post": {
-                "description": "Set volume on specified player",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Set volume",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Volume (0-100)",
-                        "name": "volume",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player/{id}/set-window": {
-            "post": {
-                "description": "Set window position and size on specified player",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备"
-                ],
-                "summary": "Set window",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Player ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Window Parameters",
-                        "name": "window",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/api.WindowParams"
-                        }
                     }
                 ],
                 "responses": {
@@ -4157,26 +4054,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "api.WindowParams": {
-            "type": "object",
-            "properties": {
-                "fullscreen": {
-                    "type": "boolean"
-                },
-                "height": {
-                    "type": "integer"
-                },
-                "width": {
-                    "type": "integer"
-                },
-                "x": {
-                    "type": "integer"
-                },
-                "y": {
-                    "type": "integer"
-                }
-            }
-        },
         "common.Page": {
             "type": "object",
             "properties": {

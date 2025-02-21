@@ -1,18 +1,5 @@
 basePath: /swagger/ebcp-service
 definitions:
-  api.WindowParams:
-    properties:
-      fullscreen:
-        type: boolean
-      height:
-        type: integer
-      width:
-        type: integer
-      x:
-        type: integer
-      "y":
-        type: integer
-    type: object
   common.Page:
     properties:
       items: {}
@@ -2566,13 +2553,18 @@ paths:
       summary: delete
       tags:
       - 播放设备
-  /ebcp-player/{id}/pause:
+  /ebcp-player/{id}/cut/{programId}:
     post:
-      description: Pause playback on specified player
+      description: Cut to specified program on player
       parameters:
       - description: Player ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Program ID
+        in: path
+        name: programId
         required: true
         type: string
       produces:
@@ -2586,23 +2578,23 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Pause playback
+      summary: Cut to program
       tags:
       - 播放设备
-  /ebcp-player/{id}/play-by-index/{index}:
+  /ebcp-player/{id}/fade/{programId}:
     post:
-      description: Play resource by index on specified player
+      description: Fade to specified program on player
       parameters:
       - description: Player ID
         in: path
         name: id
         required: true
         type: string
-      - description: Resource Index
+      - description: Program ID
         in: path
-        name: index
+        name: programId
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -2614,16 +2606,21 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Play resource by index
+      summary: Fade to program
       tags:
       - 播放设备
-  /ebcp-player/{id}/play-current:
+  /ebcp-player/{id}/pause/{programId}:
     post:
-      description: Play current resource on specified player
+      description: Pause specified program on player
       parameters:
       - description: Player ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Program ID
+        in: path
+        name: programId
         required: true
         type: string
       produces:
@@ -2637,16 +2634,21 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Play current resource
+      summary: Pause program
       tags:
       - 播放设备
-  /ebcp-player/{id}/play-next:
+  /ebcp-player/{id}/play/{programId}:
     post:
-      description: Play next resource on specified player
+      description: Play specified program on player
       parameters:
       - description: Player ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Program ID
+        in: path
+        name: programId
         required: true
         type: string
       produces:
@@ -2660,12 +2662,12 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Play next resource
+      summary: Play program
       tags:
       - 播放设备
-  /ebcp-player/{id}/play-prev:
-    post:
-      description: Play previous resource on specified player
+  /ebcp-player/{id}/program-list:
+    get:
+      description: Get program list from specified player
       parameters:
       - description: Player ID
         in: path
@@ -2683,16 +2685,21 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Play previous resource
+      summary: Get program list
       tags:
       - 播放设备
-  /ebcp-player/{id}/resume:
+  /ebcp-player/{id}/stop/{programId}:
     post:
-      description: Resume playback on specified player
+      description: Stop specified program on player
       parameters:
       - description: Player ID
         in: path
         name: id
+        required: true
+        type: string
+      - description: Program ID
+        in: path
+        name: programId
         required: true
         type: string
       produces:
@@ -2706,94 +2713,7 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: Resume playback
-      tags:
-      - 播放设备
-  /ebcp-player/{id}/set-visibility/{visible}:
-    post:
-      description: Set visibility on specified player
-      parameters:
-      - description: Player ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Visibility
-        in: path
-        name: visible
-        required: true
-        type: boolean
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/common.Response'
-        "500":
-          description: Error
-          schema:
-            $ref: '#/definitions/common.Response'
-      summary: Set visibility
-      tags:
-      - 播放设备
-  /ebcp-player/{id}/set-volume/{volume}:
-    post:
-      description: Set volume on specified player
-      parameters:
-      - description: Player ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Volume (0-100)
-        in: path
-        name: volume
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/common.Response'
-        "500":
-          description: Error
-          schema:
-            $ref: '#/definitions/common.Response'
-      summary: Set volume
-      tags:
-      - 播放设备
-  /ebcp-player/{id}/set-window:
-    post:
-      consumes:
-      - application/json
-      description: Set window position and size on specified player
-      parameters:
-      - description: Player ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Window Parameters
-        in: body
-        name: window
-        required: true
-        schema:
-          $ref: '#/definitions/api.WindowParams'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: '#/definitions/common.Response'
-        "500":
-          description: Error
-          schema:
-            $ref: '#/definitions/common.Response'
-      summary: Set window
+      summary: Stop program
       tags:
       - 播放设备
   /ebcp-player/batch-delete:
