@@ -32,7 +32,7 @@ Table: o_ebcp_camera
 
 JSON Sample
 -------------------------------------
-{    "id": "eQZbiTkyufaxorCTuddgatkVo",    "created_by": "VGnMcyqrbYsjqGnpYFgZKiUZO",    "created_time": 47,    "updated_by": "HVyNrkWuDpqENkKTRiZftnwqX",    "updated_time": 52,    "name": "cVIlLoKZRfZKbhpmgUqJBOloE",    "device_no": "dcxwQWGQPkumiZaGwfiUqfOVd",    "main_stream_url": "GVTwVcKflJsyHEAZUQxFIyRAw",    "sub_stream_url": "EkSIhbrWmbKYpMmhCvHqkAttF",    "status": 13}
+{    "id": "wHHwFeIDlSvhjYMjbQAZHdvQD",    "created_by": "UqdJRTyQJsNOjKaUtgSJwgrAu",    "created_time": 78,    "updated_by": "plibHFenBSMAZFIesUmqYkpnP",    "updated_time": 54,    "name": "TUkAFMltMFgNiPtXDBZYKxuZp",    "device_no": "vhgYespOSDQaXMqSGFtvpPolU",    "main_stream_url": "bLdptMJgXlmRFdcPlftIKMwrS",    "sub_stream_url": "yAHgnrbTAgHwcyHccSWgbMXff",    "status": 42}
 
 
 

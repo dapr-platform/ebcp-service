@@ -31,7 +31,7 @@ Table: o_ebcp_item_schedule
 
 JSON Sample
 -------------------------------------
-{    "id": "xwDAEaUybTZydSQVqXaRRACUA",    "created_by": "QZDSaiJoavwZisemCdQqSHVre",    "created_time": 24,    "updated_by": "NjnPYwIqpfdoSPLvsqHFHNYan",    "updated_time": 19,    "exhibition_item_id": "ppXXctIRkEOvFxFkIBeeBkxLa",    "schedule_time": "2299-08-06T06:36:21.531952261+08:00",    "task_type": 68,    "cycle_type": 27}
+{    "id": "nvukBAwhgcNYAQFlOZUtonRHb",    "created_by": "nAbDSHHdksjIDwpFZIvnfrdtX",    "created_time": 7,    "updated_by": "pWmZXuWXwcDnotaJEsFasOSsb",    "updated_time": 54,    "exhibition_item_id": "cSnDmqDAsKBRaFaCPBrfgKaub",    "schedule_time": "2045-07-25T16:26:14.611248633+08:00",    "task_type": 98,    "cycle_type": 20}
 
 
 

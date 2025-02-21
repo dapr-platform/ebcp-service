@@ -29,7 +29,7 @@ Table: o_ebcp_room_area_relation
 
 JSON Sample
 -------------------------------------
-{    "id": "RrSTqeWWShhPaefMtEFoswuAF",    "created_by": "KpZGmZJfLZFnhSwvQXCAJjPsV",    "created_time": 50,    "updated_by": "lXaKoPxKNDCDefMCUyKucVsqX",    "updated_time": 85,    "exhibition_room_id": "kQZFdcYeNnFBcpQECqkOqNXRx",    "exhibition_area_id": "jZpUGYkvKIEEBPaSwmmjdHalc"}
+{    "id": "RRdBQZqyQOIhdmpkArPjDLQeX",    "created_by": "bXjgxvfBJeMyqIseBvymPXcGH",    "created_time": 28,    "updated_by": "vtQlwTQAYKsiZvgpkPUnYgtoa",    "updated_time": 2,    "exhibition_room_id": "sDyRISBMecZJqFFhmxybCAnLc",    "exhibition_area_id": "oDTYtoLulRJdEwMiXDmeqHKAj"}
 
 
 
