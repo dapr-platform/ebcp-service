@@ -26,11 +26,13 @@ Table: o_ebcp_player
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] ip_address                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 8] version                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "LerEQEqtjidDDOahYidqnWcHE",    "created_by": "lGlNgmxoiwHOZkNgfGPQOTAph",    "created_time": 58,    "updated_by": "ajVqdhbDvowoKLJLerxOIMYoP",    "updated_time": 93,    "name": "RyDPECyWHtOZdZDFUtuSfwBRt",    "ip_address": "rAccTAWICAjdcimHCBcmdSMiX",    "port": 36}
+{    "id": "FyyWdTBQgjYrftyuHfkPkIstj",    "created_by": "WsgpxcRhqZDoObMKlJrDtiQge",    "created_time": 74,    "updated_by": "FgRJHeXeooJacsOMXwofgXEvY",    "updated_time": 56,    "name": "MsuGjApKgluHHjRpwlOVQjkqd",    "ip_address": "KeAZCJFyKnyPIjQJkJTasfUJS",    "port": 93,    "version": "NJxpAARKLAQurbMqNuwnsEkQA",    "status": 69}
 
 
 
@@ -52,6 +54,10 @@ var (
 	Ebcp_player_FIELD_NAME_ip_address = "ip_address"
 
 	Ebcp_player_FIELD_NAME_port = "port"
+
+	Ebcp_player_FIELD_NAME_version = "version"
+
+	Ebcp_player_FIELD_NAME_status = "status"
 )
 
 // Ebcp_player struct is a row record of the o_ebcp_player table in the  database
@@ -71,6 +77,10 @@ type Ebcp_player struct {
 	IPAddress string `json:"ip_address"` //IP地址
 
 	Port int32 `json:"port"` //端口
+
+	Version string `json:"version"` //版本号
+
+	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
 
 }
 
@@ -244,6 +254,48 @@ var Ebcp_playerTableInfo = &TableInfo{
 			ProtobufFieldName:  "port",
 			ProtobufType:       "int32",
 			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "version",
+			Comment:            `版本号`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(255)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       255,
+			GoFieldName:        "Version",
+			GoFieldType:        "string",
+			JSONFieldName:      "version",
+			ProtobufFieldName:  "version",
+			ProtobufType:       "string",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "status",
+			Comment:            `状态(1: 正常, 2: 故障)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Status",
+			GoFieldType:        "int32",
+			JSONFieldName:      "status",
+			ProtobufFieldName:  "status",
+			ProtobufType:       "int32",
+			ProtobufPos:        10,
 		},
 	},
 }

@@ -138,6 +138,8 @@ CREATE TABLE o_ebcp_player (
     name VARCHAR(255) NOT NULL,
     ip_address VARCHAR(255) NOT NULL,
     port INTEGER NOT NULL,
+    version VARCHAR(255),
+    status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
 
@@ -145,6 +147,26 @@ COMMENT ON TABLE o_ebcp_player IS '播放设备表';
 COMMENT ON COLUMN o_ebcp_player.name IS '设备名称';
 COMMENT ON COLUMN o_ebcp_player.ip_address IS 'IP地址';
 COMMENT ON COLUMN o_ebcp_player.port IS '端口';
+COMMENT ON COLUMN o_ebcp_player.version IS '版本号';
+COMMENT ON COLUMN o_ebcp_player.status IS '状态(1: 正常, 2: 故障)';
+
+-- 播放设备节目表
+CREATE TABLE o_ebcp_player_program (
+    id VARCHAR(32) NOT NULL,
+    created_by VARCHAR(32) NOT NULL,
+    created_time TIMESTAMP NOT NULL,
+    updated_by VARCHAR(32) NOT NULL,
+    updated_time TIMESTAMP NOT NULL,
+    program_id VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    player_id VARCHAR(32) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE o_ebcp_player_program IS '播放设备节目表';
+COMMENT ON COLUMN o_ebcp_player_program.program_id IS '节目ID';
+COMMENT ON COLUMN o_ebcp_player_program.name IS '节目名称';
+COMMENT ON COLUMN o_ebcp_player_program.player_id IS '播放设备ID';
 
 -- 展项关联配置表
 CREATE TABLE o_ebcp_item_device_relation (
@@ -289,6 +311,7 @@ DROP VIEW IF EXISTS v_ebcp_exhibition_info;
 
 DROP TABLE IF EXISTS o_ebcp_item_schedule;
 DROP TABLE IF EXISTS o_ebcp_item_device_relation;
+DROP TABLE IF EXISTS o_ebcp_player_program;
 DROP TABLE IF EXISTS o_ebcp_player;
 DROP TABLE IF EXISTS o_ebcp_camera;
 DROP TABLE IF EXISTS o_ebcp_exhibition_item;

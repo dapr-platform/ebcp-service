@@ -99,6 +99,8 @@ func batchUpsertEbcp_playerHandler(w http.ResponseWriter, r *http.Request) {
 // @Param name query string false "name"
 // @Param ip_address query string false "ip_address"
 // @Param port query string false "port"
+// @Param version query string false "version"
+// @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_player}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -128,6 +130,8 @@ func Ebcp_playerPageListHandler(w http.ResponseWriter, r *http.Request) {
 // @Param name query string false "name"
 // @Param ip_address query string false "ip_address"
 // @Param port query string false "port"
+// @Param version query string false "version"
+// @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_player} "objects array"
 // @Failure 500 {object} common.Response ""

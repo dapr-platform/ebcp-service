@@ -217,10 +217,32 @@ INSERT INTO o_ebcp_exhibition_item (
     (md5('抗美援朝地图展示'), 'admin', NOW(), 'admin', NOW(), '抗美援朝地图展示', 
     md5('抗美援朝战争馆'), 'media', 'LED大屏', 1, 'PC工作站+播控软件');
 
+-- 初始化摄像头数据
+INSERT INTO o_ebcp_camera (
+    id, created_by, created_time, updated_by, updated_time,
+    name, device_no, main_stream_url, sub_stream_url, status
+) VALUES
+    (md5('camera_1'), 'admin', NOW(), 'admin', NOW(), 'Camera 1', '182.92.117.41',
+    'rtsp://admin:things2024@182.92.117.41:40307/h264/ch1/main/av_stream', 'rtsp://admin:things2024@182.92.117.41:40307/h264/ch1/sub/av_stream', 1);
 
+-- 初始化播放器数据  
+INSERT INTO o_ebcp_player (
+    id, created_by, created_time, updated_by, updated_time,
+    name, ip_address, port, status
+) VALUES
+    (md5('player_1'), 'admin', NOW(), 'admin', NOW(), 'Player 1',
+    '182.92.117.41', 40306, 1);
 
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
+DELETE FROM o_ebcp_player;
+DELETE FROM o_ebcp_camera;
+DELETE FROM o_ebcp_exhibition_item;
+DELETE FROM o_ebcp_room_area_relation;
+DELETE FROM o_ebcp_exhibition_area;
+DELETE FROM o_ebcp_exhibition_room;
+DELETE FROM o_ebcp_exhibition_hall;
+DELETE FROM o_ops_dict;
 -- +goose StatementEnd

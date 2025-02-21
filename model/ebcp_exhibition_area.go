@@ -24,7 +24,7 @@ Table: o_ebcp_exhibition_area
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] exhibition_room_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] location                                       VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] current_exhibition_name                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 8] current_exhibition_start_time                  TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 9] current_exhibition_end_time                    TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
@@ -33,7 +33,7 @@ Table: o_ebcp_exhibition_area
 
 JSON Sample
 -------------------------------------
-{    "id": "iJfLPFEhuZVkrXdWIcMYLdTkG",    "created_by": "xuaEWVpHMCjFSjcmMOjJlMAXc",    "created_time": 13,    "updated_by": "WxPPHEOeDYxSBiojwaRElMbso",    "updated_time": 66,    "name": "lfUqLLAnLFrUHPvJRyXKrbSYu",    "exhibition_room_id": "aqrMrpKHGkAPEfuyGdEklaAOy",    "current_exhibition_name": "uaABWNWnFppVHdMROrnZYcjRC",    "current_exhibition_start_time": 43,    "current_exhibition_end_time": 66,    "remarks": "GVTpDrJUwrvlccPegWotMiQbM"}
+{    "id": "gvpOhUSOGISBYaDmbLABhBecq",    "created_by": "RhWlpqKjuCASmMmRHKfviGBTy",    "created_time": 75,    "updated_by": "mGDMNiXsTJcUUTCFmRXDKVygM",    "updated_time": 64,    "name": "sqDrlWLOAFPsAkbWkJEhRucAo",    "location": "sbOxOOKYPCHAbbswmoXwXwenW",    "current_exhibition_name": "ZAhcermGlWlJkTtEFpXBCKrOJ",    "current_exhibition_start_time": 19,    "current_exhibition_end_time": 86,    "remarks": "dSXYFCyuFLVPPXCSxwoWFJaXe"}
 
 
 
@@ -52,7 +52,7 @@ var (
 
 	Ebcp_exhibition_area_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_area_FIELD_NAME_exhibition_room_id = "exhibition_room_id"
+	Ebcp_exhibition_area_FIELD_NAME_location = "location"
 
 	Ebcp_exhibition_area_FIELD_NAME_current_exhibition_name = "current_exhibition_name"
 
@@ -77,7 +77,7 @@ type Ebcp_exhibition_area struct {
 
 	Name string `json:"name"` //展区名称
 
-	ExhibitionRoomID string `json:"exhibition_room_id"` //所属展厅ID
+	Location string `json:"location"` //展区位置
 
 	CurrentExhibitionName string `json:"current_exhibition_name"` //当前展览名称
 
@@ -221,21 +221,21 @@ var Ebcp_exhibition_areaTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "exhibition_room_id",
-			Comment:            `所属展厅ID`,
+			Name:               "location",
+			Comment:            `展区位置`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
+			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "ExhibitionRoomID",
+			ColumnLength:       255,
+			GoFieldName:        "Location",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_room_id",
-			ProtobufFieldName:  "exhibition_room_id",
+			JSONFieldName:      "location",
+			ProtobufFieldName:  "location",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},

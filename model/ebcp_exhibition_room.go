@@ -24,15 +24,16 @@ Table: o_ebcp_exhibition_room
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] location                                       VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 6] location                                       VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] exhibition_hall_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 8] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[ 9] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 8] floor                                          VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[10] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "qPkDrTykmcGRIaPDwYIdlKuha",    "created_by": "AkmESPURQNleVvPpbFKvdQiNY",    "created_time": 19,    "updated_by": "QOfpyuWRqFAAsUAJHWIIKhAIG",    "updated_time": 53,    "name": "OKZRnoWAXbGboYwgHFaxfTqtV",    "location": "jlRQXeUDvPNLBQwwJyXKVXocc",    "exhibition_hall_id": "mLiLujUOPnmpwXhahWQmdUmIx",    "status": 60,    "remarks": "aqptSqcUnQnsHsvjVhDZtAAfS"}
+{    "id": "cOtwqnSVavMJGLoQRPVnKwNJr",    "created_by": "ejTYWTvByxlXHQomlklZLSPwj",    "created_time": 90,    "updated_by": "NsLOognAdoorwhJeagZLwQDwi",    "updated_time": 28,    "name": "TnBLcCBGrIxZCCPnCpKJmPiTN",    "location": "ncNFeNPWRYwFbTFbCJxGMKyCi",    "exhibition_hall_id": "sbaRRhTgFDRDDsfuCSUKBaHol",    "floor": "nmLPYnTOuuIYVOarCvZMUjILB",    "status": 93,    "remarks": "upDgtblMxerieRbbDwLYUNOdD"}
 
 
 
@@ -55,6 +56,8 @@ var (
 
 	Ebcp_exhibition_room_FIELD_NAME_exhibition_hall_id = "exhibition_hall_id"
 
+	Ebcp_exhibition_room_FIELD_NAME_floor = "floor"
+
 	Ebcp_exhibition_room_FIELD_NAME_status = "status"
 
 	Ebcp_exhibition_room_FIELD_NAME_remarks = "remarks"
@@ -74,9 +77,11 @@ type Ebcp_exhibition_room struct {
 
 	Name string `json:"name"` //展厅名称
 
-	Location string `json:"location"` //展厅位置
+	Location string `json:"location"` //展厅位置(西侧，西北侧)
 
 	ExhibitionHallID string `json:"exhibition_hall_id"` //所属展馆ID
+
+	Floor string `json:"floor"` //楼层(B1,F1,F2,F3...)
 
 	Status int32 `json:"status"` //状态（1: 正常, 2: 未使用, 3: 维修）
 
@@ -217,16 +222,16 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              6,
 			Name:               "location",
-			Comment:            `展厅位置`,
+			Comment:            `展厅位置(西侧，西北侧)`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
+			ColumnLength:       32,
 			GoFieldName:        "Location",
 			GoFieldType:        "string",
 			JSONFieldName:      "location",
@@ -258,6 +263,27 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              8,
+			Name:               "floor",
+			Comment:            `楼层(B1,F1,F2,F3...)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "Floor",
+			GoFieldType:        "string",
+			JSONFieldName:      "floor",
+			ProtobufFieldName:  "floor",
+			ProtobufType:       "string",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
 			Name:               "status",
 			Comment:            `状态（1: 正常, 2: 未使用, 3: 维修）`,
 			Notes:              ``,
@@ -274,11 +300,11 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        9,
+			ProtobufPos:        10,
 		},
 
 		&ColumnInfo{
-			Index:              9,
+			Index:              10,
 			Name:               "remarks",
 			Comment:            `备注`,
 			Notes:              ``,
@@ -295,7 +321,7 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			JSONFieldName:      "remarks",
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        11,
 		},
 	},
 }
