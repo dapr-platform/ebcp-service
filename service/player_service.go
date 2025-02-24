@@ -70,21 +70,20 @@ func updatePlayerPrograms() {
 					return
 				}
 				exists, err := common.DbQuery[model.Ebcp_player_program](context.Background(), common.GetDaprClient(),
-					model.Ebcp_player_programTableInfo.Name, "player_id = "+ id)
+					model.Ebcp_player_programTableInfo.Name, "player_id="+id)
 				if err != nil {
 					common.Logger.Errorf("Failed to check if player %s has programs: %v", id, err)
 					return
 				}
 				addedMap := make(map[string]bool)
 
-				
 				// Insert new programs
 				for _, program := range programs.Programs {
 					if program.IsEmpty {
 						continue
 					}
 					playerProgram := model.Ebcp_player_program{
-						ID:          common.GetMD5Hash(id+"_"+cast.ToString(program.ID)),
+						ID:          common.GetMD5Hash(id + "_" + cast.ToString(program.ID)),
 						CreatedBy:   "admin",
 						CreatedTime: common.LocalTime(time.Now()),
 						UpdatedBy:   "admin",
@@ -104,7 +103,7 @@ func updatePlayerPrograms() {
 				for _, program := range exists {
 					if !addedMap[cast.ToString(program.ProgramID)] {
 						err = common.DbDelete(context.Background(), common.GetDaprClient(),
-							model.Ebcp_player_programTableInfo.Name, "id = ?", program.ID)
+							model.Ebcp_player_programTableInfo.Name, "id",program.ID)
 						if err != nil {
 							common.Logger.Errorf("Failed to delete program for player %s: %v", id, err)
 						}
