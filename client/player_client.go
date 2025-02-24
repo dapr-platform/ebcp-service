@@ -25,6 +25,13 @@ const (
 	TagPlayProgram    uint16 = 271
 	TagStopProgram    uint16 = 272
 
+	// Sound control tags
+	TagOpenGlobalSound  uint16 = 262 // 0x0106
+	TagCloseGlobalSound uint16 = 263 // 0x0107
+	TagSetGlobalVolume  uint16 = 264 // 0x0108
+	TagIncreaseVolume   uint16 = 328 // 0x0148
+	TagDecreaseVolume   uint16 = 329 // 0x0149
+
 	// Connection constants
 	reconnectInterval = 5 * time.Second
 	connectTimeout    = 5 * time.Second
@@ -481,6 +488,44 @@ func (c *PlayerClient) StopProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
 	_, err := c.sendCommand(TagStopProgram, data)
+	return err
+}
+
+// OpenGlobalSound opens global sound
+func (c *PlayerClient) OpenGlobalSound() error {
+	_, err := c.sendCommand(TagOpenGlobalSound, nil)
+	return err
+}
+
+// CloseGlobalSound closes global sound
+func (c *PlayerClient) CloseGlobalSound() error {
+	_, err := c.sendCommand(TagCloseGlobalSound, nil)
+	return err
+}
+
+// SetGlobalVolume sets global volume (0-100)
+func (c *PlayerClient) SetGlobalVolume(volume uint8) error {
+	if volume > 100 {
+		return fmt.Errorf("volume must be between 0 and 100")
+	}
+	data := []byte{volume}
+	_, err := c.sendCommand(TagSetGlobalVolume, data)
+	return err
+}
+
+// IncreaseGlobalVolume increases global volume by step
+func (c *PlayerClient) IncreaseGlobalVolume(step uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, step)
+	_, err := c.sendCommand(TagIncreaseVolume, data)
+	return err
+}
+
+// DecreaseGlobalVolume decreases global volume by step
+func (c *PlayerClient) DecreaseGlobalVolume(step uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, step)
+	_, err := c.sendCommand(TagDecreaseVolume, data)
 	return err
 }
 
