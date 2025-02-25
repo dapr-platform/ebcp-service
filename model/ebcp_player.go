@@ -20,9 +20,9 @@ DB Table Details
 Table: o_ebcp_player
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] ip_address                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
@@ -32,7 +32,7 @@ Table: o_ebcp_player
 
 JSON Sample
 -------------------------------------
-{    "id": "cmwUrJtEpiDHSHhVBcUrwSbsn",    "created_by": "bJUsPdLNDREpfBABlBEyfjrHU",    "created_time": 3,    "updated_by": "scQRfwcbolfudNequYHNSxZqJ",    "updated_time": 81,    "name": "VSqLHQrRVgBbgFojOPXtFJYTS",    "ip_address": "LIAiwOTvDibvMvUOGxpGsvvRB",    "port": 10,    "version": "RZbLOliBlsOWGNDLmGZMnIWFt",    "status": 6}
+{    "id": "PSZrqPvRtQohilQBmZuWLcCBH",    "created_by": "XiOkORwVKtfmZPVJkXaTJoRdk",    "created_time": 21,    "updated_by": "ZAxbbVILJpkxQZPHkkQuAqNxk",    "updated_time": 99,    "name": "sNGgTgCAdFLRSOQNAOXbvwTsg",    "ip_address": "yqfYNlmQnRSQngrRfPXAhJhAJ",    "port": 17,    "version": "YNIybhrryYutghDaAsLSVWVwT",    "status": 62}
 
 
 
@@ -78,9 +78,9 @@ type Ebcp_player struct {
 
 	Port int32 `json:"port"` //端口
 
-	Version string `json:"version"` //版本号
+	Version string `json:"version"` //版本
 
-	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
+	Status int32 `json:"status"` //状态（1: 正常, 2: 离线, 3: 故障）
 
 }
 
@@ -259,7 +259,7 @@ var Ebcp_playerTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              8,
 			Name:               "version",
-			Comment:            `版本号`,
+			Comment:            `版本`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -280,7 +280,7 @@ var Ebcp_playerTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              9,
 			Name:               "status",
-			Comment:            `状态(1: 正常, 2: 故障)`,
+			Comment:            `状态（1: 正常, 2: 离线, 3: 故障）`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",

@@ -20,7 +20,7 @@ func InitEbcp_exhibition_hall_detailsRoute(r chi.Router) {
 
 // @Summary page query
 // @Description page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%
-// @Tags 展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）
+// @Tags 展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
@@ -46,7 +46,7 @@ func Ebcp_exhibition_hall_detailsPageListHandler(w http.ResponseWriter, r *http.
 
 // @Summary query objects
 // @Description query objects
-// @Tags 展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）
+// @Tags 展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
 // @Param id query string false "id"

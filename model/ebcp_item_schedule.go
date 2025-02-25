@@ -20,9 +20,9 @@ DB Table Details
 Table: o_ebcp_item_schedule
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] exhibition_item_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 6] schedule_time                                  TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
 [ 7] task_type                                      INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
@@ -31,7 +31,7 @@ Table: o_ebcp_item_schedule
 
 JSON Sample
 -------------------------------------
-{    "id": "nvukBAwhgcNYAQFlOZUtonRHb",    "created_by": "nAbDSHHdksjIDwpFZIvnfrdtX",    "created_time": 7,    "updated_by": "pWmZXuWXwcDnotaJEsFasOSsb",    "updated_time": 54,    "exhibition_item_id": "cSnDmqDAsKBRaFaCPBrfgKaub",    "schedule_time": "2045-07-25T16:26:14.611248633+08:00",    "task_type": 98,    "cycle_type": 20}
+{    "id": "lJsHagxmErPCsGXWgWtfRTOgb",    "created_by": "xOmAMXWxUyvewfUPDdLDPqeKN",    "created_time": 62,    "updated_by": "MoKjSuvnFVEvlSYWweuStranj",    "updated_time": 52,    "exhibition_item_id": "LPFYnexvnNpkGbhsvFdPQFqTZ",    "schedule_time": "2191-08-23T17:00:55.216883276+08:00",    "task_type": 66,    "cycle_type": 83}
 
 
 

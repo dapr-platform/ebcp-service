@@ -96,9 +96,10 @@ func batchUpsertEbcp_player_programHandler(w http.ResponseWriter, r *http.Reques
 // @Param created_time query string false "created_time"
 // @Param updated_by query string false "updated_by"
 // @Param updated_time query string false "updated_time"
-// @Param program_id query string false "program_id"
 // @Param name query string false "name"
 // @Param player_id query string false "player_id"
+// @Param program_id query string false "program_id"
+// @Param program_index query string false "program_index"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_player_program}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -125,9 +126,10 @@ func Ebcp_player_programPageListHandler(w http.ResponseWriter, r *http.Request) 
 // @Param created_time query string false "created_time"
 // @Param updated_by query string false "updated_by"
 // @Param updated_time query string false "updated_time"
-// @Param program_id query string false "program_id"
 // @Param name query string false "name"
 // @Param player_id query string false "player_id"
+// @Param program_id query string false "program_id"
+// @Param program_index query string false "program_index"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_player_program} "objects array"
 // @Failure 500 {object} common.Response ""

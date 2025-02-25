@@ -98,6 +98,7 @@ func batchUpsertEbcp_item_device_relationHandler(w http.ResponseWriter, r *http.
 // @Param updated_time query string false "updated_time"
 // @Param exhibition_item_id query string false "exhibition_item_id"
 // @Param device_type query string false "device_type"
+// @Param device_sub_type query string false "device_sub_type"
 // @Param device_id query string false "device_id"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_item_device_relation}} "objects array"
@@ -127,6 +128,7 @@ func Ebcp_item_device_relationPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param updated_time query string false "updated_time"
 // @Param exhibition_item_id query string false "exhibition_item_id"
 // @Param device_type query string false "device_type"
+// @Param device_sub_type query string false "device_sub_type"
 // @Param device_id query string false "device_id"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_item_device_relation} "objects array"

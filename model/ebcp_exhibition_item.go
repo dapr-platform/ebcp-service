@@ -20,20 +20,20 @@ DB Table Details
 Table: o_ebcp_exhibition_item
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] exhibition_area_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 8] display_format                                 VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
+[ 6] exhibition_id                                  VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] exhibition_room_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 8] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
 [ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 [10] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "acPZBuSbHGTCGnnuNXZDMqwGa",    "created_by": "DUHYUjqUBXYhjBDShaKtnIhdR",    "created_time": 60,    "updated_by": "xJeulauedEWwZVXEiqkhpnOZP",    "updated_time": 9,    "name": "EKFuCDPFjprMaGgRCNaTlICqT",    "exhibition_area_id": "QPxxPjEqgBGhtXbcBDbtMKeIn",    "type": "tsntTJIjSpDnHGlZIYRoCFTMi",    "display_format": "oBLWEsJcubmihGgcHuWurnLQG",    "status": 95,    "remarks": "FpkqeatmQSAiXhGBNZgPAGhsE"}
+{    "id": "BsmOyxMkVrCdQnjKfwBFSsedE",    "created_by": "WPOVVKFHyTcmODXMqfELdLUUD",    "created_time": 88,    "updated_by": "rKOQewuvLVMvODhXqwKPoyFla",    "updated_time": 24,    "name": "TvUpHMuFJITdkNmQpuUNLSNbZ",    "exhibition_id": "NgrBUQoqLAZqLRSoOkHCsgwWh",    "exhibition_room_id": "fuSfyTHNQCikSpqnOABDHyiPT",    "type": "MbkQgZinpZcylgrHouqnkwsFF",    "status": 21,    "remarks": "dWJlhSHgRnxBhpFuZBUuclngA"}
 
 
 
@@ -52,11 +52,11 @@ var (
 
 	Ebcp_exhibition_item_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_item_FIELD_NAME_exhibition_area_id = "exhibition_area_id"
+	Ebcp_exhibition_item_FIELD_NAME_exhibition_id = "exhibition_id"
+
+	Ebcp_exhibition_item_FIELD_NAME_exhibition_room_id = "exhibition_room_id"
 
 	Ebcp_exhibition_item_FIELD_NAME_type = "type"
-
-	Ebcp_exhibition_item_FIELD_NAME_display_format = "display_format"
 
 	Ebcp_exhibition_item_FIELD_NAME_status = "status"
 
@@ -77,11 +77,11 @@ type Ebcp_exhibition_item struct {
 
 	Name string `json:"name"` //展项名称
 
-	ExhibitionAreaID string `json:"exhibition_area_id"` //所属展区ID
+	ExhibitionID string `json:"exhibition_id"` //所属展览ID
+
+	ExhibitionRoomID string `json:"exhibition_room_id"` //所属展厅ID
 
 	Type string `json:"type"` //展项类型（media、static）
-
-	DisplayFormat string `json:"display_format"` //展示格式
 
 	Status int32 `json:"status"` //状态（1: 启动, 2: 停止, 3: 故障）
 
@@ -221,8 +221,8 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "exhibition_area_id",
-			Comment:            `所属展区ID`,
+			Name:               "exhibition_id",
+			Comment:            `所属展览ID`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -232,16 +232,37 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ExhibitionAreaID",
+			GoFieldName:        "ExhibitionID",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_area_id",
-			ProtobufFieldName:  "exhibition_area_id",
+			JSONFieldName:      "exhibition_id",
+			ProtobufFieldName:  "exhibition_id",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
 			Index:              7,
+			Name:               "exhibition_room_id",
+			Comment:            `所属展厅ID`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ExhibitionRoomID",
+			GoFieldType:        "string",
+			JSONFieldName:      "exhibition_room_id",
+			ProtobufFieldName:  "exhibition_room_id",
+			ProtobufType:       "string",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
 			Name:               "type",
 			Comment:            `展项类型（media、static）`,
 			Notes:              ``,
@@ -257,27 +278,6 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			GoFieldType:        "string",
 			JSONFieldName:      "type",
 			ProtobufFieldName:  "type",
-			ProtobufType:       "string",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "display_format",
-			Comment:            `展示格式`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(100)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       100,
-			GoFieldName:        "DisplayFormat",
-			GoFieldType:        "string",
-			JSONFieldName:      "display_format",
-			ProtobufFieldName:  "display_format",
 			ProtobufType:       "string",
 			ProtobufPos:        9,
 		},

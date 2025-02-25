@@ -20,16 +20,16 @@ DB Table Details
 Table: o_ebcp_exhibition_hall
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "RKPpdLWdEIUiobOZBKaixpITF",    "created_by": "EqmFKHRBfaMcZYpswHmNyTveY",    "created_time": 63,    "updated_by": "yusxDYWunOGvDGBFdJpEPvZDL",    "updated_time": 1,    "name": "RGilmiFWmHhaWAbmWcKPsYeyl",    "remarks": "wiVupBOuEClOHSrggvdrBUntM"}
+{    "id": "AUpiHvWYPXgqLKvBNywocSFVM",    "created_by": "QFcQRCCJPwRbQaphtmMlrwpep",    "created_time": 88,    "updated_by": "CwKWixNMWTGUgNyeARQkGbrRS",    "updated_time": 98,    "name": "DCpLKSHQnfjKrFbVZZyabtrgP",    "remarks": "OyBjceoIXnMxukNaNrrHlDSrO"}
 
 
 

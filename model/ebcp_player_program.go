@@ -20,17 +20,18 @@ DB Table Details
 Table: o_ebcp_player_program
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 5] program_id                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 7] player_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
+[ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 6] player_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] program_id                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 8] program_index                                  INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "HGyYHaGGPqdQsaBHjicfwVXeM",    "created_by": "WZWrCSBlgJdwiSTsrvCnLQlex",    "created_time": 6,    "updated_by": "xFOXasDYhHdHIusuvClTDfUHn",    "updated_time": 80,    "program_id": "wOWHCvyYQrfaxQIqhLTUjVmQW",    "name": "foUZnEhZNQpgTceCLlBJHJgqj",    "player_id": "ttONgvJKejeUkoccuTDVjEjOS"}
+{    "id": "oNEuKAlkOBHDnDmHnxkrrGuMQ",    "created_by": "cylrtYMXFPjFDGNaisLMmkKHy",    "created_time": 38,    "updated_by": "oQtrNjCVEXiBFbtdGTgkgmlXv",    "updated_time": 19,    "name": "dEkHJONvFbuANJvvgSrgBtJGE",    "player_id": "KWWkLPOgluXnIjauPRpTquyUx",    "program_id": "CecUXuFKKilQlDkJsjqPDlWrR",    "program_index": 93}
 
 
 
@@ -47,11 +48,13 @@ var (
 
 	Ebcp_player_program_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_player_program_FIELD_NAME_program_id = "program_id"
-
 	Ebcp_player_program_FIELD_NAME_name = "name"
 
 	Ebcp_player_program_FIELD_NAME_player_id = "player_id"
+
+	Ebcp_player_program_FIELD_NAME_program_id = "program_id"
+
+	Ebcp_player_program_FIELD_NAME_program_index = "program_index"
 )
 
 // Ebcp_player_program struct is a row record of the o_ebcp_player_program table in the  database
@@ -66,11 +69,13 @@ type Ebcp_player_program struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	ProgramID string `json:"program_id"` //节目ID
-
 	Name string `json:"name"` //节目名称
 
 	PlayerID string `json:"player_id"` //播放设备ID
+
+	ProgramID string `json:"program_id"` //节目ID
+
+	ProgramIndex int32 `json:"program_index"` //节目序号
 
 }
 
@@ -185,27 +190,6 @@ var Ebcp_player_programTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "program_id",
-			Comment:            `节目ID`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "ProgramID",
-			GoFieldType:        "string",
-			JSONFieldName:      "program_id",
-			ProtobufFieldName:  "program_id",
-			ProtobufType:       "string",
-			ProtobufPos:        6,
-		},
-
-		&ColumnInfo{
-			Index:              6,
 			Name:               "name",
 			Comment:            `节目名称`,
 			Notes:              ``,
@@ -222,11 +206,11 @@ var Ebcp_player_programTableInfo = &TableInfo{
 			JSONFieldName:      "name",
 			ProtobufFieldName:  "name",
 			ProtobufType:       "string",
-			ProtobufPos:        7,
+			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
-			Index:              7,
+			Index:              6,
 			Name:               "player_id",
 			Comment:            `播放设备ID`,
 			Notes:              ``,
@@ -243,7 +227,49 @@ var Ebcp_player_programTableInfo = &TableInfo{
 			JSONFieldName:      "player_id",
 			ProtobufFieldName:  "player_id",
 			ProtobufType:       "string",
+			ProtobufPos:        7,
+		},
+
+		&ColumnInfo{
+			Index:              7,
+			Name:               "program_id",
+			Comment:            `节目ID`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ProgramID",
+			GoFieldType:        "string",
+			JSONFieldName:      "program_id",
+			ProtobufFieldName:  "program_id",
+			ProtobufType:       "string",
 			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "program_index",
+			Comment:            `节目序号`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "ProgramIndex",
+			GoFieldType:        "int32",
+			JSONFieldName:      "program_index",
+			ProtobufFieldName:  "program_index",
+			ProtobufType:       "int32",
+			ProtobufPos:        9,
 		},
 	},
 }

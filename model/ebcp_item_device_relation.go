@@ -20,17 +20,18 @@ DB Table Details
 Table: o_ebcp_item_device_relation
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] exhibition_item_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 6] device_type                                    INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 7] device_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] device_sub_type                                VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[ 8] device_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "wbFjaVeKXIwkanVjcmqEmmLOP",    "created_by": "yJmbhiZQFGJdGJBBAdXcnZAGv",    "created_time": 45,    "updated_by": "VKfrvcdNdvuxqRrkELdfJcjgi",    "updated_time": 26,    "exhibition_item_id": "aRpLRJYxJrtGNbwYXxmBgHZyk",    "device_type": 90,    "device_id": "iioQZYnNUqxQBXjqJKlRgNLWo"}
+{    "id": "AQVeZfZxklvSLTbhwjYHsLRgq",    "created_by": "EZLjOkGYNHQEHfOEgnGFXDEFD",    "created_time": 74,    "updated_by": "wkayBWMknnPMoruGbjlpLtuop",    "updated_time": 13,    "exhibition_item_id": "aiDHPBlTYYEHkqSRbRYAsCims",    "device_type": 5,    "device_sub_type": "sidxYRbWYauEtUJnsEmMFfuNj",    "device_id": "FVMRAdwRgdoQwTabDqSSiRshl"}
 
 
 
@@ -51,6 +52,8 @@ var (
 
 	Ebcp_item_device_relation_FIELD_NAME_device_type = "device_type"
 
+	Ebcp_item_device_relation_FIELD_NAME_device_sub_type = "device_sub_type"
+
 	Ebcp_item_device_relation_FIELD_NAME_device_id = "device_id"
 )
 
@@ -68,7 +71,9 @@ type Ebcp_item_device_relation struct {
 
 	ExhibitionItemID string `json:"exhibition_item_id"` //展项ID
 
-	DeviceType int32 `json:"device_type"` //关联设备类型(1: 播放设备, 2: 摄像头, 3: 照明回路)
+	DeviceType int32 `json:"device_type"` //关联设备类型(1: 播放设备, 2: 中控设备)
+
+	DeviceSubType string `json:"device_sub_type"` //关联设备子类型(中控设备时需要)
 
 	DeviceID string `json:"device_id"` //关联设备ID
 
@@ -207,7 +212,7 @@ var Ebcp_item_device_relationTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              6,
 			Name:               "device_type",
-			Comment:            `关联设备类型(1: 播放设备, 2: 摄像头, 3: 照明回路)`,
+			Comment:            `关联设备类型(1: 播放设备, 2: 中控设备)`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -227,6 +232,27 @@ var Ebcp_item_device_relationTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              7,
+			Name:               "device_sub_type",
+			Comment:            `关联设备子类型(中控设备时需要)`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(50)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       50,
+			GoFieldName:        "DeviceSubType",
+			GoFieldType:        "string",
+			JSONFieldName:      "device_sub_type",
+			ProtobufFieldName:  "device_sub_type",
+			ProtobufType:       "string",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
 			Name:               "device_id",
 			Comment:            `关联设备ID`,
 			Notes:              ``,
@@ -243,7 +269,7 @@ var Ebcp_item_device_relationTableInfo = &TableInfo{
 			JSONFieldName:      "device_id",
 			ProtobufFieldName:  "device_id",
 			ProtobufType:       "string",
-			ProtobufPos:        8,
+			ProtobufPos:        9,
 		},
 	},
 }

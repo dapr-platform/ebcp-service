@@ -97,9 +97,9 @@ func batchUpsertEbcp_exhibition_itemHandler(w http.ResponseWriter, r *http.Reque
 // @Param updated_by query string false "updated_by"
 // @Param updated_time query string false "updated_time"
 // @Param name query string false "name"
-// @Param exhibition_area_id query string false "exhibition_area_id"
+// @Param exhibition_id query string false "exhibition_id"
+// @Param exhibition_room_id query string false "exhibition_room_id"
 // @Param type query string false "type"
-// @Param display_format query string false "display_format"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
 // @Produce  json
@@ -129,9 +129,9 @@ func Ebcp_exhibition_itemPageListHandler(w http.ResponseWriter, r *http.Request)
 // @Param updated_by query string false "updated_by"
 // @Param updated_time query string false "updated_time"
 // @Param name query string false "name"
-// @Param exhibition_area_id query string false "exhibition_area_id"
+// @Param exhibition_id query string false "exhibition_id"
+// @Param exhibition_room_id query string false "exhibition_room_id"
 // @Param type query string false "type"
-// @Param display_format query string false "display_format"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
 // @Produce  json
