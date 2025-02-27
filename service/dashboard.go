@@ -8,15 +8,14 @@ import (
 )
 
 func GetDashboardStats() (map[string]int, error) {
-
-	// Get room count
-	roomCount, err := common.DbGetCount(context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_roomTableInfo.Name, "id","")
+	// Get exhibition count
+	exhibitionCount, err := common.DbGetCount(context.Background(), common.GetDaprClient(), model.Ebcp_exhibitionTableInfo.Name, "id","")
 	if err != nil {
 		return nil, err
 	}
 
-	// Get area count
-	areaCount, err := common.DbGetCount(context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_areaTableInfo.Name, "id","")
+	// Get room count
+	roomCount, err := common.DbGetCount(context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_roomTableInfo.Name, "id","")
 	if err != nil {
 		return nil, err
 	}
@@ -32,16 +31,12 @@ func GetDashboardStats() (map[string]int, error) {
 	if err != nil {
 		return nil, err
 	}
-	cameraCount, err := common.DbGetCount(context.Background(), common.GetDaprClient(), model.Ebcp_cameraTableInfo.Name, "id","")
-	if err != nil {
-		return nil, err
-	}
-
+	
 	stats := map[string]int{
-		"roomCount":   int(roomCount),
-		"areaCount":   int(areaCount),
-		"itemCount":   int(itemCount),
-		"deviceCount": int(deviceCount+cameraCount),
+		"exhibitionCount": int(exhibitionCount),
+		"roomCount":       int(roomCount),
+		"itemCount":       int(itemCount),
+		"deviceCount":     int(deviceCount),
 	}
 
 	return stats, nil
