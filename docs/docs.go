@@ -15,14 +15,14 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/ebcp-camera": {
+        "/ebcp-control-device": {
             "get": {
                 "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -76,20 +76,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "device_no",
-                        "name": "device_no",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "main_stream_url",
-                        "name": "main_stream_url",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "sub_stream_url",
-                        "name": "sub_stream_url",
+                        "description": "device_type",
+                        "name": "device_type",
                         "in": "query"
                     },
                     {
@@ -113,7 +101,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Ebcp_camera"
+                                                "$ref": "#/definitions/model.Ebcp_control_device"
                                             }
                                         }
                                     }
@@ -138,7 +126,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -148,7 +136,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ebcp_camera"
+                            "$ref": "#/definitions/model.Ebcp_control_device"
                         }
                     }
                 ],
@@ -164,7 +152,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_camera"
+                                            "$ref": "#/definitions/model.Ebcp_control_device"
                                         }
                                     }
                                 }
@@ -180,7 +168,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-camera/batch-delete": {
+        "/ebcp-control-device/batch-delete": {
             "post": {
                 "description": "batch delete",
                 "consumes": [
@@ -190,7 +178,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -223,7 +211,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-camera/batch-upsert": {
+        "/ebcp-control-device/batch-upsert": {
             "post": {
                 "description": "batch update",
                 "consumes": [
@@ -233,7 +221,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -267,14 +255,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-camera/page": {
+        "/ebcp-control-device/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -336,20 +324,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "device_no",
-                        "name": "device_no",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "main_stream_url",
-                        "name": "main_stream_url",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "sub_stream_url",
-                        "name": "sub_stream_url",
+                        "description": "device_type",
+                        "name": "device_type",
                         "in": "query"
                     },
                     {
@@ -381,7 +357,7 @@ const docTemplate = `{
                                                         "items": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_camera"
+                                                                "$ref": "#/definitions/model.Ebcp_control_device"
                                                             }
                                                         }
                                                     }
@@ -402,14 +378,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-camera/{id}": {
+        "/ebcp-control-device/{id}": {
             "delete": {
                 "description": "delete",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "摄像头"
+                    "中控设备"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -433,7 +409,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_camera"
+                                            "$ref": "#/definitions/model.Ebcp_control_device"
                                         }
                                     }
                                 }
@@ -449,14 +425,55 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-area": {
+        "/ebcp-dashboard/stats": {
+            "get": {
+                "description": "Get counts of rooms, areas, items and devices",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "数据统计"
+                ],
+                "summary": "Get dashboard statistics",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition": {
             "get": {
                 "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "展区"
+                    "展览"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -510,26 +527,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "location",
-                        "name": "location",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "current_exhibition_name",
-                        "name": "current_exhibition_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_start_time",
-                        "name": "current_exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_end_time",
-                        "name": "current_exhibition_end_time",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
@@ -553,7 +558,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Ebcp_exhibition_area"
+                                                "$ref": "#/definitions/model.Ebcp_exhibition"
                                             }
                                         }
                                     }
@@ -578,7 +583,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展区"
+                    "展览"
                 ],
                 "summary": "save",
                 "parameters": [
@@ -588,7 +593,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ebcp_exhibition_area"
+                            "$ref": "#/definitions/model.Ebcp_exhibition"
                         }
                     }
                 ],
@@ -604,508 +609,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_area"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area-details": {
-            "get": {
-                "description": "query objects",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注"
-                ],
-                "summary": "query objects",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "area_name",
-                        "name": "area_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_name",
-                        "name": "current_exhibition_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_start_time",
-                        "name": "current_exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_end_time",
-                        "name": "current_exhibition_end_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "location",
-                        "name": "location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_items",
-                        "name": "exhibition_items",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Ebcp_exhibition_area_details"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area-details/page": {
-            "get": {
-                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区详细视图，包含展区信息及其关联的所有展项信息（JSON格式），展项信息包括名字、状态、类型和备注"
-                ],
-                "summary": "page query",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "current page",
-                        "name": "_page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page size",
-                        "name": "_page_size",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "area_name",
-                        "name": "area_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_name",
-                        "name": "current_exhibition_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_start_time",
-                        "name": "current_exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_end_time",
-                        "name": "current_exhibition_end_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "location",
-                        "name": "location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_items",
-                        "name": "exhibition_items",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_area_details"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区"
-                ],
-                "summary": "batch delete",
-                "parameters": [
-                    {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区"
-                ],
-                "summary": "batch update",
-                "parameters": [
-                    {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area/page": {
-            "get": {
-                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区"
-                ],
-                "summary": "page query",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "current page",
-                        "name": "_page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page size",
-                        "name": "_page_size",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_by",
-                        "name": "created_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_time",
-                        "name": "created_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_by",
-                        "name": "updated_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_time",
-                        "name": "updated_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "location",
-                        "name": "location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_name",
-                        "name": "current_exhibition_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_start_time",
-                        "name": "current_exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "current_exhibition_end_time",
-                        "name": "current_exhibition_end_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "remarks",
-                        "name": "remarks",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_area"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-exhibition-area/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展区"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_area"
+                                            "$ref": "#/definitions/model.Ebcp_exhibition"
                                         }
                                     }
                                 }
@@ -1275,7 +779,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）"
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -1354,7 +858,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展馆详细视图，包含展馆信息及其关联的展厅和展区信息（JSON格式）"
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -1697,6 +1201,316 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览信息视图"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_status",
+                        "name": "item_status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览信息视图"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_status",
+                        "name": "item_status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-item": {
             "get": {
                 "description": "query objects",
@@ -1758,20 +1572,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_area_id",
-                        "name": "exhibition_area_id",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_room_id",
+                        "name": "exhibition_room_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "type",
                         "name": "type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "display_format",
-                        "name": "display_format",
                         "in": "query"
                     },
                     {
@@ -1911,6 +1725,92 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-item/batch-start": {
+            "post": {
+                "description": "Start multiple exhibition items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Batch start exhibition items",
+                "parameters": [
+                    {
+                        "description": "Array of Exhibition Item IDs",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-item/batch-stop": {
+            "post": {
+                "description": "Stop multiple exhibition items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Batch stop exhibition items",
+                "parameters": [
+                    {
+                        "description": "Array of Exhibition Item IDs",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-item/batch-upsert": {
             "post": {
                 "description": "batch update",
@@ -2024,20 +1924,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_area_id",
-                        "name": "exhibition_area_id",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_room_id",
+                        "name": "exhibition_room_id",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "type",
                         "name": "type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "display_format",
-                        "name": "display_format",
                         "in": "query"
                     },
                     {
@@ -2143,170 +2043,34 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room": {
-            "get": {
-                "description": "query objects",
+        "/ebcp-exhibition-item/{id}/start": {
+            "post": {
+                "description": "Start an exhibition item by ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "展厅"
+                    "展项"
                 ],
-                "summary": "query objects",
+                "summary": "Start exhibition item",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
+                        "description": "Exhibition Item ID",
                         "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_by",
-                        "name": "created_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_time",
-                        "name": "created_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_by",
-                        "name": "updated_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_time",
-                        "name": "updated_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "location",
-                        "name": "location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_hall_id",
-                        "name": "exhibition_hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "floor",
-                        "name": "floor",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "status",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "remarks",
-                        "name": "remarks",
-                        "in": "query"
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Ebcp_exhibition_room"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
                         }
-                    }
-                }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅"
-                ],
-                "summary": "save",
-                "parameters": [
-                    {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_exhibition_room"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_room"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
                         }
@@ -2314,7 +2078,42 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room/batch-delete": {
+        "/ebcp-exhibition-item/{id}/stop": {
+            "post": {
+                "description": "Stop an exhibition item by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Stop exhibition item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exhibition Item ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition/batch-delete": {
             "post": {
                 "description": "batch delete",
                 "consumes": [
@@ -2324,7 +2123,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展厅"
+                    "展览"
                 ],
                 "summary": "batch delete",
                 "parameters": [
@@ -2357,7 +2156,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room/batch-upsert": {
+        "/ebcp-exhibition/batch-upsert": {
             "post": {
                 "description": "batch update",
                 "consumes": [
@@ -2367,7 +2166,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展厅"
+                    "展览"
                 ],
                 "summary": "batch update",
                 "parameters": [
@@ -2401,14 +2200,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room/page": {
+        "/ebcp-exhibition/page": {
             "get": {
                 "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "展厅"
+                    "展览"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -2470,26 +2269,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "location",
-                        "name": "location",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_hall_id",
-                        "name": "exhibition_hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "floor",
-                        "name": "floor",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "status",
-                        "name": "status",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
@@ -2521,7 +2308,7 @@ const docTemplate = `{
                                                         "items": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_room"
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition"
                                                             }
                                                         }
                                                     }
@@ -2542,14 +2329,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-room/{id}": {
+        "/ebcp-exhibition/{id}": {
             "delete": {
                 "description": "delete",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "展厅"
+                    "展览"
                 ],
                 "summary": "delete",
                 "parameters": [
@@ -2573,7 +2360,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_exhibition_room"
+                                            "$ref": "#/definitions/model.Ebcp_exhibition"
                                         }
                                     }
                                 }
@@ -2652,6 +2439,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "device_type",
                         "name": "device_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "device_sub_type",
+                        "name": "device_sub_type",
                         "in": "query"
                     },
                     {
@@ -2900,6 +2693,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "device_type",
                         "name": "device_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "device_sub_type",
+                        "name": "device_sub_type",
                         "in": "query"
                     },
                     {
@@ -3641,12 +3440,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "program_id",
-                        "name": "program_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "name",
                         "name": "name",
                         "in": "query"
@@ -3655,6 +3448,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "player_id",
                         "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_index",
+                        "name": "program_index",
                         "in": "query"
                     }
                 ],
@@ -3889,12 +3694,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "program_id",
-                        "name": "program_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "name",
                         "name": "name",
                         "in": "query"
@@ -3903,6 +3702,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "player_id",
                         "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_index",
+                        "name": "program_index",
                         "in": "query"
                     }
                 ],
@@ -4468,6 +4279,202 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-player/{id}/sound/close": {
+            "post": {
+                "description": "Close global sound on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Close global sound",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/sound/open": {
+            "post": {
+                "description": "Open global sound on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Open global sound",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/sound/volume/decrease": {
+            "post": {
+                "description": "Decrease volume on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Decrease volume",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step (1-100)",
+                        "name": "step",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/sound/volume/increase": {
+            "post": {
+                "description": "Increase volume on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Increase volume",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step (1-100)",
+                        "name": "step",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/sound/volume/{volume}": {
+            "post": {
+                "description": "Set global volume on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Set global volume",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Volume level (0-100)",
+                        "name": "volume",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-player/{id}/stop/{programId}": {
             "post": {
                 "description": "Stop specified program on player",
@@ -4509,404 +4516,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/ebcp-room-area-relation": {
-            "get": {
-                "description": "query objects",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "query objects",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "_select",
-                        "name": "_select",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_by",
-                        "name": "created_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_time",
-                        "name": "created_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_by",
-                        "name": "updated_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_time",
-                        "name": "updated_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_area_id",
-                        "name": "exhibition_area_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Ebcp_room_area_relation"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "save",
-                "parameters": [
-                    {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_room_area_relation"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_room_area_relation"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-room-area-relation/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "batch delete",
-                "parameters": [
-                    {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-room-area-relation/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "batch update",
-                "parameters": [
-                    {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-room-area-relation/page": {
-            "get": {
-                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "page query",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "current page",
-                        "name": "_page",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page size",
-                        "name": "_page_size",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "order",
-                        "name": "_order",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_by",
-                        "name": "created_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "created_time",
-                        "name": "created_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_by",
-                        "name": "updated_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "updated_time",
-                        "name": "updated_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_area_id",
-                        "name": "exhibition_area_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "objects array",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_room_area_relation"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-room-area-relation/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "展厅展区关联"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_room_area_relation"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -4937,7 +4546,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Ebcp_camera": {
+        "model.Ebcp_control_device": {
             "type": "object",
             "properties": {
                 "created_by": {
@@ -4948,30 +4557,22 @@ const docTemplate = `{
                     "description": "created_time",
                     "type": "string"
                 },
-                "device_no": {
-                    "description": "设备编号",
+                "device_type": {
+                    "description": "设备类型",
                     "type": "string"
                 },
                 "id": {
                     "description": "id",
                     "type": "string"
                 },
-                "main_stream_url": {
-                    "description": "主码流URL",
-                    "type": "string"
-                },
                 "name": {
-                    "description": "摄像头名称",
+                    "description": "设备名称",
                     "type": "string"
                 },
                 "status": {
                     "description": "状态(1: 正常, 2: 故障)",
                     "type": "integer"
                 },
-                "sub_stream_url": {
-                    "description": "辅码流URL",
-                    "type": "string"
-                },
                 "updated_by": {
                     "description": "updated_by",
                     "type": "string"
@@ -4982,7 +4583,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Ebcp_exhibition_area": {
+        "model.Ebcp_exhibition": {
             "type": "object",
             "properties": {
                 "created_by": {
@@ -4993,32 +4594,24 @@ const docTemplate = `{
                     "description": "created_time",
                     "type": "string"
                 },
-                "current_exhibition_end_time": {
-                    "description": "当前展览结束时间",
-                    "type": "string"
-                },
-                "current_exhibition_name": {
-                    "description": "当前展览名称",
-                    "type": "string"
-                },
-                "current_exhibition_start_time": {
-                    "description": "当前展览开始时间",
+                "end_time": {
+                    "description": "结束时间",
                     "type": "string"
                 },
                 "id": {
                     "description": "id",
                     "type": "string"
                 },
-                "location": {
-                    "description": "展区位置",
-                    "type": "string"
-                },
                 "name": {
-                    "description": "展区名称",
+                    "description": "展览名称",
                     "type": "string"
                 },
                 "remarks": {
                     "description": "备注",
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "开始时间",
                     "type": "string"
                 },
                 "updated_by": {
@@ -5027,42 +4620,6 @@ const docTemplate = `{
                 },
                 "updated_time": {
                     "description": "updated_time",
-                    "type": "string"
-                }
-            }
-        },
-        "model.Ebcp_exhibition_area_details": {
-            "type": "object",
-            "properties": {
-                "area_name": {
-                    "description": "area_name",
-                    "type": "string"
-                },
-                "current_exhibition_end_time": {
-                    "description": "current_exhibition_end_time",
-                    "type": "string"
-                },
-                "current_exhibition_name": {
-                    "description": "current_exhibition_name",
-                    "type": "string"
-                },
-                "current_exhibition_start_time": {
-                    "description": "current_exhibition_start_time",
-                    "type": "string"
-                },
-                "exhibition_items": {
-                    "description": "exhibition_items"
-                },
-                "exhibition_room_id": {
-                    "description": "exhibition_room_id",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "string"
-                },
-                "location": {
-                    "description": "location",
                     "type": "string"
                 }
             }
@@ -5120,6 +4677,71 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Ebcp_exhibition_info": {
+            "type": "object",
+            "properties": {
+                "exhibition_end_time": {
+                    "description": "exhibition_end_time",
+                    "type": "string"
+                },
+                "exhibition_id": {
+                    "description": "exhibition_id",
+                    "type": "string"
+                },
+                "exhibition_name": {
+                    "description": "exhibition_name",
+                    "type": "string"
+                },
+                "exhibition_start_time": {
+                    "description": "exhibition_start_time",
+                    "type": "string"
+                },
+                "hall_id": {
+                    "description": "hall_id",
+                    "type": "string"
+                },
+                "hall_name": {
+                    "description": "hall_name",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "item_id",
+                    "type": "string"
+                },
+                "item_name": {
+                    "description": "item_name",
+                    "type": "string"
+                },
+                "item_status": {
+                    "description": "item_status",
+                    "type": "integer"
+                },
+                "item_type": {
+                    "description": "item_type",
+                    "type": "string"
+                },
+                "room_floor": {
+                    "description": "room_floor",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "room_id",
+                    "type": "string"
+                },
+                "room_location": {
+                    "description": "room_location",
+                    "type": "string"
+                },
+                "room_name": {
+                    "description": "room_name",
+                    "type": "string"
+                },
+                "room_status": {
+                    "description": "room_status",
+                    "type": "integer"
+                }
+            }
+        },
         "model.Ebcp_exhibition_item": {
             "type": "object",
             "properties": {
@@ -5131,12 +4753,12 @@ const docTemplate = `{
                     "description": "created_time",
                     "type": "string"
                 },
-                "display_format": {
-                    "description": "展示格式",
+                "exhibition_id": {
+                    "description": "所属展览ID",
                     "type": "string"
                 },
-                "exhibition_area_id": {
-                    "description": "所属展区ID",
+                "exhibition_room_id": {
+                    "description": "所属展厅ID",
                     "type": "string"
                 },
                 "id": {
@@ -5169,55 +4791,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Ebcp_exhibition_room": {
-            "type": "object",
-            "properties": {
-                "created_by": {
-                    "description": "created_by",
-                    "type": "string"
-                },
-                "created_time": {
-                    "description": "created_time",
-                    "type": "string"
-                },
-                "exhibition_hall_id": {
-                    "description": "所属展馆ID",
-                    "type": "string"
-                },
-                "floor": {
-                    "description": "楼层(B1,F1,F2,F3...)",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "string"
-                },
-                "location": {
-                    "description": "展厅位置(西侧，西北侧)",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "展厅名称",
-                    "type": "string"
-                },
-                "remarks": {
-                    "description": "备注",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "状态（1: 正常, 2: 未使用, 3: 维修）",
-                    "type": "integer"
-                },
-                "updated_by": {
-                    "description": "updated_by",
-                    "type": "string"
-                },
-                "updated_time": {
-                    "description": "updated_time",
-                    "type": "string"
-                }
-            }
-        },
         "model.Ebcp_item_device_relation": {
             "type": "object",
             "properties": {
@@ -5233,8 +4806,12 @@ const docTemplate = `{
                     "description": "关联设备ID",
                     "type": "string"
                 },
+                "device_sub_type": {
+                    "description": "关联设备子类型(中控设备时需要)",
+                    "type": "string"
+                },
                 "device_type": {
-                    "description": "关联设备类型(1: 播放设备, 2: 摄像头, 3: 照明回路)",
+                    "description": "关联设备类型(1: 播放设备, 2: 中控设备)",
                     "type": "integer"
                 },
                 "exhibition_item_id": {
@@ -5324,7 +4901,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态(1: 正常, 2: 故障)",
+                    "description": "状态（1: 正常, 2: 离线, 3: 故障）",
                     "type": "integer"
                 },
                 "updated_by": {
@@ -5336,7 +4913,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "version": {
-                    "description": "版本号",
+                    "description": "版本",
                     "type": "string"
                 }
             }
@@ -5368,38 +4945,9 @@ const docTemplate = `{
                     "description": "节目ID",
                     "type": "string"
                 },
-                "updated_by": {
-                    "description": "updated_by",
-                    "type": "string"
-                },
-                "updated_time": {
-                    "description": "updated_time",
-                    "type": "string"
-                }
-            }
-        },
-        "model.Ebcp_room_area_relation": {
-            "type": "object",
-            "properties": {
-                "created_by": {
-                    "description": "created_by",
-                    "type": "string"
-                },
-                "created_time": {
-                    "description": "created_time",
-                    "type": "string"
-                },
-                "exhibition_area_id": {
-                    "description": "展区ID",
-                    "type": "string"
-                },
-                "exhibition_room_id": {
-                    "description": "展厅ID",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "string"
+                "program_index": {
+                    "description": "节目序号",
+                    "type": "integer"
                 },
                 "updated_by": {
                     "description": "updated_by",

@@ -391,7 +391,7 @@ func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 
 	// First packet contains the program count
 	if len(resp) < headerSize+tlvHeaderSize+programCountSize {
-		return nil, fmt.Errorf("response too short for header and program count")
+		return nil, fmt.Errorf("response too short for header and program count: len(resp)=%d", len(resp))
 	}
 
 	// Get program count from first packet
