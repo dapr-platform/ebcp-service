@@ -27,11 +27,13 @@ Table: o_ebcp_exhibition
 [ 6] start_time                                     TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 7] end_time                                       TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 8] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 9] hall_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "qIEUQFsPmUcgTVLgtqYZsnvGh",    "created_by": "mcApfJaqqtxWkqJFwYscYYwMR",    "created_time": 27,    "updated_by": "VOHSaqcLLLSrhriRYLwkxTZdQ",    "updated_time": 80,    "name": "mtfrChBosLjcWgTMjwYZZpIMo",    "start_time": 94,    "end_time": 15,    "remarks": "PfPEfLoZMEHcwNykSFYbYBkQX"}
+{    "id": "DipKYjRmQbiXZjYIigXONVUmB",    "created_by": "RRcxxRLpfaTrSlOaQyBKAZuJs",    "created_time": 47,    "updated_by": "efipQniflqLRgkFwqUmKoDGEy",    "updated_time": 7,    "name": "dCDuFklqyHjxZfocTjIOBkLmy",    "start_time": 57,    "end_time": 58,    "remarks": "sJnvrPlKyetapWvWYdrkLboWR",    "hall_id": "hACgMeILAjBOJiVmZHiXMlmeu",    "status": 18}
 
 
 
@@ -55,6 +57,10 @@ var (
 	Ebcp_exhibition_FIELD_NAME_end_time = "end_time"
 
 	Ebcp_exhibition_FIELD_NAME_remarks = "remarks"
+
+	Ebcp_exhibition_FIELD_NAME_hall_id = "hall_id"
+
+	Ebcp_exhibition_FIELD_NAME_status = "status"
 )
 
 // Ebcp_exhibition struct is a row record of the o_ebcp_exhibition table in the  database
@@ -76,6 +82,10 @@ type Ebcp_exhibition struct {
 	EndTime common.LocalTime `json:"end_time"` //结束时间
 
 	Remarks string `json:"remarks"` //备注
+
+	HallID string `json:"hall_id"` //所属展馆ID
+
+	Status int32 `json:"status"` //状态（1: 运行中, 2: 筹备中, 3: 已结束）
 
 }
 
@@ -270,6 +280,48 @@ var Ebcp_exhibitionTableInfo = &TableInfo{
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
 			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "hall_id",
+			Comment:            `所属展馆ID`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "HallID",
+			GoFieldType:        "string",
+			JSONFieldName:      "hall_id",
+			ProtobufFieldName:  "hall_id",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
+			Name:               "status",
+			Comment:            `状态（1: 运行中, 2: 筹备中, 3: 已结束）`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Status",
+			GoFieldType:        "int32",
+			JSONFieldName:      "status",
+			ProtobufFieldName:  "status",
+			ProtobufType:       "int32",
+			ProtobufPos:        11,
 		},
 	},
 }

@@ -22,21 +22,14 @@ Table: v_ebcp_exhibition_info
 [ 1] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 2] exhibition_start_time                          TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 3] exhibition_end_time                            TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 4] hall_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 5] hall_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 8] room_floor                                     VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 9] room_location                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[10] room_status                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[11] total_room_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
-[12] total_item_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
-[13] room_item_count                                INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[ 4] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 5] total_room_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[ 6] total_item_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "exhibition_id": "iKqvffjbEbsrSTWphhLkmNlLb",    "exhibition_name": "ulBklsWhpMtXImOkQaBmTnecb",    "exhibition_start_time": 81,    "exhibition_end_time": 37,    "hall_id": "hqmMiyOcRIjTMXTovOmkeSlvT",    "hall_name": "QjjstBpycJAxAdEroQIqHoXgf",    "room_id": "NoRhJnGaXdoqFhWMOZEwnuBvD",    "room_name": "JYXItYgKpjGxiIwEvIjIGUVni",    "room_floor": "ZRhlokitjnLYoOSNBjeCTTCpt",    "room_location": "IXHIdxvYicAToMWDepdMaBrho",    "room_status": 34,    "total_room_count": 49,    "total_item_count": 24,    "room_item_count": 28}
+{    "exhibition_id": "YhyCFrAXmgYRfYvAbLTaiCIoY",    "exhibition_name": "CRemGiOdNoRdELwhNirLIACGC",    "exhibition_start_time": 19,    "exhibition_end_time": 3,    "exhibition_status": 84,    "total_room_count": 18,    "total_item_count": 22}
 
 
 Comments
@@ -58,56 +51,28 @@ var (
 
 	Ebcp_exhibition_info_FIELD_NAME_exhibition_end_time = "exhibition_end_time"
 
-	Ebcp_exhibition_info_FIELD_NAME_hall_id = "hall_id"
-
-	Ebcp_exhibition_info_FIELD_NAME_hall_name = "hall_name"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_id = "room_id"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_name = "room_name"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_floor = "room_floor"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_location = "room_location"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_status = "room_status"
+	Ebcp_exhibition_info_FIELD_NAME_exhibition_status = "exhibition_status"
 
 	Ebcp_exhibition_info_FIELD_NAME_total_room_count = "total_room_count"
 
 	Ebcp_exhibition_info_FIELD_NAME_total_item_count = "total_item_count"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_item_count = "room_item_count"
 )
 
 // Ebcp_exhibition_info struct is a row record of the v_ebcp_exhibition_info table in the  database
 type Ebcp_exhibition_info struct {
-	ExhibitionID string `json:"exhibition_id"` //exhibition_id
+	ExhibitionID string `json:"exhibition_id"` //展览ID
 
-	ExhibitionName string `json:"exhibition_name"` //exhibition_name
+	ExhibitionName string `json:"exhibition_name"` //展览名称
 
-	ExhibitionStartTime common.LocalTime `json:"exhibition_start_time"` //exhibition_start_time
+	ExhibitionStartTime common.LocalTime `json:"exhibition_start_time"` //展览开始时间
 
-	ExhibitionEndTime common.LocalTime `json:"exhibition_end_time"` //exhibition_end_time
+	ExhibitionEndTime common.LocalTime `json:"exhibition_end_time"` //展览结束时间
 
-	HallID string `json:"hall_id"` //hall_id
+	ExhibitionStatus int32 `json:"exhibition_status"` //展览状态（1: 运行中, 2: 筹备中, 3: 已结束）
 
-	HallName string `json:"hall_name"` //hall_name
+	TotalRoomCount int32 `json:"total_room_count"` //展厅总数
 
-	RoomID string `json:"room_id"` //room_id
-
-	RoomName string `json:"room_name"` //room_name
-
-	RoomFloor string `json:"room_floor"` //room_floor
-
-	RoomLocation string `json:"room_location"` //room_location
-
-	RoomStatus int32 `json:"room_status"` //room_status
-
-	TotalRoomCount int32 `json:"total_room_count"` //total_room_count
-
-	TotalItemCount int32 `json:"total_item_count"` //total_item_count
-
-	RoomItemCount int32 `json:"room_item_count"` //room_item_count
+	TotalItemCount int32 `json:"total_item_count"` //展项总数
 
 }
 
@@ -118,7 +83,7 @@ var Ebcp_exhibition_infoTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:   0,
 			Name:    "exhibition_id",
-			Comment: `exhibition_id`,
+			Comment: `展览ID`,
 			Notes: `Warning table: v_ebcp_exhibition_info does not have a primary key defined, setting col position 1 exhibition_id as primary key
 Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullable column, setting it as NOT NULL
 `,
@@ -141,7 +106,7 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 		&ColumnInfo{
 			Index:              1,
 			Name:               "exhibition_name",
-			Comment:            `exhibition_name`,
+			Comment:            `展览名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -162,7 +127,7 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 		&ColumnInfo{
 			Index:              2,
 			Name:               "exhibition_start_time",
-			Comment:            `exhibition_start_time`,
+			Comment:            `展览开始时间`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -183,7 +148,7 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 		&ColumnInfo{
 			Index:              3,
 			Name:               "exhibition_end_time",
-			Comment:            `exhibition_end_time`,
+			Comment:            `展览结束时间`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TIMESTAMP",
@@ -203,134 +168,8 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 
 		&ColumnInfo{
 			Index:              4,
-			Name:               "hall_id",
-			Comment:            `hall_id`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "HallID",
-			GoFieldType:        "string",
-			JSONFieldName:      "hall_id",
-			ProtobufFieldName:  "hall_id",
-			ProtobufType:       "string",
-			ProtobufPos:        5,
-		},
-
-		&ColumnInfo{
-			Index:              5,
-			Name:               "hall_name",
-			Comment:            `hall_name`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "HallName",
-			GoFieldType:        "string",
-			JSONFieldName:      "hall_name",
-			ProtobufFieldName:  "hall_name",
-			ProtobufType:       "string",
-			ProtobufPos:        6,
-		},
-
-		&ColumnInfo{
-			Index:              6,
-			Name:               "room_id",
-			Comment:            `room_id`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "RoomID",
-			GoFieldType:        "string",
-			JSONFieldName:      "room_id",
-			ProtobufFieldName:  "room_id",
-			ProtobufType:       "string",
-			ProtobufPos:        7,
-		},
-
-		&ColumnInfo{
-			Index:              7,
-			Name:               "room_name",
-			Comment:            `room_name`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "RoomName",
-			GoFieldType:        "string",
-			JSONFieldName:      "room_name",
-			ProtobufFieldName:  "room_name",
-			ProtobufType:       "string",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "room_floor",
-			Comment:            `room_floor`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "RoomFloor",
-			GoFieldType:        "string",
-			JSONFieldName:      "room_floor",
-			ProtobufFieldName:  "room_floor",
-			ProtobufType:       "string",
-			ProtobufPos:        9,
-		},
-
-		&ColumnInfo{
-			Index:              9,
-			Name:               "room_location",
-			Comment:            `room_location`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "RoomLocation",
-			GoFieldType:        "string",
-			JSONFieldName:      "room_location",
-			ProtobufFieldName:  "room_location",
-			ProtobufType:       "string",
-			ProtobufPos:        10,
-		},
-
-		&ColumnInfo{
-			Index:              10,
-			Name:               "room_status",
-			Comment:            `room_status`,
+			Name:               "exhibition_status",
+			Comment:            `展览状态（1: 运行中, 2: 筹备中, 3: 已结束）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "INT4",
@@ -340,18 +179,18 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 			IsArray:            false,
 			ColumnType:         "INT4",
 			ColumnLength:       -1,
-			GoFieldName:        "RoomStatus",
+			GoFieldName:        "ExhibitionStatus",
 			GoFieldType:        "int32",
-			JSONFieldName:      "room_status",
-			ProtobufFieldName:  "room_status",
+			JSONFieldName:      "exhibition_status",
+			ProtobufFieldName:  "exhibition_status",
 			ProtobufType:       "int32",
-			ProtobufPos:        11,
+			ProtobufPos:        5,
 		},
 
 		&ColumnInfo{
-			Index:              11,
+			Index:              5,
 			Name:               "total_room_count",
-			Comment:            `total_room_count`,
+			Comment:            `展厅总数`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "INT8",
@@ -366,13 +205,13 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 			JSONFieldName:      "total_room_count",
 			ProtobufFieldName:  "total_room_count",
 			ProtobufType:       "int32",
-			ProtobufPos:        12,
+			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
-			Index:              12,
+			Index:              6,
 			Name:               "total_item_count",
-			Comment:            `total_item_count`,
+			Comment:            `展项总数`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "INT8",
@@ -387,28 +226,7 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 			JSONFieldName:      "total_item_count",
 			ProtobufFieldName:  "total_item_count",
 			ProtobufType:       "int32",
-			ProtobufPos:        13,
-		},
-
-		&ColumnInfo{
-			Index:              13,
-			Name:               "room_item_count",
-			Comment:            `room_item_count`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "INT8",
-			DatabaseTypePretty: "INT8",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "INT8",
-			ColumnLength:       -1,
-			GoFieldName:        "RoomItemCount",
-			GoFieldType:        "int32",
-			JSONFieldName:      "room_item_count",
-			ProtobufFieldName:  "room_item_count",
-			ProtobufType:       "int32",
-			ProtobufPos:        14,
+			ProtobufPos:        7,
 		},
 	},
 }

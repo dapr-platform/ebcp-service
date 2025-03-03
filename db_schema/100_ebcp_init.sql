@@ -33,37 +33,37 @@ INSERT INTO o_ebcp_exhibition_hall (
 -- 初始化展览数据
 INSERT INTO o_ebcp_exhibition (
     id, created_by, created_time, updated_by, updated_time,
-    name, start_time, end_time, remarks
+    name, start_time, end_time, remarks, hall_id, status
 ) VALUES
     (md5('陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('陆军重武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '陆军重武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '陆军重武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('领航强军向复兴-新时代国防和军队建设成就展'), 'admin', NOW(), 'admin', NOW(), 
-    '领航强军向复兴-新时代国防和军队建设成就展', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '领航强军向复兴-新时代国防和军队建设成就展', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'), 'admin', NOW(), 'admin', NOW(),
-    '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('空军武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '空军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '空军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('导弹武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '导弹武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '导弹武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('核武器与核技术和平利用厅'), 'admin', NOW(), 'admin', NOW(), 
-    '核武器与核技术和平利用厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '核武器与核技术和平利用厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('海军武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '海军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '海军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('抗美援朝战争馆'), 'admin', NOW(), 'admin', NOW(), 
-    '抗美援朝战争馆', NOW(), NOW() + INTERVAL '10 year', NULL),
+    '抗美援朝战争馆', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
     
     (md5('新民主主义革命时期陈列'), 'admin', NOW(), 'admin', NOW(), 
-    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL);
+    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1);
 
 -- 初始化展厅数据
 INSERT INTO o_ebcp_exhibition_room (

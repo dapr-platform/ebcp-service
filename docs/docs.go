@@ -566,6 +566,18 @@ const docTemplate = `{
                         "description": "remarks",
                         "name": "remarks",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -634,6 +646,304 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/model.Ebcp_exhibition"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-area-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览区域信息视图"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_item_count",
+                        "name": "room_item_count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_area_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-area-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览区域信息视图"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_item_count",
+                        "name": "room_item_count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition_area_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -1274,44 +1584,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_id",
-                        "name": "room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_name",
-                        "name": "room_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_floor",
-                        "name": "room_floor",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_location",
-                        "name": "room_location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_status",
-                        "name": "room_status",
+                        "description": "exhibition_status",
+                        "name": "exhibition_status",
                         "in": "query"
                     },
                     {
@@ -1324,12 +1598,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "total_item_count",
                         "name": "total_item_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_item_count",
-                        "name": "room_item_count",
                         "in": "query"
                     }
                 ],
@@ -1421,44 +1689,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_id",
-                        "name": "room_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_name",
-                        "name": "room_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_floor",
-                        "name": "room_floor",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_location",
-                        "name": "room_location",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_status",
-                        "name": "room_status",
+                        "description": "exhibition_status",
+                        "name": "exhibition_status",
                         "in": "query"
                     },
                     {
@@ -1471,12 +1703,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "total_item_count",
                         "name": "total_item_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_item_count",
-                        "name": "room_item_count",
                         "in": "query"
                     }
                 ],
@@ -2753,6 +2979,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     }
                 ],
@@ -5088,6 +5326,10 @@ const docTemplate = `{
                     "description": "结束时间",
                     "type": "string"
                 },
+                "hall_id": {
+                    "description": "所属展馆ID",
+                    "type": "string"
+                },
                 "id": {
                     "description": "id",
                     "type": "string"
@@ -5104,6 +5346,10 @@ const docTemplate = `{
                     "description": "开始时间",
                     "type": "string"
                 },
+                "status": {
+                    "description": "状态（1: 运行中, 2: 筹备中, 3: 已结束）",
+                    "type": "integer"
+                },
                 "updated_by": {
                     "description": "updated_by",
                     "type": "string"
@@ -5111,6 +5357,67 @@ const docTemplate = `{
                 "updated_time": {
                     "description": "updated_time",
                     "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_exhibition_area_info": {
+            "type": "object",
+            "properties": {
+                "exhibition_end_time": {
+                    "description": "展览结束时间",
+                    "type": "string"
+                },
+                "exhibition_id": {
+                    "description": "展览ID",
+                    "type": "string"
+                },
+                "exhibition_name": {
+                    "description": "展览名称",
+                    "type": "string"
+                },
+                "exhibition_start_time": {
+                    "description": "展览开始时间",
+                    "type": "string"
+                },
+                "hall_id": {
+                    "description": "展馆ID",
+                    "type": "string"
+                },
+                "hall_name": {
+                    "description": "展馆名称",
+                    "type": "string"
+                },
+                "room_floor": {
+                    "description": "展厅楼层",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "展厅ID",
+                    "type": "string"
+                },
+                "room_item_count": {
+                    "description": "展厅展项总数",
+                    "type": "integer"
+                },
+                "room_location": {
+                    "description": "展厅位置",
+                    "type": "string"
+                },
+                "room_name": {
+                    "description": "展厅名称",
+                    "type": "string"
+                },
+                "room_status": {
+                    "description": "展厅状态",
+                    "type": "integer"
+                },
+                "total_item_count": {
+                    "description": "展项总数",
+                    "type": "integer"
+                },
+                "total_room_count": {
+                    "description": "展厅总数",
+                    "type": "integer"
                 }
             }
         },
@@ -5171,59 +5478,31 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "exhibition_end_time": {
-                    "description": "exhibition_end_time",
+                    "description": "展览结束时间",
                     "type": "string"
                 },
                 "exhibition_id": {
-                    "description": "exhibition_id",
+                    "description": "展览ID",
                     "type": "string"
                 },
                 "exhibition_name": {
-                    "description": "exhibition_name",
+                    "description": "展览名称",
                     "type": "string"
                 },
                 "exhibition_start_time": {
-                    "description": "exhibition_start_time",
+                    "description": "展览开始时间",
                     "type": "string"
                 },
-                "hall_id": {
-                    "description": "hall_id",
-                    "type": "string"
-                },
-                "hall_name": {
-                    "description": "hall_name",
-                    "type": "string"
-                },
-                "room_floor": {
-                    "description": "room_floor",
-                    "type": "string"
-                },
-                "room_id": {
-                    "description": "room_id",
-                    "type": "string"
-                },
-                "room_item_count": {
-                    "description": "room_item_count",
-                    "type": "integer"
-                },
-                "room_location": {
-                    "description": "room_location",
-                    "type": "string"
-                },
-                "room_name": {
-                    "description": "room_name",
-                    "type": "string"
-                },
-                "room_status": {
-                    "description": "room_status",
+                "exhibition_status": {
+                    "description": "展览状态（1: 运行中, 2: 筹备中, 3: 已结束）",
                     "type": "integer"
                 },
                 "total_item_count": {
-                    "description": "total_item_count",
+                    "description": "展项总数",
                     "type": "integer"
                 },
                 "total_room_count": {
-                    "description": "total_room_count",
+                    "description": "展厅总数",
                     "type": "integer"
                 }
             }

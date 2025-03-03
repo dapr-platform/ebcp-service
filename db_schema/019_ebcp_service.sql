@@ -29,6 +29,8 @@ CREATE TABLE o_ebcp_exhibition (
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     remarks TEXT,
+    hall_id VARCHAR(32) NOT NULL,
+    status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
 
@@ -37,6 +39,8 @@ COMMENT ON COLUMN o_ebcp_exhibition.name IS '展览名称';
 COMMENT ON COLUMN o_ebcp_exhibition.start_time IS '开始时间';
 COMMENT ON COLUMN o_ebcp_exhibition.end_time IS '结束时间';
 COMMENT ON COLUMN o_ebcp_exhibition.remarks IS '备注';
+COMMENT ON COLUMN o_ebcp_exhibition.hall_id IS '所属展馆ID';
+COMMENT ON COLUMN o_ebcp_exhibition.status IS '状态（1: 运行中, 2: 筹备中, 3: 已结束）';
 
 -- 展厅表
 CREATE TABLE o_ebcp_exhibition_room (
@@ -195,7 +199,29 @@ COMMENT ON COLUMN o_ebcp_item_schedule.task_type IS '任务类型(1: 启动, 2: 
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
 
 -- 创建视图
+
+-- 创建视图
 CREATE VIEW v_ebcp_exhibition_info AS
+SELECT 
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    e.start_time AS exhibition_start_time,
+    e.end_time AS exhibition_end_time,
+    e.status AS exhibition_status,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count
+FROM o_ebcp_exhibition e;
+
+COMMENT ON VIEW v_ebcp_exhibition_info IS '展览信息视图';
+COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_status IS '展览状态（1: 运行中, 2: 筹备中, 3: 已结束）';    
+COMMENT ON COLUMN v_ebcp_exhibition_info.total_room_count IS '展厅总数';
+COMMENT ON COLUMN v_ebcp_exhibition_info.total_item_count IS '展项总数';
+
+CREATE VIEW v_ebcp_exhibition_area_info AS
 SELECT 
     e.id AS exhibition_id,
     e.name AS exhibition_name,
@@ -215,7 +241,21 @@ FROM o_ebcp_exhibition e
 JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
 JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id;
 
-COMMENT ON VIEW v_ebcp_exhibition_info IS '展览信息视图';
+COMMENT ON VIEW v_ebcp_exhibition_area_info IS '展览区域信息视图';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_id IS '展馆ID';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_name IS '展馆名称';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_id IS '展厅ID';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_name IS '展厅名称';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor IS '展厅楼层';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location IS '展厅位置';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_status IS '展厅状态';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_room_count IS '展厅总数';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_item_count IS '展项总数';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_item_count IS '展厅展项总数';
 
 -- 展馆详细视图
 CREATE VIEW v_ebcp_exhibition_hall_details AS

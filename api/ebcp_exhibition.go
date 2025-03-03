@@ -108,6 +108,8 @@ func batchUpsertEbcp_exhibitionHandler(w http.ResponseWriter, r *http.Request) {
 // @Param start_time query string false "start_time"
 // @Param end_time query string false "end_time"
 // @Param remarks query string false "remarks"
+// @Param hall_id query string false "hall_id"
+// @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -138,6 +140,8 @@ func Ebcp_exhibitionPageListHandler(w http.ResponseWriter, r *http.Request) {
 // @Param start_time query string false "start_time"
 // @Param end_time query string false "end_time"
 // @Param remarks query string false "remarks"
+// @Param hall_id query string false "hall_id"
+// @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition} "objects array"
 // @Failure 500 {object} common.Response ""
