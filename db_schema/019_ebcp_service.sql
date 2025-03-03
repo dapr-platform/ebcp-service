@@ -208,16 +208,12 @@ SELECT
     r.floor AS room_floor,
     r.location AS room_location,
     r.status AS room_status,
-    i.id AS item_id,
-    i.name AS item_name,
-    i.type AS item_type,
-    i.status AS item_status,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS room_count,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS item_count
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = r.id) AS room_item_count
 FROM o_ebcp_exhibition e
-LEFT JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
-LEFT JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id
-LEFT JOIN o_ebcp_exhibition_item i ON i.exhibition_id = e.id AND i.exhibition_room_id = r.id;
+JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
+JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id;
 
 COMMENT ON VIEW v_ebcp_exhibition_info IS '展览信息视图';
 

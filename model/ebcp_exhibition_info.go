@@ -29,17 +29,14 @@ Table: v_ebcp_exhibition_info
 [ 8] room_floor                                     VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 9] room_location                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] room_status                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[11] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[12] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[13] item_type                                      VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[14] item_status                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[15] room_count                                     INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
-[16] item_count                                     INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[11] total_room_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[12] total_item_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[13] room_item_count                                INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "exhibition_id": "dfrWPYojMKLRxBUPTNgfSoCBw",    "exhibition_name": "tOBeIRZKjcXZUBlVOwXxeOjFf",    "exhibition_start_time": 6,    "exhibition_end_time": 65,    "hall_id": "cVpOUvkksHeEWdpsxeueCrhDF",    "hall_name": "mEJkNQBattStwMybaXHkeFuil",    "room_id": "dMmDXWPYPktbXXKGHMFWhKuOt",    "room_name": "qNxCtuCfXSenaMjblHLTehvKe",    "room_floor": "oZOqHThbGiYJCmuXdyIaqGmjK",    "room_location": "BfFKloSyPsbLOmEITfDAaSgxr",    "room_status": 44,    "item_id": "PfWEPQDMZARGLGOyOfJYnYVgV",    "item_name": "xUvTrvPgnXBVdtysoFKSfLTTN",    "item_type": "IBRCrkiTGkbRRhEupPCWMIFlx",    "item_status": 22,    "room_count": 65,    "item_count": 99}
+{    "exhibition_id": "iKqvffjbEbsrSTWphhLkmNlLb",    "exhibition_name": "ulBklsWhpMtXImOkQaBmTnecb",    "exhibition_start_time": 81,    "exhibition_end_time": 37,    "hall_id": "hqmMiyOcRIjTMXTovOmkeSlvT",    "hall_name": "QjjstBpycJAxAdEroQIqHoXgf",    "room_id": "NoRhJnGaXdoqFhWMOZEwnuBvD",    "room_name": "JYXItYgKpjGxiIwEvIjIGUVni",    "room_floor": "ZRhlokitjnLYoOSNBjeCTTCpt",    "room_location": "IXHIdxvYicAToMWDepdMaBrho",    "room_status": 34,    "total_room_count": 49,    "total_item_count": 24,    "room_item_count": 28}
 
 
 Comments
@@ -75,17 +72,11 @@ var (
 
 	Ebcp_exhibition_info_FIELD_NAME_room_status = "room_status"
 
-	Ebcp_exhibition_info_FIELD_NAME_item_id = "item_id"
+	Ebcp_exhibition_info_FIELD_NAME_total_room_count = "total_room_count"
 
-	Ebcp_exhibition_info_FIELD_NAME_item_name = "item_name"
+	Ebcp_exhibition_info_FIELD_NAME_total_item_count = "total_item_count"
 
-	Ebcp_exhibition_info_FIELD_NAME_item_type = "item_type"
-
-	Ebcp_exhibition_info_FIELD_NAME_item_status = "item_status"
-
-	Ebcp_exhibition_info_FIELD_NAME_room_count = "room_count"
-
-	Ebcp_exhibition_info_FIELD_NAME_item_count = "item_count"
+	Ebcp_exhibition_info_FIELD_NAME_room_item_count = "room_item_count"
 )
 
 // Ebcp_exhibition_info struct is a row record of the v_ebcp_exhibition_info table in the  database
@@ -112,17 +103,11 @@ type Ebcp_exhibition_info struct {
 
 	RoomStatus int32 `json:"room_status"` //room_status
 
-	ItemID string `json:"item_id"` //item_id
+	TotalRoomCount int32 `json:"total_room_count"` //total_room_count
 
-	ItemName string `json:"item_name"` //item_name
+	TotalItemCount int32 `json:"total_item_count"` //total_item_count
 
-	ItemType string `json:"item_type"` //item_type
-
-	ItemStatus int32 `json:"item_status"` //item_status
-
-	RoomCount int32 `json:"room_count"` //room_count
-
-	ItemCount int32 `json:"item_count"` //item_count
+	RoomItemCount int32 `json:"room_item_count"` //room_item_count
 
 }
 
@@ -365,128 +350,65 @@ Warning table: v_ebcp_exhibition_info primary key column exhibition_id is nullab
 
 		&ColumnInfo{
 			Index:              11,
-			Name:               "item_id",
-			Comment:            `item_id`,
+			Name:               "total_room_count",
+			Comment:            `total_room_count`,
 			Notes:              ``,
 			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
+			DatabaseTypeName:   "INT8",
+			DatabaseTypePretty: "INT8",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "ItemID",
-			GoFieldType:        "string",
-			JSONFieldName:      "item_id",
-			ProtobufFieldName:  "item_id",
-			ProtobufType:       "string",
+			ColumnType:         "INT8",
+			ColumnLength:       -1,
+			GoFieldName:        "TotalRoomCount",
+			GoFieldType:        "int32",
+			JSONFieldName:      "total_room_count",
+			ProtobufFieldName:  "total_room_count",
+			ProtobufType:       "int32",
 			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
 			Index:              12,
-			Name:               "item_name",
-			Comment:            `item_name`,
+			Name:               "total_item_count",
+			Comment:            `total_item_count`,
 			Notes:              ``,
 			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypeName:   "INT8",
+			DatabaseTypePretty: "INT8",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "ItemName",
-			GoFieldType:        "string",
-			JSONFieldName:      "item_name",
-			ProtobufFieldName:  "item_name",
-			ProtobufType:       "string",
+			ColumnType:         "INT8",
+			ColumnLength:       -1,
+			GoFieldName:        "TotalItemCount",
+			GoFieldType:        "int32",
+			JSONFieldName:      "total_item_count",
+			ProtobufFieldName:  "total_item_count",
+			ProtobufType:       "int32",
 			ProtobufPos:        13,
 		},
 
 		&ColumnInfo{
 			Index:              13,
-			Name:               "item_type",
-			Comment:            `item_type`,
+			Name:               "room_item_count",
+			Comment:            `room_item_count`,
 			Notes:              ``,
 			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(50)",
+			DatabaseTypeName:   "INT8",
+			DatabaseTypePretty: "INT8",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       50,
-			GoFieldName:        "ItemType",
-			GoFieldType:        "string",
-			JSONFieldName:      "item_type",
-			ProtobufFieldName:  "item_type",
-			ProtobufType:       "string",
+			ColumnType:         "INT8",
+			ColumnLength:       -1,
+			GoFieldName:        "RoomItemCount",
+			GoFieldType:        "int32",
+			JSONFieldName:      "room_item_count",
+			ProtobufFieldName:  "room_item_count",
+			ProtobufType:       "int32",
 			ProtobufPos:        14,
-		},
-
-		&ColumnInfo{
-			Index:              14,
-			Name:               "item_status",
-			Comment:            `item_status`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "INT4",
-			DatabaseTypePretty: "INT4",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "INT4",
-			ColumnLength:       -1,
-			GoFieldName:        "ItemStatus",
-			GoFieldType:        "int32",
-			JSONFieldName:      "item_status",
-			ProtobufFieldName:  "item_status",
-			ProtobufType:       "int32",
-			ProtobufPos:        15,
-		},
-
-		&ColumnInfo{
-			Index:              15,
-			Name:               "room_count",
-			Comment:            `room_count`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "INT8",
-			DatabaseTypePretty: "INT8",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "INT8",
-			ColumnLength:       -1,
-			GoFieldName:        "RoomCount",
-			GoFieldType:        "int32",
-			JSONFieldName:      "room_count",
-			ProtobufFieldName:  "room_count",
-			ProtobufType:       "int32",
-			ProtobufPos:        16,
-		},
-
-		&ColumnInfo{
-			Index:              16,
-			Name:               "item_count",
-			Comment:            `item_count`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "INT8",
-			DatabaseTypePretty: "INT8",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "INT8",
-			ColumnLength:       -1,
-			GoFieldName:        "ItemCount",
-			GoFieldType:        "int32",
-			JSONFieldName:      "item_count",
-			ProtobufFieldName:  "item_count",
-			ProtobufType:       "int32",
-			ProtobufPos:        17,
 		},
 	},
 }

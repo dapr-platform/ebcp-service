@@ -139,30 +139,15 @@ definitions:
       hall_name:
         description: hall_name
         type: string
-      item_count:
-        description: item_count
-        type: integer
-      item_id:
-        description: item_id
-        type: string
-      item_name:
-        description: item_name
-        type: string
-      item_status:
-        description: item_status
-        type: integer
-      item_type:
-        description: item_type
-        type: string
-      room_count:
-        description: room_count
-        type: integer
       room_floor:
         description: room_floor
         type: string
       room_id:
         description: room_id
         type: string
+      room_item_count:
+        description: room_item_count
+        type: integer
       room_location:
         description: room_location
         type: string
@@ -171,6 +156,12 @@ definitions:
         type: string
       room_status:
         description: room_status
+        type: integer
+      total_item_count:
+        description: total_item_count
+        type: integer
+      total_room_count:
+        description: total_room_count
         type: integer
     type: object
   model.Ebcp_exhibition_item:
@@ -1191,29 +1182,17 @@ paths:
         in: query
         name: room_status
         type: string
-      - description: item_id
+      - description: total_room_count
         in: query
-        name: item_id
+        name: total_room_count
         type: string
-      - description: item_name
+      - description: total_item_count
         in: query
-        name: item_name
+        name: total_item_count
         type: string
-      - description: item_type
+      - description: room_item_count
         in: query
-        name: item_type
-        type: string
-      - description: item_status
-        in: query
-        name: item_status
-        type: string
-      - description: room_count
-        in: query
-        name: room_count
-        type: string
-      - description: item_count
-        in: query
-        name: item_count
+        name: room_item_count
         type: string
       produces:
       - application/json
@@ -1299,29 +1278,17 @@ paths:
         in: query
         name: room_status
         type: string
-      - description: item_id
+      - description: total_room_count
         in: query
-        name: item_id
+        name: total_room_count
         type: string
-      - description: item_name
+      - description: total_item_count
         in: query
-        name: item_name
+        name: total_item_count
         type: string
-      - description: item_type
+      - description: room_item_count
         in: query
-        name: item_type
-        type: string
-      - description: item_status
-        in: query
-        name: item_status
-        type: string
-      - description: room_count
-        in: query
-        name: room_count
-        type: string
-      - description: item_count
-        in: query
-        name: item_count
+        name: room_item_count
         type: string
       produces:
       - application/json

@@ -1316,38 +1316,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_name",
-                        "name": "item_name",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_type",
-                        "name": "item_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "item_status",
-                        "name": "item_status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_count",
-                        "name": "room_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "item_count",
-                        "name": "item_count",
+                        "description": "room_item_count",
+                        "name": "room_item_count",
                         "in": "query"
                     }
                 ],
@@ -1481,38 +1463,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_name",
-                        "name": "item_name",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_type",
-                        "name": "item_type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "item_status",
-                        "name": "item_status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "room_count",
-                        "name": "room_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "item_count",
-                        "name": "item_count",
+                        "description": "room_item_count",
+                        "name": "room_item_count",
                         "in": "query"
                     }
                 ],
@@ -5230,30 +5194,6 @@ const docTemplate = `{
                     "description": "hall_name",
                     "type": "string"
                 },
-                "item_count": {
-                    "description": "item_count",
-                    "type": "integer"
-                },
-                "item_id": {
-                    "description": "item_id",
-                    "type": "string"
-                },
-                "item_name": {
-                    "description": "item_name",
-                    "type": "string"
-                },
-                "item_status": {
-                    "description": "item_status",
-                    "type": "integer"
-                },
-                "item_type": {
-                    "description": "item_type",
-                    "type": "string"
-                },
-                "room_count": {
-                    "description": "room_count",
-                    "type": "integer"
-                },
                 "room_floor": {
                     "description": "room_floor",
                     "type": "string"
@@ -5261,6 +5201,10 @@ const docTemplate = `{
                 "room_id": {
                     "description": "room_id",
                     "type": "string"
+                },
+                "room_item_count": {
+                    "description": "room_item_count",
+                    "type": "integer"
                 },
                 "room_location": {
                     "description": "room_location",
@@ -5272,6 +5216,14 @@ const docTemplate = `{
                 },
                 "room_status": {
                     "description": "room_status",
+                    "type": "integer"
+                },
+                "total_item_count": {
+                    "description": "total_item_count",
+                    "type": "integer"
+                },
+                "total_room_count": {
+                    "description": "total_room_count",
                     "type": "integer"
                 }
             }
