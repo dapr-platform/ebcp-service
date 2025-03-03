@@ -36,7 +36,7 @@ Table: v_ebcp_exhibition_area_info
 
 JSON Sample
 -------------------------------------
-{    "exhibition_id": "pgMUQFncOmQaUMbtOUHkRUNDS",    "exhibition_name": "QEghZVOSdkOPBEkHyUsdFcWAj",    "exhibition_start_time": 0,    "exhibition_end_time": 24,    "hall_id": "dMYMtninGGbCpsgUSraxMHQLY",    "hall_name": "ICOvDasCghmasIwnfdAxalyLM",    "room_id": "wZoyaGukNQgKAeyhcIoWiIIOx",    "room_name": "vDnwpnHqXhcvPLsDghsKhMVrK",    "room_floor": "gBqZXGmUUKrMACffukLdoETvo",    "room_location": "NARDQbioajdTnNsSToaYhYYVu",    "room_status": 30,    "total_room_count": 78,    "total_item_count": 43,    "room_item_count": 18}
+{    "exhibition_id": "vivmIXeBCpuhxAjeqCoVeBrat",    "exhibition_name": "EnwCgikWmoUxoxGUFHgOCHhPu",    "exhibition_start_time": 86,    "exhibition_end_time": 93,    "hall_id": "WpNUnIFUvwYpbrDTjOyDUVCLC",    "hall_name": "lHDAQSXbFDnFaaNTBwKqqNIMq",    "room_id": "redIdDJYuIxNseAihTdJwmHPh",    "room_name": "oruWbAfdDuALkfmaBUFoNGwhD",    "room_floor": "yBonFKIWNBoogaOgBtjFHaMAU",    "room_location": "YwUHQbZhabNTXFJfBlMUAavrZ",    "room_status": 44,    "total_room_count": 53,    "total_item_count": 70,    "room_item_count": 24}
 
 
 Comments

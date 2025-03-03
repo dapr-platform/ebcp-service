@@ -1284,6 +1284,184 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-hall-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_description",
+                        "name": "hall_description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_hall_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-hall-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_description",
+                        "name": "hall_description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition_hall_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-hall/batch-delete": {
             "post": {
                 "description": "batch delete",
@@ -1920,6 +2098,328 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-item-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_status",
+                        "name": "item_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_remarks",
+                        "name": "item_remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_devices",
+                        "name": "player_devices",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "control_devices",
+                        "name": "control_devices",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "schedules",
+                        "name": "schedules",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_item_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-item-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_status",
+                        "name": "item_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_remarks",
+                        "name": "item_remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_devices",
+                        "name": "player_devices",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "control_devices",
+                        "name": "control_devices",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "schedules",
+                        "name": "schedules",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition_item_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-item/batch-delete": {
             "post": {
                 "description": "batch delete",
@@ -2513,6 +3013,316 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/model.Ebcp_exhibition_room"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-room-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_remarks",
+                        "name": "room_remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_status",
+                        "name": "exhibition_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_count",
+                        "name": "item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "items",
+                        "name": "items",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_room_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-room-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_floor",
+                        "name": "room_floor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location",
+                        "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_status",
+                        "name": "room_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_remarks",
+                        "name": "room_remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_start_time",
+                        "name": "exhibition_start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_end_time",
+                        "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_status",
+                        "name": "exhibition_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_count",
+                        "name": "item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "items",
+                        "name": "items",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_exhibition_room_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -5474,6 +6284,26 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Ebcp_exhibition_hall_info": {
+            "type": "object",
+            "properties": {
+                "hall_description": {
+                    "description": "hall_description",
+                    "type": "string"
+                },
+                "hall_name": {
+                    "description": "hall_name",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "rooms": {
+                    "description": "rooms"
+                }
+            }
+        },
         "model.Ebcp_exhibition_info": {
             "type": "object",
             "properties": {
@@ -5556,6 +6386,72 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Ebcp_exhibition_item_info": {
+            "type": "object",
+            "properties": {
+                "control_devices": {
+                    "description": "control_devices"
+                },
+                "exhibition_id": {
+                    "description": "exhibition_id",
+                    "type": "string"
+                },
+                "exhibition_name": {
+                    "description": "exhibition_name",
+                    "type": "string"
+                },
+                "hall_id": {
+                    "description": "hall_id",
+                    "type": "string"
+                },
+                "hall_name": {
+                    "description": "hall_name",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "item_id",
+                    "type": "string"
+                },
+                "item_name": {
+                    "description": "item_name",
+                    "type": "string"
+                },
+                "item_remarks": {
+                    "description": "item_remarks",
+                    "type": "string"
+                },
+                "item_status": {
+                    "description": "item_status",
+                    "type": "integer"
+                },
+                "item_type": {
+                    "description": "item_type",
+                    "type": "string"
+                },
+                "player_devices": {
+                    "description": "player_devices"
+                },
+                "room_floor": {
+                    "description": "room_floor",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "room_id",
+                    "type": "string"
+                },
+                "room_location": {
+                    "description": "room_location",
+                    "type": "string"
+                },
+                "room_name": {
+                    "description": "room_name",
+                    "type": "string"
+                },
+                "schedules": {
+                    "description": "schedules"
+                }
+            }
+        },
         "model.Ebcp_exhibition_room": {
             "type": "object",
             "properties": {
@@ -5606,6 +6502,70 @@ const docTemplate = `{
                 "updated_time": {
                     "description": "updated_time",
                     "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_exhibition_room_info": {
+            "type": "object",
+            "properties": {
+                "exhibition_end_time": {
+                    "description": "exhibition_end_time",
+                    "type": "string"
+                },
+                "exhibition_id": {
+                    "description": "exhibition_id",
+                    "type": "string"
+                },
+                "exhibition_name": {
+                    "description": "exhibition_name",
+                    "type": "string"
+                },
+                "exhibition_start_time": {
+                    "description": "exhibition_start_time",
+                    "type": "string"
+                },
+                "exhibition_status": {
+                    "description": "exhibition_status",
+                    "type": "integer"
+                },
+                "hall_id": {
+                    "description": "hall_id",
+                    "type": "string"
+                },
+                "hall_name": {
+                    "description": "hall_name",
+                    "type": "string"
+                },
+                "item_count": {
+                    "description": "item_count",
+                    "type": "integer"
+                },
+                "items": {
+                    "description": "items"
+                },
+                "room_floor": {
+                    "description": "room_floor",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "room_id",
+                    "type": "string"
+                },
+                "room_location": {
+                    "description": "room_location",
+                    "type": "string"
+                },
+                "room_name": {
+                    "description": "room_name",
+                    "type": "string"
+                },
+                "room_remarks": {
+                    "description": "room_remarks",
+                    "type": "string"
+                },
+                "room_status": {
+                    "description": "room_status",
+                    "type": "integer"
                 }
             }
         },

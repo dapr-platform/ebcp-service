@@ -18,4 +18,7 @@ func InitRoute(r chi.Router) {
 	InitEbcp_player_programRoute(r)
 	InitEbcp_control_deviceRoute(r)
 	InitEbcp_exhibition_area_infoRoute(r)
+	InitEbcp_exhibition_hall_infoRoute(r)
+	InitEbcp_exhibition_room_infoRoute(r)
+	InitEbcp_exhibition_item_infoRoute(r)
 }

@@ -258,7 +258,7 @@ COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_item_count IS '展项总数'
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_item_count IS '展厅展项总数';
 
 -- 展馆详细视图
-CREATE VIEW v_ebcp_exhibition_hall_details AS
+CREATE VIEW v_ebcp_exhibition_hall_info AS
 SELECT 
     eh.id AS id,
     eh.name AS hall_name,
@@ -298,7 +298,112 @@ LEFT JOIN
 GROUP BY 
     eh.id, eh.name, eh.remarks;
 
-COMMENT ON VIEW v_ebcp_exhibition_hall_details IS '展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）';
+COMMENT ON VIEW v_ebcp_exhibition_hall_info IS '展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）';
+
+-- 展厅详细视图
+CREATE VIEW v_ebcp_exhibition_room_info AS
+SELECT 
+    er.id AS room_id,
+    er.name AS room_name,
+    er.floor AS room_floor,
+    er.location AS room_location,
+    er.status AS room_status,
+    er.remarks AS room_remarks,
+    eh.id AS hall_id,
+    eh.name AS hall_name,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    e.start_time AS exhibition_start_time,
+    e.end_time AS exhibition_end_time,
+    e.status AS exhibition_status,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = er.id) AS item_count,
+    json_agg(
+        json_build_object(
+            'item_id', ei.id,
+            'item_name', ei.name,
+            'item_type', ei.type,
+            'item_status', ei.status,
+            'item_remarks', ei.remarks
+        )
+    ) AS items
+FROM 
+    o_ebcp_exhibition_room er
+JOIN 
+    o_ebcp_exhibition_hall eh ON er.exhibition_hall_id = eh.id
+LEFT JOIN 
+    o_ebcp_exhibition e ON er.exhibition_id = e.id
+LEFT JOIN 
+    o_ebcp_exhibition_item ei ON ei.exhibition_room_id = er.id
+GROUP BY 
+    er.id, er.name, er.floor, er.location, er.status, er.remarks, 
+    eh.id, eh.name, e.id, e.name, e.start_time, e.end_time, e.status;
+
+COMMENT ON VIEW v_ebcp_exhibition_room_info IS '展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）';
+
+-- 展项详细视图
+CREATE VIEW v_ebcp_exhibition_item_info AS
+SELECT 
+    ei.id AS item_id,
+    ei.name AS item_name,
+    ei.type AS item_type,
+    ei.status AS item_status,
+    ei.remarks AS item_remarks,
+    er.id AS room_id,
+    er.name AS room_name,
+    er.floor AS room_floor,
+    er.location AS room_location,
+    eh.id AS hall_id,
+    eh.name AS hall_name,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'device_id', p.id,
+                'device_name', p.name,
+                'device_type', 'player',
+                'ip_address', p.ip_address,
+                'port', p.port,
+                'status', p.status
+            )
+        )
+        FROM o_ebcp_player p
+        WHERE p.item_id = ei.id
+    ) AS player_devices,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'device_id', cd.id,
+                'device_name', cd.name,
+                'device_type', cd.device_type,
+                'status', cd.status
+            )
+        )
+        FROM o_ebcp_control_device cd
+        WHERE cd.item_id = ei.id
+    ) AS control_devices,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'schedule_id', s.id,
+                'schedule_time', s.schedule_time,
+                'task_type', s.task_type,
+                'cycle_type', s.cycle_type
+            )
+        )
+        FROM o_ebcp_item_schedule s
+        WHERE s.exhibition_item_id = ei.id
+    ) AS schedules
+FROM 
+    o_ebcp_exhibition_item ei
+JOIN 
+    o_ebcp_exhibition_room er ON ei.exhibition_room_id = er.id
+JOIN 
+    o_ebcp_exhibition_hall eh ON er.exhibition_hall_id = eh.id
+JOIN 
+    o_ebcp_exhibition e ON ei.exhibition_id = e.id;
+
+COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）';
 
 -- +goose StatementEnd
 
@@ -306,7 +411,10 @@ COMMENT ON VIEW v_ebcp_exhibition_hall_details IS '展馆详细视图，包含�
 -- +goose StatementBegin
 SELECT 'down SQL query';
 
-DROP VIEW IF EXISTS v_ebcp_exhibition_hall_details;
+DROP VIEW IF EXISTS v_ebcp_exhibition_item_info;
+DROP VIEW IF EXISTS v_ebcp_exhibition_room_info;
+DROP VIEW IF EXISTS v_ebcp_exhibition_hall_info;
+DROP VIEW IF EXISTS v_ebcp_exhibition_area_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_info;
 
 DROP TABLE IF EXISTS o_ebcp_item_schedule;

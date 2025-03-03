@@ -29,7 +29,7 @@ Table: v_ebcp_exhibition_info
 
 JSON Sample
 -------------------------------------
-{    "exhibition_id": "YhyCFrAXmgYRfYvAbLTaiCIoY",    "exhibition_name": "CRemGiOdNoRdELwhNirLIACGC",    "exhibition_start_time": 19,    "exhibition_end_time": 3,    "exhibition_status": 84,    "total_room_count": 18,    "total_item_count": 22}
+{    "exhibition_id": "JRtoGMotxBYfuDZyOReIHrYUC",    "exhibition_name": "ooZCDesSYmsupvcwOZyGYxWNu",    "exhibition_start_time": 20,    "exhibition_end_time": 64,    "exhibition_status": 0,    "total_room_count": 94,    "total_item_count": 93}
 
 
 Comments
