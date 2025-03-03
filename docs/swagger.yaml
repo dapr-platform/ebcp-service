@@ -32,8 +32,14 @@ definitions:
       id:
         description: id
         type: string
+      item_id:
+        description: 所属展项ID
+        type: string
       name:
         description: 设备名称
+        type: string
+      room_id:
+        description: 所属展厅ID
         type: string
       status:
         description: '状态(1: 正常, 2: 故障)'
@@ -133,6 +139,9 @@ definitions:
       hall_name:
         description: hall_name
         type: string
+      item_count:
+        description: item_count
+        type: integer
       item_id:
         description: item_id
         type: string
@@ -145,6 +154,9 @@ definitions:
       item_type:
         description: item_type
         type: string
+      room_count:
+        description: room_count
+        type: integer
       room_floor:
         description: room_floor
         type: string
@@ -310,6 +322,9 @@ definitions:
       ip_address:
         description: IP地址
         type: string
+      item_id:
+        description: 所属展项ID
+        type: string
       name:
         description: 设备名称
         type: string
@@ -404,6 +419,14 @@ paths:
       - description: device_type
         in: query
         name: device_type
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
         type: string
       - description: status
         in: query
@@ -591,6 +614,14 @@ paths:
       - description: device_type
         in: query
         name: device_type
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
         type: string
       - description: status
         in: query
@@ -1116,14 +1147,6 @@ paths:
         in: query
         name: _order
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -1139,6 +1162,14 @@ paths:
       - description: exhibition_end_time
         in: query
         name: exhibition_end_time
+        type: string
+      - description: hall_id
+        in: query
+        name: hall_id
+        type: string
+      - description: hall_name
+        in: query
+        name: hall_name
         type: string
       - description: room_id
         in: query
@@ -1175,6 +1206,14 @@ paths:
       - description: item_status
         in: query
         name: item_status
+        type: string
+      - description: room_count
+        in: query
+        name: room_count
+        type: string
+      - description: item_count
+        in: query
+        name: item_count
         type: string
       produces:
       - application/json
@@ -1216,14 +1255,6 @@ paths:
         in: query
         name: _order
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -1239,6 +1270,14 @@ paths:
       - description: exhibition_end_time
         in: query
         name: exhibition_end_time
+        type: string
+      - description: hall_id
+        in: query
+        name: hall_id
+        type: string
+      - description: hall_name
+        in: query
+        name: hall_name
         type: string
       - description: room_id
         in: query
@@ -1275,6 +1314,14 @@ paths:
       - description: item_status
         in: query
         name: item_status
+        type: string
+      - description: room_count
+        in: query
+        name: room_count
+        type: string
+      - description: item_count
+        in: query
+        name: item_count
         type: string
       produces:
       - application/json
@@ -2718,6 +2765,10 @@ paths:
         in: query
         name: version
         type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
       - description: status
         in: query
         name: status
@@ -3470,6 +3521,10 @@ paths:
       - description: version
         in: query
         name: version
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
         type: string
       - description: status
         in: query

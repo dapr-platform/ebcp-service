@@ -98,6 +98,8 @@ func batchUpsertEbcp_control_deviceHandler(w http.ResponseWriter, r *http.Reques
 // @Param updated_time query string false "updated_time"
 // @Param name query string false "name"
 // @Param device_type query string false "device_type"
+// @Param item_id query string false "item_id"
+// @Param room_id query string false "room_id"
 // @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_control_device}} "objects array"
@@ -127,6 +129,8 @@ func Ebcp_control_devicePageListHandler(w http.ResponseWriter, r *http.Request) 
 // @Param updated_time query string false "updated_time"
 // @Param name query string false "name"
 // @Param device_type query string false "device_type"
+// @Param item_id query string false "item_id"
+// @Param room_id query string false "room_id"
 // @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_control_device} "objects array"

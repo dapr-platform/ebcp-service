@@ -169,17 +169,16 @@ INSERT INTO o_ebcp_exhibition_item (
 -- 初始化播放器数据  
 INSERT INTO o_ebcp_player (
     id, created_by, created_time, updated_by, updated_time,
-    name, ip_address, port, status
+    name, ip_address, port, status, item_id
 ) VALUES
     -- B1层播放设备
-    (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40306, 1);
+    (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40306, 1, md5('九五枪族'));
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 DELETE FROM o_ebcp_player_program;
 DELETE FROM o_ebcp_player;
-DELETE FROM o_ebcp_camera;
 DELETE FROM o_ebcp_exhibition_item;
 DELETE FROM o_ebcp_exhibition_room;
 DELETE FROM o_ebcp_exhibition;

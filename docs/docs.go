@@ -82,6 +82,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -326,6 +338,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "device_type",
                         "name": "device_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
                         "in": "query"
                     },
                     {
@@ -1226,18 +1250,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "exhibition_id",
                         "name": "exhibition_id",
                         "in": "query"
@@ -1258,6 +1270,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "exhibition_end_time",
                         "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -1312,6 +1336,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_status",
                         "name": "item_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_count",
+                        "name": "room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_count",
+                        "name": "item_count",
                         "in": "query"
                     }
                 ],
@@ -1379,18 +1415,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "exhibition_id",
                         "name": "exhibition_id",
                         "in": "query"
@@ -1411,6 +1435,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "exhibition_end_time",
                         "name": "exhibition_end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_id",
+                        "name": "hall_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "hall_name",
+                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -1465,6 +1501,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_status",
                         "name": "item_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_count",
+                        "name": "room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_count",
+                        "name": "item_count",
                         "in": "query"
                     }
                 ],
@@ -3757,6 +3805,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -4439,6 +4493,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -5023,8 +5083,16 @@ const docTemplate = `{
                     "description": "id",
                     "type": "string"
                 },
+                "item_id": {
+                    "description": "所属展项ID",
+                    "type": "string"
+                },
                 "name": {
                     "description": "设备名称",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "所属展厅ID",
                     "type": "string"
                 },
                 "status": {
@@ -5162,6 +5230,10 @@ const docTemplate = `{
                     "description": "hall_name",
                     "type": "string"
                 },
+                "item_count": {
+                    "description": "item_count",
+                    "type": "integer"
+                },
                 "item_id": {
                     "description": "item_id",
                     "type": "string"
@@ -5177,6 +5249,10 @@ const docTemplate = `{
                 "item_type": {
                     "description": "item_type",
                     "type": "string"
+                },
+                "room_count": {
+                    "description": "room_count",
+                    "type": "integer"
                 },
                 "room_floor": {
                     "description": "room_floor",
@@ -5401,6 +5477,10 @@ const docTemplate = `{
                 },
                 "ip_address": {
                     "description": "IP地址",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "所属展项ID",
                     "type": "string"
                 },
                 "name": {

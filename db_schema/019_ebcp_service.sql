@@ -99,6 +99,7 @@ CREATE TABLE o_ebcp_player (
     ip_address VARCHAR(255) NOT NULL,
     port INTEGER NOT NULL,
     version VARCHAR(255),
+    item_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
@@ -108,6 +109,7 @@ COMMENT ON COLUMN o_ebcp_player.name IS '设备名称';
 COMMENT ON COLUMN o_ebcp_player.ip_address IS 'IP地址';
 COMMENT ON COLUMN o_ebcp_player.port IS '端口';
 COMMENT ON COLUMN o_ebcp_player.version IS '版本';
+COMMENT ON COLUMN o_ebcp_player.item_id IS '所属展项ID';
 COMMENT ON COLUMN o_ebcp_player.status IS '状态（1: 正常, 2: 离线, 3: 故障）';
 
 -- 播放设备节目表
@@ -139,6 +141,8 @@ CREATE TABLE o_ebcp_control_device (
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     device_type VARCHAR(50) NOT NULL,
+    item_id VARCHAR(32),
+    room_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
@@ -146,6 +150,8 @@ CREATE TABLE o_ebcp_control_device (
 COMMENT ON TABLE o_ebcp_control_device IS '中控设备表';
 COMMENT ON COLUMN o_ebcp_control_device.name IS '设备名称';
 COMMENT ON COLUMN o_ebcp_control_device.device_type IS '设备类型';
+COMMENT ON COLUMN o_ebcp_control_device.item_id IS '所属展项ID';
+COMMENT ON COLUMN o_ebcp_control_device.room_id IS '所属展厅ID';
 COMMENT ON COLUMN o_ebcp_control_device.status IS '状态(1: 正常, 2: 故障)';
 
 -- 展项关联配置表
@@ -191,12 +197,12 @@ COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 
 -- 创建视图
 CREATE VIEW v_ebcp_exhibition_info AS
 SELECT 
-    h.id AS hall_id,
-    h.name AS hall_name,
     e.id AS exhibition_id,
     e.name AS exhibition_name,
     e.start_time AS exhibition_start_time,
     e.end_time AS exhibition_end_time,
+    h.id AS hall_id,
+    h.name AS hall_name,
     r.id AS room_id,
     r.name AS room_name,
     r.floor AS room_floor,
@@ -205,11 +211,13 @@ SELECT
     i.id AS item_id,
     i.name AS item_name,
     i.type AS item_type,
-    i.status AS item_status
-FROM o_ebcp_exhibition_hall h
-LEFT JOIN o_ebcp_exhibition_room r ON r.exhibition_hall_id = h.id
-LEFT JOIN o_ebcp_exhibition e ON e.id = r.exhibition_id
-LEFT JOIN o_ebcp_exhibition_item i ON i.exhibition_room_id = r.id AND i.exhibition_id = e.id;
+    i.status AS item_status,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS room_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS item_count
+FROM o_ebcp_exhibition e
+LEFT JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
+LEFT JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id
+LEFT JOIN o_ebcp_exhibition_item i ON i.exhibition_id = e.id AND i.exhibition_room_id = r.id;
 
 COMMENT ON VIEW v_ebcp_exhibition_info IS '展览信息视图';
 

@@ -25,12 +25,14 @@ Table: o_ebcp_control_device
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] device_type                                    VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 7] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[ 7] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 8] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "UQjXkqMrFfOtqVSfPSGrvXdIH",    "created_by": "QidhKeioIZsAwRvmZsjYMJMAP",    "created_time": 36,    "updated_by": "dZEVYwmDtAxoTZnRWevdApvRC",    "updated_time": 36,    "name": "KlUkRqtEmJeggFEHUeJwEPFjs",    "device_type": "kCqwROBwaEWrYqBpCcbICGwgk",    "status": 2}
+{    "id": "VflEUgNAoqfFMKotkdPIWeixO",    "created_by": "dbdVGRSAmsfSwiKohhQfwHpoX",    "created_time": 1,    "updated_by": "hbfTJNmmnOjTTRgYHnJIKUQZt",    "updated_time": 50,    "name": "YypRlJJuBkngEYGDAfVgAbnUY",    "device_type": "sCgrhamPCClyHPlSKKmPxoFjP",    "item_id": "QbgpYQSAZtwVCRIenvBCTGvsZ",    "room_id": "QllEgJtdkSMIPcYwNGlqGawkY",    "status": 58}
 
 
 
@@ -51,6 +53,10 @@ var (
 
 	Ebcp_control_device_FIELD_NAME_device_type = "device_type"
 
+	Ebcp_control_device_FIELD_NAME_item_id = "item_id"
+
+	Ebcp_control_device_FIELD_NAME_room_id = "room_id"
+
 	Ebcp_control_device_FIELD_NAME_status = "status"
 )
 
@@ -69,6 +75,10 @@ type Ebcp_control_device struct {
 	Name string `json:"name"` //设备名称
 
 	DeviceType string `json:"device_type"` //设备类型
+
+	ItemID string `json:"item_id"` //所属展项ID
+
+	RoomID string `json:"room_id"` //所属展厅ID
 
 	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
 
@@ -227,6 +237,48 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              7,
+			Name:               "item_id",
+			Comment:            `所属展项ID`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ItemID",
+			GoFieldType:        "string",
+			JSONFieldName:      "item_id",
+			ProtobufFieldName:  "item_id",
+			ProtobufType:       "string",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "room_id",
+			Comment:            `所属展厅ID`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "RoomID",
+			GoFieldType:        "string",
+			JSONFieldName:      "room_id",
+			ProtobufFieldName:  "room_id",
+			ProtobufType:       "string",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
 			Name:               "status",
 			Comment:            `状态(1: 正常, 2: 故障)`,
 			Notes:              ``,
@@ -243,7 +295,7 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        8,
+			ProtobufPos:        10,
 		},
 	},
 }

@@ -27,12 +27,13 @@ Table: o_ebcp_player
 [ 6] ip_address                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 8] version                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[ 9] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "rNjfOTaRKteULFsBDFBhAhOiT",    "created_by": "dxsHDqYSWRseVolpHSaqkoDPH",    "created_time": 12,    "updated_by": "SsHBMEgfeevcsnPJwtuIHZQpu",    "updated_time": 15,    "name": "frlSmRTLhGBygSLwQgdWjjcaI",    "ip_address": "LKxxaTdUyBySCsuUrKrHaiBDr",    "port": 6,    "version": "ZFxahRiFnAiNtJlkEqLFMVYxx",    "status": 89}
+{    "id": "pCnKxCdqpDcOyJaEuRNmksfZB",    "created_by": "rnfoIAMyCTRqiwOdtBbFZvSZU",    "created_time": 75,    "updated_by": "eXJIodxdmGKhXYypEeyGTAbkI",    "updated_time": 6,    "name": "oCyOVqDRFKKbOwbEhWDicfvUS",    "ip_address": "RngHaZhKoGMUmwGhvJMsZcoJd",    "port": 53,    "version": "DmNWcFLQsZkKEZoZuKhQToRrN",    "item_id": "QwomGwmnAZRDEvdoDJUhfvuqs",    "status": 12}
 
 
 
@@ -57,6 +58,8 @@ var (
 
 	Ebcp_player_FIELD_NAME_version = "version"
 
+	Ebcp_player_FIELD_NAME_item_id = "item_id"
+
 	Ebcp_player_FIELD_NAME_status = "status"
 )
 
@@ -79,6 +82,8 @@ type Ebcp_player struct {
 	Port int32 `json:"port"` //端口
 
 	Version string `json:"version"` //版本
+
+	ItemID string `json:"item_id"` //所属展项ID
 
 	Status int32 `json:"status"` //状态（1: 正常, 2: 离线, 3: 故障）
 
@@ -279,6 +284,27 @@ var Ebcp_playerTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              9,
+			Name:               "item_id",
+			Comment:            `所属展项ID`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ItemID",
+			GoFieldType:        "string",
+			JSONFieldName:      "item_id",
+			ProtobufFieldName:  "item_id",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
 			Name:               "status",
 			Comment:            `状态（1: 正常, 2: 离线, 3: 故障）`,
 			Notes:              ``,
@@ -295,7 +321,7 @@ var Ebcp_playerTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        10,
+			ProtobufPos:        11,
 		},
 	},
 }
