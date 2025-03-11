@@ -1869,6 +1869,12 @@
                     },
                     {
                         "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -2012,6 +2018,12 @@
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -2183,6 +2195,12 @@
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -2563,6 +2581,12 @@
                         "type": "string",
                         "description": "type",
                         "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -6261,6 +6285,10 @@
                     "description": "所属展厅ID",
                     "type": "string"
                 },
+                "export_info": {
+                    "description": "输出信息",
+                    "type": "string"
+                },
                 "id": {
                     "description": "id",
                     "type": "string"
@@ -6303,6 +6331,10 @@
                 },
                 "exhibition_name": {
                     "description": "exhibition_name",
+                    "type": "string"
+                },
+                "export_info": {
+                    "description": "export_info",
                     "type": "string"
                 },
                 "id": {

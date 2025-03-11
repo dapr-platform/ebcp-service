@@ -218,6 +218,9 @@ definitions:
       exhibition_room_id:
         description: 所属展厅ID
         type: string
+      export_info:
+        description: 输出信息
+        type: string
       id:
         description: id
         type: string
@@ -249,6 +252,9 @@ definitions:
         type: string
       exhibition_name:
         description: exhibition_name
+        type: string
+      export_info:
+        description: export_info
         type: string
       id:
         description: id
@@ -1685,6 +1691,10 @@ paths:
         in: query
         name: type
         type: string
+      - description: export_info
+        in: query
+        name: export_info
+        type: string
       - description: status
         in: query
         name: status
@@ -1775,6 +1785,10 @@ paths:
       - description: remarks
         in: query
         name: remarks
+        type: string
+      - description: export_info
+        in: query
+        name: export_info
         type: string
       - description: room_id
         in: query
@@ -1887,6 +1901,10 @@ paths:
       - description: remarks
         in: query
         name: remarks
+        type: string
+      - description: export_info
+        in: query
+        name: export_info
         type: string
       - description: room_id
         in: query
@@ -2207,6 +2225,10 @@ paths:
       - description: type
         in: query
         name: type
+        type: string
+      - description: export_info
+        in: query
+        name: export_info
         type: string
       - description: status
         in: query

@@ -79,6 +79,7 @@ CREATE TABLE o_ebcp_exhibition_item (
     exhibition_id VARCHAR(32) NOT NULL,
     exhibition_room_id VARCHAR(32) NOT NULL,
     type VARCHAR(50) NOT NULL,
+    export_info TEXT,
     status INTEGER NOT NULL DEFAULT 1,
     remarks TEXT,
     PRIMARY KEY (id)
@@ -89,6 +90,7 @@ COMMENT ON COLUMN o_ebcp_exhibition_item.name IS '展项名称';
 COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_room_id IS '所属展厅ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.type IS '展项类型（media、static）';
+COMMENT ON COLUMN o_ebcp_exhibition_item.export_info IS '输出信息';
 COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（1: 启动, 2: 停止, 3: 故障）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.remarks IS '备注';
 
@@ -387,6 +389,7 @@ SELECT
     ei.type AS type,
     ei.status AS status,
     ei.remarks AS remarks,
+    ei.export_info AS export_info,
     er.id AS room_id,
     er.name AS room_name,
     er.floor AS room_floor,

@@ -1876,6 +1876,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -2019,6 +2025,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -2190,6 +2202,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -2570,6 +2588,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "type",
                         "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "export_info",
+                        "name": "export_info",
                         "in": "query"
                     },
                     {
@@ -6268,6 +6292,10 @@ const docTemplate = `{
                     "description": "所属展厅ID",
                     "type": "string"
                 },
+                "export_info": {
+                    "description": "输出信息",
+                    "type": "string"
+                },
                 "id": {
                     "description": "id",
                     "type": "string"
@@ -6310,6 +6338,10 @@ const docTemplate = `{
                 },
                 "exhibition_name": {
                     "description": "exhibition_name",
+                    "type": "string"
+                },
+                "export_info": {
+                    "description": "export_info",
                     "type": "string"
                 },
                 "id": {

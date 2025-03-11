@@ -27,13 +27,14 @@ Table: o_ebcp_exhibition_item
 [ 6] exhibition_id                                  VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] exhibition_room_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 9] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[10] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 9] export_info                                    TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[11] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "LCjaOYgAOHidlxfZyUaVTpkke",    "created_by": "VUIHiQasOhKsBHWZWBoWjBHSJ",    "created_time": 19,    "updated_by": "SWkxEbipXxybrMKHiXtmrturJ",    "updated_time": 47,    "name": "OYqtSHVaBUiaLTutrUKLMvRxf",    "exhibition_id": "UNSoLXpTnbCBfoZytvTtBuChq",    "exhibition_room_id": "CbqXXxRmdqopKQiSAApruAdXS",    "type": "QWvMwEBbTXVdPXSKZwDfyRSbL",    "status": 88,    "remarks": "WRedGvfdXVZFLXqPciynIHLfl"}
+{    "id": "nhJVaIcdhovvrRtDmMGxhDCOA",    "created_by": "CRuBwOaaGmOCbyLSVmDvKWyBi",    "created_time": 25,    "updated_by": "mktrjsBxITXCqdyZhIHLdobZE",    "updated_time": 62,    "name": "HuPwuVybrqoImWnklSDqlVUqr",    "exhibition_id": "HOhSVbrOYgBvpyEsflbBOMyVN",    "exhibition_room_id": "SYseLERcAUxfCBgjFMhpItUev",    "type": "jmeNbhOkblKkeZYBNGpZalOnR",    "export_info": "sMlsJPsjikMUVJCcpBiDmLcsn",    "status": 12,    "remarks": "DoBnMsIuterGppJJMgnaHcNYH"}
 
 
 
@@ -57,6 +58,8 @@ var (
 	Ebcp_exhibition_item_FIELD_NAME_exhibition_room_id = "exhibition_room_id"
 
 	Ebcp_exhibition_item_FIELD_NAME_type = "type"
+
+	Ebcp_exhibition_item_FIELD_NAME_export_info = "export_info"
 
 	Ebcp_exhibition_item_FIELD_NAME_status = "status"
 
@@ -82,6 +85,8 @@ type Ebcp_exhibition_item struct {
 	ExhibitionRoomID string `json:"exhibition_room_id"` //所属展厅ID
 
 	Type string `json:"type"` //展项类型（media、static）
+
+	ExportInfo string `json:"export_info"` //输出信息
 
 	Status int32 `json:"status"` //状态（1: 启动, 2: 停止, 3: 故障）
 
@@ -284,6 +289,27 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              9,
+			Name:               "export_info",
+			Comment:            `输出信息`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
+			GoFieldName:        "ExportInfo",
+			GoFieldType:        "string",
+			JSONFieldName:      "export_info",
+			ProtobufFieldName:  "export_info",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
 			Name:               "status",
 			Comment:            `状态（1: 启动, 2: 停止, 3: 故障）`,
 			Notes:              ``,
@@ -300,11 +326,11 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        10,
+			ProtobufPos:        11,
 		},
 
 		&ColumnInfo{
-			Index:              10,
+			Index:              11,
 			Name:               "remarks",
 			Comment:            `备注`,
 			Notes:              ``,
@@ -321,7 +347,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			JSONFieldName:      "remarks",
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
-			ProtobufPos:        11,
+			ProtobufPos:        12,
 		},
 	},
 }

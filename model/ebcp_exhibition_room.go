@@ -25,7 +25,7 @@ Table: o_ebcp_exhibition_room
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] location                                       VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] exhibition_hall_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] exhibition_hall_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] floor                                          VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 9] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
@@ -34,7 +34,7 @@ Table: o_ebcp_exhibition_room
 
 JSON Sample
 -------------------------------------
-{    "id": "BodjpGjXKWqnTrVxqGGMfrIBw",    "created_by": "mDjnhpWUsbXmdctSDAEiRwirP",    "created_time": 35,    "updated_by": "nYYoXdNYCKnqkbiohEptrrTaG",    "updated_time": 26,    "name": "RPMgHnDcyYmYdfuwdBqirpMUl",    "location": "COuuPLyPwWFDDcmyofMxtJjZx",    "exhibition_hall_id": "QFfQHuCluDZuvfkaQoKsUpsbP",    "floor": "XRnfLVLNLqkxLboCEOAHttJdZ",    "exhibition_id": "fDXVakDSasmwcVOceWnsvxkXJ",    "status": 63,    "remarks": "TeKSCkhrnbiuNOdPVEoXRYFun"}
+{    "id": "iDReIOZRyvSLuUaYLCldhZPJS",    "created_by": "cIcjnrkFCaxvGqFZWLOyaJZUw",    "created_time": 67,    "updated_by": "JeoNXPtaZGgpTIHKhIpGGmnEY",    "updated_time": 28,    "name": "TlZEnQvJcgaLKedSyjqesDFLH",    "location": "INOcEYdPefwWiJJEcZjvHnUVu",    "exhibition_hall_id": "AOlAHPjFBLXtTgwyKgyMpwVRB",    "floor": "rWhIFyktLVYtVECGPjkOfpRFu",    "exhibition_id": "ExJdEsuvhiLVbvFKSEXVdcpBt",    "status": 72,    "remarks": "MUfVayGovXTXipKITrBsqAFJG"}
 
 
 
@@ -250,7 +250,7 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			Name:               "exhibition_hall_id",
 			Comment:            `所属展馆ID`,
 			Notes:              ``,
-			Nullable:           false,
+			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
