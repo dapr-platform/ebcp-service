@@ -20,7 +20,7 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 
 // @Summary page query
 // @Description page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%
-// @Tags 展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）
+// @Tags 展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
@@ -37,8 +37,6 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 // @Param room_location query string false "room_location"
 // @Param room_location_value query string false "room_location_value"
 // @Param room_location_name query string false "room_location_name"
-// @Param hall_id query string false "hall_id"
-// @Param hall_name query string false "hall_name"
 // @Param exhibition_id query string false "exhibition_id"
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"
@@ -62,7 +60,7 @@ func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Req
 
 // @Summary query objects
 // @Description query objects
-// @Tags 展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）
+// @Tags 展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
 // @Param id query string false "id"
@@ -78,8 +76,6 @@ func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param room_location query string false "room_location"
 // @Param room_location_value query string false "room_location_value"
 // @Param room_location_name query string false "room_location_name"
-// @Param hall_id query string false "hall_id"
-// @Param hall_name query string false "hall_name"
 // @Param exhibition_id query string false "exhibition_id"
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"

@@ -92,12 +92,6 @@ definitions:
       end_time:
         description: 展览结束时间
         type: string
-      hall_id:
-        description: 展馆ID
-        type: string
-      hall_name:
-        description: 展馆名称
-        type: string
       id:
         description: 展览ID
         type: string
@@ -256,12 +250,6 @@ definitions:
       exhibition_name:
         description: exhibition_name
         type: string
-      hall_id:
-        description: hall_id
-        type: string
-      hall_name:
-        description: hall_name
-        type: string
       id:
         description: id
         type: string
@@ -370,12 +358,6 @@ definitions:
         type: string
       floor_value:
         description: floor_value
-        type: string
-      hall_id:
-        description: hall_id
-        type: string
-      hall_name:
-        description: hall_name
         type: string
       id:
         description: id
@@ -968,14 +950,6 @@ paths:
         in: query
         name: end_time
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: room_id
         in: query
         name: room_id
@@ -1079,14 +1053,6 @@ paths:
       - description: end_time
         in: query
         name: end_time
-        type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
         type: string
       - description: room_id
         in: query
@@ -1842,14 +1808,6 @@ paths:
         in: query
         name: room_location_name
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -1890,7 +1848,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: query objects
       tags:
-      - 展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）
+      - 展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）
   /ebcp-exhibition-item-info/page:
     get:
       description: page query, _page(from 1 begin), _page_size, _order, and others
@@ -1962,14 +1920,6 @@ paths:
         in: query
         name: room_location_name
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -2015,7 +1965,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: page query
       tags:
-      - 展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）
+      - 展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）
   /ebcp-exhibition-item/{id}:
     delete:
       description: delete
@@ -2455,14 +2405,6 @@ paths:
         in: query
         name: remarks
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -2511,7 +2453,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: query objects
       tags:
-      - 展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）
+      - 展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）
   /ebcp-exhibition-room-info/page:
     get:
       description: page query, _page(from 1 begin), _page_size, _order, and others
@@ -2571,14 +2513,6 @@ paths:
         in: query
         name: remarks
         type: string
-      - description: hall_id
-        in: query
-        name: hall_id
-        type: string
-      - description: hall_name
-        in: query
-        name: hall_name
-        type: string
       - description: exhibition_id
         in: query
         name: exhibition_id
@@ -2632,7 +2566,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: page query
       tags:
-      - 展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）
+      - 展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）
   /ebcp-exhibition-room/{id}:
     delete:
       description: delete

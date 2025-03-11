@@ -28,20 +28,18 @@ Table: v_ebcp_exhibition_room_info
 [ 7] location_name                                  VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 8] status                                         INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 9] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[10] hall_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[11] hall_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[12] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[13] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[14] exhibition_start_time                          TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[15] exhibition_end_time                            TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[16] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[17] item_count                                     INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
-[18] items                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[10] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[11] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[12] exhibition_start_time                          TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[13] exhibition_end_time                            TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[14] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[15] item_count                                     INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
+[16] items                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "qAKjHfCehTXRfEcgslNeHafDc",    "name": "TkmHgqeICUfEhywjmRSPIxyKb",    "floor": "ldnXRrFjTYGupmORFOVDuyceu",    "floor_value": "whITAZnfFPvpnPiSxOTHhkkEF",    "floor_name": "iiZqrITvJPQcIcLJsHLMgZXsU",    "location": "fQNjrAFPADNbCHikoyJQPlJmq",    "location_value": "vGjrdpQsNvthNqyaAqwDQOWpF",    "location_name": "KLTEayhhBIafqZGkWUvUxJFBh",    "status": 67,    "remarks": "ocycRHZwNecXtdwRLxJSfAXvs",    "hall_id": "qEBtMWROauMtAWRAFJsqMAVwS",    "hall_name": "ywxAtuJEticvikZsPVgvJjhIB",    "exhibition_id": "jrkaoZDqBUwdoyIxhsSAXDTUh",    "exhibition_name": "adlAcPnjlOeDwdJjZppYeJHYG",    "exhibition_start_time": 94,    "exhibition_end_time": 78,    "exhibition_status": 46,    "item_count": 62,    "items": 75}
+{    "id": "VWpthmwnpUnQHNKAlExdrtZFv",    "name": "nKqwnFJWwuLKnxEGSGQZMKOEQ",    "floor": "geYdXTlXVIaBvmBEKEOyqgVcu",    "floor_value": "btXlITWhbtwljOnSbiQxfQhCV",    "floor_name": "qtXxhBnwHjHpdcyOfvUYZGHrm",    "location": "HUZPNRxbipbaMaPuMiXpoZeFE",    "location_value": "IgnLiiupseRUyPpgmQSpaRYRG",    "location_name": "yfQXnMtXtEOIYWaWIqxdrTaSl",    "status": 64,    "remarks": "sgxdwJEsdlKyVQgiVjwOMROyM",    "exhibition_id": "LyeiagCGAYHTbdqcjjxUaGNdX",    "exhibition_name": "yZboFxJgPPyFAANBLUQNXXDRL",    "exhibition_start_time": 45,    "exhibition_end_time": 31,    "exhibition_status": 77,    "item_count": 46,    "items": 45}
 
 
 Comments
@@ -74,10 +72,6 @@ var (
 	Ebcp_exhibition_room_info_FIELD_NAME_status = "status"
 
 	Ebcp_exhibition_room_info_FIELD_NAME_remarks = "remarks"
-
-	Ebcp_exhibition_room_info_FIELD_NAME_hall_id = "hall_id"
-
-	Ebcp_exhibition_room_info_FIELD_NAME_hall_name = "hall_name"
 
 	Ebcp_exhibition_room_info_FIELD_NAME_exhibition_id = "exhibition_id"
 
@@ -115,10 +109,6 @@ type Ebcp_exhibition_room_info struct {
 	Status int32 `json:"status"` //status
 
 	Remarks string `json:"remarks"` //remarks
-
-	HallID string `json:"hall_id"` //hall_id
-
-	HallName string `json:"hall_name"` //hall_name
 
 	ExhibitionID string `json:"exhibition_id"` //exhibition_id
 
@@ -354,48 +344,6 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 
 		&ColumnInfo{
 			Index:              10,
-			Name:               "hall_id",
-			Comment:            `hall_id`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "HallID",
-			GoFieldType:        "string",
-			JSONFieldName:      "hall_id",
-			ProtobufFieldName:  "hall_id",
-			ProtobufType:       "string",
-			ProtobufPos:        11,
-		},
-
-		&ColumnInfo{
-			Index:              11,
-			Name:               "hall_name",
-			Comment:            `hall_name`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "HallName",
-			GoFieldType:        "string",
-			JSONFieldName:      "hall_name",
-			ProtobufFieldName:  "hall_name",
-			ProtobufType:       "string",
-			ProtobufPos:        12,
-		},
-
-		&ColumnInfo{
-			Index:              12,
 			Name:               "exhibition_id",
 			Comment:            `exhibition_id`,
 			Notes:              ``,
@@ -412,11 +360,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "exhibition_id",
 			ProtobufFieldName:  "exhibition_id",
 			ProtobufType:       "string",
-			ProtobufPos:        13,
+			ProtobufPos:        11,
 		},
 
 		&ColumnInfo{
-			Index:              13,
+			Index:              11,
 			Name:               "exhibition_name",
 			Comment:            `exhibition_name`,
 			Notes:              ``,
@@ -433,11 +381,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "exhibition_name",
 			ProtobufFieldName:  "exhibition_name",
 			ProtobufType:       "string",
-			ProtobufPos:        14,
+			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
-			Index:              14,
+			Index:              12,
 			Name:               "exhibition_start_time",
 			Comment:            `exhibition_start_time`,
 			Notes:              ``,
@@ -454,11 +402,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "exhibition_start_time",
 			ProtobufFieldName:  "exhibition_start_time",
 			ProtobufType:       "uint64",
-			ProtobufPos:        15,
+			ProtobufPos:        13,
 		},
 
 		&ColumnInfo{
-			Index:              15,
+			Index:              13,
 			Name:               "exhibition_end_time",
 			Comment:            `exhibition_end_time`,
 			Notes:              ``,
@@ -475,11 +423,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "exhibition_end_time",
 			ProtobufFieldName:  "exhibition_end_time",
 			ProtobufType:       "uint64",
-			ProtobufPos:        16,
+			ProtobufPos:        14,
 		},
 
 		&ColumnInfo{
-			Index:              16,
+			Index:              14,
 			Name:               "exhibition_status",
 			Comment:            `exhibition_status`,
 			Notes:              ``,
@@ -496,11 +444,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "exhibition_status",
 			ProtobufFieldName:  "exhibition_status",
 			ProtobufType:       "int32",
-			ProtobufPos:        17,
+			ProtobufPos:        15,
 		},
 
 		&ColumnInfo{
-			Index:              17,
+			Index:              15,
 			Name:               "item_count",
 			Comment:            `item_count`,
 			Notes:              ``,
@@ -517,11 +465,11 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "item_count",
 			ProtobufFieldName:  "item_count",
 			ProtobufType:       "int32",
-			ProtobufPos:        18,
+			ProtobufPos:        16,
 		},
 
 		&ColumnInfo{
-			Index:              18,
+			Index:              16,
 			Name:               "items",
 			Comment:            `items`,
 			Notes:              ``,
@@ -538,7 +486,7 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			JSONFieldName:      "items",
 			ProtobufFieldName:  "items",
 			ProtobufType:       "string",
-			ProtobufPos:        19,
+			ProtobufPos:        17,
 		},
 	},
 }

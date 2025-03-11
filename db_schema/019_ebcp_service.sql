@@ -51,7 +51,7 @@ CREATE TABLE o_ebcp_exhibition_room (
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(32) NOT NULL,
-    exhibition_hall_id VARCHAR(32) NOT NULL,
+    exhibition_hall_id VARCHAR(32),
     floor VARCHAR(32) NOT NULL,
     exhibition_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
@@ -259,8 +259,6 @@ SELECT
     e.name AS name,
     e.start_time AS start_time,
     e.end_time AS end_time,
-    h.id AS hall_id,
-    h.name AS hall_name,
     r.id AS room_id,
     r.name AS room_name,
     r.floor AS room_floor,
@@ -274,16 +272,13 @@ SELECT
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = r.id) AS room_item_count
 FROM o_ebcp_exhibition e
-JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
-JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id;
+JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id;
 
 COMMENT ON VIEW v_ebcp_exhibition_area_info IS '展览区域信息视图';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.id IS '展览ID';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.name IS '展览名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.start_time IS '展览开始时间';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.end_time IS '展览结束时间';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_id IS '展馆ID';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_name IS '展馆名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_id IS '展厅ID';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_name IS '展厅名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor IS '展厅楼层';
@@ -357,8 +352,6 @@ SELECT
     (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS location_name,
     er.status AS status,
     er.remarks AS remarks,
-    eh.id AS hall_id,
-    eh.name AS hall_name,
     e.id AS exhibition_id,
     e.name AS exhibition_name,
     e.start_time AS exhibition_start_time,
@@ -376,17 +369,15 @@ SELECT
     ) AS items
 FROM 
     o_ebcp_exhibition_room er
-JOIN 
-    o_ebcp_exhibition_hall eh ON er.exhibition_hall_id = eh.id
 LEFT JOIN 
     o_ebcp_exhibition e ON er.exhibition_id = e.id
 LEFT JOIN 
     o_ebcp_exhibition_item ei ON ei.exhibition_room_id = er.id
 GROUP BY 
     er.id, er.name, er.floor, er.location, er.status, er.remarks, 
-    eh.id, eh.name, e.id, e.name, e.start_time, e.end_time, e.status;
+    e.id, e.name, e.start_time, e.end_time, e.status;
 
-COMMENT ON VIEW v_ebcp_exhibition_room_info IS '展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）';
+COMMENT ON VIEW v_ebcp_exhibition_room_info IS '展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）';
 
 -- 展项详细视图
 CREATE VIEW v_ebcp_exhibition_item_info AS
@@ -404,8 +395,6 @@ SELECT
     er.location AS room_location,
     (SELECT dict_value FROM o_ops_dict WHERE id = er.location) AS room_location_value,
     (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS room_location_name,
-    eh.id AS hall_id,
-    eh.name AS hall_name,
     e.id AS exhibition_id,
     e.name AS exhibition_name,
     (
@@ -451,11 +440,9 @@ FROM
 JOIN 
     o_ebcp_exhibition_room er ON ei.exhibition_room_id = er.id
 JOIN 
-    o_ebcp_exhibition_hall eh ON er.exhibition_hall_id = eh.id
-JOIN 
     o_ebcp_exhibition e ON ei.exhibition_id = e.id;
 
-COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）';
+COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）';
 
 -- +goose StatementEnd
 

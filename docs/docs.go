@@ -710,18 +710,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "room_id",
                         "name": "room_id",
                         "in": "query"
@@ -877,18 +865,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "end_time",
                         "name": "end_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -1999,7 +1975,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）"
+                    "展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -2095,18 +2071,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "exhibition_id",
                         "name": "exhibition_id",
                         "in": "query"
@@ -2174,7 +2138,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展项详细视图，包含展项信息及其关联的展厅、展馆、展览、设备和定时任务信息（JSON格式）"
+                    "展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -2274,18 +2238,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_location_name",
                         "name": "room_location_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -2977,7 +2929,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）"
+                    "展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -3051,18 +3003,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -3146,7 +3086,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）"
+                    "展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -3228,18 +3168,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_id",
-                        "name": "hall_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
                         "in": "query"
                     },
                     {
@@ -6167,14 +6095,6 @@ const docTemplate = `{
                     "description": "展览结束时间",
                     "type": "string"
                 },
-                "hall_id": {
-                    "description": "展馆ID",
-                    "type": "string"
-                },
-                "hall_name": {
-                    "description": "展馆名称",
-                    "type": "string"
-                },
                 "id": {
                     "description": "展览ID",
                     "type": "string"
@@ -6392,14 +6312,6 @@ const docTemplate = `{
                     "description": "exhibition_name",
                     "type": "string"
                 },
-                "hall_id": {
-                    "description": "hall_id",
-                    "type": "string"
-                },
-                "hall_name": {
-                    "description": "hall_name",
-                    "type": "string"
-                },
                 "id": {
                     "description": "id",
                     "type": "string"
@@ -6546,14 +6458,6 @@ const docTemplate = `{
                 },
                 "floor_value": {
                     "description": "floor_value",
-                    "type": "string"
-                },
-                "hall_id": {
-                    "description": "hall_id",
-                    "type": "string"
-                },
-                "hall_name": {
-                    "description": "hall_name",
                     "type": "string"
                 },
                 "id": {
