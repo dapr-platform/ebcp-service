@@ -107,6 +107,9 @@ definitions:
       room_floor:
         description: 展厅楼层
         type: string
+      room_floor_value:
+        description: 展厅楼层值
+        type: string
       room_id:
         description: 展厅ID
         type: string
@@ -115,6 +118,9 @@ definitions:
         type: integer
       room_location:
         description: 展厅位置
+        type: string
+      room_location_value:
+        description: 展厅位置值
         type: string
       room_name:
         description: 展厅名称
@@ -264,11 +270,17 @@ definitions:
       room_floor:
         description: room_floor
         type: string
+      room_floor_value:
+        description: room_floor_value
+        type: string
       room_id:
         description: room_id
         type: string
       room_location:
         description: room_location
+        type: string
+      room_location_value:
+        description: room_location_value
         type: string
       room_name:
         description: room_name
@@ -341,6 +353,9 @@ definitions:
       floor:
         description: floor
         type: string
+      floor_value:
+        description: floor_value
+        type: string
       hall_id:
         description: hall_id
         type: string
@@ -357,6 +372,9 @@ definitions:
         description: items
       location:
         description: location
+        type: string
+      location_value:
+        description: location_value
         type: string
       name:
         description: name
@@ -952,9 +970,17 @@ paths:
         in: query
         name: room_floor
         type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
       - description: room_location
         in: query
         name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
         type: string
       - description: room_status
         in: query
@@ -1048,9 +1074,17 @@ paths:
         in: query
         name: room_floor
         type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
       - description: room_location
         in: query
         name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
         type: string
       - description: room_status
         in: query
@@ -1754,9 +1788,17 @@ paths:
         in: query
         name: room_floor
         type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
       - description: room_location
         in: query
         name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
         type: string
       - description: hall_id
         in: query
@@ -1858,9 +1900,17 @@ paths:
         in: query
         name: room_floor
         type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
       - description: room_location
         in: query
         name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
         type: string
       - description: hall_id
         in: query
@@ -2327,9 +2377,17 @@ paths:
         in: query
         name: floor
         type: string
+      - description: floor_value
+        in: query
+        name: floor_value
+        type: string
       - description: location
         in: query
         name: location
+        type: string
+      - description: location_value
+        in: query
+        name: location_value
         type: string
       - description: status
         in: query
@@ -2427,9 +2485,17 @@ paths:
         in: query
         name: floor
         type: string
+      - description: floor_value
+        in: query
+        name: floor_value
+        type: string
       - description: location
         in: query
         name: location
+        type: string
+      - description: location_value
+        in: query
+        name: location_value
         type: string
       - description: status
         in: query

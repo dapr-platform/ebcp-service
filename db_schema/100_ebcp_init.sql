@@ -27,7 +27,7 @@ INSERT INTO o_ops_dict (
 INSERT INTO o_ebcp_exhibition_hall (
     id, created_by, created_time, updated_by, updated_time, name, remarks
 ) VALUES (
-    md5('军事博物馆'), 'admin', NOW(), 'admin', NOW(), '军事博物馆', NULL
+    md5('中国人民革命军事博物馆'), 'admin', NOW(), 'admin', NOW(), '中国人民革命军事博物馆', NULL
 );
 
 -- 初始化展览数据
@@ -36,52 +36,52 @@ INSERT INTO o_ebcp_exhibition (
     name, start_time, end_time, remarks, hall_id, status
 ) VALUES
     (md5('陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('陆军重武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '陆军重武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '陆军重武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('领航强军向复兴-新时代国防和军队建设成就展'), 'admin', NOW(), 'admin', NOW(), 
-    '领航强军向复兴-新时代国防和军队建设成就展', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '领航强军向复兴-新时代国防和军队建设成就展', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'), 'admin', NOW(), 'admin', NOW(),
-    '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('空军武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '空军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '空军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('导弹武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '导弹武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '导弹武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('核武器与核技术和平利用厅'), 'admin', NOW(), 'admin', NOW(), 
-    '核武器与核技术和平利用厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '核武器与核技术和平利用厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('海军武器装备技术厅'), 'admin', NOW(), 'admin', NOW(), 
-    '海军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '海军武器装备技术厅', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('抗美援朝战争馆'), 'admin', NOW(), 'admin', NOW(), 
-    '抗美援朝战争馆', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1),
+    '抗美援朝战争馆', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('新民主主义革命时期陈列'), 'admin', NOW(), 'admin', NOW(), 
-    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL, md5('军事博物馆'), 1);
+    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1);
 
 -- 初始化展厅数据
 INSERT INTO o_ebcp_exhibition_room (
     id, created_by, created_time, updated_by, updated_time,
     name, location, exhibition_hall_id, floor, exhibition_id, status, remarks
 ) VALUES
-    (md5('B1西侧'), 'admin', NOW(), 'admin', NOW(), 'B1西侧', md5('location_typeWEST'), md5('军事博物馆'), md5('floor_typeB1'), md5('陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'), 1, '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'),
-    (md5('B1西北侧'), 'admin', NOW(), 'admin', NOW(), 'B1西北侧', md5('location_typeNORTHWEST'), md5('军事博物馆'), md5('floor_typeB1'), md5('陆军重武器装备技术厅'), 1, '陆军重武器装备技术厅'),
-    (md5('1F西南侧'), 'admin', NOW(), 'admin', NOW(), '1F西南侧', md5('location_typeSOUTHWEST'), md5('军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
-    (md5('1F西侧'), 'admin', NOW(), 'admin', NOW(), '1F西侧', md5('location_typeWEST'), md5('军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
-    (md5('1F西北侧'), 'admin', NOW(), 'admin', NOW(), '1F西北侧', md5('location_typeNORTHWEST'), md5('军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
-    (md5('1F东南侧'), 'admin', NOW(), 'admin', NOW(), '1F东南侧', md5('location_typeSOUTHEAST'), md5('军事博物馆'), md5('floor_type1F'), md5('在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'), 1, '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'),
-    (md5('1F东北侧'), 'admin', NOW(), 'admin', NOW(), '1F东北侧', md5('location_typeNORTHEAST'), md5('军事博物馆'), md5('floor_type1F'), md5('空军武器装备技术厅'), 1, '空军武器装备技术厅'),
-    (md5('2F西南侧'), 'admin', NOW(), 'admin', NOW(), '2F西南侧', md5('location_typeSOUTHWEST'), md5('军事博物馆'), md5('floor_type2F'), md5('新民主主义革命时期陈列'), 1, '新民主主义革命时期陈列'),
-    (md5('2F西北侧'), 'admin', NOW(), 'admin', NOW(), '2F西北侧', md5('location_typeNORTHWEST'), md5('军事博物馆'), md5('floor_type2F'), md5('导弹武器装备技术厅'), 1, '导弹武器装备技术厅'),
-    (md5('2F北侧'), 'admin', NOW(), 'admin', NOW(), '2F北侧', md5('location_typeNORTH'), md5('军事博物馆'), md5('floor_type2F'), md5('核武器与核技术和平利用厅'), 1, '核武器与核技术和平利用厅'),
-    (md5('2F东北侧'), 'admin', NOW(), 'admin', NOW(), '2F东北侧', md5('location_typeNORTHEAST'), md5('军事博物馆'), md5('floor_type2F'), md5('海军武器装备技术厅'), 1, '海军武器装备技术厅'),
-    (md5('3F东南侧'), 'admin', NOW(), 'admin', NOW(), '3F东南侧', md5('location_typeSOUTHEAST'), md5('军事博物馆'), md5('floor_type3F'), md5('抗美援朝战争馆'), 1, '抗美援朝战争馆');
+    (md5('B1西侧'), 'admin', NOW(), 'admin', NOW(), 'B1西侧', md5('location_typeWEST'), md5('中国人民革命军事博物馆'), md5('floor_typeB1'), md5('陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'), 1, '陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'),
+    (md5('B1西北侧'), 'admin', NOW(), 'admin', NOW(), 'B1西北侧', md5('location_typeNORTHWEST'), md5('中国人民革命军事博物馆'), md5('floor_typeB1'), md5('陆军重武器装备技术厅'), 1, '陆军重武器装备技术厅'),
+    (md5('1F西南侧'), 'admin', NOW(), 'admin', NOW(), '1F西南侧', md5('location_typeSOUTHWEST'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
+    (md5('1F西侧'), 'admin', NOW(), 'admin', NOW(), '1F西侧', md5('location_typeWEST'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
+    (md5('1F西北侧'), 'admin', NOW(), 'admin', NOW(), '1F西北侧', md5('location_typeNORTHWEST'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('领航强军向复兴-新时代国防和军队建设成就展'), 1, '领航强军向复兴-新时代国防和军队建设成就展'),
+    (md5('1F东南侧'), 'admin', NOW(), 'admin', NOW(), '1F东南侧', md5('location_typeSOUTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'), 1, '在党的旗帜下前进-人民军队庆祝中国共产党成立100周年主题展览'),
+    (md5('1F东北侧'), 'admin', NOW(), 'admin', NOW(), '1F东北侧', md5('location_typeNORTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('空军武器装备技术厅'), 1, '空军武器装备技术厅'),
+    (md5('2F西南侧'), 'admin', NOW(), 'admin', NOW(), '2F西南侧', md5('location_typeSOUTHWEST'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('新民主主义革命时期陈列'), 1, '新民主主义革命时期陈列'),
+    (md5('2F西北侧'), 'admin', NOW(), 'admin', NOW(), '2F西北侧', md5('location_typeNORTHWEST'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('导弹武器装备技术厅'), 1, '导弹武器装备技术厅'),
+    (md5('2F北侧'), 'admin', NOW(), 'admin', NOW(), '2F北侧', md5('location_typeNORTH'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('核武器与核技术和平利用厅'), 1, '核武器与核技术和平利用厅'),
+    (md5('2F东北侧'), 'admin', NOW(), 'admin', NOW(), '2F东北侧', md5('location_typeNORTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('海军武器装备技术厅'), 1, '海军武器装备技术厅'),
+    (md5('3F东南侧'), 'admin', NOW(), 'admin', NOW(), '3F东南侧', md5('location_typeSOUTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type3F'), md5('抗美援朝战争馆'), 1, '抗美援朝战争馆');
 
 -- 初始化展项数据
 INSERT INTO o_ebcp_exhibition_item (

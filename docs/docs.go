@@ -740,8 +740,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_value",
+                        "name": "room_floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_value",
+                        "name": "room_location_value",
                         "in": "query"
                     },
                     {
@@ -887,8 +899,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_value",
+                        "name": "room_floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_value",
+                        "name": "room_location_value",
                         "in": "query"
                     },
                     {
@@ -2017,8 +2041,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_value",
+                        "name": "room_floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_value",
+                        "name": "room_location_value",
                         "in": "query"
                     },
                     {
@@ -2176,8 +2212,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_value",
+                        "name": "room_floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_value",
+                        "name": "room_location_value",
                         "in": "query"
                     },
                     {
@@ -2917,8 +2965,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "floor_value",
+                        "name": "floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "location",
                         "name": "location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location_value",
+                        "name": "location_value",
                         "in": "query"
                     },
                     {
@@ -3070,8 +3130,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "floor_value",
+                        "name": "floor_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "location",
                         "name": "location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location_value",
+                        "name": "location_value",
                         "in": "query"
                     },
                     {
@@ -6043,6 +6115,10 @@ const docTemplate = `{
                     "description": "展厅楼层",
                     "type": "string"
                 },
+                "room_floor_value": {
+                    "description": "展厅楼层值",
+                    "type": "string"
+                },
                 "room_id": {
                     "description": "展厅ID",
                     "type": "string"
@@ -6053,6 +6129,10 @@ const docTemplate = `{
                 },
                 "room_location": {
                     "description": "展厅位置",
+                    "type": "string"
+                },
+                "room_location_value": {
+                    "description": "展厅位置值",
                     "type": "string"
                 },
                 "room_name": {
@@ -6259,12 +6339,20 @@ const docTemplate = `{
                     "description": "room_floor",
                     "type": "string"
                 },
+                "room_floor_value": {
+                    "description": "room_floor_value",
+                    "type": "string"
+                },
                 "room_id": {
                     "description": "room_id",
                     "type": "string"
                 },
                 "room_location": {
                     "description": "room_location",
+                    "type": "string"
+                },
+                "room_location_value": {
+                    "description": "room_location_value",
                     "type": "string"
                 },
                 "room_name": {
@@ -6364,6 +6452,10 @@ const docTemplate = `{
                     "description": "floor",
                     "type": "string"
                 },
+                "floor_value": {
+                    "description": "floor_value",
+                    "type": "string"
+                },
                 "hall_id": {
                     "description": "hall_id",
                     "type": "string"
@@ -6385,6 +6477,10 @@ const docTemplate = `{
                 },
                 "location": {
                     "description": "location",
+                    "type": "string"
+                },
+                "location_value": {
+                    "description": "location_value",
                     "type": "string"
                 },
                 "name": {
