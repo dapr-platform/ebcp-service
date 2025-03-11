@@ -24,13 +24,15 @@ func InitEbcp_exhibition_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
-// @Param exhibition_id query string false "exhibition_id"
-// @Param exhibition_name query string false "exhibition_name"
-// @Param exhibition_start_time query string false "exhibition_start_time"
-// @Param exhibition_end_time query string false "exhibition_end_time"
-// @Param exhibition_status query string false "exhibition_status"
+// @Param id query string false "id"
+// @Param name query string false "name"
+// @Param start_time query string false "start_time"
+// @Param end_time query string false "end_time"
+// @Param status query string false "status"
 // @Param total_room_count query string false "total_room_count"
 // @Param total_item_count query string false "total_item_count"
+// @Param rooms query string false "rooms"
+// @Param items query string false "items"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_info}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -43,7 +45,7 @@ func Ebcp_exhibition_infoPageListHandler(w http.ResponseWriter, r *http.Request)
 		common.HttpResult(w, common.ErrParam.AppendMsg("page or pageSize is empty"))
 		return
 	}
-	common.CommonPageQuery[model.Ebcp_exhibition_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_info", "exhibition_id")
+	common.CommonPageQuery[model.Ebcp_exhibition_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_info", "id")
 
 }
 
@@ -52,17 +54,19 @@ func Ebcp_exhibition_infoPageListHandler(w http.ResponseWriter, r *http.Request)
 // @Tags 展览信息视图
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
-// @Param exhibition_id query string false "exhibition_id"
-// @Param exhibition_name query string false "exhibition_name"
-// @Param exhibition_start_time query string false "exhibition_start_time"
-// @Param exhibition_end_time query string false "exhibition_end_time"
-// @Param exhibition_status query string false "exhibition_status"
+// @Param id query string false "id"
+// @Param name query string false "name"
+// @Param start_time query string false "start_time"
+// @Param end_time query string false "end_time"
+// @Param status query string false "status"
 // @Param total_room_count query string false "total_room_count"
 // @Param total_item_count query string false "total_item_count"
+// @Param rooms query string false "rooms"
+// @Param items query string false "items"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_info} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-info [get]
 func Ebcp_exhibition_infoListHandler(w http.ResponseWriter, r *http.Request) {
-	common.CommonQuery[model.Ebcp_exhibition_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_info", "exhibition_id")
+	common.CommonQuery[model.Ebcp_exhibition_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_info", "id")
 }

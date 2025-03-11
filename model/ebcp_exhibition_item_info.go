@@ -18,11 +18,11 @@ DB Table Details
 
 
 Table: v_ebcp_exhibition_item_info
-[ 0] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 1] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 2] item_type                                      VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 3] item_status                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 4] item_remarks                                   TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 0] id                                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 1] name                                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 2] type                                           VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[ 3] status                                         INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 4] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [ 5] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 6] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] room_floor                                     VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
@@ -38,13 +38,13 @@ Table: v_ebcp_exhibition_item_info
 
 JSON Sample
 -------------------------------------
-{    "item_id": "aCsUNkZrnFCKUWRblvIVnEKrT",    "item_name": "JsnpTrMomPeMwFJJHXMailWjY",    "item_type": "hSvYdoXMevdhCMDKYhxrhKLid",    "item_status": 64,    "item_remarks": "tFshxJOvBhaBmdUBmgelYgifo",    "room_id": "ZlXqhZXfBrGrGAWCNQvrIWYKl",    "room_name": "fpGRxJWHKRjZukCeUGQdjQCNy",    "room_floor": "MLIkqLSUVAmZbSOwYRrllubCm",    "room_location": "WncZfkHAHKHjGLAtWxWqBHZGO",    "hall_id": "mZGSpvjvRTCjXXXUIybTkgUqQ",    "hall_name": "tLbohYYVsRMYAIgdtHrMxeaar",    "exhibition_id": "HYkIjUPXTTlabgNUChCWVShDX",    "exhibition_name": "SbmisqaaQMIdiQbMRmPgpLmoB",    "player_devices": 52,    "control_devices": 68,    "schedules": 48}
+{    "id": "dEDWVIsoUbLleNjMCoFfXHdKC",    "name": "CmuRlpybQdEQXvELroGYAamjm",    "type": "vRiOobLbSmTAotnvgwfEhKdmU",    "status": 64,    "remarks": "ZgCotkrGkTCiBAJZbODMfjWtv",    "room_id": "wTtfxYuKvYNvJslPZrcnmGrfr",    "room_name": "sRnPmwMHPaGAQKfgZJmyCrZCR",    "room_floor": "vAuQysWPppKahmZFSbyKabgLE",    "room_location": "jyHaKynroqmpJAbYWOuagFhRG",    "hall_id": "lZbWnkVYxCleFiBTrQiEdntYh",    "hall_name": "uWfBcQlNSnrcOvkjJegfkJJyn",    "exhibition_id": "vSTOBOpZoVieTnGlpgqiaEKPw",    "exhibition_name": "ulkfiQSwgpdkYXPlLimcAOoZj",    "player_devices": 81,    "control_devices": 12,    "schedules": 69}
 
 
 Comments
 -------------------------------------
-[ 0] Warning table: v_ebcp_exhibition_item_info does not have a primary key defined, setting col position 1 item_id as primary key
-Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullable column, setting it as NOT NULL
+[ 0] Warning table: v_ebcp_exhibition_item_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_item_info primary key column id is nullable column, setting it as NOT NULL
 
 
 
@@ -52,15 +52,15 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 */
 
 var (
-	Ebcp_exhibition_item_info_FIELD_NAME_item_id = "item_id"
+	Ebcp_exhibition_item_info_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_item_name = "item_name"
+	Ebcp_exhibition_item_info_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_item_type = "item_type"
+	Ebcp_exhibition_item_info_FIELD_NAME_type = "type"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_item_status = "item_status"
+	Ebcp_exhibition_item_info_FIELD_NAME_status = "status"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_item_remarks = "item_remarks"
+	Ebcp_exhibition_item_info_FIELD_NAME_remarks = "remarks"
 
 	Ebcp_exhibition_item_info_FIELD_NAME_room_id = "room_id"
 
@@ -87,15 +87,15 @@ var (
 
 // Ebcp_exhibition_item_info struct is a row record of the v_ebcp_exhibition_item_info table in the  database
 type Ebcp_exhibition_item_info struct {
-	ItemID string `json:"item_id"` //item_id
+	ID string `json:"id"` //id
 
-	ItemName string `json:"item_name"` //item_name
+	Name string `json:"name"` //name
 
-	ItemType string `json:"item_type"` //item_type
+	Type string `json:"type"` //type
 
-	ItemStatus int32 `json:"item_status"` //item_status
+	Status int32 `json:"status"` //status
 
-	ItemRemarks string `json:"item_remarks"` //item_remarks
+	Remarks string `json:"remarks"` //remarks
 
 	RoomID string `json:"room_id"` //room_id
 
@@ -127,10 +127,10 @@ var Ebcp_exhibition_item_infoTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:   0,
-			Name:    "item_id",
-			Comment: `item_id`,
-			Notes: `Warning table: v_ebcp_exhibition_item_info does not have a primary key defined, setting col position 1 item_id as primary key
-Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullable column, setting it as NOT NULL
+			Name:    "id",
+			Comment: `id`,
+			Notes: `Warning table: v_ebcp_exhibition_item_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_item_info primary key column id is nullable column, setting it as NOT NULL
 `,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -140,18 +140,18 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ItemID",
+			GoFieldName:        "ID",
 			GoFieldType:        "string",
-			JSONFieldName:      "item_id",
-			ProtobufFieldName:  "item_id",
+			JSONFieldName:      "id",
+			ProtobufFieldName:  "id",
 			ProtobufType:       "string",
 			ProtobufPos:        1,
 		},
 
 		&ColumnInfo{
 			Index:              1,
-			Name:               "item_name",
-			Comment:            `item_name`,
+			Name:               "name",
+			Comment:            `name`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -161,18 +161,18 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "ItemName",
+			GoFieldName:        "Name",
 			GoFieldType:        "string",
-			JSONFieldName:      "item_name",
-			ProtobufFieldName:  "item_name",
+			JSONFieldName:      "name",
+			ProtobufFieldName:  "name",
 			ProtobufType:       "string",
 			ProtobufPos:        2,
 		},
 
 		&ColumnInfo{
 			Index:              2,
-			Name:               "item_type",
-			Comment:            `item_type`,
+			Name:               "type",
+			Comment:            `type`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -182,18 +182,18 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       50,
-			GoFieldName:        "ItemType",
+			GoFieldName:        "Type",
 			GoFieldType:        "string",
-			JSONFieldName:      "item_type",
-			ProtobufFieldName:  "item_type",
+			JSONFieldName:      "type",
+			ProtobufFieldName:  "type",
 			ProtobufType:       "string",
 			ProtobufPos:        3,
 		},
 
 		&ColumnInfo{
 			Index:              3,
-			Name:               "item_status",
-			Comment:            `item_status`,
+			Name:               "status",
+			Comment:            `status`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "INT4",
@@ -203,18 +203,18 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 			IsArray:            false,
 			ColumnType:         "INT4",
 			ColumnLength:       -1,
-			GoFieldName:        "ItemStatus",
+			GoFieldName:        "Status",
 			GoFieldType:        "int32",
-			JSONFieldName:      "item_status",
-			ProtobufFieldName:  "item_status",
+			JSONFieldName:      "status",
+			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
 			ProtobufPos:        4,
 		},
 
 		&ColumnInfo{
 			Index:              4,
-			Name:               "item_remarks",
-			Comment:            `item_remarks`,
+			Name:               "remarks",
+			Comment:            `remarks`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -224,10 +224,10 @@ Warning table: v_ebcp_exhibition_item_info primary key column item_id is nullabl
 			IsArray:            false,
 			ColumnType:         "TEXT",
 			ColumnLength:       -1,
-			GoFieldName:        "ItemRemarks",
+			GoFieldName:        "Remarks",
 			GoFieldType:        "string",
-			JSONFieldName:      "item_remarks",
-			ProtobufFieldName:  "item_remarks",
+			JSONFieldName:      "remarks",
+			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
 			ProtobufPos:        5,
 		},

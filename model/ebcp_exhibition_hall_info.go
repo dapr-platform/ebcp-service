@@ -19,14 +19,14 @@ DB Table Details
 
 Table: v_ebcp_exhibition_hall_info
 [ 0] id                                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 1] hall_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 2] hall_description                               TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 1] name                                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 2] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [ 3] rooms                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "NkYQmLmrOMZjdGcnNWkHNSOgB",    "hall_name": "yVXVhCSDKOcLmocyqWEQkUigZ",    "hall_description": "rARuvcrlFvxQwuVERoyQcrBpi",    "rooms": 70}
+{    "id": "qyRhFGYthathjBpJQIckSTYkm",    "name": "rwjnrYhZMhQGXxKifqjSypNtm",    "remarks": "doyrggeCtTSHVnDhwRCRtisUB",    "rooms": 82}
 
 
 Comments
@@ -42,9 +42,9 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 var (
 	Ebcp_exhibition_hall_info_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_hall_info_FIELD_NAME_hall_name = "hall_name"
+	Ebcp_exhibition_hall_info_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_hall_info_FIELD_NAME_hall_description = "hall_description"
+	Ebcp_exhibition_hall_info_FIELD_NAME_remarks = "remarks"
 
 	Ebcp_exhibition_hall_info_FIELD_NAME_rooms = "rooms"
 )
@@ -53,9 +53,9 @@ var (
 type Ebcp_exhibition_hall_info struct {
 	ID string `json:"id"` //id
 
-	HallName string `json:"hall_name"` //hall_name
+	Name string `json:"name"` //name
 
-	HallDescription string `json:"hall_description"` //hall_description
+	Remarks string `json:"remarks"` //remarks
 
 	Rooms any `json:"rooms"` //rooms
 
@@ -90,8 +90,8 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 
 		&ColumnInfo{
 			Index:              1,
-			Name:               "hall_name",
-			Comment:            `hall_name`,
+			Name:               "name",
+			Comment:            `name`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -101,18 +101,18 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "HallName",
+			GoFieldName:        "Name",
 			GoFieldType:        "string",
-			JSONFieldName:      "hall_name",
-			ProtobufFieldName:  "hall_name",
+			JSONFieldName:      "name",
+			ProtobufFieldName:  "name",
 			ProtobufType:       "string",
 			ProtobufPos:        2,
 		},
 
 		&ColumnInfo{
 			Index:              2,
-			Name:               "hall_description",
-			Comment:            `hall_description`,
+			Name:               "remarks",
+			Comment:            `remarks`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -122,10 +122,10 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 			IsArray:            false,
 			ColumnType:         "TEXT",
 			ColumnLength:       -1,
-			GoFieldName:        "HallDescription",
+			GoFieldName:        "Remarks",
 			GoFieldType:        "string",
-			JSONFieldName:      "hall_description",
-			ProtobufFieldName:  "hall_description",
+			JSONFieldName:      "remarks",
+			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
 			ProtobufPos:        3,
 		},

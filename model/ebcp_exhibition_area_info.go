@@ -18,10 +18,10 @@ DB Table Details
 
 
 Table: v_ebcp_exhibition_area_info
-[ 0] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 1] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 2] exhibition_start_time                          TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 3] exhibition_end_time                            TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 0] id                                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 1] name                                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 2] start_time                                     TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
+[ 3] end_time                                       TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 4] hall_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 5] hall_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
@@ -36,13 +36,13 @@ Table: v_ebcp_exhibition_area_info
 
 JSON Sample
 -------------------------------------
-{    "exhibition_id": "vivmIXeBCpuhxAjeqCoVeBrat",    "exhibition_name": "EnwCgikWmoUxoxGUFHgOCHhPu",    "exhibition_start_time": 86,    "exhibition_end_time": 93,    "hall_id": "WpNUnIFUvwYpbrDTjOyDUVCLC",    "hall_name": "lHDAQSXbFDnFaaNTBwKqqNIMq",    "room_id": "redIdDJYuIxNseAihTdJwmHPh",    "room_name": "oruWbAfdDuALkfmaBUFoNGwhD",    "room_floor": "yBonFKIWNBoogaOgBtjFHaMAU",    "room_location": "YwUHQbZhabNTXFJfBlMUAavrZ",    "room_status": 44,    "total_room_count": 53,    "total_item_count": 70,    "room_item_count": 24}
+{    "id": "GyyTPuPYNEkliiVRPrNbRYyxr",    "name": "LyAcBTcwHjQKKFVPlDbTqwjZu",    "start_time": 74,    "end_time": 79,    "hall_id": "rNrPZdICkNPCkCAOwsvhudRNU",    "hall_name": "YGFacUNALqwONnELcTsEqIHSO",    "room_id": "aVGjwcmAgpsItSHMaTeGAAEPn",    "room_name": "BHsAUtpxQfMSYrtwMoGMuHePD",    "room_floor": "nEcFrPsEwJJyYmdHAZiLUsnsQ",    "room_location": "TNtRauMrqkXgQpxtuXWcgFWkP",    "room_status": 85,    "total_room_count": 24,    "total_item_count": 60,    "room_item_count": 15}
 
 
 Comments
 -------------------------------------
-[ 0] Warning table: v_ebcp_exhibition_area_info does not have a primary key defined, setting col position 1 exhibition_id as primary key
-Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is nullable column, setting it as NOT NULL
+[ 0] Warning table: v_ebcp_exhibition_area_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_area_info primary key column id is nullable column, setting it as NOT NULL
 
 
 
@@ -50,13 +50,13 @@ Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is n
 */
 
 var (
-	Ebcp_exhibition_area_info_FIELD_NAME_exhibition_id = "exhibition_id"
+	Ebcp_exhibition_area_info_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_area_info_FIELD_NAME_exhibition_name = "exhibition_name"
+	Ebcp_exhibition_area_info_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_area_info_FIELD_NAME_exhibition_start_time = "exhibition_start_time"
+	Ebcp_exhibition_area_info_FIELD_NAME_start_time = "start_time"
 
-	Ebcp_exhibition_area_info_FIELD_NAME_exhibition_end_time = "exhibition_end_time"
+	Ebcp_exhibition_area_info_FIELD_NAME_end_time = "end_time"
 
 	Ebcp_exhibition_area_info_FIELD_NAME_hall_id = "hall_id"
 
@@ -81,13 +81,13 @@ var (
 
 // Ebcp_exhibition_area_info struct is a row record of the v_ebcp_exhibition_area_info table in the  database
 type Ebcp_exhibition_area_info struct {
-	ExhibitionID string `json:"exhibition_id"` //展览ID
+	ID string `json:"id"` //展览ID
 
-	ExhibitionName string `json:"exhibition_name"` //展览名称
+	Name string `json:"name"` //展览名称
 
-	ExhibitionStartTime common.LocalTime `json:"exhibition_start_time"` //展览开始时间
+	StartTime common.LocalTime `json:"start_time"` //展览开始时间
 
-	ExhibitionEndTime common.LocalTime `json:"exhibition_end_time"` //展览结束时间
+	EndTime common.LocalTime `json:"end_time"` //展览结束时间
 
 	HallID string `json:"hall_id"` //展馆ID
 
@@ -117,10 +117,10 @@ var Ebcp_exhibition_area_infoTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:   0,
-			Name:    "exhibition_id",
+			Name:    "id",
 			Comment: `展览ID`,
-			Notes: `Warning table: v_ebcp_exhibition_area_info does not have a primary key defined, setting col position 1 exhibition_id as primary key
-Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is nullable column, setting it as NOT NULL
+			Notes: `Warning table: v_ebcp_exhibition_area_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_area_info primary key column id is nullable column, setting it as NOT NULL
 `,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -130,17 +130,17 @@ Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is n
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ExhibitionID",
+			GoFieldName:        "ID",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_id",
-			ProtobufFieldName:  "exhibition_id",
+			JSONFieldName:      "id",
+			ProtobufFieldName:  "id",
 			ProtobufType:       "string",
 			ProtobufPos:        1,
 		},
 
 		&ColumnInfo{
 			Index:              1,
-			Name:               "exhibition_name",
+			Name:               "name",
 			Comment:            `展览名称`,
 			Notes:              ``,
 			Nullable:           true,
@@ -151,17 +151,17 @@ Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is n
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "ExhibitionName",
+			GoFieldName:        "Name",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_name",
-			ProtobufFieldName:  "exhibition_name",
+			JSONFieldName:      "name",
+			ProtobufFieldName:  "name",
 			ProtobufType:       "string",
 			ProtobufPos:        2,
 		},
 
 		&ColumnInfo{
 			Index:              2,
-			Name:               "exhibition_start_time",
+			Name:               "start_time",
 			Comment:            `展览开始时间`,
 			Notes:              ``,
 			Nullable:           true,
@@ -172,17 +172,17 @@ Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is n
 			IsArray:            false,
 			ColumnType:         "TIMESTAMP",
 			ColumnLength:       -1,
-			GoFieldName:        "ExhibitionStartTime",
+			GoFieldName:        "StartTime",
 			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "exhibition_start_time",
-			ProtobufFieldName:  "exhibition_start_time",
+			JSONFieldName:      "start_time",
+			ProtobufFieldName:  "start_time",
 			ProtobufType:       "uint64",
 			ProtobufPos:        3,
 		},
 
 		&ColumnInfo{
 			Index:              3,
-			Name:               "exhibition_end_time",
+			Name:               "end_time",
 			Comment:            `展览结束时间`,
 			Notes:              ``,
 			Nullable:           true,
@@ -193,10 +193,10 @@ Warning table: v_ebcp_exhibition_area_info primary key column exhibition_id is n
 			IsArray:            false,
 			ColumnType:         "TIMESTAMP",
 			ColumnLength:       -1,
-			GoFieldName:        "ExhibitionEndTime",
+			GoFieldName:        "EndTime",
 			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "exhibition_end_time",
-			ProtobufFieldName:  "exhibition_end_time",
+			JSONFieldName:      "end_time",
+			ProtobufFieldName:  "end_time",
 			ProtobufType:       "uint64",
 			ProtobufPos:        4,
 		},

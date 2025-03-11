@@ -686,26 +686,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_id",
-                        "name": "exhibition_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_name",
-                        "name": "exhibition_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
@@ -833,26 +833,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_id",
-                        "name": "exhibition_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_name",
-                        "name": "exhibition_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
@@ -1137,14 +1137,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "hall_description",
-                        "name": "hall_description",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -1224,14 +1224,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "hall_name",
-                        "name": "hall_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "hall_description",
-                        "name": "hall_description",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -1560,32 +1560,32 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_id",
-                        "name": "exhibition_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_name",
-                        "name": "exhibition_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_status",
-                        "name": "exhibition_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
@@ -1598,6 +1598,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "total_item_count",
                         "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "items",
+                        "name": "items",
                         "in": "query"
                     }
                 ],
@@ -1665,32 +1677,32 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_id",
-                        "name": "exhibition_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_name",
-                        "name": "exhibition_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
+                        "description": "end_time",
+                        "name": "end_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_status",
-                        "name": "exhibition_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
@@ -1703,6 +1715,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "total_item_count",
                         "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "items",
+                        "name": "items",
                         "in": "query"
                     }
                 ],
@@ -1945,32 +1969,32 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_name",
-                        "name": "item_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_type",
-                        "name": "item_type",
+                        "description": "type",
+                        "name": "type",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_status",
-                        "name": "item_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_remarks",
-                        "name": "item_remarks",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -2104,32 +2128,32 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_name",
-                        "name": "item_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_type",
-                        "name": "item_type",
+                        "description": "type",
+                        "name": "type",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_status",
-                        "name": "item_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "item_remarks",
-                        "name": "item_remarks",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -2875,38 +2899,38 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "room_id",
-                        "name": "room_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_name",
-                        "name": "room_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_floor",
-                        "name": "room_floor",
+                        "description": "floor",
+                        "name": "floor",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_location",
-                        "name": "room_location",
+                        "description": "location",
+                        "name": "location",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_status",
-                        "name": "room_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_remarks",
-                        "name": "room_remarks",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -3028,38 +3052,38 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "room_id",
-                        "name": "room_id",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_name",
-                        "name": "room_name",
+                        "description": "name",
+                        "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_floor",
-                        "name": "room_floor",
+                        "description": "floor",
+                        "name": "floor",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_location",
-                        "name": "room_location",
+                        "description": "location",
+                        "name": "location",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_status",
-                        "name": "room_status",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "room_remarks",
-                        "name": "room_remarks",
+                        "description": "remarks",
+                        "name": "remarks",
                         "in": "query"
                     },
                     {
@@ -5995,20 +6019,8 @@ const docTemplate = `{
         "model.Ebcp_exhibition_area_info": {
             "type": "object",
             "properties": {
-                "exhibition_end_time": {
+                "end_time": {
                     "description": "展览结束时间",
-                    "type": "string"
-                },
-                "exhibition_id": {
-                    "description": "展览ID",
-                    "type": "string"
-                },
-                "exhibition_name": {
-                    "description": "展览名称",
-                    "type": "string"
-                },
-                "exhibition_start_time": {
-                    "description": "展览开始时间",
                     "type": "string"
                 },
                 "hall_id": {
@@ -6017,6 +6029,14 @@ const docTemplate = `{
                 },
                 "hall_name": {
                     "description": "展馆名称",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "展览ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "展览名称",
                     "type": "string"
                 },
                 "room_floor": {
@@ -6042,6 +6062,10 @@ const docTemplate = `{
                 "room_status": {
                     "description": "展厅状态",
                     "type": "integer"
+                },
+                "start_time": {
+                    "description": "展览开始时间",
+                    "type": "string"
                 },
                 "total_item_count": {
                     "description": "展项总数",
@@ -6089,16 +6113,16 @@ const docTemplate = `{
         "model.Ebcp_exhibition_hall_info": {
             "type": "object",
             "properties": {
-                "hall_description": {
-                    "description": "hall_description",
-                    "type": "string"
-                },
-                "hall_name": {
-                    "description": "hall_name",
-                    "type": "string"
-                },
                 "id": {
                     "description": "id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "remarks": {
+                    "description": "remarks",
                     "type": "string"
                 },
                 "rooms": {
@@ -6109,23 +6133,29 @@ const docTemplate = `{
         "model.Ebcp_exhibition_info": {
             "type": "object",
             "properties": {
-                "exhibition_end_time": {
+                "end_time": {
                     "description": "展览结束时间",
                     "type": "string"
                 },
-                "exhibition_id": {
+                "id": {
                     "description": "展览ID",
                     "type": "string"
                 },
-                "exhibition_name": {
+                "items": {
+                    "description": "展览的所有展项"
+                },
+                "name": {
                     "description": "展览名称",
                     "type": "string"
                 },
-                "exhibition_start_time": {
+                "rooms": {
+                    "description": "展览使用的所有展厅"
+                },
+                "start_time": {
                     "description": "展览开始时间",
                     "type": "string"
                 },
-                "exhibition_status": {
+                "status": {
                     "description": "展览状态（1: 运行中, 2: 筹备中, 3: 已结束）",
                     "type": "integer"
                 },
@@ -6210,28 +6240,20 @@ const docTemplate = `{
                     "description": "hall_name",
                     "type": "string"
                 },
-                "item_id": {
-                    "description": "item_id",
+                "id": {
+                    "description": "id",
                     "type": "string"
                 },
-                "item_name": {
-                    "description": "item_name",
-                    "type": "string"
-                },
-                "item_remarks": {
-                    "description": "item_remarks",
-                    "type": "string"
-                },
-                "item_status": {
-                    "description": "item_status",
-                    "type": "integer"
-                },
-                "item_type": {
-                    "description": "item_type",
+                "name": {
+                    "description": "name",
                     "type": "string"
                 },
                 "player_devices": {
                     "description": "player_devices"
+                },
+                "remarks": {
+                    "description": "remarks",
+                    "type": "string"
                 },
                 "room_floor": {
                     "description": "room_floor",
@@ -6251,6 +6273,14 @@ const docTemplate = `{
                 },
                 "schedules": {
                     "description": "schedules"
+                },
+                "status": {
+                    "description": "status",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "type",
+                    "type": "string"
                 }
             }
         },
@@ -6330,12 +6360,20 @@ const docTemplate = `{
                     "description": "exhibition_status",
                     "type": "integer"
                 },
+                "floor": {
+                    "description": "floor",
+                    "type": "string"
+                },
                 "hall_id": {
                     "description": "hall_id",
                     "type": "string"
                 },
                 "hall_name": {
                     "description": "hall_name",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
                     "type": "string"
                 },
                 "item_count": {
@@ -6345,28 +6383,20 @@ const docTemplate = `{
                 "items": {
                     "description": "items"
                 },
-                "room_floor": {
-                    "description": "room_floor",
+                "location": {
+                    "description": "location",
                     "type": "string"
                 },
-                "room_id": {
-                    "description": "room_id",
+                "name": {
+                    "description": "name",
                     "type": "string"
                 },
-                "room_location": {
-                    "description": "room_location",
+                "remarks": {
+                    "description": "remarks",
                     "type": "string"
                 },
-                "room_name": {
-                    "description": "room_name",
-                    "type": "string"
-                },
-                "room_remarks": {
-                    "description": "room_remarks",
-                    "type": "string"
-                },
-                "room_status": {
-                    "description": "room_status",
+                "status": {
+                    "description": "status",
                     "type": "integer"
                 }
             }

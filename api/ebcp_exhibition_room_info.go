@@ -24,12 +24,12 @@ func InitEbcp_exhibition_room_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
-// @Param room_id query string false "room_id"
-// @Param room_name query string false "room_name"
-// @Param room_floor query string false "room_floor"
-// @Param room_location query string false "room_location"
-// @Param room_status query string false "room_status"
-// @Param room_remarks query string false "room_remarks"
+// @Param id query string false "id"
+// @Param name query string false "name"
+// @Param floor query string false "floor"
+// @Param location query string false "location"
+// @Param status query string false "status"
+// @Param remarks query string false "remarks"
 // @Param hall_id query string false "hall_id"
 // @Param hall_name query string false "hall_name"
 // @Param exhibition_id query string false "exhibition_id"
@@ -51,7 +51,7 @@ func Ebcp_exhibition_room_infoPageListHandler(w http.ResponseWriter, r *http.Req
 		common.HttpResult(w, common.ErrParam.AppendMsg("page or pageSize is empty"))
 		return
 	}
-	common.CommonPageQuery[model.Ebcp_exhibition_room_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_room_info", "room_id")
+	common.CommonPageQuery[model.Ebcp_exhibition_room_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_room_info", "id")
 
 }
 
@@ -60,12 +60,12 @@ func Ebcp_exhibition_room_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Tags 展厅详细视图，包含展厅信息及其关联的展馆、展览和展项信息（JSON格式）
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
-// @Param room_id query string false "room_id"
-// @Param room_name query string false "room_name"
-// @Param room_floor query string false "room_floor"
-// @Param room_location query string false "room_location"
-// @Param room_status query string false "room_status"
-// @Param room_remarks query string false "room_remarks"
+// @Param id query string false "id"
+// @Param name query string false "name"
+// @Param floor query string false "floor"
+// @Param location query string false "location"
+// @Param status query string false "status"
+// @Param remarks query string false "remarks"
 // @Param hall_id query string false "hall_id"
 // @Param hall_name query string false "hall_name"
 // @Param exhibition_id query string false "exhibition_id"
@@ -80,5 +80,5 @@ func Ebcp_exhibition_room_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-room-info [get]
 func Ebcp_exhibition_room_infoListHandler(w http.ResponseWriter, r *http.Request) {
-	common.CommonQuery[model.Ebcp_exhibition_room_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_room_info", "room_id")
+	common.CommonQuery[model.Ebcp_exhibition_room_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_room_info", "id")
 }

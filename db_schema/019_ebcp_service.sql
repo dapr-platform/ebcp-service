@@ -203,30 +203,58 @@ COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 
 -- 创建视图
 CREATE VIEW v_ebcp_exhibition_info AS
 SELECT 
-    e.id AS exhibition_id,
-    e.name AS exhibition_name,
-    e.start_time AS exhibition_start_time,
-    e.end_time AS exhibition_end_time,
-    e.status AS exhibition_status,
+    e.id AS id,
+    e.name AS name,
+    e.start_time AS start_time,
+    e.end_time AS end_time,
+    e.status AS status,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', r.id,
+                'name', r.name,
+                'floor', r.floor,
+                'location', r.location,
+                'status', r.status
+            )
+        )
+        FROM o_ebcp_exhibition_room r
+        WHERE r.exhibition_id = e.id
+    ) AS rooms,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', i.id,
+                'name', i.name,
+                'type', i.type,
+                'status', i.status,
+                'room_id', i.exhibition_room_id
+            )
+        )
+        FROM o_ebcp_exhibition_item i
+        WHERE i.exhibition_id = e.id
+    ) AS items
 FROM o_ebcp_exhibition e;
 
 COMMENT ON VIEW v_ebcp_exhibition_info IS '展览信息视图';
-COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_id IS '展览ID';
-COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_name IS '展览名称';
-COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_start_time IS '展览开始时间';
-COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_end_time IS '展览结束时间';
-COMMENT ON COLUMN v_ebcp_exhibition_info.exhibition_status IS '展览状态（1: 运行中, 2: 筹备中, 3: 已结束）';    
+COMMENT ON COLUMN v_ebcp_exhibition_info.id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_info.name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_info.start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_info.end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_info.status IS '展览状态（1: 运行中, 2: 筹备中, 3: 已结束）';    
 COMMENT ON COLUMN v_ebcp_exhibition_info.total_room_count IS '展厅总数';
 COMMENT ON COLUMN v_ebcp_exhibition_info.total_item_count IS '展项总数';
+COMMENT ON COLUMN v_ebcp_exhibition_info.rooms IS '展览使用的所有展厅';
+COMMENT ON COLUMN v_ebcp_exhibition_info.items IS '展览的所有展项';
 
 CREATE VIEW v_ebcp_exhibition_area_info AS
 SELECT 
-    e.id AS exhibition_id,
-    e.name AS exhibition_name,
-    e.start_time AS exhibition_start_time,
-    e.end_time AS exhibition_end_time,
+    e.id AS id,
+    e.name AS name,
+    e.start_time AS start_time,
+    e.end_time AS end_time,
     h.id AS hall_id,
     h.name AS hall_name,
     r.id AS room_id,
@@ -242,10 +270,10 @@ JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id
 JOIN o_ebcp_exhibition_hall h ON h.id = r.exhibition_hall_id;
 
 COMMENT ON VIEW v_ebcp_exhibition_area_info IS '展览区域信息视图';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_id IS '展览ID';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_name IS '展览名称';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_start_time IS '展览开始时间';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.end_time IS '展览结束时间';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_id IS '展馆ID';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.hall_name IS '展馆名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_id IS '展厅ID';
@@ -261,15 +289,15 @@ COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_item_count IS '展厅展项�
 CREATE VIEW v_ebcp_exhibition_hall_info AS
 SELECT 
     eh.id AS id,
-    eh.name AS hall_name,
-    eh.remarks AS hall_description,
+    eh.name AS name,
+    eh.remarks AS remarks,
     json_agg(
         json_build_object(
-            'room_id', er.id,
-            'room_name', er.name,
-            'room_floor', er.floor,
-            'room_location', er.location,
-            'room_status', er.status,
+            'id', er.id,
+            'name', er.name,
+            'floor', er.floor,
+            'location', er.location,
+            'status', er.status,
             'exhibition_id', er.exhibition_id,
             'exhibition_name', e.name,
             'exhibition_start_time', e.start_time,
@@ -277,11 +305,11 @@ SELECT
             'items', (
                 SELECT json_agg(
                     json_build_object(
-                        'item_id', ei.id,
-                        'item_name', ei.name,
-                        'item_type', ei.type,
-                        'item_status', ei.status,
-                        'item_remarks', ei.remarks
+                        'id', ei.id,
+                        'name', ei.name,
+                        'type', ei.type,
+                        'status', ei.status,
+                        'remarks', ei.remarks
                     )
                 )
                 FROM o_ebcp_exhibition_item ei
@@ -303,12 +331,12 @@ COMMENT ON VIEW v_ebcp_exhibition_hall_info IS '展馆详细视图，包含展�
 -- 展厅详细视图
 CREATE VIEW v_ebcp_exhibition_room_info AS
 SELECT 
-    er.id AS room_id,
-    er.name AS room_name,
-    er.floor AS room_floor,
-    er.location AS room_location,
-    er.status AS room_status,
-    er.remarks AS room_remarks,
+    er.id AS id,
+    er.name AS name,
+    er.floor AS floor,
+    er.location AS location,
+    er.status AS status,
+    er.remarks AS remarks,
     eh.id AS hall_id,
     eh.name AS hall_name,
     e.id AS exhibition_id,
@@ -319,11 +347,11 @@ SELECT
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = er.id) AS item_count,
     json_agg(
         json_build_object(
-            'item_id', ei.id,
-            'item_name', ei.name,
-            'item_type', ei.type,
-            'item_status', ei.status,
-            'item_remarks', ei.remarks
+            'id', ei.id,
+            'name', ei.name,
+            'type', ei.type,
+            'status', ei.status,
+            'remarks', ei.remarks
         )
     ) AS items
 FROM 
@@ -343,11 +371,11 @@ COMMENT ON VIEW v_ebcp_exhibition_room_info IS '展厅详细视图，包含展�
 -- 展项详细视图
 CREATE VIEW v_ebcp_exhibition_item_info AS
 SELECT 
-    ei.id AS item_id,
-    ei.name AS item_name,
-    ei.type AS item_type,
-    ei.status AS item_status,
-    ei.remarks AS item_remarks,
+    ei.id AS id,
+    ei.name AS name,
+    ei.type AS type,
+    ei.status AS status,
+    ei.remarks AS remarks,
     er.id AS room_id,
     er.name AS room_name,
     er.floor AS room_floor,

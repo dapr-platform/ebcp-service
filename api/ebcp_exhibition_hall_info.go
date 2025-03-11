@@ -25,8 +25,8 @@ func InitEbcp_exhibition_hall_infoRoute(r chi.Router) {
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
 // @Param id query string false "id"
-// @Param hall_name query string false "hall_name"
-// @Param hall_description query string false "hall_description"
+// @Param name query string false "name"
+// @Param remarks query string false "remarks"
 // @Param rooms query string false "rooms"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_hall_info}} "objects array"
@@ -50,8 +50,8 @@ func Ebcp_exhibition_hall_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
 // @Param id query string false "id"
-// @Param hall_name query string false "hall_name"
-// @Param hall_description query string false "hall_description"
+// @Param name query string false "name"
+// @Param remarks query string false "remarks"
 // @Param rooms query string false "rooms"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_hall_info} "objects array"
