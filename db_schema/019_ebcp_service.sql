@@ -257,10 +257,6 @@ COMMENT ON COLUMN v_ebcp_exhibition_info.items IS '展览的所有展项';
 
 CREATE VIEW v_ebcp_exhibition_area_info AS
 SELECT 
-    e.id AS id,
-    e.name AS name,
-    e.start_time AS start_time,
-    e.end_time AS end_time,
     r.id AS room_id,
     r.name AS room_name,
     r.floor AS room_floor,
@@ -270,17 +266,29 @@ SELECT
     (SELECT dict_value FROM o_ops_dict WHERE id = r.location) AS room_location_value,
     (SELECT dict_name FROM o_ops_dict WHERE id = r.location) AS room_location_name,
     r.status AS room_status,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE room_id = r.id) AS room_item_count
-FROM o_ebcp_exhibition e
-JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id;
+    r.remarks AS room_remarks,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    e.start_time AS exhibition_start_time,
+    e.end_time AS exhibition_end_time,
+    e.status AS exhibition_status,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', i.id,
+                'name', i.name,
+                'type', i.type,
+                'status', i.status,
+                'remarks', i.remarks
+            )
+        )
+        FROM o_ebcp_exhibition_item i
+        WHERE i.room_id = r.id
+    ) AS items
+FROM o_ebcp_exhibition_room r
+LEFT JOIN o_ebcp_exhibition e ON e.id = r.exhibition_id;
 
 COMMENT ON VIEW v_ebcp_exhibition_area_info IS '展览区域信息视图';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.id IS '展览ID';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.name IS '展览名称';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.start_time IS '展览开始时间';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.end_time IS '展览结束时间';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_id IS '展厅ID';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_name IS '展厅名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor IS '展厅楼层';
@@ -290,9 +298,13 @@ COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location IS '展厅位置';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location_value IS '展厅位置值';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location_name IS '展厅位置名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_status IS '展厅状态';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_room_count IS '展厅总数';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_item_count IS '展项总数';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_item_count IS '展厅展项总数';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_remarks IS '展厅备注';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_status IS '展览状态';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.items IS '展厅内的展项列表';
 
 -- 展馆详细视图
 CREATE VIEW v_ebcp_exhibition_hall_info AS

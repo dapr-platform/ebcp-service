@@ -89,15 +89,23 @@ definitions:
     type: object
   model.Ebcp_exhibition_area_info:
     properties:
-      end_time:
+      exhibition_end_time:
         description: 展览结束时间
         type: string
-      id:
+      exhibition_id:
         description: 展览ID
         type: string
-      name:
+      exhibition_name:
         description: 展览名称
         type: string
+      exhibition_start_time:
+        description: 展览开始时间
+        type: string
+      exhibition_status:
+        description: 展览状态
+        type: integer
+      items:
+        description: 展厅内的展项列表
       room_floor:
         description: 展厅楼层
         type: string
@@ -110,9 +118,6 @@ definitions:
       room_id:
         description: 展厅ID
         type: string
-      room_item_count:
-        description: 展厅展项总数
-        type: integer
       room_location:
         description: 展厅位置
         type: string
@@ -125,17 +130,11 @@ definitions:
       room_name:
         description: 展厅名称
         type: string
+      room_remarks:
+        description: 展厅备注
+        type: string
       room_status:
         description: 展厅状态
-        type: integer
-      start_time:
-        description: 展览开始时间
-        type: string
-      total_item_count:
-        description: 展项总数
-        type: integer
-      total_room_count:
-        description: 展厅总数
         type: integer
     type: object
   model.Ebcp_exhibition_hall:
@@ -940,22 +939,6 @@ paths:
         in: query
         name: _order
         type: string
-      - description: id
-        in: query
-        name: id
-        type: string
-      - description: name
-        in: query
-        name: name
-        type: string
-      - description: start_time
-        in: query
-        name: start_time
-        type: string
-      - description: end_time
-        in: query
-        name: end_time
-        type: string
       - description: room_id
         in: query
         name: room_id
@@ -992,17 +975,33 @@ paths:
         in: query
         name: room_status
         type: string
-      - description: total_room_count
+      - description: room_remarks
         in: query
-        name: total_room_count
+        name: room_remarks
         type: string
-      - description: total_item_count
+      - description: exhibition_id
         in: query
-        name: total_item_count
+        name: exhibition_id
         type: string
-      - description: room_item_count
+      - description: exhibition_name
         in: query
-        name: room_item_count
+        name: exhibition_name
+        type: string
+      - description: exhibition_start_time
+        in: query
+        name: exhibition_start_time
+        type: string
+      - description: exhibition_end_time
+        in: query
+        name: exhibition_end_time
+        type: string
+      - description: exhibition_status
+        in: query
+        name: exhibition_status
+        type: string
+      - description: items
+        in: query
+        name: items
         type: string
       produces:
       - application/json
@@ -1044,22 +1043,6 @@ paths:
         in: query
         name: _order
         type: string
-      - description: id
-        in: query
-        name: id
-        type: string
-      - description: name
-        in: query
-        name: name
-        type: string
-      - description: start_time
-        in: query
-        name: start_time
-        type: string
-      - description: end_time
-        in: query
-        name: end_time
-        type: string
       - description: room_id
         in: query
         name: room_id
@@ -1096,17 +1079,33 @@ paths:
         in: query
         name: room_status
         type: string
-      - description: total_room_count
+      - description: room_remarks
         in: query
-        name: total_room_count
+        name: room_remarks
         type: string
-      - description: total_item_count
+      - description: exhibition_id
         in: query
-        name: total_item_count
+        name: exhibition_id
         type: string
-      - description: room_item_count
+      - description: exhibition_name
         in: query
-        name: room_item_count
+        name: exhibition_name
+        type: string
+      - description: exhibition_start_time
+        in: query
+        name: exhibition_start_time
+        type: string
+      - description: exhibition_end_time
+        in: query
+        name: exhibition_end_time
+        type: string
+      - description: exhibition_status
+        in: query
+        name: exhibition_status
+        type: string
+      - description: items
+        in: query
+        name: items
         type: string
       produces:
       - application/json

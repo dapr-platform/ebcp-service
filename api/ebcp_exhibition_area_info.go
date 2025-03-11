@@ -24,10 +24,6 @@ func InitEbcp_exhibition_area_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
-// @Param id query string false "id"
-// @Param name query string false "name"
-// @Param start_time query string false "start_time"
-// @Param end_time query string false "end_time"
 // @Param room_id query string false "room_id"
 // @Param room_name query string false "room_name"
 // @Param room_floor query string false "room_floor"
@@ -37,9 +33,13 @@ func InitEbcp_exhibition_area_infoRoute(r chi.Router) {
 // @Param room_location_value query string false "room_location_value"
 // @Param room_location_name query string false "room_location_name"
 // @Param room_status query string false "room_status"
-// @Param total_room_count query string false "total_room_count"
-// @Param total_item_count query string false "total_item_count"
-// @Param room_item_count query string false "room_item_count"
+// @Param room_remarks query string false "room_remarks"
+// @Param exhibition_id query string false "exhibition_id"
+// @Param exhibition_name query string false "exhibition_name"
+// @Param exhibition_start_time query string false "exhibition_start_time"
+// @Param exhibition_end_time query string false "exhibition_end_time"
+// @Param exhibition_status query string false "exhibition_status"
+// @Param items query string false "items"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_area_info}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -52,7 +52,7 @@ func Ebcp_exhibition_area_infoPageListHandler(w http.ResponseWriter, r *http.Req
 		common.HttpResult(w, common.ErrParam.AppendMsg("page or pageSize is empty"))
 		return
 	}
-	common.CommonPageQuery[model.Ebcp_exhibition_area_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_area_info", "id")
+	common.CommonPageQuery[model.Ebcp_exhibition_area_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_area_info", "room_id")
 
 }
 
@@ -61,10 +61,6 @@ func Ebcp_exhibition_area_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Tags 展览区域信息视图
 // @Param _select query string false "_select"
 // @Param _order query string false "order"
-// @Param id query string false "id"
-// @Param name query string false "name"
-// @Param start_time query string false "start_time"
-// @Param end_time query string false "end_time"
 // @Param room_id query string false "room_id"
 // @Param room_name query string false "room_name"
 // @Param room_floor query string false "room_floor"
@@ -74,13 +70,17 @@ func Ebcp_exhibition_area_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param room_location_value query string false "room_location_value"
 // @Param room_location_name query string false "room_location_name"
 // @Param room_status query string false "room_status"
-// @Param total_room_count query string false "total_room_count"
-// @Param total_item_count query string false "total_item_count"
-// @Param room_item_count query string false "room_item_count"
+// @Param room_remarks query string false "room_remarks"
+// @Param exhibition_id query string false "exhibition_id"
+// @Param exhibition_name query string false "exhibition_name"
+// @Param exhibition_start_time query string false "exhibition_start_time"
+// @Param exhibition_end_time query string false "exhibition_end_time"
+// @Param exhibition_status query string false "exhibition_status"
+// @Param items query string false "items"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_area_info} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-area-info [get]
 func Ebcp_exhibition_area_infoListHandler(w http.ResponseWriter, r *http.Request) {
-	common.CommonQuery[model.Ebcp_exhibition_area_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_area_info", "id")
+	common.CommonQuery[model.Ebcp_exhibition_area_info](w, r, common.GetDaprClient(), "v_ebcp_exhibition_area_info", "room_id")
 }
