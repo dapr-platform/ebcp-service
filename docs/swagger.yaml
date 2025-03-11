@@ -215,9 +215,6 @@ definitions:
       exhibition_id:
         description: 所属展览ID
         type: string
-      exhibition_room_id:
-        description: 所属展厅ID
-        type: string
       export_info:
         description: 输出信息
         type: string
@@ -229,6 +226,9 @@ definitions:
         type: string
       remarks:
         description: 备注
+        type: string
+      room_id:
+        description: 所属展厅ID
         type: string
       status:
         description: '状态（1: 启动, 2: 停止, 3: 故障）'
@@ -1683,9 +1683,9 @@ paths:
         in: query
         name: exhibition_id
         type: string
-      - description: exhibition_room_id
+      - description: room_id
         in: query
-        name: exhibition_room_id
+        name: room_id
         type: string
       - description: type
         in: query
@@ -2218,9 +2218,9 @@ paths:
         in: query
         name: exhibition_id
         type: string
-      - description: exhibition_room_id
+      - description: room_id
         in: query
-        name: exhibition_room_id
+        name: room_id
         type: string
       - description: type
         in: query

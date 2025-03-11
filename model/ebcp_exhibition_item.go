@@ -25,7 +25,7 @@ Table: o_ebcp_exhibition_item
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 6] exhibition_id                                  VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] exhibition_room_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] room_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
 [ 9] export_info                                    TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
@@ -34,7 +34,7 @@ Table: o_ebcp_exhibition_item
 
 JSON Sample
 -------------------------------------
-{    "id": "nhJVaIcdhovvrRtDmMGxhDCOA",    "created_by": "CRuBwOaaGmOCbyLSVmDvKWyBi",    "created_time": 25,    "updated_by": "mktrjsBxITXCqdyZhIHLdobZE",    "updated_time": 62,    "name": "HuPwuVybrqoImWnklSDqlVUqr",    "exhibition_id": "HOhSVbrOYgBvpyEsflbBOMyVN",    "exhibition_room_id": "SYseLERcAUxfCBgjFMhpItUev",    "type": "jmeNbhOkblKkeZYBNGpZalOnR",    "export_info": "sMlsJPsjikMUVJCcpBiDmLcsn",    "status": 12,    "remarks": "DoBnMsIuterGppJJMgnaHcNYH"}
+{    "id": "HnAHYhWVdspqXoNSKjPLqbJTC",    "created_by": "CtCAVUQBHNdKqdYDxlGgnWZcM",    "created_time": 83,    "updated_by": "lSeMqKYhFfamtTZNknjTRcUvO",    "updated_time": 33,    "name": "yhuXNWMboihYySkmxuAxZRLUe",    "exhibition_id": "LPfZgOrFvpCZgcBHftFQgZYuG",    "room_id": "TySqTQPmtcWxjRoFiXsUcTyyW",    "type": "jWFaeVbZdcQmuFUMZfFMEdUyg",    "export_info": "NLapcToVIasmSytCRLUZQkTYC",    "status": 12,    "remarks": "bjRsHiKUwVnujTpOIPVkTdSYP"}
 
 
 
@@ -55,7 +55,7 @@ var (
 
 	Ebcp_exhibition_item_FIELD_NAME_exhibition_id = "exhibition_id"
 
-	Ebcp_exhibition_item_FIELD_NAME_exhibition_room_id = "exhibition_room_id"
+	Ebcp_exhibition_item_FIELD_NAME_room_id = "room_id"
 
 	Ebcp_exhibition_item_FIELD_NAME_type = "type"
 
@@ -82,7 +82,7 @@ type Ebcp_exhibition_item struct {
 
 	ExhibitionID string `json:"exhibition_id"` //所属展览ID
 
-	ExhibitionRoomID string `json:"exhibition_room_id"` //所属展厅ID
+	RoomID string `json:"room_id"` //所属展厅ID
 
 	Type string `json:"type"` //展项类型（media、static）
 
@@ -247,7 +247,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              7,
-			Name:               "exhibition_room_id",
+			Name:               "room_id",
 			Comment:            `所属展厅ID`,
 			Notes:              ``,
 			Nullable:           false,
@@ -258,10 +258,10 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ExhibitionRoomID",
+			GoFieldName:        "RoomID",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_room_id",
-			ProtobufFieldName:  "exhibition_room_id",
+			JSONFieldName:      "room_id",
+			ProtobufFieldName:  "room_id",
 			ProtobufType:       "string",
 			ProtobufPos:        8,
 		},

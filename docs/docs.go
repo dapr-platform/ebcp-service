@@ -1864,8 +1864,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
+                        "description": "room_id",
+                        "name": "room_id",
                         "in": "query"
                     },
                     {
@@ -2580,8 +2580,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_room_id",
-                        "name": "exhibition_room_id",
+                        "description": "room_id",
+                        "name": "room_id",
                         "in": "query"
                     },
                     {
@@ -6288,10 +6288,6 @@ const docTemplate = `{
                     "description": "所属展览ID",
                     "type": "string"
                 },
-                "exhibition_room_id": {
-                    "description": "所属展厅ID",
-                    "type": "string"
-                },
                 "export_info": {
                     "description": "输出信息",
                     "type": "string"
@@ -6306,6 +6302,10 @@ const docTemplate = `{
                 },
                 "remarks": {
                     "description": "备注",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "所属展厅ID",
                     "type": "string"
                 },
                 "status": {

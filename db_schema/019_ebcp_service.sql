@@ -77,7 +77,7 @@ CREATE TABLE o_ebcp_exhibition_item (
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     exhibition_id VARCHAR(32) NOT NULL,
-    exhibition_room_id VARCHAR(32) NOT NULL,
+    room_id VARCHAR(32) NOT NULL,
     type VARCHAR(50) NOT NULL,
     export_info TEXT,
     status INTEGER NOT NULL DEFAULT 1,
@@ -88,7 +88,7 @@ CREATE TABLE o_ebcp_exhibition_item (
 COMMENT ON TABLE o_ebcp_exhibition_item IS '展项表';
 COMMENT ON COLUMN o_ebcp_exhibition_item.name IS '展项名称';
 COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_id IS '所属展览ID';
-COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_room_id IS '所属展厅ID';
+COMMENT ON COLUMN o_ebcp_exhibition_item.room_id IS '所属展厅ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.type IS '展项类型（media、static）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.export_info IS '输出信息';
 COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（1: 启动, 2: 停止, 3: 故障）';
@@ -236,7 +236,7 @@ SELECT
                 'name', i.name,
                 'type', i.type,
                 'status', i.status,
-                'room_id', i.exhibition_room_id
+                'room_id', i.room_id
             )
         )
         FROM o_ebcp_exhibition_item i
@@ -272,7 +272,7 @@ SELECT
     r.status AS room_status,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = r.id) AS room_item_count
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE room_id = r.id) AS room_item_count
 FROM o_ebcp_exhibition e
 JOIN o_ebcp_exhibition_room r ON r.exhibition_id = e.id;
 
@@ -326,7 +326,7 @@ SELECT
                     )
                 )
                 FROM o_ebcp_exhibition_item ei
-                WHERE ei.exhibition_room_id = er.id
+                WHERE ei.room_id = er.id
             )
         )
     ) AS rooms
@@ -359,7 +359,7 @@ SELECT
     e.start_time AS exhibition_start_time,
     e.end_time AS exhibition_end_time,
     e.status AS exhibition_status,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_room_id = er.id) AS item_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE room_id = er.id) AS item_count,
     json_agg(
         json_build_object(
             'id', ei.id,
@@ -374,7 +374,7 @@ FROM
 LEFT JOIN 
     o_ebcp_exhibition e ON er.exhibition_id = e.id
 LEFT JOIN 
-    o_ebcp_exhibition_item ei ON ei.exhibition_room_id = er.id
+    o_ebcp_exhibition_item ei ON ei.room_id = er.id
 GROUP BY 
     er.id, er.name, er.floor, er.location, er.status, er.remarks, 
     e.id, e.name, e.start_time, e.end_time, e.status;
@@ -441,7 +441,7 @@ SELECT
 FROM 
     o_ebcp_exhibition_item ei
 JOIN 
-    o_ebcp_exhibition_room er ON ei.exhibition_room_id = er.id
+    o_ebcp_exhibition_room er ON ei.room_id = er.id
 JOIN 
     o_ebcp_exhibition e ON ei.exhibition_id = e.id;
 

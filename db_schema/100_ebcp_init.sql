@@ -86,7 +86,7 @@ INSERT INTO o_ebcp_exhibition_room (
 -- 初始化展项数据
 INSERT INTO o_ebcp_exhibition_item (
     id, created_by, created_time, updated_by, updated_time,
-    name, exhibition_id, exhibition_room_id, type, status, remarks, export_info
+    name, exhibition_id, room_id, type, status, remarks, export_info
 ) VALUES
     (md5('九五枪族'), 'admin', NOW(), 'admin', NOW(), '九五枪族', 
     md5('陆军轻武器装备技术厅&陆军航空兵武器装备技术厅'), md5('B1西侧'), 'media', 1, 'PC工作站+播控软件', 'LED大屏'),
