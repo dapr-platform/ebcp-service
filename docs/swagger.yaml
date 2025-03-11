@@ -107,6 +107,9 @@ definitions:
       room_floor:
         description: 展厅楼层
         type: string
+      room_floor_name:
+        description: 展厅楼层名称
+        type: string
       room_floor_value:
         description: 展厅楼层值
         type: string
@@ -118,6 +121,9 @@ definitions:
         type: integer
       room_location:
         description: 展厅位置
+        type: string
+      room_location_name:
+        description: 展厅位置名称
         type: string
       room_location_value:
         description: 展厅位置值
@@ -270,6 +276,9 @@ definitions:
       room_floor:
         description: room_floor
         type: string
+      room_floor_name:
+        description: room_floor_name
+        type: string
       room_floor_value:
         description: room_floor_value
         type: string
@@ -278,6 +287,9 @@ definitions:
         type: string
       room_location:
         description: room_location
+        type: string
+      room_location_name:
+        description: room_location_name
         type: string
       room_location_value:
         description: room_location_value
@@ -353,6 +365,9 @@ definitions:
       floor:
         description: floor
         type: string
+      floor_name:
+        description: floor_name
+        type: string
       floor_value:
         description: floor_value
         type: string
@@ -372,6 +387,9 @@ definitions:
         description: items
       location:
         description: location
+        type: string
+      location_name:
+        description: location_name
         type: string
       location_value:
         description: location_value
@@ -974,6 +992,10 @@ paths:
         in: query
         name: room_floor_value
         type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
       - description: room_location
         in: query
         name: room_location
@@ -981,6 +1003,10 @@ paths:
       - description: room_location_value
         in: query
         name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
         type: string
       - description: room_status
         in: query
@@ -1078,6 +1104,10 @@ paths:
         in: query
         name: room_floor_value
         type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
       - description: room_location
         in: query
         name: room_location
@@ -1085,6 +1115,10 @@ paths:
       - description: room_location_value
         in: query
         name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
         type: string
       - description: room_status
         in: query
@@ -1792,6 +1826,10 @@ paths:
         in: query
         name: room_floor_value
         type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
       - description: room_location
         in: query
         name: room_location
@@ -1799,6 +1837,10 @@ paths:
       - description: room_location_value
         in: query
         name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
         type: string
       - description: hall_id
         in: query
@@ -1904,6 +1946,10 @@ paths:
         in: query
         name: room_floor_value
         type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
       - description: room_location
         in: query
         name: room_location
@@ -1911,6 +1957,10 @@ paths:
       - description: room_location_value
         in: query
         name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
         type: string
       - description: hall_id
         in: query
@@ -2381,6 +2431,10 @@ paths:
         in: query
         name: floor_value
         type: string
+      - description: floor_name
+        in: query
+        name: floor_name
+        type: string
       - description: location
         in: query
         name: location
@@ -2388,6 +2442,10 @@ paths:
       - description: location_value
         in: query
         name: location_value
+        type: string
+      - description: location_name
+        in: query
+        name: location_name
         type: string
       - description: status
         in: query
@@ -2489,6 +2547,10 @@ paths:
         in: query
         name: floor_value
         type: string
+      - description: floor_name
+        in: query
+        name: floor_name
+        type: string
       - description: location
         in: query
         name: location
@@ -2496,6 +2558,10 @@ paths:
       - description: location_value
         in: query
         name: location_value
+        type: string
+      - description: location_name
+        in: query
+        name: location_name
         type: string
       - description: status
         in: query

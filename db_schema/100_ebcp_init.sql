@@ -4,24 +4,24 @@
 -- 楼层字典
 INSERT INTO o_ops_dict (
     id, created_by, created_time, updated_by, updated_time,
-    dict_type, dict_code, dict_name, dict_value, sort_order, remarks
+    dict_type, dict_type_name, dict_name, dict_value, sort_order, remarks
 ) VALUES
-    (md5('floor_typeB1'), 'admin', NOW(), 'admin', NOW(), 'floor_type', 'B1', '地下一层', 'B1', 1, NULL),
-    (md5('floor_type1F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '1F', '一层', '1F', 2, NULL),
-    (md5('floor_type2F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '2F', '二层', '2F', 3, NULL),
-    (md5('floor_type3F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '3F', '三层', '3F', 4, NULL);
+    (md5('floor_typeB1'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '楼层', '地下一层', 'B1', 1, NULL),
+    (md5('floor_type1F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '楼层', '一层', '1F', 2, NULL),
+    (md5('floor_type2F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '楼层', '二层', '2F', 3, NULL),
+    (md5('floor_type3F'), 'admin', NOW(), 'admin', NOW(), 'floor_type', '楼层', '三层', '3F', 4, NULL);
 
 -- 位置字典
 INSERT INTO o_ops_dict (
     id, created_by, created_time, updated_by, updated_time,
-    dict_type, dict_code, dict_name, dict_value, sort_order, remarks
+    dict_type, dict_type_name, dict_name, dict_value, sort_order, remarks
 ) VALUES
-    (md5('location_typeWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'WEST', '西侧', 'WEST', 1, NULL),
-    (md5('location_typeSOUTHWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'SOUTHWEST', '西南侧', 'SOUTHWEST', 2, NULL),
-    (md5('location_typeNORTHWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'NORTHWEST', '西北侧', 'NORTHWEST', 3, NULL),
-    (md5('location_typeNORTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'NORTHEAST', '东北侧', 'NORTHEAST', 4, NULL),
-    (md5('location_typeNORTH'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'NORTH', '北侧', 'NORTH', 5, NULL),
-    (md5('location_typeSOUTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', 'SOUTHEAST', '东南侧', 'SOUTHEAST', 6, NULL);
+    (md5('location_typeWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '西侧', 'WEST', 1, NULL),
+    (md5('location_typeSOUTHWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '西南侧', 'SOUTHWEST', 2, NULL),
+    (md5('location_typeNORTHWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '西北侧', 'NORTHWEST', 3, NULL),
+    (md5('location_typeNORTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '东北侧', 'NORTHEAST', 4, NULL),
+    (md5('location_typeNORTH'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '北侧', 'NORTH', 5, NULL),
+    (md5('location_typeSOUTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '东南侧', 'SOUTHEAST', 6, NULL);
 
 -- 初始化展馆数据
 INSERT INTO o_ebcp_exhibition_hall (

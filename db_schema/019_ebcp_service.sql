@@ -217,8 +217,10 @@ SELECT
                 'name', r.name,
                 'floor', r.floor,
                 'floor_value', (SELECT dict_value FROM o_ops_dict WHERE id = r.floor),
+                'floor_name', (SELECT dict_name FROM o_ops_dict WHERE id = r.floor),
                 'location', r.location,
                 'location_value', (SELECT dict_value FROM o_ops_dict WHERE id = r.location),
+                'location_name', (SELECT dict_name FROM o_ops_dict WHERE id = r.location),
                 'status', r.status
             )
         )
@@ -263,8 +265,10 @@ SELECT
     r.name AS room_name,
     r.floor AS room_floor,
     (SELECT dict_value FROM o_ops_dict WHERE id = r.floor) AS room_floor_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = r.floor) AS room_floor_name,
     r.location AS room_location,
     (SELECT dict_value FROM o_ops_dict WHERE id = r.location) AS room_location_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = r.location) AS room_location_name,
     r.status AS room_status,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
@@ -284,8 +288,10 @@ COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_id IS '展厅ID';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_name IS '展厅名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor IS '展厅楼层';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor_value IS '展厅楼层值';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_floor_name IS '展厅楼层名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location IS '展厅位置';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location_value IS '展厅位置值';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_location_name IS '展厅位置名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.room_status IS '展厅状态';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_room_count IS '展厅总数';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.total_item_count IS '展项总数';
@@ -303,8 +309,10 @@ SELECT
             'name', er.name,
             'floor', er.floor,
             'floor_value', (SELECT dict_value FROM o_ops_dict WHERE id = er.floor),
+            'floor_name', (SELECT dict_name FROM o_ops_dict WHERE id = er.floor),
             'location', er.location,
             'location_value', (SELECT dict_value FROM o_ops_dict WHERE id = er.location),
+            'location_name', (SELECT dict_name FROM o_ops_dict WHERE id = er.location),
             'status', er.status,
             'exhibition_id', er.exhibition_id,
             'exhibition_name', e.name,
@@ -343,8 +351,10 @@ SELECT
     er.name AS name,
     er.floor AS floor,
     (SELECT dict_value FROM o_ops_dict WHERE id = er.floor) AS floor_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.floor) AS floor_name,
     er.location AS location,
     (SELECT dict_value FROM o_ops_dict WHERE id = er.location) AS location_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS location_name,
     er.status AS status,
     er.remarks AS remarks,
     eh.id AS hall_id,
@@ -390,8 +400,10 @@ SELECT
     er.name AS room_name,
     er.floor AS room_floor,
     (SELECT dict_value FROM o_ops_dict WHERE id = er.floor) AS room_floor_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.floor) AS room_floor_name,
     er.location AS room_location,
     (SELECT dict_value FROM o_ops_dict WHERE id = er.location) AS room_location_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS room_location_name,
     eh.id AS hall_id,
     eh.name AS hall_name,
     e.id AS exhibition_id,

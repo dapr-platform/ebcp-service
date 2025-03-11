@@ -746,6 +746,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_name",
+                        "name": "room_floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
                         "in": "query"
@@ -754,6 +760,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_location_value",
                         "name": "room_location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_name",
+                        "name": "room_location_name",
                         "in": "query"
                     },
                     {
@@ -905,6 +917,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_name",
+                        "name": "room_floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
                         "in": "query"
@@ -913,6 +931,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_location_value",
                         "name": "room_location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_name",
+                        "name": "room_location_name",
                         "in": "query"
                     },
                     {
@@ -2047,6 +2071,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_name",
+                        "name": "room_floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
                         "in": "query"
@@ -2055,6 +2085,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_location_value",
                         "name": "room_location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_name",
+                        "name": "room_location_name",
                         "in": "query"
                     },
                     {
@@ -2218,6 +2254,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "room_floor_name",
+                        "name": "room_floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_location",
                         "name": "room_location",
                         "in": "query"
@@ -2226,6 +2268,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_location_value",
                         "name": "room_location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_location_name",
+                        "name": "room_location_name",
                         "in": "query"
                     },
                     {
@@ -2971,6 +3019,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "floor_name",
+                        "name": "floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "location",
                         "name": "location",
                         "in": "query"
@@ -2979,6 +3033,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "location_value",
                         "name": "location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location_name",
+                        "name": "location_name",
                         "in": "query"
                     },
                     {
@@ -3136,6 +3196,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "floor_name",
+                        "name": "floor_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "location",
                         "name": "location",
                         "in": "query"
@@ -3144,6 +3210,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "location_value",
                         "name": "location_value",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "location_name",
+                        "name": "location_name",
                         "in": "query"
                     },
                     {
@@ -6115,6 +6187,10 @@ const docTemplate = `{
                     "description": "展厅楼层",
                     "type": "string"
                 },
+                "room_floor_name": {
+                    "description": "展厅楼层名称",
+                    "type": "string"
+                },
                 "room_floor_value": {
                     "description": "展厅楼层值",
                     "type": "string"
@@ -6129,6 +6205,10 @@ const docTemplate = `{
                 },
                 "room_location": {
                     "description": "展厅位置",
+                    "type": "string"
+                },
+                "room_location_name": {
+                    "description": "展厅位置名称",
                     "type": "string"
                 },
                 "room_location_value": {
@@ -6339,6 +6419,10 @@ const docTemplate = `{
                     "description": "room_floor",
                     "type": "string"
                 },
+                "room_floor_name": {
+                    "description": "room_floor_name",
+                    "type": "string"
+                },
                 "room_floor_value": {
                     "description": "room_floor_value",
                     "type": "string"
@@ -6349,6 +6433,10 @@ const docTemplate = `{
                 },
                 "room_location": {
                     "description": "room_location",
+                    "type": "string"
+                },
+                "room_location_name": {
+                    "description": "room_location_name",
                     "type": "string"
                 },
                 "room_location_value": {
@@ -6452,6 +6540,10 @@ const docTemplate = `{
                     "description": "floor",
                     "type": "string"
                 },
+                "floor_name": {
+                    "description": "floor_name",
+                    "type": "string"
+                },
                 "floor_value": {
                     "description": "floor_value",
                     "type": "string"
@@ -6477,6 +6569,10 @@ const docTemplate = `{
                 },
                 "location": {
                     "description": "location",
+                    "type": "string"
+                },
+                "location_name": {
+                    "description": "location_name",
                     "type": "string"
                 },
                 "location_value": {
