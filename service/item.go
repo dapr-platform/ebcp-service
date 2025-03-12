@@ -11,7 +11,7 @@ import (
 // StartExhibitionItem 启动单个展项
 func StartExhibitionItem(id string) error {
 	// 获取展项信息
-	item,err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
@@ -31,13 +31,13 @@ func StartExhibitionItem(id string) error {
 // StopExhibitionItem 停止单个展项
 func StopExhibitionItem(id string) error {
 	// 获取展项信息
-	item,err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
 	//TODO
 	// 更新展项状态为停止
-	item.Status = 0
+	item.Status = 2
 	err = common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
 	if err != nil {
 		return fmt.Errorf("更新展项状态失败: %v", err)
