@@ -189,7 +189,7 @@ CREATE TABLE o_ebcp_item_schedule (
     created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    exhibition_item_id VARCHAR(32) NOT NULL,
+    item_id VARCHAR(32) NOT NULL,
     start_time TIME NOT NULL,
     stop_time TIME NOT NULL,
     cycle_type INTEGER NOT NULL,
@@ -197,7 +197,7 @@ CREATE TABLE o_ebcp_item_schedule (
 );
 
 COMMENT ON TABLE o_ebcp_item_schedule IS '展项定时任务表';
-COMMENT ON COLUMN o_ebcp_item_schedule.exhibition_item_id IS '展项ID';
+COMMENT ON COLUMN o_ebcp_item_schedule.item_id IS '展项ID';
 COMMENT ON COLUMN o_ebcp_item_schedule.start_time IS '开始时间';
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_time IS '停止时间'; 
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
@@ -461,7 +461,7 @@ SELECT
             'cycle_type', s.cycle_type
         )
         FROM o_ebcp_item_schedule s
-        WHERE s.exhibition_item_id = ei.id
+        WHERE s.item_id = ei.id
         LIMIT 1
     ) AS schedule
 FROM 

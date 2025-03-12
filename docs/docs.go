@@ -4313,8 +4313,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_item_id",
-                        "name": "exhibition_item_id",
+                        "description": "item_id",
+                        "name": "item_id",
                         "in": "query"
                     },
                     {
@@ -4567,8 +4567,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_item_id",
-                        "name": "exhibition_item_id",
+                        "description": "item_id",
+                        "name": "item_id",
                         "in": "query"
                     },
                     {
@@ -6930,12 +6930,12 @@ const docTemplate = `{
                     "description": "循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)",
                     "type": "integer"
                 },
-                "exhibition_item_id": {
-                    "description": "展项ID",
-                    "type": "string"
-                },
                 "id": {
                     "description": "id",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "展项ID",
                     "type": "string"
                 },
                 "start_time": {

@@ -23,7 +23,7 @@ Table: o_ebcp_item_schedule
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
-[ 5] exhibition_item_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 5] item_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 6] start_time                                     TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
 [ 7] stop_time                                      TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
 [ 8] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
@@ -31,7 +31,7 @@ Table: o_ebcp_item_schedule
 
 JSON Sample
 -------------------------------------
-{    "id": "YMvBJDnmbYRnOSMLVXAmxdDXk",    "created_by": "gjJqBviUMekvlojNwsoMfrQoA",    "created_time": 35,    "updated_by": "KDXikPufXhdHjOZIjfldyIVJb",    "updated_time": 39,    "exhibition_item_id": "PgGEaVVBkiRLetahRrDrDDSBe",    "start_time": "2124-11-05T14:11:01.974521398+08:00",    "stop_time": "2204-04-23T04:19:37.551871529+08:00",    "cycle_type": 87}
+{    "id": "uUIVIfSpPIQHNkfCGOupovdNE",    "created_by": "WABxfbtSyIsnKTJdIvToSMODP",    "created_time": 39,    "updated_by": "EmhEeWpyVYNpIlSCsxwTInAVh",    "updated_time": 31,    "item_id": "BQXBlJLcqbEoTonlTFvDriBXi",    "start_time": "2102-05-23T01:26:14.091111862+08:00",    "stop_time": "2295-04-01T08:19:12.006582548+08:00",    "cycle_type": 49}
 
 
 
@@ -48,7 +48,7 @@ var (
 
 	Ebcp_item_schedule_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_item_schedule_FIELD_NAME_exhibition_item_id = "exhibition_item_id"
+	Ebcp_item_schedule_FIELD_NAME_item_id = "item_id"
 
 	Ebcp_item_schedule_FIELD_NAME_start_time = "start_time"
 
@@ -69,7 +69,7 @@ type Ebcp_item_schedule struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	ExhibitionItemID string `json:"exhibition_item_id"` //展项ID
+	ItemID string `json:"item_id"` //展项ID
 
 	StartTime time.Time `json:"start_time"` //开始时间
 
@@ -190,7 +190,7 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "exhibition_item_id",
+			Name:               "item_id",
 			Comment:            `展项ID`,
 			Notes:              ``,
 			Nullable:           false,
@@ -201,10 +201,10 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ExhibitionItemID",
+			GoFieldName:        "ItemID",
 			GoFieldType:        "string",
-			JSONFieldName:      "exhibition_item_id",
-			ProtobufFieldName:  "exhibition_item_id",
+			JSONFieldName:      "item_id",
+			ProtobufFieldName:  "item_id",
 			ProtobufType:       "string",
 			ProtobufPos:        6,
 		},
