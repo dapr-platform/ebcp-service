@@ -24,14 +24,14 @@ Table: o_ebcp_item_schedule
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] item_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 6] start_time                                     TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
-[ 7] stop_time                                      TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
+[ 6] start_time                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] stop_time                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "uUIVIfSpPIQHNkfCGOupovdNE",    "created_by": "WABxfbtSyIsnKTJdIvToSMODP",    "created_time": 39,    "updated_by": "EmhEeWpyVYNpIlSCsxwTInAVh",    "updated_time": 31,    "item_id": "BQXBlJLcqbEoTonlTFvDriBXi",    "start_time": "2102-05-23T01:26:14.091111862+08:00",    "stop_time": "2295-04-01T08:19:12.006582548+08:00",    "cycle_type": 49}
+{    "id": "ggbnLrCwZwiklQYfVjvHKPvuJ",    "created_by": "fXIPZfLTYLNmwACPuLNyHAwSR",    "created_time": 52,    "updated_by": "LQlyZxjaSlIXSkErLmBmyuDdV",    "updated_time": 78,    "item_id": "TIGkKqlYNgQtyfVEHLOsonAMu",    "start_time": "pbMJJisROKwqIuTtwEAyCUIbd",    "stop_time": "gISiofpEAhdYbnrxoDWyqnrxD",    "cycle_type": 22}
 
 
 
@@ -71,9 +71,9 @@ type Ebcp_item_schedule struct {
 
 	ItemID string `json:"item_id"` //展项ID
 
-	StartTime time.Time `json:"start_time"` //开始时间
+	StartTime string `json:"start_time"` //开始时间
 
-	StopTime time.Time `json:"stop_time"` //停止时间
+	StopTime string `json:"stop_time"` //停止时间
 
 	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
 
@@ -215,18 +215,18 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			Comment:            `开始时间`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "TIME",
-			DatabaseTypePretty: "TIME",
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "TIME",
-			ColumnLength:       -1,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
 			GoFieldName:        "StartTime",
-			GoFieldType:        "time.Time",
+			GoFieldType:        "string",
 			JSONFieldName:      "start_time",
 			ProtobufFieldName:  "start_time",
-			ProtobufType:       "google.protobuf.Timestamp",
+			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
 
@@ -236,18 +236,18 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			Comment:            `停止时间`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "TIME",
-			DatabaseTypePretty: "TIME",
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "TIME",
-			ColumnLength:       -1,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
 			GoFieldName:        "StopTime",
-			GoFieldType:        "time.Time",
+			GoFieldType:        "string",
 			JSONFieldName:      "stop_time",
 			ProtobufFieldName:  "stop_time",
-			ProtobufType:       "google.protobuf.Timestamp",
+			ProtobufType:       "string",
 			ProtobufPos:        8,
 		},
 

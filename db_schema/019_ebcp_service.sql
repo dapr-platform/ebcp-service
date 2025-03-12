@@ -190,8 +190,8 @@ CREATE TABLE o_ebcp_item_schedule (
     updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     item_id VARCHAR(32) NOT NULL,
-    start_time TIME NOT NULL,
-    stop_time TIME NOT NULL,
+    start_time VARCHAR(32) NOT NULL,
+    stop_time VARCHAR(32) NOT NULL,
     cycle_type INTEGER NOT NULL,
     PRIMARY KEY (id)
 );
