@@ -190,6 +190,8 @@ CREATE TABLE o_ebcp_item_schedule (
     updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     exhibition_item_id VARCHAR(32) NOT NULL,
+    player_id VARCHAR(32) NOT NULL,
+    program_id VARCHAR(32) NOT NULL,
     schedule_time TIME NOT NULL,
     task_type INTEGER NOT NULL,
     cycle_type INTEGER NOT NULL,
@@ -199,6 +201,8 @@ CREATE TABLE o_ebcp_item_schedule (
 COMMENT ON TABLE o_ebcp_item_schedule IS '展项定时任务表';
 COMMENT ON COLUMN o_ebcp_item_schedule.exhibition_item_id IS '展项ID';
 COMMENT ON COLUMN o_ebcp_item_schedule.schedule_time IS '任务时间';
+COMMENT ON COLUMN o_ebcp_item_schedule.player_id IS '播放器id';
+COMMENT ON COLUMN o_ebcp_item_schedule.program_id IS '节目id';
 COMMENT ON COLUMN o_ebcp_item_schedule.task_type IS '任务类型(1: 启动, 2: 停止)';
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
 
@@ -459,7 +463,9 @@ SELECT
                 'schedule_id', s.id,
                 'schedule_time', s.schedule_time,
                 'task_type', s.task_type,
-                'cycle_type', s.cycle_type
+                'cycle_type', s.cycle_type,
+                'player_id', s.player_id,
+                'program_id', s.program_id
             )
         )
         FROM o_ebcp_item_schedule s

@@ -4319,6 +4319,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "schedule_time",
                         "name": "schedule_time",
                         "in": "query"
@@ -4569,6 +4581,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "exhibition_item_id",
                         "name": "exhibition_item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
                         "in": "query"
                     },
                     {
@@ -6936,6 +6960,14 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "id",
+                    "type": "string"
+                },
+                "player_id": {
+                    "description": "播放器id",
+                    "type": "string"
+                },
+                "program_id": {
+                    "description": "节目id",
                     "type": "string"
                 },
                 "schedule_time": {

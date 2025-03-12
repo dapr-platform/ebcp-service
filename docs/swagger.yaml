@@ -438,6 +438,12 @@ definitions:
       id:
         description: id
         type: string
+      player_id:
+        description: 播放器id
+        type: string
+      program_id:
+        description: 节目id
+        type: string
       schedule_time:
         description: 任务时间
         type: string
@@ -3297,6 +3303,14 @@ paths:
         in: query
         name: exhibition_item_id
         type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
+        type: string
       - description: schedule_time
         in: query
         name: schedule_time
@@ -3487,6 +3501,14 @@ paths:
       - description: exhibition_item_id
         in: query
         name: exhibition_item_id
+        type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
         type: string
       - description: schedule_time
         in: query
