@@ -459,12 +459,72 @@ JOIN
 
 COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）';
 
+-- 播放设备详细视图
+CREATE VIEW v_ebcp_player_info AS
+SELECT 
+    p.id AS id,
+    p.name AS name,
+    p.ip_address AS ip_address,
+    p.port AS port,
+    p.version AS version,
+    p.status AS status,
+    ei.id AS item_id,
+    ei.name AS item_name,
+    ei.type AS item_type,
+    er.id AS room_id,
+    er.name AS room_name,
+    er.floor AS room_floor,
+    (SELECT dict_value FROM o_ops_dict WHERE id = er.floor) AS room_floor_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.floor) AS room_floor_name,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', pp.id,
+                'name', pp.name,
+                'program_id', pp.program_id,
+                'program_index', pp.program_index
+            )
+        )
+        FROM o_ebcp_player_program pp
+        WHERE pp.player_id = p.id
+    ) AS programs
+FROM 
+    o_ebcp_player p
+LEFT JOIN 
+    o_ebcp_exhibition_item ei ON p.item_id = ei.id
+LEFT JOIN 
+    o_ebcp_exhibition_room er ON ei.room_id = er.id
+LEFT JOIN 
+    o_ebcp_exhibition e ON ei.exhibition_id = e.id;
+
+COMMENT ON VIEW v_ebcp_player_info IS '播放设备详细视图，包含设备信息及其关联的展项、展厅、展览和节目信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_player_info.id IS '设备ID';
+COMMENT ON COLUMN v_ebcp_player_info.name IS '设备名称';
+COMMENT ON COLUMN v_ebcp_player_info.ip_address IS 'IP地址';
+COMMENT ON COLUMN v_ebcp_player_info.port IS '端口';
+COMMENT ON COLUMN v_ebcp_player_info.version IS '版本';
+COMMENT ON COLUMN v_ebcp_player_info.status IS '状态';
+COMMENT ON COLUMN v_ebcp_player_info.item_id IS '所属展项ID';
+COMMENT ON COLUMN v_ebcp_player_info.item_name IS '所属展项名称';
+COMMENT ON COLUMN v_ebcp_player_info.item_type IS '所属展项类型';
+COMMENT ON COLUMN v_ebcp_player_info.room_id IS '所属展厅ID';
+COMMENT ON COLUMN v_ebcp_player_info.room_name IS '所属展厅名称';
+COMMENT ON COLUMN v_ebcp_player_info.room_floor IS '所属展厅楼层';
+COMMENT ON COLUMN v_ebcp_player_info.room_floor_value IS '所属展厅楼层值';
+COMMENT ON COLUMN v_ebcp_player_info.room_floor_name IS '所属展厅楼层名称';
+COMMENT ON COLUMN v_ebcp_player_info.exhibition_id IS '所属展览ID';
+COMMENT ON COLUMN v_ebcp_player_info.exhibition_name IS '所属展览名称';
+COMMENT ON COLUMN v_ebcp_player_info.programs IS '关联的节目信息';
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
 
+DROP VIEW IF EXISTS v_ebcp_player_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_item_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_room_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_hall_info;
