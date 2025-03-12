@@ -11,7 +11,7 @@ import (
 // StartExhibitionItem 启动单个展项
 func StartExhibitionItem(id string) error {
 	// 获取展项信息
-	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "id="+id)
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
@@ -31,7 +31,7 @@ func StartExhibitionItem(id string) error {
 // StopExhibitionItem 停止单个展项
 func StopExhibitionItem(id string) error {
 	// 获取展项信息
-	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, id+"="+id)
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "id="+id)
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
