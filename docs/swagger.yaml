@@ -438,18 +438,12 @@ definitions:
       id:
         description: id
         type: string
-      player_id:
-        description: 播放器id
+      start_time:
+        description: 开始时间
         type: string
-      program_id:
-        description: 节目id
+      stop_time:
+        description: 停止时间
         type: string
-      schedule_time:
-        description: 任务时间
-        type: string
-      task_type:
-        description: '任务类型(1: 启动, 2: 停止)'
-        type: integer
       updated_by:
         description: updated_by
         type: string
@@ -3303,21 +3297,13 @@ paths:
         in: query
         name: exhibition_item_id
         type: string
-      - description: player_id
+      - description: start_time
         in: query
-        name: player_id
+        name: start_time
         type: string
-      - description: program_id
+      - description: stop_time
         in: query
-        name: program_id
-        type: string
-      - description: schedule_time
-        in: query
-        name: schedule_time
-        type: string
-      - description: task_type
-        in: query
-        name: task_type
+        name: stop_time
         type: string
       - description: cycle_type
         in: query
@@ -3502,21 +3488,13 @@ paths:
         in: query
         name: exhibition_item_id
         type: string
-      - description: player_id
+      - description: start_time
         in: query
-        name: player_id
+        name: start_time
         type: string
-      - description: program_id
+      - description: stop_time
         in: query
-        name: program_id
-        type: string
-      - description: schedule_time
-        in: query
-        name: schedule_time
-        type: string
-      - description: task_type
-        in: query
-        name: task_type
+        name: stop_time
         type: string
       - description: cycle_type
         in: query

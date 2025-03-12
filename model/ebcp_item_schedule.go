@@ -24,16 +24,14 @@ Table: o_ebcp_item_schedule
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 5] exhibition_item_id                             VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 6] player_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 7] program_id                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 8] schedule_time                                  TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
-[ 9] task_type                                      INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[10] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 6] start_time                                     TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
+[ 7] stop_time                                      TIME                 null: false  primary: false  isArray: false  auto: false  col: TIME            len: -1      default: []
+[ 8] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "hwxqftfUqpOjZURcNShEZUwxh",    "created_by": "XXKjZXOXUWbsjDpQLnvwfgUub",    "created_time": 44,    "updated_by": "fmgEvkbFtgyYYmQdsiRaKTWva",    "updated_time": 31,    "exhibition_item_id": "hnvKKiAPvXWvBTsXWMmEaQKcB",    "player_id": "fycwZGWVUaXYTSWWhMIetmNBk",    "program_id": "FgVOmrppUctSHJxtNTbpyhAKu",    "schedule_time": "2313-10-06T17:52:10.723699699+08:00",    "task_type": 42,    "cycle_type": 85}
+{    "id": "NRDbTeLjQdgCAGkexSBkjhCCh",    "created_by": "lemNeCCqVUJPgAXoWUtSChMWN",    "created_time": 79,    "updated_by": "uFWjvueGGFLSYXFVeyxHkoPYL",    "updated_time": 63,    "exhibition_item_id": "lZDIGOxghPhbIjPCiuGUVHBhc",    "start_time": "2150-09-18T09:52:44.197098815+08:00",    "stop_time": "2217-06-10T17:56:50.932742427+08:00",    "cycle_type": 8}
 
 
 
@@ -52,13 +50,9 @@ var (
 
 	Ebcp_item_schedule_FIELD_NAME_exhibition_item_id = "exhibition_item_id"
 
-	Ebcp_item_schedule_FIELD_NAME_player_id = "player_id"
+	Ebcp_item_schedule_FIELD_NAME_start_time = "start_time"
 
-	Ebcp_item_schedule_FIELD_NAME_program_id = "program_id"
-
-	Ebcp_item_schedule_FIELD_NAME_schedule_time = "schedule_time"
-
-	Ebcp_item_schedule_FIELD_NAME_task_type = "task_type"
+	Ebcp_item_schedule_FIELD_NAME_stop_time = "stop_time"
 
 	Ebcp_item_schedule_FIELD_NAME_cycle_type = "cycle_type"
 )
@@ -77,13 +71,9 @@ type Ebcp_item_schedule struct {
 
 	ExhibitionItemID string `json:"exhibition_item_id"` //展项ID
 
-	PlayerID string `json:"player_id"` //播放器id
+	StartTime time.Time `json:"start_time"` //开始时间
 
-	ProgramID string `json:"program_id"` //节目id
-
-	ScheduleTime time.Time `json:"schedule_time"` //任务时间
-
-	TaskType int32 `json:"task_type"` //任务类型(1: 启动, 2: 停止)
+	StopTime time.Time `json:"stop_time"` //停止时间
 
 	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
 
@@ -221,50 +211,8 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "player_id",
-			Comment:            `播放器id`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "PlayerID",
-			GoFieldType:        "string",
-			JSONFieldName:      "player_id",
-			ProtobufFieldName:  "player_id",
-			ProtobufType:       "string",
-			ProtobufPos:        7,
-		},
-
-		&ColumnInfo{
-			Index:              7,
-			Name:               "program_id",
-			Comment:            `节目id`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "ProgramID",
-			GoFieldType:        "string",
-			JSONFieldName:      "program_id",
-			ProtobufFieldName:  "program_id",
-			ProtobufType:       "string",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "schedule_time",
-			Comment:            `任务时间`,
+			Name:               "start_time",
+			Comment:            `开始时间`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "TIME",
@@ -274,37 +222,37 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "TIME",
 			ColumnLength:       -1,
-			GoFieldName:        "ScheduleTime",
+			GoFieldName:        "StartTime",
 			GoFieldType:        "time.Time",
-			JSONFieldName:      "schedule_time",
-			ProtobufFieldName:  "schedule_time",
+			JSONFieldName:      "start_time",
+			ProtobufFieldName:  "start_time",
 			ProtobufType:       "google.protobuf.Timestamp",
-			ProtobufPos:        9,
+			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
-			Index:              9,
-			Name:               "task_type",
-			Comment:            `任务类型(1: 启动, 2: 停止)`,
+			Index:              7,
+			Name:               "stop_time",
+			Comment:            `停止时间`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "INT4",
-			DatabaseTypePretty: "INT4",
+			DatabaseTypeName:   "TIME",
+			DatabaseTypePretty: "TIME",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "INT4",
+			ColumnType:         "TIME",
 			ColumnLength:       -1,
-			GoFieldName:        "TaskType",
-			GoFieldType:        "int32",
-			JSONFieldName:      "task_type",
-			ProtobufFieldName:  "task_type",
-			ProtobufType:       "int32",
-			ProtobufPos:        10,
+			GoFieldName:        "StopTime",
+			GoFieldType:        "time.Time",
+			JSONFieldName:      "stop_time",
+			ProtobufFieldName:  "stop_time",
+			ProtobufType:       "google.protobuf.Timestamp",
+			ProtobufPos:        8,
 		},
 
 		&ColumnInfo{
-			Index:              10,
+			Index:              8,
 			Name:               "cycle_type",
 			Comment:            `循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)`,
 			Notes:              ``,
@@ -321,7 +269,7 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			JSONFieldName:      "cycle_type",
 			ProtobufFieldName:  "cycle_type",
 			ProtobufType:       "int32",
-			ProtobufPos:        11,
+			ProtobufPos:        9,
 		},
 	},
 }

@@ -4319,26 +4319,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "player_id",
-                        "name": "player_id",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "program_id",
-                        "name": "program_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "schedule_time",
-                        "name": "schedule_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "task_type",
-                        "name": "task_type",
+                        "description": "stop_time",
+                        "name": "stop_time",
                         "in": "query"
                     },
                     {
@@ -4585,26 +4573,14 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "player_id",
-                        "name": "player_id",
+                        "description": "start_time",
+                        "name": "start_time",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "program_id",
-                        "name": "program_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "schedule_time",
-                        "name": "schedule_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "task_type",
-                        "name": "task_type",
+                        "description": "stop_time",
+                        "name": "stop_time",
                         "in": "query"
                     },
                     {
@@ -6962,21 +6938,13 @@ const docTemplate = `{
                     "description": "id",
                     "type": "string"
                 },
-                "player_id": {
-                    "description": "播放器id",
+                "start_time": {
+                    "description": "开始时间",
                     "type": "string"
                 },
-                "program_id": {
-                    "description": "节目id",
+                "stop_time": {
+                    "description": "停止时间",
                     "type": "string"
-                },
-                "schedule_time": {
-                    "description": "任务时间",
-                    "type": "string"
-                },
-                "task_type": {
-                    "description": "任务类型(1: 启动, 2: 停止)",
-                    "type": "integer"
                 },
                 "updated_by": {
                     "description": "updated_by",
