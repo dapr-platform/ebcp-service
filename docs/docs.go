@@ -2107,8 +2107,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "schedules",
-                        "name": "schedules",
+                        "description": "schedule",
+                        "name": "schedule",
                         "in": "query"
                     }
                 ],
@@ -2284,8 +2284,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "schedules",
-                        "name": "schedules",
+                        "description": "schedule",
+                        "name": "schedule",
                         "in": "query"
                     }
                 ],
@@ -6736,8 +6736,8 @@ const docTemplate = `{
                     "description": "room_name",
                     "type": "string"
                 },
-                "schedules": {
-                    "description": "schedules"
+                "schedule": {
+                    "description": "schedule"
                 },
                 "status": {
                     "description": "status",

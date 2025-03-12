@@ -290,8 +290,8 @@ definitions:
       room_name:
         description: room_name
         type: string
-      schedules:
-        description: schedules
+      schedule:
+        description: schedule
       status:
         description: status
         type: integer
@@ -1893,9 +1893,9 @@ paths:
         in: query
         name: control_devices
         type: string
-      - description: schedules
+      - description: schedule
         in: query
-        name: schedules
+        name: schedule
         type: string
       produces:
       - application/json
@@ -2009,9 +2009,9 @@ paths:
         in: query
         name: control_devices
         type: string
-      - description: schedules
+      - description: schedule
         in: query
-        name: schedules
+        name: schedule
         type: string
       produces:
       - application/json

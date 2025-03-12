@@ -31,7 +31,7 @@ Table: o_ebcp_item_device_relation
 
 JSON Sample
 -------------------------------------
-{    "id": "XgBJkQXWWNinUEBCdAAJocbks",    "created_by": "jVchMZDlhRTiXeGvhuqDYBFCT",    "created_time": 49,    "updated_by": "ojMiJyQYjdtiTwCueFSdoVTrZ",    "updated_time": 35,    "exhibition_item_id": "iujhYnaTOeNXGmPllpfKlVBKR",    "device_type": 27,    "device_sub_type": "KcPMQwMgayXOfbAApVViRMqcD",    "device_id": "BiIkMIwHsKZBRonaKLKNcCMUl"}
+{    "id": "JORdBrvCKeYHLUMZeSLfQpxrJ",    "created_by": "GSAsMDHqVpJRRsDbAwdNhUMUN",    "created_time": 5,    "updated_by": "msCRxQwvOYNMMTpEqpBXUomqu",    "updated_time": 31,    "exhibition_item_id": "qRDsOvTQKXrXCIVEAtttqyjDM",    "device_type": 63,    "device_sub_type": "hRXXUTkIyoPApgqLRCaMhmHLv",    "device_id": "qaaGRqjxqrfttxlDAotGDBQVe"}
 
 
 

@@ -173,8 +173,20 @@ INSERT INTO o_ebcp_player (
 ) VALUES
     -- B1层播放设备
     (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40306, 1, md5('九五枪族'));
--- +goose StatementEnd
 
+-- 初始化播放器节目数据
+INSERT INTO o_ebcp_player_program (
+    id, created_by, created_time, updated_by, updated_time,
+    name, player_id, program_id, program_index
+) VALUES
+    (md5('program1'), 'admin', NOW(), 'admin', NOW(), '九五枪族视频1', md5('player_B1_west_1'), '1', 1),
+    (md5('program2'), 'admin', NOW(), 'admin', NOW(), '九五枪族视频2', md5('player_B1_west_1'), '2', 2),
+    (md5('program3'), 'admin', NOW(), 'admin', NOW(), '九五枪族视频3', md5('player_B1_west_1'), '3', 3),
+    (md5('program4'), 'admin', NOW(), 'admin', NOW(), '九五枪族图片展示', md5('player_B1_west_1'), '4', 4),
+    (md5('program5'), 'admin', NOW(), 'admin', NOW(), '九五枪族3D模型', md5('player_B1_west_1'), '5', 5);
+
+-- +goose StatementEnd
+ 
 -- +goose Down
 -- +goose StatementBegin
 DELETE FROM o_ebcp_player_program;

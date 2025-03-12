@@ -2100,8 +2100,8 @@
                     },
                     {
                         "type": "string",
-                        "description": "schedules",
-                        "name": "schedules",
+                        "description": "schedule",
+                        "name": "schedule",
                         "in": "query"
                     }
                 ],
@@ -2277,8 +2277,8 @@
                     },
                     {
                         "type": "string",
-                        "description": "schedules",
-                        "name": "schedules",
+                        "description": "schedule",
+                        "name": "schedule",
                         "in": "query"
                     }
                 ],
@@ -6729,8 +6729,8 @@
                     "description": "room_name",
                     "type": "string"
                 },
-                "schedules": {
-                    "description": "schedules"
+                "schedule": {
+                    "description": "schedule"
                 },
                 "status": {
                     "description": "status",

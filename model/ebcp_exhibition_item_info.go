@@ -36,12 +36,12 @@ Table: v_ebcp_exhibition_item_info
 [15] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [16] player_devices                                 JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 [17] control_devices                                JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
-[18] schedules                                      JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[18] schedule                                       JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "MqMKHuaCugyaiacweLjkRZJJQ",    "name": "gcuJoxCKpVeasZowkhZobMkrh",    "type": "kTsxGcStYBYlmVoAmIWaLkyhO",    "status": 88,    "remarks": "TwLXiKlhVMdHBGOFvJXBkHweI",    "export_info": "RmAFGhtXpqEYlKNqHRyOOZGBU",    "room_id": "beeDZsoFroDUkVpaIEQEirNea",    "room_name": "ybZYLkwGjnNLBjHZwZLtxrJEd",    "room_floor": "IsKFnMFSsSEjjVbIwjsYplBkZ",    "room_floor_value": "ZHYRmIdiqMWucSBSaiZYIXMBx",    "room_floor_name": "ELxfoEnWTEOOVaFEHwZVGwhHO",    "room_location": "XiEUXGokXGxFIsouKbHPtyYrF",    "room_location_value": "EisLjLhERfwyimmwrlaikHjXf",    "room_location_name": "ebBFNSFIgLBUnVdbjVUuMmnle",    "exhibition_id": "jvyOMRGPvcPVYfNCFfRdGvtIs",    "exhibition_name": "tocDQFXiwaXNpWlSPONowlVic",    "player_devices": 63,    "control_devices": 76,    "schedules": 33}
+{    "id": "qtxWsMGmSkeHmroosHVvmZJRn",    "name": "tiUxQlKktqrBNUGqXXrsehBpu",    "type": "REqTuuZNQCUwJIanfHRKEGxqT",    "status": 76,    "remarks": "xPlIYlHGKbvVJELwwvAWrQDbH",    "export_info": "SROjbGmOsmTWdbkGmpjOQppqq",    "room_id": "TkpMrSHhOPepHwwKVBXXyxVQf",    "room_name": "fttjTydejWTnhoASMkjwPGTYZ",    "room_floor": "QWONFcmjeAxCZZDmcEBWkUcHd",    "room_floor_value": "wACVpfBuknOiWNPkTTOrJJxrw",    "room_floor_name": "MbJVeloPOuEtuxcvuBnDZCLcK",    "room_location": "eIudMGSJmioFgVSZELNCBMBUu",    "room_location_value": "gWEFmGgsLEMLgEvROdNEneIod",    "room_location_name": "aNSAoCRbxEaDffwuuwOtdRiRT",    "exhibition_id": "XDMmNYfxaRoJZiatOjIeWqRmN",    "exhibition_name": "PqHUXRqOxnlJMtwEEGneMrEwr",    "player_devices": 41,    "control_devices": 75,    "schedule": 49}
 
 
 Comments
@@ -91,7 +91,7 @@ var (
 
 	Ebcp_exhibition_item_info_FIELD_NAME_control_devices = "control_devices"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_schedules = "schedules"
+	Ebcp_exhibition_item_info_FIELD_NAME_schedule = "schedule"
 )
 
 // Ebcp_exhibition_item_info struct is a row record of the v_ebcp_exhibition_item_info table in the  database
@@ -132,7 +132,7 @@ type Ebcp_exhibition_item_info struct {
 
 	ControlDevices any `json:"control_devices"` //control_devices
 
-	Schedules any `json:"schedules"` //schedules
+	Schedule any `json:"schedule"` //schedule
 
 }
 
@@ -522,8 +522,8 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 
 		&ColumnInfo{
 			Index:              18,
-			Name:               "schedules",
-			Comment:            `schedules`,
+			Name:               "schedule",
+			Comment:            `schedule`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -533,10 +533,10 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 			IsArray:            false,
 			ColumnType:         "JSON",
 			ColumnLength:       -1,
-			GoFieldName:        "Schedules",
+			GoFieldName:        "Schedule",
 			GoFieldType:        "any",
-			JSONFieldName:      "schedules",
-			ProtobufFieldName:  "schedules",
+			JSONFieldName:      "schedule",
+			ProtobufFieldName:  "schedule",
 			ProtobufType:       "string",
 			ProtobufPos:        19,
 		},

@@ -454,17 +454,16 @@ SELECT
         WHERE cd.item_id = ei.id
     ) AS control_devices,
     (
-        SELECT json_agg(
-            json_build_object(
-                'schedule_id', s.id,
-                'start_time', s.start_time,
-                'stop_time', s.stop_time,
-                'cycle_type', s.cycle_type
-            )
+        SELECT json_build_object(
+            'schedule_id', s.id,
+            'start_time', s.start_time,
+            'stop_time', s.stop_time,
+            'cycle_type', s.cycle_type
         )
         FROM o_ebcp_item_schedule s
         WHERE s.exhibition_item_id = ei.id
-    ) AS schedules
+        LIMIT 1
+    ) AS schedule
 FROM 
     o_ebcp_exhibition_item ei
 JOIN 
