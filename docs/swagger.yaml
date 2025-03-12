@@ -459,6 +459,9 @@ definitions:
       created_time:
         description: created_time
         type: string
+      current_program_id:
+        description: 当前节目ID
+        type: string
       id:
         description: id
         type: string
@@ -3575,6 +3578,10 @@ paths:
         in: query
         name: item_id
         type: string
+      - description: current_program_id
+        in: query
+        name: current_program_id
+        type: string
       - description: status
         in: query
         name: status
@@ -4545,6 +4552,10 @@ paths:
       - description: item_id
         in: query
         name: item_id
+        type: string
+      - description: current_program_id
+        in: query
+        name: current_program_id
         type: string
       - description: status
         in: query

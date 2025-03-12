@@ -32,7 +32,7 @@ Table: o_ebcp_control_device
 
 JSON Sample
 -------------------------------------
-{    "id": "BEGWNNXTUfoapGalFpEyaoBDY",    "created_by": "beLooQHpFaxNUDnEmaovUUAwF",    "created_time": 78,    "updated_by": "EaXEXtdIRhGiQSxrQmLRJJBRc",    "updated_time": 81,    "name": "jHrHHsWFbKgHCvrMpnlSIxevB",    "device_type": "aonccxtGUYZKGrlvSrppaUqRC",    "item_id": "gqacnfvtddULkMwNIQglnKYbR",    "room_id": "gyRWypOfNbHdMWdrsZBtPmwDU",    "status": 80}
+{    "id": "hUdDYwMtNdDECmJOCibdFJVeh",    "created_by": "bcIulaKDybkYfoMgdyYTnQBJu",    "created_time": 89,    "updated_by": "PCOhdMjYtoOhnYjuIVdKdMmvD",    "updated_time": 26,    "name": "vkeotpDAwEXyBMIGxhWPYssYS",    "device_type": "bGUZGyKpfxKXkiXSXdCUcwhuJ",    "item_id": "ZmkcwOJPirCSNFxmkJTdInkgf",    "room_id": "XDlncgIKlgxIIeTIsvDdXJByh",    "status": 38}
 
 
 

@@ -4765,6 +4765,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "current_program_id",
+                        "name": "current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -5783,6 +5789,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_id",
                         "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_id",
+                        "name": "current_program_id",
                         "in": "query"
                     },
                     {
@@ -6953,6 +6965,10 @@ const docTemplate = `{
                 },
                 "created_time": {
                     "description": "created_time",
+                    "type": "string"
+                },
+                "current_program_id": {
+                    "description": "当前节目ID",
                     "type": "string"
                 },
                 "id": {

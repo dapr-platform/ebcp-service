@@ -106,6 +106,7 @@ CREATE TABLE o_ebcp_player (
     port INTEGER NOT NULL,
     version VARCHAR(255),
     item_id VARCHAR(32),
+    current_program_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
@@ -116,6 +117,7 @@ COMMENT ON COLUMN o_ebcp_player.ip_address IS 'IP地址';
 COMMENT ON COLUMN o_ebcp_player.port IS '端口';
 COMMENT ON COLUMN o_ebcp_player.version IS '版本';
 COMMENT ON COLUMN o_ebcp_player.item_id IS '所属展项ID';
+COMMENT ON COLUMN o_ebcp_player.current_program_id IS '当前节目ID';
 COMMENT ON COLUMN o_ebcp_player.status IS '状态（1: 正常, 2: 离线, 3: 故障）';
 
 -- 播放设备节目表
@@ -421,6 +423,7 @@ SELECT
                 'ip_address', p.ip_address,
                 'port', p.port,
                 'status', p.status,
+                'current_program_id', p.current_program_id,
                 'programs', (
                     SELECT json_agg(
                         json_build_object(

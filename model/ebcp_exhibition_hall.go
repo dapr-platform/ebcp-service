@@ -29,7 +29,7 @@ Table: o_ebcp_exhibition_hall
 
 JSON Sample
 -------------------------------------
-{    "id": "YVXOAqHsAhNRUhiRbkbEqyBqy",    "created_by": "mVDNjPPfeihogNpBLLPXPPYMo",    "created_time": 83,    "updated_by": "hsoxELaugEKPTuiUndQmoriwf",    "updated_time": 36,    "name": "NuDvubINsYJJxjLwXmVdsnYER",    "remarks": "AiPAsyURfKQvytQjHLWFYdEeC"}
+{    "id": "XmpKELxCuENSZpCJrsShayTCq",    "created_by": "tACIEolZXkSbbtSVgDUSLSiry",    "created_time": 93,    "updated_by": "ApwHKrPjBXQCDMmCnGIOMMJPA",    "updated_time": 87,    "name": "NwsgBJBExqPjeSmmrtGvsxfBL",    "remarks": "nTcVemZNBMvapPjyARjBxCEBI"}
 
 
 
