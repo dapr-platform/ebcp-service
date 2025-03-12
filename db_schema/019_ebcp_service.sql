@@ -420,7 +420,19 @@ SELECT
                 'device_type', 'player',
                 'ip_address', p.ip_address,
                 'port', p.port,
-                'status', p.status
+                'status', p.status,
+                'programs', (
+                    SELECT json_agg(
+                        json_build_object(
+                            'id', pp.id,
+                            'name', pp.name,
+                            'program_id', pp.program_id,
+                            'program_index', pp.program_index
+                        )
+                    )
+                    FROM o_ebcp_player_program pp
+                    WHERE pp.player_id = p.id
+                )
             )
         )
         FROM o_ebcp_player p
