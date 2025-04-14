@@ -77,10 +77,15 @@ func updatePlayerPrograms() {
 				}
 				addedMap := make(map[string]bool)
 
+				firstProgramId:=""
+
 				// Insert new programs
 				for _, program := range programs.Programs {
 					if program.IsEmpty {
 						continue
+					}
+					if firstProgramId == "" {
+						firstProgramId = cast.ToString(program.ID)
 					}
 					playerProgram := model.Ebcp_player_program{
 						ID:          common.GetMD5Hash(id + "_" + cast.ToString(program.ID)),
@@ -109,6 +114,27 @@ func updatePlayerPrograms() {
 						}
 					}
 				}
+
+				if firstProgramId != "" {
+					player,err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+						model.Ebcp_playerTableInfo.Name, "id="+id)
+					if err != nil {
+						common.Logger.Errorf("Failed to get player %s: %v", id, err)
+						return
+					}
+					if player == nil {
+						common.Logger.Errorf("Player %s not found", id)
+						return
+					}
+					if player.CurrentProgramID == "" {
+						player.CurrentProgramID = firstProgramId
+						err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+						if err != nil {
+							common.Logger.Errorf("Failed to update player %s current program id: %v", id, err)
+						}
+					}
+				}
+
 			}(playerId, playerClient)
 		}
 		playerMu.RUnlock()

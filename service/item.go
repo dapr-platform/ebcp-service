@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/dapr-platform/common"
+	"github.com/spf13/cast"
 )
 
 // StartExhibitionItem 启动单个展项
@@ -15,8 +16,28 @@ func StartExhibitionItem(id string) error {
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
+	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+id)
+	if err != nil {
+		return fmt.Errorf("获取播放设备信息失败: %v", err)
+	}
+	for _, player := range players {
+		if player.CurrentProgramID == "" {
+			common.Logger.Errorf("播放设备 %s 没有当前节目", player.ID)
+			continue
+		}
+		client := GetPlayerClient(player.ID)
+		if client == nil {
+			common.Logger.Errorf("播放设备 %s 未找到", player.ID)
+			continue
+		}
 
-	//TODO
+		err = client.PlayProgram(cast.ToUint32(player.CurrentProgramID))
+		if err != nil {
+			common.Logger.Errorf("播放设备 %s 播放节目失败: %v", player.ID, err)
+			continue
+		}
+
+	}
 
 	// 更新展项状态为启动
 	item.Status = 1
@@ -35,7 +56,28 @@ func StopExhibitionItem(id string) error {
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
-	//TODO
+	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+id)
+	if err != nil {
+		return fmt.Errorf("获取播放设备信息失败: %v", err)
+	}
+	for _, player := range players {
+		if player.CurrentProgramID == "" {
+			common.Logger.Errorf("播放设备 %s 没有当前节目", player.ID)
+			continue
+		}
+		client := GetPlayerClient(player.ID)
+		if client == nil {
+			common.Logger.Errorf("播放设备 %s 未找到", player.ID)
+			continue
+		}
+
+		err = client.StopProgram(cast.ToUint32(player.CurrentProgramID))
+		if err != nil {
+			common.Logger.Errorf("播放设备 %s 播放节目失败: %v", player.ID, err)
+			continue
+		}
+
+	}
 	// 更新展项状态为停止
 	item.Status = 2
 	err = common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
