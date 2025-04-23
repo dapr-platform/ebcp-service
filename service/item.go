@@ -17,6 +17,9 @@ func StartExhibitionItem(id string) error {
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
+	if item == nil {
+		return fmt.Errorf("展项不存在")
+	}
 	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+id)
 	if err != nil {
 		return fmt.Errorf("获取播放设备信息失败: %v", err)
@@ -62,6 +65,9 @@ func StopExhibitionItem(id string) error {
 	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "id="+id)
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
+	}
+	if item == nil {
+		return fmt.Errorf("展项不存在")
 	}
 	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+id)
 	if err != nil {
