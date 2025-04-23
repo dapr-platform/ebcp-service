@@ -20,18 +20,18 @@ COMMENT ON COLUMN o_ebcp_exhibition_hall.remarks IS '备注';
 
 -- 展览表
 CREATE TABLE o_ebcp_exhibition (
-    id VARCHAR(32) NOT NULL,
-    created_by VARCHAR(32) NOT NULL,
+                               id VARCHAR(32) NOT NULL,
+                               created_by VARCHAR(32) NOT NULL,
     created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(32) NOT NULL,
+                               updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    name VARCHAR(255) NOT NULL,
+                               name VARCHAR(255) NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     remarks TEXT,
     hall_id VARCHAR(32) NOT NULL,
     status INTEGER NOT NULL DEFAULT 1,
-    PRIMARY KEY (id)
+                               PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_exhibition IS '展览表';
@@ -44,10 +44,10 @@ COMMENT ON COLUMN o_ebcp_exhibition.status IS '状态（1: 运行中, 2: 筹备�
 
 -- 展厅表
 CREATE TABLE o_ebcp_exhibition_room (
-    id VARCHAR(32) NOT NULL,
-    created_by VARCHAR(32) NOT NULL,
+                                        id VARCHAR(32) NOT NULL,
+                                        created_by VARCHAR(32) NOT NULL,
     created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(32) NOT NULL,
+                                        updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(32) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE o_ebcp_exhibition_room (
     exhibition_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
     remarks TEXT,
-    PRIMARY KEY (id)
+                                        PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_exhibition_room IS '展厅表';
@@ -70,10 +70,10 @@ COMMENT ON COLUMN o_ebcp_exhibition_room.remarks IS '备注';
 
 -- 展项表
 CREATE TABLE o_ebcp_exhibition_item (
-    id VARCHAR(32) NOT NULL,
-    created_by VARCHAR(32) NOT NULL,
+                                       id VARCHAR(32) NOT NULL,
+                                       created_by VARCHAR(32) NOT NULL,
     created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(32) NOT NULL,
+                                       updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     exhibition_id VARCHAR(32) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE o_ebcp_exhibition_item (
     export_info TEXT,
     status INTEGER NOT NULL DEFAULT 1,
     remarks TEXT,
-    PRIMARY KEY (id)
+                                       PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_exhibition_item IS '展项表';
@@ -143,16 +143,16 @@ COMMENT ON COLUMN o_ebcp_player_program.program_index IS '节目序号';
 -- 中控设备表
 CREATE TABLE o_ebcp_control_device (
     id VARCHAR(32) NOT NULL,
-    created_by VARCHAR(32) NOT NULL,
+                                     created_by VARCHAR(32) NOT NULL,
     created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_by VARCHAR(32) NOT NULL,
+                                     updated_by VARCHAR(32) NOT NULL,
     updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name VARCHAR(255) NOT NULL,
     device_type VARCHAR(50) NOT NULL,
     item_id VARCHAR(32),
     room_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
-    PRIMARY KEY (id)
+                                     PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_control_device IS '中控设备表';
@@ -173,7 +173,7 @@ CREATE TABLE o_ebcp_item_device_relation (
     device_type INTEGER NOT NULL,
     device_sub_type VARCHAR(50),
     device_id VARCHAR(32) NOT NULL,
-    PRIMARY KEY (id)
+                                     PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_item_device_relation IS '展项关联配置表';
@@ -193,7 +193,7 @@ CREATE TABLE o_ebcp_item_schedule (
     start_time VARCHAR(32) NOT NULL,
     stop_time VARCHAR(32) NOT NULL,
     cycle_type INTEGER NOT NULL,
-    PRIMARY KEY (id)
+                                       PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE o_ebcp_item_schedule IS '展项定时任务表';
