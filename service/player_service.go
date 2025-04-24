@@ -66,7 +66,11 @@ func updatePlayerPrograms() {
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
+	common.Logger.Info("启动播放器程序更新定时任务")
+
 	for range ticker.C {
+		common.Logger.Info("开始执行播放器程序更新")
+
 		// 复制当前客户端映射，避免长时间持有锁
 		clientsCopy := make(map[string]*client.PlayerClient)
 		playerMu.RLock()
@@ -75,22 +79,39 @@ func updatePlayerPrograms() {
 		}
 		playerMu.RUnlock()
 
+		playerCount := len(clientsCopy)
+		common.Logger.Infof("当前共有 %d 个播放器需要更新", playerCount)
+
+		if playerCount == 0 {
+			common.Logger.Info("没有可用的播放器，跳过本次更新")
+			continue
+		}
+
 		// 使用复制的映射处理程序更新
 		for playerId, playerClient := range clientsCopy {
 			go func(id string, client *client.PlayerClient) {
+				common.Logger.Infof("开始更新播放器 [%s] 的节目列表", id)
+
 				programs, err := client.GetProgramList()
 				if err != nil {
-					common.Logger.Errorf("Failed to get program list from player %s: %v", id, err)
+					common.Logger.Errorf("获取播放器 [%s] 节目列表失败: %v", id, err)
 					return
 				}
+
+				common.Logger.Infof("播放器 [%s] 获取到 %d 个节目", id, len(programs.Programs))
+
 				exists, err := common.DbQuery[model.Ebcp_player_program](context.Background(), common.GetDaprClient(),
 					model.Ebcp_player_programTableInfo.Name, "player_id="+id)
 				if err != nil {
-					common.Logger.Errorf("Failed to check if player %s has programs: %v", id, err)
+					common.Logger.Errorf("查询播放器 [%s] 已有节目失败: %v", id, err)
 					return
 				}
-				addedMap := make(map[string]bool)
 
+				common.Logger.Infof("播放器 [%s] 数据库中有 %d 个节目记录", id, len(exists))
+
+				addedMap := make(map[string]bool)
+				updatedCount := 0
+				addedCount := 0
 				firstProgramId := ""
 
 				// Insert new programs
@@ -101,58 +122,89 @@ func updatePlayerPrograms() {
 					if firstProgramId == "" {
 						firstProgramId = cast.ToString(program.ID)
 					}
+
+					programIdStr := cast.ToString(program.ID)
 					playerProgram := model.Ebcp_player_program{
-						ID:          common.GetMD5Hash(id + "_" + cast.ToString(program.ID)),
+						ID:          common.GetMD5Hash(id + "_" + programIdStr),
 						CreatedBy:   "admin",
 						CreatedTime: common.LocalTime(time.Now()),
 						UpdatedBy:   "admin",
 						UpdatedTime: common.LocalTime(time.Now()),
-						ProgramID:   cast.ToString(program.ID),
+						ProgramID:   programIdStr,
 						Name:        program.Name,
 						PlayerID:    id,
 					}
+
+					// 检查是否为新增或更新
+					isNewProgram := true
+					for _, existingProgram := range exists {
+						if existingProgram.ProgramID == programIdStr {
+							isNewProgram = false
+							break
+						}
+					}
+
 					err = common.DbUpsert[model.Ebcp_player_program](context.Background(), common.GetDaprClient(),
 						playerProgram, model.Ebcp_player_programTableInfo.Name, "id")
 					if err != nil {
-						common.Logger.Errorf("Failed to upsert program for player %s: %v", id, err)
+						common.Logger.Errorf("更新/插入播放器 [%s] 节目 [%s:%s] 失败: %v", id, programIdStr, program.Name, err)
 					} else {
+						if isNewProgram {
+							addedCount++
+							common.Logger.Infof("为播放器 [%s] 新增节目 [%s:%s]", id, programIdStr, program.Name)
+						} else {
+							updatedCount++
+							common.Logger.Debugf("更新播放器 [%s] 节目 [%s:%s]", id, programIdStr, program.Name)
+						}
+
 						syncPlayerProgramMedia(client, id, cast.ToString(playerProgram.ID), program.ID)
-						addedMap[cast.ToString(program.ID)] = true
+						addedMap[programIdStr] = true
 					}
 				}
+
 				// Delete programs that are no longer in the program list
+				deleteCount := 0
 				for _, program := range exists {
 					if !addedMap[cast.ToString(program.ProgramID)] {
+						common.Logger.Infof("删除播放器 [%s] 中不存在的节目 [%s:%s]", id, program.ProgramID, program.Name)
 						err = common.DbDelete(context.Background(), common.GetDaprClient(),
 							model.Ebcp_player_programTableInfo.Name, "id", program.ID)
 						if err != nil {
-							common.Logger.Errorf("Failed to delete program for player %s: %v", id, err)
+							common.Logger.Errorf("删除播放器 [%s] 节目 [%s:%s] 失败: %v", id, program.ProgramID, program.Name, err)
+						} else {
+							deleteCount++
 						}
 					}
 				}
+
+				common.Logger.Infof("播放器 [%s] 节目同步完成: 新增 %d 个, 更新 %d 个, 删除 %d 个",
+					id, addedCount, updatedCount, deleteCount)
 
 				if firstProgramId != "" {
 					player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
 						model.Ebcp_playerTableInfo.Name, "id="+id)
 					if err != nil {
-						common.Logger.Errorf("Failed to get player %s: %v", id, err)
+						common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", id, err)
 						return
 					}
 					if player == nil {
-						common.Logger.Errorf("Player %s not found", id)
+						common.Logger.Errorf("播放器 [%s] 不存在", id)
 						return
 					}
 					if player.CurrentProgramID == "" {
+						common.Logger.Infof("初始化播放器 [%s] 当前播放节目为 [%s]", id, firstProgramId)
 						player.CurrentProgramID = firstProgramId
 						err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 						if err != nil {
-							common.Logger.Errorf("Failed to update player %s current program id: %v", id, err)
+							common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
 						}
 					}
 				}
 
 			}(playerId, playerClient)
 		}
+
+		common.Logger.Info("播放器程序更新任务已启动，等待所有更新完成")
 	}
 }
 
