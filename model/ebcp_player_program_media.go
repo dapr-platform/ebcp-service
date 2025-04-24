@@ -17,54 +17,51 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_exhibition
+Table: o_ebcp_player_program_media
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
-[ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] start_time                                     TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 7] end_time                                       TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[ 8] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[ 9] hall_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[ 5] media_id                                       VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] media_name                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[ 7] player_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 8] program_id                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 9] player_program_id                              VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "LYPmeHeoCPSSCyPiZbLryrsLv",    "created_by": "fUytxwNobXQGJGMUrdZYwGCcd",    "created_time": 12,    "updated_by": "EOMOpnusPAIDgBcdguwISxLRO",    "updated_time": 58,    "name": "riXeYNxgUEpLpDIHLVpoEvNJK",    "start_time": 48,    "end_time": 15,    "remarks": "lxxGgDOFIGhfdDTijlaahOqca",    "hall_id": "gOfHnvRbMolIbbiHhCUgdROAp",    "status": 81}
+{    "id": "RsHeWmQkQQZgKAavVteRLBdYe",    "created_by": "WeiKYgjJwFqUQihpDKtYmqCLp",    "created_time": 10,    "updated_by": "NjSMZLxqFPiCBjDQMLDYAAOxy",    "updated_time": 90,    "media_id": "SWnZdktNeAVxrWeJpwKaoMmun",    "media_name": "CfWiySOBZiHHWoOUnVXdGeZeF",    "player_id": "KMVQYOYuZGnriuTSHXfIBXTXd",    "program_id": "iwZWqKfVWOIOJqkeHAmtxvaqJ",    "player_program_id": "AAJGWFDQoJvrQSgEVlDIIpgSq"}
 
 
 
 */
 
 var (
-	Ebcp_exhibition_FIELD_NAME_id = "id"
+	Ebcp_player_program_media_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_FIELD_NAME_created_by = "created_by"
+	Ebcp_player_program_media_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_exhibition_FIELD_NAME_created_time = "created_time"
+	Ebcp_player_program_media_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_exhibition_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_player_program_media_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_exhibition_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_player_program_media_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_exhibition_FIELD_NAME_name = "name"
+	Ebcp_player_program_media_FIELD_NAME_media_id = "media_id"
 
-	Ebcp_exhibition_FIELD_NAME_start_time = "start_time"
+	Ebcp_player_program_media_FIELD_NAME_media_name = "media_name"
 
-	Ebcp_exhibition_FIELD_NAME_end_time = "end_time"
+	Ebcp_player_program_media_FIELD_NAME_player_id = "player_id"
 
-	Ebcp_exhibition_FIELD_NAME_remarks = "remarks"
+	Ebcp_player_program_media_FIELD_NAME_program_id = "program_id"
 
-	Ebcp_exhibition_FIELD_NAME_hall_id = "hall_id"
-
-	Ebcp_exhibition_FIELD_NAME_status = "status"
+	Ebcp_player_program_media_FIELD_NAME_player_program_id = "player_program_id"
 )
 
-// Ebcp_exhibition struct is a row record of the o_ebcp_exhibition table in the  database
-type Ebcp_exhibition struct {
+// Ebcp_player_program_media struct is a row record of the o_ebcp_player_program_media table in the  database
+type Ebcp_player_program_media struct {
 	ID string `json:"id"` //id
 
 	CreatedBy string `json:"created_by"` //created_by
@@ -75,22 +72,20 @@ type Ebcp_exhibition struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Name string `json:"name"` //展览名称
+	MediaID string `json:"media_id"` //媒体ID
 
-	StartTime common.LocalTime `json:"start_time"` //开始时间
+	MediaName string `json:"media_name"` //媒体名称
 
-	EndTime common.LocalTime `json:"end_time"` //结束时间
+	PlayerID string `json:"player_id"` //播放设备ID(冗余)
 
-	Remarks string `json:"remarks"` //备注
+	ProgramID string `json:"program_id"` //节目ID(冗余)
 
-	HallID string `json:"hall_id"` //所属展馆ID
-
-	Status int32 `json:"status"` //状态（1: 运行中, 2: 筹备中, 3: 已结束）
+	PlayerProgramID string `json:"player_program_id"` //播放设备节目ID(冗余)
 
 }
 
-var Ebcp_exhibitionTableInfo = &TableInfo{
-	Name: "o_ebcp_exhibition",
+var Ebcp_player_program_mediaTableInfo = &TableInfo{
+	Name: "o_ebcp_player_program_media",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
@@ -200,92 +195,8 @@ var Ebcp_exhibitionTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "name",
-			Comment:            `展览名称`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "Name",
-			GoFieldType:        "string",
-			JSONFieldName:      "name",
-			ProtobufFieldName:  "name",
-			ProtobufType:       "string",
-			ProtobufPos:        6,
-		},
-
-		&ColumnInfo{
-			Index:              6,
-			Name:               "start_time",
-			Comment:            `开始时间`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "TIMESTAMP",
-			DatabaseTypePretty: "TIMESTAMP",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TIMESTAMP",
-			ColumnLength:       -1,
-			GoFieldName:        "StartTime",
-			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "start_time",
-			ProtobufFieldName:  "start_time",
-			ProtobufType:       "uint64",
-			ProtobufPos:        7,
-		},
-
-		&ColumnInfo{
-			Index:              7,
-			Name:               "end_time",
-			Comment:            `结束时间`,
-			Notes:              ``,
-			Nullable:           false,
-			DatabaseTypeName:   "TIMESTAMP",
-			DatabaseTypePretty: "TIMESTAMP",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TIMESTAMP",
-			ColumnLength:       -1,
-			GoFieldName:        "EndTime",
-			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "end_time",
-			ProtobufFieldName:  "end_time",
-			ProtobufType:       "uint64",
-			ProtobufPos:        8,
-		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "remarks",
-			Comment:            `备注`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TEXT",
-			DatabaseTypePretty: "TEXT",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TEXT",
-			ColumnLength:       -1,
-			GoFieldName:        "Remarks",
-			GoFieldType:        "string",
-			JSONFieldName:      "remarks",
-			ProtobufFieldName:  "remarks",
-			ProtobufType:       "string",
-			ProtobufPos:        9,
-		},
-
-		&ColumnInfo{
-			Index:              9,
-			Name:               "hall_id",
-			Comment:            `所属展馆ID`,
+			Name:               "media_id",
+			Comment:            `媒体ID`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -295,57 +206,120 @@ var Ebcp_exhibitionTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "HallID",
+			GoFieldName:        "MediaID",
 			GoFieldType:        "string",
-			JSONFieldName:      "hall_id",
-			ProtobufFieldName:  "hall_id",
+			JSONFieldName:      "media_id",
+			ProtobufFieldName:  "media_id",
 			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
-			Index:              10,
-			Name:               "status",
-			Comment:            `状态（1: 运行中, 2: 筹备中, 3: 已结束）`,
+			Index:              6,
+			Name:               "media_name",
+			Comment:            `媒体名称`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "INT4",
-			DatabaseTypePretty: "INT4",
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "INT4",
-			ColumnLength:       -1,
-			GoFieldName:        "Status",
-			GoFieldType:        "int32",
-			JSONFieldName:      "status",
-			ProtobufFieldName:  "status",
-			ProtobufType:       "int32",
-			ProtobufPos:        11,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       255,
+			GoFieldName:        "MediaName",
+			GoFieldType:        "string",
+			JSONFieldName:      "media_name",
+			ProtobufFieldName:  "media_name",
+			ProtobufType:       "string",
+			ProtobufPos:        7,
+		},
+
+		&ColumnInfo{
+			Index:              7,
+			Name:               "player_id",
+			Comment:            `播放设备ID(冗余)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "PlayerID",
+			GoFieldType:        "string",
+			JSONFieldName:      "player_id",
+			ProtobufFieldName:  "player_id",
+			ProtobufType:       "string",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "program_id",
+			Comment:            `节目ID(冗余)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ProgramID",
+			GoFieldType:        "string",
+			JSONFieldName:      "program_id",
+			ProtobufFieldName:  "program_id",
+			ProtobufType:       "string",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "player_program_id",
+			Comment:            `播放设备节目ID(冗余)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "PlayerProgramID",
+			GoFieldType:        "string",
+			JSONFieldName:      "player_program_id",
+			ProtobufFieldName:  "player_program_id",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
 		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_exhibition) TableName() string {
-	return "o_ebcp_exhibition"
+func (e *Ebcp_player_program_media) TableName() string {
+	return "o_ebcp_player_program_media"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_exhibition) BeforeSave() error {
+func (e *Ebcp_player_program_media) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_exhibition) Prepare() {
+func (e *Ebcp_player_program_media) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_exhibition) Validate(action Action) error {
+func (e *Ebcp_player_program_media) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_exhibition) TableInfo() *TableInfo {
-	return Ebcp_exhibitionTableInfo
+func (e *Ebcp_player_program_media) TableInfo() *TableInfo {
+	return Ebcp_player_program_mediaTableInfo
 }

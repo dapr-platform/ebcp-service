@@ -140,6 +140,28 @@ COMMENT ON COLUMN o_ebcp_player_program.player_id IS '播放设备ID';
 COMMENT ON COLUMN o_ebcp_player_program.program_id IS '节目ID';
 COMMENT ON COLUMN o_ebcp_player_program.program_index IS '节目序号';
 
+-- 播放设备节目媒体表
+CREATE TABLE o_ebcp_player_program_media (
+    id VARCHAR(32) NOT NULL,
+    created_by VARCHAR(32) NOT NULL,
+    created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(32) NOT NULL,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    media_id VARCHAR(32) NOT NULL,
+    media_name VARCHAR(255) NOT NULL,
+    player_id VARCHAR(32) NOT NULL,
+    program_id VARCHAR(32) NOT NULL,
+    player_program_id VARCHAR(32) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE o_ebcp_player_program_media IS '播放设备节目媒体表';
+COMMENT ON COLUMN o_ebcp_player_program_media.media_id IS '媒体ID';
+COMMENT ON COLUMN o_ebcp_player_program_media.media_name IS '媒体名称';
+COMMENT ON COLUMN o_ebcp_player_program_media.player_id IS '播放设备ID(冗余)';
+COMMENT ON COLUMN o_ebcp_player_program_media.program_id IS '节目ID(冗余)';
+COMMENT ON COLUMN o_ebcp_player_program_media.player_program_id IS '播放设备节目ID(冗余)';
+
 -- 中控设备表
 CREATE TABLE o_ebcp_control_device (
     id VARCHAR(32) NOT NULL,
@@ -430,7 +452,18 @@ SELECT
                             'id', pp.id,
                             'name', pp.name,
                             'program_id', pp.program_id,
-                            'program_index', pp.program_index
+                            'program_index', pp.program_index,
+                            'medias', (
+                                SELECT json_agg(
+                                    json_build_object(
+                                        'id', ppm.id,
+                                        'media_id', ppm.media_id,
+                                        'media_name', ppm.media_name
+                                    )
+                                )
+                                FROM o_ebcp_player_program_media ppm
+                                WHERE ppm.player_program_id = pp.id
+                            )
                         )
                     )
                     FROM o_ebcp_player_program pp
@@ -498,7 +531,18 @@ SELECT
                 'id', pp.id,
                 'name', pp.name,
                 'program_id', pp.program_id,
-                'program_index', pp.program_index
+                'program_index', pp.program_index,
+                'medias', (
+                    SELECT json_agg(
+                        json_build_object(
+                            'id', ppm.id,
+                            'media_id', ppm.media_id,
+                            'media_name', ppm.media_name
+                        )
+                    )
+                    FROM o_ebcp_player_program_media ppm
+                    WHERE ppm.player_program_id = pp.id
+                )
             )
         )
         FROM o_ebcp_player_program pp
@@ -547,6 +591,7 @@ DROP VIEW IF EXISTS v_ebcp_exhibition_info;
 
 DROP TABLE IF EXISTS o_ebcp_item_schedule;
 DROP TABLE IF EXISTS o_ebcp_item_device_relation;
+DROP TABLE IF EXISTS o_ebcp_player_program_media;
 DROP TABLE IF EXISTS o_ebcp_player_program;
 DROP TABLE IF EXISTS o_ebcp_control_device;
 DROP TABLE IF EXISTS o_ebcp_player;

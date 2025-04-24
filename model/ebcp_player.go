@@ -34,7 +34,7 @@ Table: o_ebcp_player
 
 JSON Sample
 -------------------------------------
-{    "id": "uhqxWowIwhKYIaHeftHYBNAEm",    "created_by": "WZbjMpcGEPtUEJFTxiNQdAYpa",    "created_time": 35,    "updated_by": "lYVBhbvOJZlBcxhFkFlHISLAi",    "updated_time": 35,    "name": "cLUPhYeyWNbZFDjiKfyNWjDSb",    "ip_address": "WvVcKJHBedfILaQChAnARNqhu",    "port": 17,    "version": "oOWPCuSFudeoXEAvPJGCgTGnD",    "item_id": "kDWIYtlNsZSZeXikxZRgMBJAf",    "current_program_id": "KwlAPQisxgKKtRSErSNJVGSJk",    "status": 96}
+{    "id": "hgOTWHidtREpKCYVPQXGpMxJE",    "created_by": "gNgPDhOrUKFqfXdthNNWmUBLT",    "created_time": 29,    "updated_by": "njNXgOPpGOBeOOQitdraydMGT",    "updated_time": 80,    "name": "wMiwKnNUVqKYEepHSOSRNXpXH",    "ip_address": "CZegMOsGftSGQWEjCyEkNkoQY",    "port": 58,    "version": "qPgFcIhyrMTxlOlCgIWLNJOaL",    "item_id": "eQXjyRHiNXPCroEVIjrSosGsy",    "current_program_id": "cLhrMJhIPqKQpIvIBtXDUjHHx",    "status": 62}
 
 
 

@@ -172,7 +172,7 @@ INSERT INTO o_ebcp_player (
     name, ip_address, port, status, item_id
 ) VALUES
     -- B1层播放设备
-    (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40306, 1, md5('九五枪族'));
+    (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40013, 1, md5('九五枪族'));
 
 -- 初始化播放器节目数据
 INSERT INTO o_ebcp_player_program (

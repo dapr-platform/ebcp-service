@@ -1,0 +1,896 @@
+package client
+
+import (
+	"bytes"
+	"encoding/binary"
+	"encoding/hex"
+	"errors"
+	"fmt"
+	"io"
+	"net"
+	"strings"
+	"sync"
+	"time"
+
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
+)
+
+const (
+	// Protocol constants
+	ProtocolHeader  uint32 = 0x55CC55CC
+	ProtocolVersion uint16 = 0x0001
+
+	// Command tags
+	TagGetProgramList uint16 = 129
+	TagFadeProgram    uint16 = 131
+	TagCutProgram     uint16 = 132
+	TagPauseProgram   uint16 = 133
+	TagPlayProgram    uint16 = 271
+	TagStopProgram    uint16 = 272
+
+	// New command tags
+	TagMuteMediaSound       uint16 = 270 // 关闭指定节目中指定媒体的声音
+	TagPlayLayerMedia       uint16 = 273 // 播放当前节目中指定图层媒体
+	TagPauseLayerMedia      uint16 = 274 // 暂停当前节目中指定图层媒体
+	TagGetAllProgramMedia   uint16 = 276 // 获取节目中所有媒体
+	TagControlLayerProgress uint16 = 283 // 控制图层的播放进度
+	TagQueryLayerProgress   uint16 = 293 // 查询图层的播放进度
+
+	// Sound control tags
+	TagOpenGlobalSound  uint16 = 262 // 0x0106
+	TagCloseGlobalSound uint16 = 263 // 0x0107
+	TagSetGlobalVolume  uint16 = 264 // 0x0108
+	TagIncreaseVolume   uint16 = 328 // 0x0148
+	TagDecreaseVolume   uint16 = 329 // 0x0149
+
+	// Connection constants
+	reconnectInterval = 5 * time.Second
+	connectTimeout    = 5 * time.Second
+
+	bufferSize = 655360
+)
+
+// Program represents a program in the player
+type Program struct {
+	ID      uint32
+	Name    string
+	IsEmpty bool
+}
+
+// Media represents a media item in a program
+type Media struct {
+	ID   uint32
+	Name string
+}
+
+// MediaListResponse represents response of GetAllProgramMedia
+type MediaListResponse struct {
+	ProgramID uint32
+	Media     []Media
+}
+
+// LayerProgressResponse represents the response of QueryLayerProgress
+type LayerProgressResponse struct {
+	Success    bool
+	LayerIndex uint16
+	RemainTime uint32
+	TotalTime  uint32
+}
+
+// ProgramListResponse represents response of GetProgramList
+type ProgramListResponse struct {
+	TotalCount int
+	Programs   []Program
+}
+
+// PlayerClient represents a client to control media player
+type PlayerClient struct {
+	addr      string
+	conn      net.Conn
+	sequence  uint16
+	mu        sync.RWMutex
+	closed    bool
+	connected bool
+	connChan  chan bool // Channel to signal connection status
+
+	// Channels for async communication
+	sendChan    chan *commandRequest
+	responseBuf *responseBuffer
+}
+
+// commandRequest represents a command to be sent
+type commandRequest struct {
+	tag      uint16
+	data     []byte
+	respChan chan *commandResponse
+}
+
+// commandResponse represents a response from the server
+type commandResponse struct {
+	data []byte
+	err  error
+}
+
+// responseBuffer manages received data
+type responseBuffer struct {
+	mu       sync.Mutex
+	data     []byte
+	ready    chan struct{}
+	lastRead time.Time
+}
+
+// newResponseBuffer creates a new response buffer
+func newResponseBuffer() *responseBuffer {
+	return &responseBuffer{
+		ready:    make(chan struct{}, 1),
+		lastRead: time.Now(),
+	}
+}
+
+// append adds data to the buffer
+func (rb *responseBuffer) append(data []byte) {
+	rb.mu.Lock()
+	rb.data = append(rb.data, data...)
+	rb.lastRead = time.Now()
+	rb.mu.Unlock()
+}
+
+// isComplete checks if the response is complete (no new data for 1 second)
+func (rb *responseBuffer) isComplete() bool {
+	rb.mu.Lock()
+	defer rb.mu.Unlock()
+	return len(rb.data) > 0 && time.Since(rb.lastRead) >= time.Second
+}
+
+// get retrieves and clears the buffer
+func (rb *responseBuffer) get() []byte {
+	rb.mu.Lock()
+	defer rb.mu.Unlock()
+	data := rb.data
+	rb.data = nil
+	rb.lastRead = time.Now()
+	return data
+}
+
+// NewTCPClient creates a new TCP client
+func NewTCPClient(addr string) (*PlayerClient, error) {
+	client := &PlayerClient{
+		addr:        addr,
+		connChan:    make(chan bool, 1),
+		sendChan:    make(chan *commandRequest),
+		responseBuf: newResponseBuffer(),
+	}
+
+	// Try initial connection
+	if err := client.connect(); err != nil {
+		fmt.Printf("Initial connection failed: %v, will retry in background\n", err)
+	}
+
+	// Start connection manager goroutine
+	go client.maintainConnection()
+
+	// Start send/receive goroutines
+	go client.sendLoop()
+	go client.receiveLoop()
+
+	return client, nil
+}
+
+// connect attempts to establish a TCP connection
+func (c *PlayerClient) connect() error {
+	conn, err := net.DialTimeout("tcp", c.addr, connectTimeout)
+	if err != nil {
+		return err
+	}
+
+	c.mu.Lock()
+	c.conn = conn
+	c.connected = true
+	c.mu.Unlock()
+
+	// Signal connection success
+	select {
+	case c.connChan <- true:
+	default:
+	}
+
+	return nil
+}
+
+// maintainConnection maintains TCP connection and handles reconnection
+func (c *PlayerClient) maintainConnection() {
+	for {
+		if c.closed {
+			return
+		}
+
+		c.mu.RLock()
+		connected := c.connected
+		c.mu.RUnlock()
+
+		if !connected {
+			if err := c.connect(); err != nil {
+				time.Sleep(reconnectInterval)
+			}
+		} else {
+			// If connected, just wait for failure signal
+			time.Sleep(reconnectInterval)
+		}
+	}
+}
+
+// handleConnectionFailure handles connection failure
+func (c *PlayerClient) handleConnectionFailure() {
+	c.mu.Lock()
+	if c.conn != nil {
+		c.conn.Close()
+		c.conn = nil
+	}
+	c.connected = false
+	c.mu.Unlock()
+}
+
+// buildPacket builds a protocol packet
+func (c *PlayerClient) buildPacket(tag uint16, data []byte) []byte {
+	contentLen := len(data)
+	if data == nil {
+		contentLen = 0
+	}
+
+	// Calculate total packet size
+	packetSize := 12 + 4 + contentLen // Header(12) + TLV header(4) + data
+	packet := make([]byte, packetSize)
+
+	// 获取当前序列号并增加它，需要锁保护
+	c.mu.Lock()
+	currentSequence := c.sequence
+	c.sequence++
+	c.mu.Unlock()
+
+	// Write header
+	binary.LittleEndian.PutUint32(packet[0:], ProtocolHeader)        // 0x55CC55CC
+	binary.LittleEndian.PutUint16(packet[4:], 1)                     // Packet type should be 1
+	binary.LittleEndian.PutUint16(packet[6:], ProtocolVersion)       // Protocol version
+	binary.LittleEndian.PutUint16(packet[8:], currentSequence)       // Sequence number
+	binary.LittleEndian.PutUint16(packet[10:], uint16(4+contentLen)) // Content length = TLV header(4) + data
+
+	// Write TLV
+	binary.LittleEndian.PutUint16(packet[12:], tag)                // Tag
+	binary.LittleEndian.PutUint16(packet[14:], uint16(contentLen)) // Length
+
+	// Write data if any
+	if contentLen > 0 {
+		copy(packet[16:], data) // Value
+	}
+
+	return packet
+}
+
+// bytesToHexString converts bytes to hex string with spaces
+func bytesToHexString(data []byte) string {
+	hexStr := hex.EncodeToString(data)
+	var parts []string
+	for i := 0; i < len(hexStr); i += 2 {
+		parts = append(parts, hexStr[i:i+2])
+	}
+	return strings.ToUpper(strings.Join(parts, " "))
+}
+
+// sendLoop handles sending commands
+func (c *PlayerClient) sendLoop() {
+	for {
+		select {
+		case req, ok := <-c.sendChan:
+			if !ok || req == nil {
+				// Channel closed or nil request, exit the loop
+				return
+			}
+
+			// 在处理命令前检查客户端状态
+			c.mu.RLock()
+			conn := c.conn
+			connected := c.connected
+			closed := c.closed
+			c.mu.RUnlock()
+
+			if closed {
+				req.respChan <- &commandResponse{err: errors.New("client is closed")}
+				continue
+			}
+
+			if !connected || conn == nil {
+				req.respChan <- &commandResponse{err: errors.New("not connected")}
+				continue
+			}
+
+			packet := c.buildPacket(req.tag, req.data)
+			fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
+
+			_, err := conn.Write(packet)
+			if err != nil {
+				c.handleConnectionFailure()
+				req.respChan <- &commandResponse{err: err}
+				continue
+			}
+
+			// Wait for response
+			select {
+			case <-c.responseBuf.ready:
+				resp := c.responseBuf.get()
+				req.respChan <- &commandResponse{data: resp}
+			case <-time.After(10 * time.Second): // Increased timeout for large responses
+				req.respChan <- &commandResponse{err: errors.New("response timeout")}
+			}
+		}
+	}
+}
+
+// receiveLoop handles receiving data
+func (c *PlayerClient) receiveLoop() {
+	tempBuf := make([]byte, bufferSize)
+	checkTicker := time.NewTicker(100 * time.Millisecond) // Check completion every 100ms
+	defer checkTicker.Stop()
+
+	for {
+		// 先检查客户端是否已关闭
+		c.mu.RLock()
+		closed := c.closed
+		conn := c.conn
+		connected := c.connected
+		c.mu.RUnlock()
+
+		if closed {
+			return
+		}
+
+		if !connected || conn == nil {
+			time.Sleep(time.Second)
+			continue
+		}
+
+		// Set a read deadline to prevent blocking forever
+		if tcpConn, ok := conn.(*net.TCPConn); ok {
+			tcpConn.SetReadDeadline(time.Now().Add(100 * time.Millisecond))
+		}
+
+		select {
+		case <-checkTicker.C:
+			// 再次检查是否已关闭（避免长时间操作期间状态变化）
+			c.mu.RLock()
+			closed := c.closed
+			c.mu.RUnlock()
+
+			if closed {
+				return
+			}
+
+			// Check if we have a complete response
+			if c.responseBuf.isComplete() {
+				select {
+				case c.responseBuf.ready <- struct{}{}:
+				default:
+				}
+			}
+		default:
+			n, err := conn.Read(tempBuf)
+			if err != nil {
+				if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+					// Timeout is expected, continue checking for completion
+					continue
+				}
+				c.handleConnectionFailure()
+				continue
+			}
+
+			if n > 0 {
+				c.responseBuf.append(tempBuf[:n])
+				fmt.Printf("Received %d bytes\n", n)
+			}
+		}
+	}
+}
+
+// isValidPacketHeader checks if the given position in data is a valid packet header
+func isValidPacketHeader(data []byte, offset int) bool {
+	if offset+4 > len(data) {
+		return false
+	}
+	// 0x55CC55CC in little-endian is CC 55 CC 55
+	return data[offset] == 0xCC && data[offset+1] == 0x55 &&
+		data[offset+2] == 0xCC && data[offset+3] == 0x55
+}
+
+// sendCommand sends command and returns response
+func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
+	// 使用读锁确保client处于有效状态
+	c.mu.RLock()
+	if c.closed {
+		c.mu.RUnlock()
+		return nil, errors.New("client is closed")
+	}
+	c.mu.RUnlock()
+
+	respChan := make(chan *commandResponse, 1)
+	req := &commandRequest{
+		tag:      tag,
+		data:     data,
+		respChan: respChan,
+	}
+
+	// Send request
+	c.sendChan <- req
+
+	// Wait for response with timeout
+	select {
+	case resp := <-respChan:
+		if resp.err != nil {
+			return nil, fmt.Errorf("command failed: %v", resp.err)
+		}
+
+		// Verify response
+		if len(resp.data) < 16 {
+			return nil, errors.New("response too short")
+		}
+
+		// 验证帧头
+		if !isValidPacketHeader(resp.data, 0) {
+			return nil, errors.New("invalid packet header")
+		}
+
+		packetHeader := binary.LittleEndian.Uint32(resp.data[0:4])
+		packetType := binary.LittleEndian.Uint16(resp.data[4:6])
+		protocolVersion := binary.LittleEndian.Uint16(resp.data[6:8])
+		sequence := binary.LittleEndian.Uint16(resp.data[8:10])
+		contentLength := binary.LittleEndian.Uint16(resp.data[10:12])
+		tlvTag := binary.LittleEndian.Uint16(resp.data[12:14])
+		tlvLength := binary.LittleEndian.Uint16(resp.data[14:16])
+
+		fmt.Printf("Response details:\n")
+		fmt.Printf("  Header: 0x%08X\n", packetHeader)
+		fmt.Printf("  Packet Type: %d\n", packetType)
+		fmt.Printf("  Protocol Version: 0x%04X\n", protocolVersion)
+		fmt.Printf("  Sequence: %d\n", sequence)
+		fmt.Printf("  Content Length: %d\n", contentLength)
+		fmt.Printf("  TLV Tag: %d (0x%04X) (Expected: %d)\n", tlvTag, tlvTag, tag)
+		fmt.Printf("  TLV Length: %d\n", tlvLength)
+
+		// 特殊情况处理：
+		// 1. 某些服务器实现可能返回TLV标签为0
+		// 2. QueryLayerProgress命令(293/0x0125)可能返回标签28(0x001C)
+		if tlvTag != tag && tlvTag != 0 {
+			// 如果是QueryLayerProgress并且返回标签是28，这是正常的
+			if tag == TagQueryLayerProgress && tlvTag == 28 {
+				fmt.Printf("  Accepting tag 28(0x001C) as valid response for QueryLayerProgress\n")
+			} else {
+				// 其他情况下标签不匹配视为错误
+				return nil, fmt.Errorf("unexpected TLV tag: got %d (0x%04X), want %d (0x%04X)",
+					tlvTag, tlvTag, tag, tag)
+			}
+		}
+
+		return resp.data, nil
+	case <-time.After(10 * time.Second): // Overall timeout
+		return nil, errors.New("command timeout")
+	}
+}
+
+// GetProgramList gets the program list
+func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
+	// Send empty data for query
+	resp, err := c.sendCommand(TagGetProgramList, nil)
+	if err != nil {
+		return nil, fmt.Errorf("GetProgramList failed: %v", err)
+	}
+
+	// Each program comes in a separate packet
+	// Each packet: CC 55 CC 55 + version(2) + sequence(2) + tag(2) + length(2) + TLV
+	const (
+		headerSize       = 12 // CC 55 CC 55 + version + sequence + tag + length
+		tlvHeaderSize    = 4  // TLV tag(2) + length(2)
+		programCountSize = 4  // Program count is 2 bytes
+		programIndexSize = 4
+		programIdSize    = 4
+		programNameSize  = 128
+		isEmptySize      = 1
+	)
+
+	// First packet contains the program count
+	if len(resp) < headerSize+tlvHeaderSize+programCountSize {
+		return nil, fmt.Errorf("response too short for header and program count: len(resp)=%d", len(resp))
+	}
+
+	// Get program count from first packet
+	programCount := int(binary.LittleEndian.Uint16(resp[16:18]))
+	fmt.Printf("Program count: %d\n", programCount)
+
+	// Create result structure
+	result := &ProgramListResponse{
+		TotalCount: programCount,
+		Programs:   make([]Program, 0, programCount),
+	}
+
+	// Process each packet
+	offset := 0
+	for i := 0; i < programCount; i++ {
+		// Find next packet start
+		for offset < len(resp)-4 {
+			if isValidPacketHeader(resp, offset) {
+				break
+			}
+			offset++
+		}
+
+		// Verify we have enough data for a complete packet
+		packetStart := offset
+		if packetStart+headerSize+tlvHeaderSize+programCountSize+
+			programIndexSize+programIdSize+programNameSize+isEmptySize > len(resp) {
+			return nil, fmt.Errorf("incomplete packet data at program %d", i)
+		}
+
+		// Skip header and TLV header
+		dataStart := packetStart + headerSize + tlvHeaderSize + programCountSize
+
+		// Read program data
+		program := Program{
+			ID:      binary.LittleEndian.Uint32(resp[dataStart+programIndexSize : dataStart+programIndexSize+programIdSize]),
+			IsEmpty: resp[dataStart+programIndexSize+programIdSize+programNameSize] == 0,
+		}
+
+		// Read null-terminated program name
+		nameBytes := resp[dataStart+programIndexSize+programIdSize : dataStart+programIndexSize+programIdSize+programNameSize]
+		nullPos := bytes.IndexByte(nameBytes, 0)
+		if nullPos != -1 {
+			program.Name = string(nameBytes[:nullPos])
+		} else {
+			program.Name = string(bytes.TrimRight(nameBytes, "\x00"))
+		}
+
+		result.Programs = append(result.Programs, program)
+
+		// Move to next packet
+		offset = packetStart + headerSize + tlvHeaderSize + programCountSize +
+			programIndexSize + programIdSize + programNameSize + isEmptySize
+	}
+
+	return result, nil
+}
+
+// FadeProgram fades to specified program
+func (c *PlayerClient) FadeProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagFadeProgram, data)
+	return err
+}
+
+// CutProgram cuts to specified program
+func (c *PlayerClient) CutProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagCutProgram, data)
+	return err
+}
+
+// PauseProgram pauses specified program
+func (c *PlayerClient) PauseProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagPauseProgram, data)
+	return err
+}
+
+// PlayProgram plays specified program
+func (c *PlayerClient) PlayProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagPlayProgram, data)
+	return err
+}
+
+// StopProgram stops specified program
+func (c *PlayerClient) StopProgram(programID uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+	_, err := c.sendCommand(TagStopProgram, data)
+	return err
+}
+
+// OpenGlobalSound opens global sound
+func (c *PlayerClient) OpenGlobalSound() error {
+	_, err := c.sendCommand(TagOpenGlobalSound, nil)
+	return err
+}
+
+// CloseGlobalSound closes global sound
+func (c *PlayerClient) CloseGlobalSound() error {
+	_, err := c.sendCommand(TagCloseGlobalSound, nil)
+	return err
+}
+
+// SetGlobalVolume sets global volume (0-100)
+func (c *PlayerClient) SetGlobalVolume(volume uint8) error {
+	if volume > 100 {
+		return fmt.Errorf("volume must be between 0 and 100")
+	}
+	data := []byte{volume}
+	_, err := c.sendCommand(TagSetGlobalVolume, data)
+	return err
+}
+
+// IncreaseGlobalVolume increases global volume by step
+func (c *PlayerClient) IncreaseGlobalVolume(step uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, step)
+	_, err := c.sendCommand(TagIncreaseVolume, data)
+	return err
+}
+
+// DecreaseGlobalVolume decreases global volume by step
+func (c *PlayerClient) DecreaseGlobalVolume(step uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, step)
+	_, err := c.sendCommand(TagDecreaseVolume, data)
+	return err
+}
+
+// GetAllProgramMedia gets all media in a program
+func (c *PlayerClient) GetAllProgramMedia(programID uint32) (*MediaListResponse, error) {
+	// Prepare request data
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, programID)
+
+	// Send command
+	resp, err := c.sendCommand(TagGetAllProgramMedia, data)
+	if err != nil {
+		return nil, fmt.Errorf("GetAllProgramMedia failed: %v", err)
+	}
+
+	// Parse response
+	if len(resp) < 16 {
+		return nil, errors.New("response too short")
+	}
+
+	// Create result structure
+	result := &MediaListResponse{
+		ProgramID: programID,
+		Media:     make([]Media, 0),
+	}
+
+	// Each media item has: MediaId(4 bytes) + MediaName(32 bytes)
+	const (
+		headerSize    = 12 // CC 55 CC 55 + version + sequence + tag + length
+		tlvHeaderSize = 4  // TLV tag(2) + length(2)
+		mediaIdSize   = 4
+		mediaNameSize = 32
+		mediaItemSize = mediaIdSize + mediaNameSize
+	)
+
+	// 获取实际的TLV长度
+	tlvLength := binary.LittleEndian.Uint16(resp[14:16])
+	fmt.Printf("TLV length from response: %d\n", tlvLength)
+
+	// 根据TLV长度计算媒体项数量，而不是使用固定的计算方式
+	// 这样可以适应不同的服务器实现
+	dataSize := int(tlvLength)
+	if dataSize <= 0 {
+		// 回退到原来的计算方式
+		dataSize = len(resp) - headerSize - tlvHeaderSize
+		fmt.Printf("Using fallback dataSize calculation: %d\n", dataSize)
+	}
+
+	if dataSize < 0 {
+		return nil, errors.New("invalid response size")
+	}
+
+	mediaCount := dataSize / mediaItemSize
+	dataStart := headerSize + tlvHeaderSize
+	fmt.Printf("Media resp dataSize: %d, mediaCount: %d, data: %x\n", dataSize, mediaCount, resp)
+
+	// 如果数据量不是mediaItemSize的整数倍，可能有额外的头部或尾部
+	if dataSize%mediaItemSize != 0 {
+		fmt.Printf("Warning: data size %d is not a multiple of media item size %d\n", dataSize, mediaItemSize)
+		// 尝试调整起始位置，查找有效数据的起始
+		for offset := dataStart; offset < len(resp)-4; offset++ {
+			// 寻找可能的媒体ID标记
+			if resp[offset] == 0 && resp[offset+1] == 0 && resp[offset+2] == 0 && resp[offset+3] == 0 {
+				potentialMediaStart := offset
+				fmt.Printf("Potential media data starts at offset %d: %x\n", potentialMediaStart, resp[potentialMediaStart:potentialMediaStart+8])
+				// 如果找到可能的媒体起始位置，调整dataStart
+				if potentialMediaStart != dataStart {
+					fmt.Printf("Adjusting dataStart from %d to %d\n", dataStart, potentialMediaStart)
+					dataStart = potentialMediaStart
+					break
+				}
+			}
+		}
+	}
+
+	// Extract each media item
+	for i := 0; i < mediaCount; i++ {
+		offset := dataStart + (i * mediaItemSize)
+		if offset+mediaItemSize > len(resp) {
+			fmt.Printf("Warning: offset %d + mediaItemSize %d exceeds response length %d\n", offset, mediaItemSize, len(resp))
+			break
+		}
+
+		mediaId := binary.LittleEndian.Uint32(resp[offset : offset+mediaIdSize])
+		fmt.Printf("Media %d ID: %d, raw data: %x\n", i, mediaId, resp[offset:offset+mediaItemSize])
+
+		media := Media{
+			ID: mediaId,
+		}
+
+		// Read null-terminated media name
+		// 协议文档说明：字符串数组最后一位为'\0'
+		nameBytes := resp[offset+mediaIdSize : offset+mediaIdSize+mediaNameSize]
+		nullPos := bytes.IndexByte(nameBytes, 0)
+
+		var rawNameBytes []byte
+		if nullPos != -1 {
+			// 找到空字符，取空字符之前的有效数据
+			rawNameBytes = nameBytes[:nullPos]
+		} else {
+			// 没有找到空字符，去掉尾部的空字节
+			rawNameBytes = bytes.TrimRight(nameBytes, "\x00")
+		}
+		fmt.Printf("Media %d rawNameBytes: %x\n", i, rawNameBytes)
+
+		// 先检查是否已经是有效的UTF-8编码
+		if utf8Valid(rawNameBytes) {
+			media.Name = string(rawNameBytes)
+			fmt.Printf("Media %d is utf8: %s\n", i, media.Name)
+		} else {
+			// 尝试不同的中文编码转换
+			converted := false
+
+			// 尝试GBK (中国大陆最常用的中文编码)
+			utf8NameBytes, err := io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.GBK.NewDecoder()))
+			if err == nil && utf8Valid(utf8NameBytes) {
+				media.Name = string(utf8NameBytes)
+				fmt.Printf("Media %d is gbk: %s\n", i, media.Name)
+				converted = true
+			}
+
+			// 如果GBK失败，尝试GB18030 (GBK的超集，包含更多字符)
+			if !converted {
+				utf8NameBytes, err = io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.GB18030.NewDecoder()))
+				if err == nil && utf8Valid(utf8NameBytes) {
+					media.Name = string(utf8NameBytes)
+					fmt.Printf("Media %d is gb18030: %s\n", i, media.Name)
+					converted = true
+				}
+			}
+
+			// 如果GB18030失败，尝试HZGB2312 (另一种常见中文编码)
+			if !converted {
+				utf8NameBytes, err = io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.HZGB2312.NewDecoder()))
+				if err == nil && utf8Valid(utf8NameBytes) {
+					media.Name = string(utf8NameBytes)
+					fmt.Printf("Media is hzgb2312: %d: %s\n", i, media.Name)
+					converted = true
+				}
+			}
+
+			// 如果所有尝试都失败，使用原始字节
+			if !converted {
+				media.Name = string(rawNameBytes)
+				fmt.Printf("Media is raw: %d: %s\n", i, media.Name)
+			}
+		}
+
+		result.Media = append(result.Media, media)
+	}
+
+	return result, nil
+}
+
+// utf8Valid checks if a byte slice contains valid UTF-8 data
+func utf8Valid(data []byte) bool {
+	return strings.HasPrefix(strings.ToValidUTF8(string(data), ""), string(data))
+}
+
+// PlayLayerMedia plays media in the specified layer of current program
+func (c *PlayerClient) PlayLayerMedia(layerIndex uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, layerIndex)
+	_, err := c.sendCommand(TagPlayLayerMedia, data)
+	return err
+}
+
+// PauseLayerMedia pauses media in the specified layer of current program
+func (c *PlayerClient) PauseLayerMedia(layerIndex uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, layerIndex)
+	_, err := c.sendCommand(TagPauseLayerMedia, data)
+	return err
+}
+
+// MuteMediaSound mutes sound for media at specified position
+func (c *PlayerClient) MuteMediaSound(col, row uint32) error {
+	data := make([]byte, 8)
+	binary.LittleEndian.PutUint32(data[0:4], col)
+	binary.LittleEndian.PutUint32(data[4:8], row)
+	_, err := c.sendCommand(TagMuteMediaSound, data)
+	return err
+}
+
+// ControlLayerProgress controls playback progress of specified layer
+func (c *PlayerClient) ControlLayerProgress(triggerID string, remainTime, totalTime uint32, layerIndex uint16) error {
+	// TriggerID (36 bytes) + RemainTime (4 bytes) + TotalTime (4 bytes) + layerIndex (2 bytes)
+	data := make([]byte, 36+4+4+2)
+
+	// Copy triggerID (padding with zeros if needed)
+	triggerIDBytes := []byte(triggerID)
+	if len(triggerIDBytes) > 36 {
+		triggerIDBytes = triggerIDBytes[:36]
+	}
+	copy(data[:36], triggerIDBytes)
+
+	// Copy other fields
+	binary.LittleEndian.PutUint32(data[36:40], remainTime)
+	binary.LittleEndian.PutUint32(data[40:44], totalTime)
+	binary.LittleEndian.PutUint16(data[44:46], layerIndex)
+
+	_, err := c.sendCommand(TagControlLayerProgress, data)
+	return err
+}
+
+// QueryLayerProgress queries playback progress of specified layer
+func (c *PlayerClient) QueryLayerProgress(layerIndex uint16) (*LayerProgressResponse, error) {
+	// Prepare request data
+	data := make([]byte, 2)
+	binary.LittleEndian.PutUint16(data, layerIndex)
+
+	// Send command
+	resp, err := c.sendCommand(TagQueryLayerProgress, data)
+	if err != nil {
+		return nil, fmt.Errorf("QueryLayerProgress failed: %v", err)
+	}
+
+	// Parse response
+	if len(resp) < 16+11 { // header(12) + tlv(4) + success(1) + layerIndex(2) + remainTime(4) + totalTime(4)
+		return nil, errors.New("response too short")
+	}
+
+	// 解析响应
+	result := &LayerProgressResponse{
+		Success:    resp[16] == 1,
+		LayerIndex: binary.LittleEndian.Uint16(resp[17:19]),
+		RemainTime: binary.LittleEndian.Uint32(resp[19:23]),
+		TotalTime:  binary.LittleEndian.Uint32(resp[23:27]),
+	}
+
+	fmt.Printf("Progress data: success=%v, layerIndex=%d, remainTime=%d, totalTime=%d\n",
+		result.Success, result.LayerIndex, result.RemainTime, result.TotalTime)
+
+	return result, nil
+}
+
+// Close closes the connection and stops all goroutines
+func (c *PlayerClient) Close() error {
+	c.mu.Lock()
+
+	// 防止重复关闭
+	if c.closed {
+		c.mu.Unlock()
+		return nil
+	}
+
+	c.closed = true
+
+	// 关闭发送通道，通知发送循环退出
+	close(c.sendChan)
+
+	// 关闭连接
+	var err error
+	if c.conn != nil {
+		err = c.conn.Close()
+		c.conn = nil
+	}
+
+	c.connected = false
+	c.mu.Unlock()
+
+	return err
+}
