@@ -17,7 +17,10 @@ func InitEbcp_playerExtRoute(r chi.Router) {
 	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/pause/{programId}", PauseProgramHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play/{programId}", PlayProgramHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/stop/{programId}", StopProgramHandler)
-
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/play-media/{programId}/{mediaId}", PlayProgaramMediaHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/pause-media/{programId}/{mediaId}", PauseProgramMediaHandler)
+	r.Get(common.BASE_CONTEXT+"/ebcp-player/{id}/get-media-process/{programId}/{mediaId}", GetProgramMediaProcessHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/set-media-process/{programId}/{mediaId}", SetProgramMediaProcessHandler)
 	// Register sound control routes
 	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/sound/open", OpenGlobalSoundHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-player/{id}/sound/close", CloseGlobalSoundHandler)
@@ -36,13 +39,8 @@ func InitEbcp_playerExtRoute(r chi.Router) {
 // @Router /ebcp-player/{id}/program-list [get]
 func GetProgramListHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
 
-	programs, err := client.GetProgramList()
+	programs, err := service.GetPlayerPrograms(id)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -89,7 +87,7 @@ func FadeProgramHandler(w http.ResponseWriter, r *http.Request) {
 // @Description Cut to specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
-// @Param programId path string true "Program ID"
+// @Param programId path string true "Program ID, 整数 0,1,2..."
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
@@ -157,7 +155,7 @@ func PauseProgramHandler(w http.ResponseWriter, r *http.Request) {
 // @Description Play specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
-// @Param programId path string true "Program ID"
+// @Param programId path string true "Program ID, 整数 0,1,2..."
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
@@ -191,7 +189,7 @@ func PlayProgramHandler(w http.ResponseWriter, r *http.Request) {
 // @Description Stop specified program on player
 // @Tags 播放设备
 // @Param id path string true "Player ID"
-// @Param programId path string true "Program ID"
+// @Param programId path string true "Program ID, 整数 0,1,2..."
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
@@ -213,6 +211,133 @@ func StopProgramHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = client.StopProgram(uint32(programId))
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+
+	common.HttpSuccess(w, common.OK)
+}
+
+// @Summary Play Progaram Media
+// @Description Play specified program media on player
+// @Tags 播放设备
+// @Param id path string true "Player ID"
+// @Param programId path string true "Program ID,整数id，0，1，2..."
+// @Param mediaId path string true "Media ID,整数id，0，1，2..."
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-player/{id}/play-media/{programId}/{mediaId} [post]
+func PlayProgaramMediaHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	programIdStr := chi.URLParam(r, "programId")
+	mediaIdStr := chi.URLParam(r, "mediaId")
+
+	_, err := strconv.ParseUint(programIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
+		return
+	}
+	_, err = strconv.ParseUint(mediaIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid media id"))
+		return
+	}
+	err = service.PlayProgramMedia(id, programIdStr, mediaIdStr)
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+
+	common.HttpSuccess(w, common.OK)
+}
+
+// @Summary Pause Program Media
+// @Description Pause specified program media on player
+// @Tags 播放设备
+// @Param id path string true "Player ID"
+// @Param programId path string true "Program ID,整数id，0，1，2..."
+// @Param mediaId path string true "Media ID,整数id，0，1，2..."
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-player/{id}/pause-media/{programId}/{mediaId} [post]
+func PauseProgramMediaHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	programIdStr := chi.URLParam(r, "programId")
+	mediaIdStr := chi.URLParam(r, "mediaId")
+
+	_, err := strconv.ParseUint(programIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
+		return
+	}
+	_, err = strconv.ParseUint(mediaIdStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid media id"))
+		return
+	}
+	err = service.PauseProgramMedia(id, programIdStr, mediaIdStr)
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+
+	common.HttpSuccess(w, common.OK)
+}
+
+// @Summary Get Program Media Process
+// @Description Get specified program media process on player
+// @Tags 播放设备
+// @Param id path string true "Player ID"
+// @Param programId path string true "Program ID,整数id，0，1，2..."
+// @Param mediaId path string true "Media ID,整数id，0，1，2..."
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-player/{id}/get-media-process/{programId}/{mediaId} [get]
+func GetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	programIdStr := chi.URLParam(r, "programId")
+	mediaIdStr := chi.URLParam(r, "mediaId")
+	remainTime, totalTime, err := service.GetProgramMediaProcess(id, programIdStr, mediaIdStr)
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{"remainTime": remainTime, "totalTime": totalTime}))
+}
+
+// @Summary Set Program Media Process
+// @Description Set specified program media process on player
+// @Tags 播放设备
+// @Param id path string true "Player ID"
+// @Param programId path string true "Program ID,整数id，0，1，2..."
+// @Param mediaId path string true "Media ID,整数id，0，1，2..."
+// @Param remainTime query string true "Remain Time,整数，单位秒"
+// @Param totalTime query string true "Total Time,整数，单位秒"
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-player/{id}/set-media-process/{programId}/{mediaId} [post]
+func SetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	programIdStr := chi.URLParam(r, "programId")
+	mediaIdStr := chi.URLParam(r, "mediaId")
+	remainTimeStr := r.URL.Query().Get("remainTime")
+	totalTimeStr := r.URL.Query().Get("totalTime")
+	remainTime, err := strconv.ParseUint(remainTimeStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid remain time"))
+		return
+	}
+	totalTime, err := strconv.ParseUint(totalTimeStr, 10, 32)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg("invalid total time"))
+		return
+	}
+	err = service.SetProgramMediaProcess(id, programIdStr, mediaIdStr, int(remainTime), int(totalTime))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return

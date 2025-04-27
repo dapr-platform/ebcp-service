@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -254,6 +255,48 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 		}
 	}
 	common.Logger.Infof("Synced program media for player %s program %s", playerId, programId)
+}
+
+func GetPlayerPrograms(playerId string) ([]model.Ebcp_player_program_info, error) {
+	programs, err := common.DbQuery[model.Ebcp_player_program_info](context.Background(), common.GetDaprClient(), model.Ebcp_player_program_infoTableInfo.Name, "player_id="+playerId)
+	if err != nil {
+		return nil, err
+	}
+	return programs, nil
+}
+func PlayProgramMedia(playerId, programId, mediaId string) error {
+	player := GetPlayerClient(playerId)
+	if player == nil {
+		return fmt.Errorf("player not found")
+	}
+	return player.PlayLayerMedia(cast.ToUint32(mediaId))
+}
+
+func PauseProgramMedia(playerId, programId, mediaId string) error {
+	player := GetPlayerClient(playerId)
+	if player == nil {
+		return fmt.Errorf("player not found")
+	}
+	return player.PauseLayerMedia(cast.ToUint32(mediaId))
+}
+
+func GetProgramMediaProcess(playerId, programId, mediaId string) (int, int, error) {
+	player := GetPlayerClient(playerId)
+	if player == nil {
+		return 0, 0, fmt.Errorf("player not found")
+	}
+	progress, err := player.QueryLayerProgress(cast.ToUint16(mediaId))
+	if err != nil {
+		return 0, 0, err
+	}
+	return int(progress.RemainTime), int(progress.TotalTime), nil
+}
+func SetProgramMediaProcess(playerId, programId, mediaId string, remainTime, totalTime int) error {
+	player := GetPlayerClient(playerId)
+	if player == nil {
+		return fmt.Errorf("player not found")
+	}
+	return player.ControlLayerProgress(programId, uint32(remainTime), uint32(totalTime), cast.ToUint16(mediaId))
 }
 
 // checkConnections verifies and refreshes player connections

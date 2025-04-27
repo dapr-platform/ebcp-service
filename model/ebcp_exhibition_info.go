@@ -31,7 +31,7 @@ Table: v_ebcp_exhibition_info
 
 JSON Sample
 -------------------------------------
-{    "id": "tLLIrbRtZmSuxPegcigsiIZfO",    "name": "AtyOLFkFlJaOFHxhRwXSOSDbO",    "start_time": 18,    "end_time": 77,    "status": 24,    "total_room_count": 89,    "total_item_count": 46,    "rooms": 89,    "items": 36}
+{    "id": "hiQhqnspcpmnIYQTEHVYVeBUq",    "name": "vixrblPTDQUOWCVZHEaOnAnSq",    "start_time": 22,    "end_time": 98,    "status": 52,    "total_room_count": 77,    "total_item_count": 2,    "rooms": 58,    "items": 67}
 
 
 Comments

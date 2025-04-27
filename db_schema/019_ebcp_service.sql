@@ -576,12 +576,54 @@ COMMENT ON COLUMN v_ebcp_player_info.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN v_ebcp_player_info.exhibition_name IS '所属展览名称';
 COMMENT ON COLUMN v_ebcp_player_info.programs IS '关联的节目信息';
 
+-- 节目详细视图
+CREATE VIEW v_ebcp_player_program_info AS
+SELECT 
+    pp.id AS id,
+    pp.name AS name,
+    pp.program_id AS program_id,
+    pp.program_index AS program_index,
+    p.id AS player_id,
+    p.name AS player_name,
+    p.ip_address AS player_ip_address,
+    p.port AS player_port,
+    p.status AS player_status,
+    ei.id AS item_id,
+    ei.name AS item_name,
+    er.id AS room_id,
+    er.name AS room_name,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', ppm.id,
+                'media_id', ppm.media_id,
+                'media_name', ppm.media_name
+            )
+        )
+        FROM o_ebcp_player_program_media ppm
+        WHERE ppm.program_id = pp.id
+    ) AS medias
+FROM 
+    o_ebcp_player_program pp
+LEFT JOIN 
+    o_ebcp_player p ON pp.player_id = p.id
+LEFT JOIN 
+    o_ebcp_exhibition_item ei ON p.item_id = ei.id
+LEFT JOIN 
+    o_ebcp_exhibition_room er ON ei.room_id = er.id
+LEFT JOIN 
+    o_ebcp_exhibition e ON er.exhibition_id = e.id;
+
+COMMENT ON VIEW v_ebcp_player_program_info IS '节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）';
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
 
+DROP VIEW IF EXISTS v_ebcp_player_program_info;
 DROP VIEW IF EXISTS v_ebcp_player_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_item_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_room_info;
