@@ -53,6 +53,7 @@ const (
 
 // Program represents a program in the player
 type Program struct {
+	Index   uint32
 	ID      uint32
 	Name    string
 	IsEmpty bool
@@ -673,189 +674,92 @@ func (c *PlayerClient) sendCommandWithTimeout(tag uint16, data []byte, timeout t
 	return buffer[:totalRead], nil
 }
 
-// GetProgramList gets the program list
+// GetProgramList gets the list of programs from the player
 func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
-	// 为程序列表专门使用更长的超时设置
-	longerTimeout := 30 * time.Second
-
-	// 多次尝试获取完整的程序列表
+	// 设置超时时间
+	timeout := 30 * time.Second
 	var resp []byte
 	var err error
-	maxRetries := 3
 
-	for attempt := 0; attempt < maxRetries; attempt++ {
-		// Send empty data for query
-		resp, err = c.sendCommandWithTimeout(TagGetProgramList, nil, longerTimeout)
+	// 尝试最多3次获取程序列表
+	for retries := 0; retries < 3; retries++ {
+		resp, err = c.sendCommandWithTimeout(TagGetProgramList, nil, timeout)
 		if err != nil {
-			if attempt < maxRetries-1 {
-				fmt.Printf("GetProgramList attempt %d failed: %v, retrying...\n", attempt+1, err)
-				time.Sleep(1 * time.Second)
-				continue
-			}
-			return nil, fmt.Errorf("GetProgramList failed after %d attempts: %v", maxRetries, err)
+			fmt.Printf("Failed to get program list (attempt %d): %v\n", retries+1, err)
+			time.Sleep(time.Second)
+			continue
 		}
 
-		// 如果响应数据长度明显太短，可能是不完整的
-		if len(resp) < 100 {
-			if attempt < maxRetries-1 {
-				fmt.Printf("GetProgramList response too short (%d bytes), retrying...\n", len(resp))
-				time.Sleep(1 * time.Second)
-				continue
-			}
+		// 验证响应长度是否足够
+		if len(resp) < 20 {
+			fmt.Printf("Response too short (attempt %d): %d bytes\n", retries+1, len(resp))
+			time.Sleep(time.Second)
+			continue
 		}
 
-		// 收到看起来有效的响应
 		break
 	}
 
-	// Each program comes in a separate packet
-	// Each packet: CC 55 CC 55 + version(2) + sequence(2) + tag(2) + length(2) + TLV
+	if err != nil {
+		return nil, fmt.Errorf("failed to get program list after retries: %v", err)
+	}
+
+	// 定义节目数据结构大小
 	const (
-		headerSize       = 12 // CC 55 CC 55 + version + sequence + tag + length
-		tlvHeaderSize    = 4  // TLV tag(2) + length(2)
-		programCountSize = 4  // Program count is 2 bytes
-		programIndexSize = 4
-		programIdSize    = 4
-		programNameSize  = 128
-		isEmptySize      = 1
+		programHeaderSize  = 16
+		programCountSize   = 4                                                                                                              // 包头大小
+		programIndexSize   = 4                                                                                                              // 索引大小
+		programIdSize      = 4                                                                                                              // ID大小
+		programNameSize    = 128                                                                                                            // 名称大小
+		programIsEmptySize = 1                                                                                                              // isEmpty标志大小
+		programSize        = programHeaderSize + programCountSize + programIndexSize + programIdSize + programNameSize + programIsEmptySize // 157字节
 	)
-
-	// First packet contains the program count
-	if len(resp) < headerSize+tlvHeaderSize+programCountSize {
-		return nil, fmt.Errorf("response too short for header and program count: len(resp)=%d", len(resp))
-	}
-
-	// Get program count from first packet
-	programCount := int(binary.LittleEndian.Uint16(resp[16:18]))
-	fmt.Printf("Program count: %d (response length: %d bytes)\n", programCount, len(resp))
-
-	// Create result structure
+	// 创建结果结构
 	result := &ProgramListResponse{
-		TotalCount: programCount,
-		Programs:   make([]Program, 0, programCount),
+		TotalCount: 0,
+		Programs:   make([]Program, 0, 0),
 	}
 
-	// 计算期望的最小响应大小
-	expectedMinSize := headerSize + tlvHeaderSize + programCountSize + // 第一个包头和程序计数
-		// 每个程序数据包的大小（去掉了programCountSize，因为它只在第一个包中出现）
-		(headerSize+tlvHeaderSize+programIndexSize+programIdSize+programNameSize+isEmptySize)*programCount
+	for i := 0; i < len(resp); i += programSize {
+		fmt.Printf("Program %d: %s\n", i, bytesToHexString(resp[i:i+programSize]))
+		// 节目数据开始位置（跳过包头）
+		dataStart := i + programHeaderSize + programCountSize
 
-	if len(resp) < expectedMinSize {
-		fmt.Printf("Warning: Response size %d is smaller than expected minimum %d for %d programs\n",
-			len(resp), expectedMinSize, programCount)
-	}
+		// 解析索引
+		programIndex := binary.LittleEndian.Uint32(resp[dataStart : dataStart+programIndexSize])
 
-	// 确定在可用数据中可以解析的程序数量
-	maxProgramsInResponse := 0
-	offset := 0
-	validPrograms := 0
+		// 解析ID
+		idPos := dataStart + programIndexSize
+		programId := binary.LittleEndian.Uint32(resp[idPos : idPos+programIdSize])
 
-	// 第一步：统计有多少个有效的程序数据包
-	for offset < len(resp)-headerSize {
-		// 寻找下一个有效包头
-		found := false
-		for i := offset; i < len(resp)-4; i++ {
-			if isValidPacketHeader(resp, i) {
-				offset = i
-				found = true
-				break
-			}
-		}
+		// 解析名称
+		namePos := idPos + programIdSize
+		nameBytes := resp[namePos : namePos+programNameSize]
+		name := string(bytes.TrimRight(nameBytes, "\x00"))
 
-		if !found {
-			break // 找不到下一个有效包头
-		}
+		// 解析isEmpty（0表示空，1表示非空）
+		isEmptyPos := namePos + programNameSize
+		isEmptyByte := resp[isEmptyPos]
+		isEmpty := isEmptyByte == 0
 
-		// 检查是否还有足够的数据读取此包
-		if offset+headerSize > len(resp) {
-			break
-		}
+		// 打印调试信息
+		fmt.Printf("Program %d raw details: Index=%d, ID=%d, isEmpty byte=0x%02X at position %d, isEmpty=%v\n",
+			i, programIndex, programId, isEmptyByte, isEmptyPos, isEmpty)
 
-		// 读取包长度
-		contentLength := binary.LittleEndian.Uint16(resp[offset+10 : offset+12])
-
-		// 检查是否有完整的包内容
-		if offset+headerSize+int(contentLength) > len(resp) {
-			break // 此包内容不完整
-		}
-
-		// 如果这是一个有效的程序数据包
-		if offset+headerSize+tlvHeaderSize+programIndexSize+programIdSize+programNameSize+isEmptySize <= len(resp) {
-			validPrograms++
-		}
-
-		// 移动到下一个包
-		offset += headerSize + int(contentLength)
-	}
-
-	maxProgramsInResponse = validPrograms
-	fmt.Printf("Found %d valid program entries in response\n", maxProgramsInResponse)
-
-	// 如果找到的有效程序数为0，但程序数应该大于0，返回错误
-	if maxProgramsInResponse == 0 && programCount > 0 {
-		return nil, fmt.Errorf("no valid program data found in response")
-	}
-
-	// 第二步：解析程序数据
-	offset = 0
-	parsedPrograms := 0
-
-	for i := 0; i < programCount && parsedPrograms < maxProgramsInResponse; i++ {
-		// 寻找下一个有效包头
-		found := false
-		for j := offset; j < len(resp)-4; j++ {
-			if isValidPacketHeader(resp, j) {
-				offset = j
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			break // 找不到下一个有效包头
-		}
-
-		// 验证是否有足够的数据
-		packetStart := offset
-		if packetStart+headerSize+tlvHeaderSize+programIndexSize+programIdSize+programNameSize+isEmptySize > len(resp) {
-			fmt.Printf("Incomplete data for program %d at offset %d\n", i, packetStart)
-			break
-		}
-
-		// 跳过包头和TLV头部
-		dataStart := packetStart + headerSize + tlvHeaderSize
-
-		// 读取程序数据
+		// 创建程序对象
 		program := Program{
-			ID:      binary.LittleEndian.Uint32(resp[dataStart+programIndexSize : dataStart+programIndexSize+programIdSize]),
-			IsEmpty: resp[dataStart+programIndexSize+programIdSize+programNameSize] == 0,
+			Index:   programIndex,
+			ID:      programId,
+			Name:    name,
+			IsEmpty: isEmpty,
 		}
 
-		// 读取以null结尾的程序名
-		nameBytes := resp[dataStart+programIndexSize+programIdSize : dataStart+programIndexSize+programIdSize+programNameSize]
-		nullPos := bytes.IndexByte(nameBytes, 0)
-		if nullPos != -1 {
-			program.Name = string(nameBytes[:nullPos])
-		} else {
-			program.Name = string(bytes.TrimRight(nameBytes, "\x00"))
-		}
-
+		// 添加到结果列表
 		result.Programs = append(result.Programs, program)
-		parsedPrograms++
 
-		// 移动到下一个包
-		offset = packetStart + headerSize + tlvHeaderSize + programIndexSize + programIdSize + programNameSize + isEmptySize
 	}
 
-	// 更新实际解析的程序数量
-	result.TotalCount = parsedPrograms
-	fmt.Printf("Successfully parsed %d/%d programs\n", parsedPrograms, programCount)
-
-	if len(result.Programs) > 0 {
-		return result, nil
-	}
-
-	return nil, fmt.Errorf("failed to parse any programs from response")
+	return result, nil
 }
 
 // FadeProgram fades to specified program
@@ -958,13 +862,15 @@ func (c *PlayerClient) GetAllProgramMedia(programID uint32) (*MediaListResponse,
 		ProgramID: programID,
 		Media:     make([]Media, 0),
 	}
+	fmt.Printf("Media resp: % x \n", resp)
 
+	// 获取实际的TLV长度
 	// Each media item has: MediaId(4 bytes) + MediaName(32 bytes)
 	const (
 		headerSize    = 12 // CC 55 CC 55 + version + sequence + tag + length
 		tlvHeaderSize = 4  // TLV tag(2) + length(2)
 		mediaIdSize   = 4
-		mediaNameSize = 32
+		mediaNameSize = 300
 		mediaItemSize = mediaIdSize + mediaNameSize
 	)
 
@@ -975,11 +881,6 @@ func (c *PlayerClient) GetAllProgramMedia(programID uint32) (*MediaListResponse,
 	// 根据TLV长度计算媒体项数量，而不是使用固定的计算方式
 	// 这样可以适应不同的服务器实现
 	dataSize := int(tlvLength)
-	if dataSize <= 0 {
-		// 回退到原来的计算方式
-		dataSize = len(resp) - headerSize - tlvHeaderSize
-		fmt.Printf("Using fallback dataSize calculation: %d\n", dataSize)
-	}
 
 	if dataSize < 0 {
 		return nil, errors.New("invalid response size")

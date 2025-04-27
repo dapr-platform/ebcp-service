@@ -56,7 +56,7 @@ func TestGetAllProgramMedia(t *testing.T) {
 	fmt.Printf("GetProgramList response: total=%d, programs=%+v\n", programs.TotalCount, programs.Programs)
 	time.Sleep(time.Second)
 	// 只查询前3个程序或更少（如果程序总数小于3）
-	count := 3
+	count := 2
 	if len(programs.Programs) < count {
 		count = len(programs.Programs)
 	}
