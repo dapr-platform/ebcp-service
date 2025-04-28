@@ -573,6 +573,89 @@ definitions:
         description: updated_time
         type: string
     type: object
+  model.Ebcp_player_program_info:
+    properties:
+      exhibition_id:
+        description: exhibition_id
+        type: string
+      exhibition_name:
+        description: exhibition_name
+        type: string
+      id:
+        description: id
+        type: string
+      item_id:
+        description: item_id
+        type: string
+      item_name:
+        description: item_name
+        type: string
+      medias:
+        description: medias
+      name:
+        description: name
+        type: string
+      player_id:
+        description: player_id
+        type: string
+      player_ip_address:
+        description: player_ip_address
+        type: string
+      player_name:
+        description: player_name
+        type: string
+      player_port:
+        description: player_port
+        type: integer
+      player_status:
+        description: player_status
+        type: integer
+      program_id:
+        description: program_id
+        type: string
+      program_index:
+        description: program_index
+        type: integer
+      room_id:
+        description: room_id
+        type: string
+      room_name:
+        description: room_name
+        type: string
+    type: object
+  model.Ebcp_player_program_media:
+    properties:
+      created_by:
+        description: created_by
+        type: string
+      created_time:
+        description: created_time
+        type: string
+      id:
+        description: id
+        type: string
+      media_id:
+        description: 媒体ID
+        type: string
+      media_name:
+        description: 媒体名称
+        type: string
+      player_id:
+        description: 播放设备ID(冗余)
+        type: string
+      player_program_id:
+        description: 播放设备节目ID(冗余)
+        type: string
+      program_id:
+        description: 节目ID(冗余)
+        type: string
+      updated_by:
+        description: updated_by
+        type: string
+      updated_time:
+        description: updated_time
+        type: string
+    type: object
 info:
   contact: {}
   description: ebcp-service API
@@ -3920,121 +4003,370 @@ paths:
       summary: query objects
       tags:
       - 播放设备节目
-    post:
-      consumes:
-      - application/json
-      description: save
+  /ebcp-player-program-info:
+    get:
+      description: query objects
       parameters:
-      - description: object
-        in: body
-        name: item
-        required: true
-        schema:
-          $ref: '#/definitions/model.Ebcp_player_program'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: object
-          schema:
-            allOf:
-            - $ref: '#/definitions/common.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Ebcp_player_program'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.Response'
-      summary: save
-      tags:
-      - 播放设备节目
-  /ebcp-player-program/{id}:
-    delete:
-      description: delete
-      parameters:
-      - description: 实例id
-        in: path
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
         name: id
-        required: true
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
+        type: string
+      - description: program_index
+        in: query
+        name: program_index
+        type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: player_name
+        in: query
+        name: player_name
+        type: string
+      - description: player_ip_address
+        in: query
+        name: player_ip_address
+        type: string
+      - description: player_port
+        in: query
+        name: player_port
+        type: string
+      - description: player_status
+        in: query
+        name: player_status
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: item_name
+        in: query
+        name: item_name
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
+        type: string
+      - description: room_name
+        in: query
+        name: room_name
+        type: string
+      - description: exhibition_id
+        in: query
+        name: exhibition_id
+        type: string
+      - description: exhibition_name
+        in: query
+        name: exhibition_name
+        type: string
+      - description: medias
+        in: query
+        name: medias
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: object
+          description: objects array
           schema:
             allOf:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Ebcp_player_program'
+                  items:
+                    $ref: '#/definitions/model.Ebcp_player_program_info'
+                  type: array
               type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: delete
+      summary: query objects
       tags:
-      - 播放设备节目
-  /ebcp-player-program/batch-delete:
-    post:
-      consumes:
-      - application/json
-      description: batch delete
+      - 节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）
+  /ebcp-player-program-info/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
       parameters:
-      - description: id array
-        in: body
-        name: ids
+      - description: current page
+        in: query
+        name: _page
         required: true
-        schema:
-          items:
-            type: string
-          type: array
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
+        type: string
+      - description: program_index
+        in: query
+        name: program_index
+        type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: player_name
+        in: query
+        name: player_name
+        type: string
+      - description: player_ip_address
+        in: query
+        name: player_ip_address
+        type: string
+      - description: player_port
+        in: query
+        name: player_port
+        type: string
+      - description: player_status
+        in: query
+        name: player_status
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: item_name
+        in: query
+        name: item_name
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
+        type: string
+      - description: room_name
+        in: query
+        name: room_name
+        type: string
+      - description: exhibition_id
+        in: query
+        name: exhibition_id
+        type: string
+      - description: exhibition_name
+        in: query
+        name: exhibition_name
+        type: string
+      - description: medias
+        in: query
+        name: medias
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: objects array
           schema:
-            $ref: '#/definitions/common.Response'
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.Page'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/model.Ebcp_player_program_info'
+                        type: array
+                    type: object
+              type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: batch delete
+      summary: page query
       tags:
-      - 播放设备节目
-  /ebcp-player-program/batch-upsert:
-    post:
-      consumes:
-      - application/json
-      description: batch update
+      - 节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）
+  /ebcp-player-program-media:
+    get:
+      description: query objects
       parameters:
-      - description: objects array
-        in: body
-        name: entities
-        required: true
-        schema:
-          items:
-            additionalProperties: true
-            type: object
-          type: array
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: media_id
+        in: query
+        name: media_id
+        type: string
+      - description: media_name
+        in: query
+        name: media_name
+        type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
+        type: string
+      - description: player_program_id
+        in: query
+        name: player_program_id
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: objects array
           schema:
-            $ref: '#/definitions/common.Response'
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_player_program_media'
+                  type: array
+              type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.Response'
-      summary: batch update
+      summary: query objects
       tags:
-      - 播放设备节目
+      - 播放设备节目媒体
+  /ebcp-player-program-media/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: media_id
+        in: query
+        name: media_id
+        type: string
+      - description: media_name
+        in: query
+        name: media_name
+        type: string
+      - description: player_id
+        in: query
+        name: player_id
+        type: string
+      - description: program_id
+        in: query
+        name: program_id
+        type: string
+      - description: player_program_id
+        in: query
+        name: player_program_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.Page'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/model.Ebcp_player_program_media'
+                        type: array
+                    type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 播放设备节目媒体
   /ebcp-player-program/page:
     get:
       description: page query, _page(from 1 begin), _page_size, _order, and others
@@ -4153,7 +4485,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Program ID
+      - description: Program ID, 整数 0,1,2...
         in: path
         name: programId
         required: true
@@ -4200,6 +4532,72 @@ paths:
       summary: Fade to program
       tags:
       - 播放设备
+  /ebcp-player/{id}/get-media-process/{programId}/{mediaId}:
+    get:
+      description: Get specified program media process on player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program ID,整数id，0，1，2...
+        in: path
+        name: programId
+        required: true
+        type: string
+      - description: Media ID,整数id，0，1，2...
+        in: path
+        name: mediaId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Get Program Media Process
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/pause-media/{programId}/{mediaId}:
+    post:
+      description: Pause specified program media on player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program ID,整数id，0，1，2...
+        in: path
+        name: programId
+        required: true
+        type: string
+      - description: Media ID,整数id，0，1，2...
+        in: path
+        name: mediaId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Pause Program Media
+      tags:
+      - 播放设备
   /ebcp-player/{id}/pause/{programId}:
     post:
       description: Pause specified program on player
@@ -4228,6 +4626,39 @@ paths:
       summary: Pause program
       tags:
       - 播放设备
+  /ebcp-player/{id}/play-media/{programId}/{mediaId}:
+    post:
+      description: Play specified program media on player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program ID,整数id，0，1，2...
+        in: path
+        name: programId
+        required: true
+        type: string
+      - description: Media ID,整数id，0，1，2...
+        in: path
+        name: mediaId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Play Progaram Media
+      tags:
+      - 播放设备
   /ebcp-player/{id}/play/{programId}:
     post:
       description: Play specified program on player
@@ -4237,7 +4668,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Program ID
+      - description: Program ID, 整数 0,1,2...
         in: path
         name: programId
         required: true
@@ -4277,6 +4708,49 @@ paths:
           schema:
             $ref: '#/definitions/common.Response'
       summary: Get program list
+      tags:
+      - 播放设备
+  /ebcp-player/{id}/set-media-process/{programId}/{mediaId}:
+    post:
+      description: Set specified program media process on player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Program ID,整数id，0，1，2...
+        in: path
+        name: programId
+        required: true
+        type: string
+      - description: Media ID,整数id，0，1，2...
+        in: path
+        name: mediaId
+        required: true
+        type: string
+      - description: Remain Time,整数，单位秒
+        in: query
+        name: remainTime
+        required: true
+        type: string
+      - description: Total Time,整数，单位秒
+        in: query
+        name: totalTime
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Set Program Media Process
       tags:
       - 播放设备
   /ebcp-player/{id}/sound/close:
@@ -4418,7 +4892,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Program ID
+      - description: Program ID, 整数 0,1,2...
         in: path
         name: programId
         required: true

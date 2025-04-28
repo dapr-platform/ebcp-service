@@ -5298,33 +5298,131 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "save",
-                "consumes": [
-                    "application/json"
-                ],
+            }
+        },
+        "/ebcp-player-program-info": {
+            "get": {
+                "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "播放设备节目"
+                    "节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）"
                 ],
-                "summary": "save",
+                "summary": "query objects",
                 "parameters": [
                     {
-                        "description": "object",
-                        "name": "item",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Ebcp_player_program"
-                        }
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_index",
+                        "name": "program_index",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_name",
+                        "name": "player_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_ip_address",
+                        "name": "player_ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_port",
+                        "name": "player_port",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_status",
+                        "name": "player_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "medias",
+                        "name": "medias",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "object",
+                        "description": "objects array",
                         "schema": {
                             "allOf": [
                                 {
@@ -5334,7 +5432,10 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Ebcp_player_program"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_player_program_info"
+                                            }
                                         }
                                     }
                                 }
@@ -5350,38 +5451,166 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-player-program/batch-delete": {
-            "post": {
-                "description": "batch delete",
-                "consumes": [
-                    "application/json"
-                ],
+        "/ebcp-player-program-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "播放设备节目"
+                    "节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）"
                 ],
-                "summary": "batch delete",
+                "summary": "page query",
                 "parameters": [
                     {
-                        "description": "id array",
-                        "name": "ids",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_index",
+                        "name": "program_index",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_name",
+                        "name": "player_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_ip_address",
+                        "name": "player_ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_port",
+                        "name": "player_port",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_status",
+                        "name": "player_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_id",
+                        "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "room_name",
+                        "name": "room_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_id",
+                        "name": "exhibition_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "exhibition_name",
+                        "name": "exhibition_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "medias",
+                        "name": "medias",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "objects array",
                         "schema": {
-                            "$ref": "#/definitions/common.Response"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_player_program_info"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -5393,39 +5622,245 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-player-program/batch-upsert": {
-            "post": {
-                "description": "batch update",
-                "consumes": [
-                    "application/json"
-                ],
+        "/ebcp-player-program-media": {
+            "get": {
+                "description": "query objects",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "播放设备节目"
+                    "播放设备节目媒体"
                 ],
-                "summary": "batch update",
+                "summary": "query objects",
                 "parameters": [
                     {
-                        "description": "objects array",
-                        "name": "entities",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": true
-                            }
-                        }
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "media_id",
+                        "name": "media_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "media_name",
+                        "name": "media_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_program_id",
+                        "name": "player_program_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_player_program_media"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player-program-media/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备节目媒体"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "media_id",
+                        "name": "media_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "media_name",
+                        "name": "media_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_id",
+                        "name": "player_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "program_id",
+                        "name": "program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_program_id",
+                        "name": "player_program_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/common.Page"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/model.Ebcp_player_program_media"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -5551,53 +5986,6 @@ const docTemplate = `{
                                                     }
                                                 }
                                             ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/ebcp-player-program/{id}": {
-            "delete": {
-                "description": "delete",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "播放设备节目"
-                ],
-                "summary": "delete",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "实例id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "object",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/common.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Ebcp_player_program"
                                         }
                                     }
                                 }
@@ -5914,7 +6302,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Program ID",
+                        "description": "Program ID, 整数 0,1,2...",
                         "name": "programId",
                         "in": "path",
                         "required": true
@@ -5978,6 +6366,104 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-player/{id}/get-media-process/{programId}/{mediaId}": {
+            "get": {
+                "description": "Get specified program media process on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Get Program Media Process",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID,整数id，0，1，2...",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Media ID,整数id，0，1，2...",
+                        "name": "mediaId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/pause-media/{programId}/{mediaId}": {
+            "post": {
+                "description": "Pause specified program media on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Pause Program Media",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID,整数id，0，1，2...",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Media ID,整数id，0，1，2...",
+                        "name": "mediaId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-player/{id}/pause/{programId}": {
             "post": {
                 "description": "Pause specified program on player",
@@ -6020,6 +6506,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-player/{id}/play-media/{programId}/{mediaId}": {
+            "post": {
+                "description": "Play specified program media on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Play Progaram Media",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID,整数id，0，1，2...",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Media ID,整数id，0，1，2...",
+                        "name": "mediaId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-player/{id}/play/{programId}": {
             "post": {
                 "description": "Play specified program on player",
@@ -6040,7 +6575,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Program ID",
+                        "description": "Program ID, 整数 0,1,2...",
                         "name": "programId",
                         "in": "path",
                         "required": true
@@ -6078,6 +6613,69 @@ const docTemplate = `{
                         "description": "Player ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-player/{id}/set-media-process/{programId}/{mediaId}": {
+            "post": {
+                "description": "Set specified program media process on player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播放设备"
+                ],
+                "summary": "Set Program Media Process",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Player ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Program ID,整数id，0，1，2...",
+                        "name": "programId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Media ID,整数id，0，1，2...",
+                        "name": "mediaId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Remain Time,整数，单位秒",
+                        "name": "remainTime",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Total Time,整数，单位秒",
+                        "name": "totalTime",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -6313,7 +6911,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Program ID",
+                        "description": "Program ID, 整数 0,1,2...",
                         "name": "programId",
                         "in": "path",
                         "required": true
@@ -7111,6 +7709,119 @@ const docTemplate = `{
                 "program_index": {
                     "description": "节目序号",
                     "type": "integer"
+                },
+                "updated_by": {
+                    "description": "updated_by",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "updated_time",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_player_program_info": {
+            "type": "object",
+            "properties": {
+                "exhibition_id": {
+                    "description": "exhibition_id",
+                    "type": "string"
+                },
+                "exhibition_name": {
+                    "description": "exhibition_name",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "item_id",
+                    "type": "string"
+                },
+                "item_name": {
+                    "description": "item_name",
+                    "type": "string"
+                },
+                "medias": {
+                    "description": "medias"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "player_id": {
+                    "description": "player_id",
+                    "type": "string"
+                },
+                "player_ip_address": {
+                    "description": "player_ip_address",
+                    "type": "string"
+                },
+                "player_name": {
+                    "description": "player_name",
+                    "type": "string"
+                },
+                "player_port": {
+                    "description": "player_port",
+                    "type": "integer"
+                },
+                "player_status": {
+                    "description": "player_status",
+                    "type": "integer"
+                },
+                "program_id": {
+                    "description": "program_id",
+                    "type": "string"
+                },
+                "program_index": {
+                    "description": "program_index",
+                    "type": "integer"
+                },
+                "room_id": {
+                    "description": "room_id",
+                    "type": "string"
+                },
+                "room_name": {
+                    "description": "room_name",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_player_program_media": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "description": "created_by",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "media_id": {
+                    "description": "媒体ID",
+                    "type": "string"
+                },
+                "media_name": {
+                    "description": "媒体名称",
+                    "type": "string"
+                },
+                "player_id": {
+                    "description": "播放设备ID(冗余)",
+                    "type": "string"
+                },
+                "player_program_id": {
+                    "description": "播放设备节目ID(冗余)",
+                    "type": "string"
+                },
+                "program_id": {
+                    "description": "节目ID(冗余)",
+                    "type": "string"
                 },
                 "updated_by": {
                     "description": "updated_by",
