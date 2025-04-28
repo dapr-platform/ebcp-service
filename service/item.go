@@ -118,6 +118,9 @@ func StartExhibitionItem(id string) error {
 	if err != nil {
 		return fmt.Errorf("获取播放设备信息失败: %v", err)
 	}
+	if len(players) == 0 {
+		return fmt.Errorf("播放设备不存在")
+	}
 
 	var errors []string
 	for _, player := range players {
@@ -162,6 +165,9 @@ func StopExhibitionItem(id string) error {
 	if err != nil {
 		return fmt.Errorf("获取播放设备信息失败: %v", err)
 	}
+	if len(players) == 0 {
+		return fmt.Errorf("播放设备不存在")
+	}
 
 	var errors []string
 	for _, player := range players {
@@ -198,6 +204,30 @@ func PauseExhibitionItem(id string) error {
 	}
 	if item == nil {
 		return fmt.Errorf("展项不存在")
+	}
+
+	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name,
+		"item_id="+id)
+	if err != nil {
+		return fmt.Errorf("获取播放设备信息失败: %v", err)
+	}
+	if len(players) == 0 {
+		return fmt.Errorf("播放设备不存在")
+	}
+
+	var errors []string
+	for _, player := range players {
+		if err := PlayerPause(&player); err != nil {
+			msg := fmt.Sprintf("播放设备 %s 暂停节目失败: %v", player.ID, err)
+			common.Logger.Error(msg)
+			errors = append(errors, msg)
+			continue
+		}
+	}
+
+	if len(errors) > 0 {
+		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
 
 	// 更新展项状态为暂停
