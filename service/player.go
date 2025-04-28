@@ -29,6 +29,11 @@ var (
 )
 
 func init() {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("player init panic: %v", err)
+		}
+	}()
 	go maintainConnections()
 	go updatePlayerPrograms()
 	common.RegisterUpsertBeforeHook(model.Ebcp_playerTableInfo.Name, UpsertPlayer)

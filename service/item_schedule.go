@@ -30,10 +30,16 @@ var (
 )
 
 func init() {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("item_schedule init panic: %v", err)
+		}
+	}()
 	stopSchedule = make(chan struct{})
 	go scheduleService(context.Background())
 	go scheduleRefreshHolidayDates(context.Background())
 }
+
 func scheduleRefreshHolidayDates(ctx context.Context) {
 	refreshHolidayDates()
 	ticker := time.NewTicker(time.Hour * 24)
@@ -47,6 +53,7 @@ func scheduleRefreshHolidayDates(ctx context.Context) {
 		}
 	}
 }
+
 func refreshHolidayDates() {
 	year := getCurrentYear()
 	holidays, err := getHolidayDates(year)
@@ -238,6 +245,7 @@ func shouldScheduleWithDateType(schedule *model.Ebcp_item_schedule, now time.Tim
 		return false
 	}
 }
+
 func isHoliday(t time.Time) bool {
 	year := t.Year()
 	holidays, ok := cacheHolidayDates[year]

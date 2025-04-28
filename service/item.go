@@ -21,6 +21,11 @@ var (
 )
 
 func init() {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("item init panic: %v", err)
+		}
+	}()
 	stopRefresh = make(chan struct{})
 	go refreshItemStatus(context.Background())
 }
@@ -185,21 +190,18 @@ func PauseExhibitionItem(id string) error {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
 	if item == nil {
-		return fmt.Errorf("展项不存在")	
+		return fmt.Errorf("展项不存在")
 	}
 
 	// 更新展项状态为暂停
 	item.Status = ItemStatusPause
 	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {	
+		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
 		return fmt.Errorf("更新展项状态失败: %v", err)
 	}
 
 	return nil
 }
-
-
-
 
 // BatchStartExhibitionItems 批量启动展项
 func BatchStartExhibitionItems(ids []string) error {
@@ -330,7 +332,7 @@ func BatchPauseExhibitionItems(ids []string) error {
 				err := PauseExhibitionItem(id)
 				results <- result{id: id, err: err}
 			}
-		}()	
+		}()
 	}
 
 	// 发送任务
