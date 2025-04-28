@@ -474,8 +474,14 @@ definitions:
       item_id:
         description: 展项ID
         type: string
+      start_date:
+        description: 开始日期
+        type: string
       start_time:
         description: 开始时间
+        type: string
+      stop_date:
+        description: 停止日期
         type: string
       stop_time:
         description: 停止时间
@@ -1680,6 +1686,44 @@ paths:
           schema:
             $ref: '#/definitions/common.Response'
       summary: page query
+      tags:
+      - 展馆
+  /ebcp-exhibition-hall/start:
+    post:
+      consumes:
+      - application/json
+      description: 展馆一键启动
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 展馆一键启动
+      tags:
+      - 展馆
+  /ebcp-exhibition-hall/stop:
+    post:
+      consumes:
+      - application/json
+      description: 展馆一键停止
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: 展馆一键停止
       tags:
       - 展馆
   /ebcp-exhibition-info:
@@ -3648,6 +3692,14 @@ paths:
         in: query
         name: stop_time
         type: string
+      - description: start_date
+        in: query
+        name: start_date
+        type: string
+      - description: stop_date
+        in: query
+        name: stop_date
+        type: string
       - description: cycle_type
         in: query
         name: cycle_type
@@ -3842,6 +3894,14 @@ paths:
       - description: stop_time
         in: query
         name: stop_time
+        type: string
+      - description: start_date
+        in: query
+        name: start_date
+        type: string
+      - description: stop_date
+        in: query
+        name: stop_date
         type: string
       - description: cycle_type
         in: query

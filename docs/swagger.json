@@ -1505,6 +1505,64 @@
                 }
             }
         },
+        "/ebcp-exhibition-hall/start": {
+            "post": {
+                "description": "展馆一键启动",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展馆"
+                ],
+                "summary": "展馆一键启动",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-hall/stop": {
+            "post": {
+                "description": "展馆一键停止",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展馆"
+                ],
+                "summary": "展馆一键停止",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-hall/{id}": {
             "delete": {
                 "description": "delete",
@@ -4652,6 +4710,18 @@
                     },
                     {
                         "type": "string",
+                        "description": "start_date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_date",
+                        "name": "stop_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "cycle_type",
                         "name": "cycle_type",
                         "in": "query"
@@ -4908,6 +4978,18 @@
                         "type": "string",
                         "description": "stop_time",
                         "name": "stop_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_date",
+                        "name": "stop_date",
                         "in": "query"
                     },
                     {
@@ -7978,8 +8060,16 @@
                     "description": "展项ID",
                     "type": "string"
                 },
+                "start_date": {
+                    "description": "开始日期",
+                    "type": "string"
+                },
                 "start_time": {
                     "description": "开始时间",
+                    "type": "string"
+                },
+                "stop_date": {
+                    "description": "停止日期",
                     "type": "string"
                 },
                 "stop_time": {
