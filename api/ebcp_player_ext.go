@@ -130,7 +130,7 @@ func PauseProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 
-	programId, err := strconv.ParseUint(programIdStr, 10, 32)
+	_, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
 		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
@@ -158,7 +158,7 @@ func PlayProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 
-	programId, err := strconv.ParseUint(programIdStr, 10, 32)
+	_, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
 		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
@@ -186,7 +186,7 @@ func StopProgramHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 
-	programId, err := strconv.ParseUint(programIdStr, 10, 32)
+	_, err := strconv.ParseUint(programIdStr, 10, 32)
 	if err != nil {
 		common.HttpResult(w, common.ErrParam.AppendMsg("invalid program id"))
 		return
@@ -403,7 +403,7 @@ func SetGlobalVolumeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.SetGlobalVolume(uint8(volume))
+	err = client.SetGlobalVolume(uint32(volume))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
