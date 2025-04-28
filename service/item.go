@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/dapr-platform/common"
-	"github.com/spf13/cast"
 )
+
 const (
 	ItemStatusStart = 1
 	ItemStatusStop  = 2
@@ -36,7 +36,6 @@ func StartExhibitionItem(id string) error {
 			errors = append(errors, fmt.Sprintf("播放设备 %s 播放节目失败: %v", player.ID, err))
 			continue
 		}
-		
 
 	}
 	if len(errors) > 0 {
@@ -74,7 +73,7 @@ func StopExhibitionItem(id string) error {
 			errors = append(errors, fmt.Sprintf("播放设备 %s 停止节目失败: %v", player.ID, err))
 			continue
 		}
-		
+
 	}
 	if len(errors) > 0 {
 		return fmt.Errorf(strings.Join(errors, "\n"))
