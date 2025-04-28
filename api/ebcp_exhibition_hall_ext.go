@@ -1,12 +1,11 @@
 package api
 
 import (
+	"ebcp-service/service"
 	"net/http"
 
 	"github.com/dapr-platform/common"
 	"github.com/go-chi/chi/v5"
-
-	"strings"
 
 	"time"
 )
@@ -29,7 +28,10 @@ func InitEbcp_exhibition_hallExtRoute(r chi.Router) {
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-hall/start [post]
 func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
-
+	err := service.StartHall()
+	if err != nil {
+		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
+	}
 	common.HttpResult(w, common.OK)
 }
 
@@ -42,6 +44,9 @@ func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-hall/stop [post]
 func Ebcp_exhibition_hallStopHandler(w http.ResponseWriter, r *http.Request) {
-
+	err := service.StopHall()
+	if err != nil {
+		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
+	}
 	common.HttpResult(w, common.OK)
 }
