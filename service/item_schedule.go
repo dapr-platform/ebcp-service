@@ -64,8 +64,9 @@ func scheduleRefreshHolidayDates(ctx context.Context) {
 }
 
 func refreshHolidayDates() {
-	year := getCurrentYear()
+
 	for {
+		year := getCurrentYear()
 		holidays, err := getHolidayDates(year)
 		if err != nil {
 			common.Logger.Errorf("获取节假日日期失败: %v", err)
@@ -81,7 +82,7 @@ func refreshHolidayDates() {
 func getHolidayDates(year int) ([]model.Ebcp_holiday_date, error) {
 	holidays, err := common.DbQuery[model.Ebcp_holiday_date](context.Background(), common.GetDaprClient(),
 		model.Ebcp_holiday_dateTableInfo.Name,
-		fmt.Sprintf("year=", year))
+		"year="+cast.ToString(year))
 	if err != nil {
 		return nil, fmt.Errorf("获取节假日日期失败: %v", err)
 	}
