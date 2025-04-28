@@ -217,6 +217,7 @@ CREATE TABLE o_ebcp_item_schedule (
     start_time VARCHAR(32) NOT NULL,
     stop_time VARCHAR(32) NOT NULL,
     cycle_type INTEGER NOT NULL,
+    enabled INTEGER NOT NULL DEFAULT 1,
                                        PRIMARY KEY (id)
 );
 
@@ -225,8 +226,32 @@ COMMENT ON COLUMN o_ebcp_item_schedule.item_id IS '展项ID';
 COMMENT ON COLUMN o_ebcp_item_schedule.start_time IS '开始时间';
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_time IS '停止时间'; 
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
+COMMENT ON COLUMN o_ebcp_item_schedule.enabled IS '是否启用(0: 禁用, 1: 启用)';
 
--- 创建视图
+-- 节假日日期表
+CREATE TABLE o_ebcp_holiday_date (
+    id VARCHAR(32) NOT NULL,
+    created_by VARCHAR(32) NOT NULL,
+    created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(32) NOT NULL,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date DATE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    type INTEGER NOT NULL,
+    year INTEGER NOT NULL,
+    remarks VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX idx_holiday_date ON o_ebcp_holiday_date(date);
+
+COMMENT ON TABLE o_ebcp_holiday_date IS '节假日日期表';
+COMMENT ON COLUMN o_ebcp_holiday_date.date IS '日期';
+COMMENT ON COLUMN o_ebcp_holiday_date.name IS '节假日名称';
+COMMENT ON COLUMN o_ebcp_holiday_date.type IS '类型(1:法定节假日, 2:调休工作日, 3:周末调休, 4:闭馆日)';
+COMMENT ON COLUMN o_ebcp_holiday_date.year IS '年份';
+COMMENT ON COLUMN o_ebcp_holiday_date.remarks IS '备注';
+
 
 -- 创建视图
 CREATE VIEW v_ebcp_exhibition_info AS
@@ -511,16 +536,18 @@ SELECT
         WHERE cd.item_id = ei.id
     ) AS control_devices,
     (
-        SELECT json_build_object(
-            'schedule_id', s.id,
-            'start_time', s.start_time,
-            'stop_time', s.stop_time,
-            'cycle_type', s.cycle_type
+        SELECT json_agg(
+            json_build_object(
+                'schedule_id', s.id,
+                'start_time', s.start_time,
+                'stop_time', s.stop_time,
+                'cycle_type', s.cycle_type,
+                'enabled', s.enabled
+            )
         )
         FROM o_ebcp_item_schedule s
         WHERE s.item_id = ei.id
-        LIMIT 1
-    ) AS schedule
+    ) AS schedules
 FROM 
     o_ebcp_exhibition_item ei
 JOIN 
@@ -680,7 +707,7 @@ DROP VIEW IF EXISTS v_ebcp_exhibition_room_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_hall_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_area_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_info;
-
+DROP TABLE IF EXISTS o_ebcp_holiday_date;
 DROP TABLE IF EXISTS o_ebcp_item_schedule;
 DROP TABLE IF EXISTS o_ebcp_item_device_relation;
 DROP TABLE IF EXISTS o_ebcp_player_program_media;

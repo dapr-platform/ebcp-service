@@ -34,7 +34,7 @@ Table: o_ebcp_exhibition_item
 
 JSON Sample
 -------------------------------------
-{    "id": "qqcwDWGHTCIIvliUVXlZcmrJW",    "created_by": "wEQZUKcgKPqtMBpKhXSZObrxJ",    "created_time": 94,    "updated_by": "VHuoxvVbtylNkuhUXZHYtArIt",    "updated_time": 17,    "name": "UVOhnhlGhHAMrlBZOlfRDQtjW",    "exhibition_id": "cPnrekuDIarkqZVFAdaeYjSWc",    "room_id": "fYpgCdTBDWQZjTFvmnSnDBGvP",    "type": "xnhXMgHsKiTtMfZdSWvMcouHT",    "export_info": "KOqGTFSrKgKXcIfeUdSdJwWXc",    "status": 86,    "remarks": "vobEiioUdJrVcaHDaMmjTkSNB"}
+{    "id": "ISysNKgGODFcPpwdtayYxYdXS",    "created_by": "jrJCHZdtTUerPpbgJjikjxtJu",    "created_time": 83,    "updated_by": "DWBfamLqWUorpjIPQMCSBOGCZ",    "updated_time": 50,    "name": "wYCXgAJuLanwtukoxoeslGeVH",    "exhibition_id": "kLigrOLvIKAQaOuyaDodpMeuB",    "room_id": "EAucNZFcnvVjOqyAFXqIOqfEI",    "type": "TeLLJkHXqJGNriGiibdpqRkkZ",    "export_info": "fNFABemRtZoZuMjsqkIfkIplS",    "status": 70,    "remarks": "jRucnmkwxGPJvUrIfxfrWdqbn"}
 
 
 
@@ -88,7 +88,7 @@ type Ebcp_exhibition_item struct {
 
 	ExportInfo string `json:"export_info"` //输出信息
 
-	Status int32 `json:"status"` //状态（1: 启动, 2: 停止, 3: 故障）
+	Status int32 `json:"status"` //状态（0: 启动, 1: 暂停, 2: 停止）
 
 	Remarks string `json:"remarks"` //备注
 
@@ -311,7 +311,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              10,
 			Name:               "status",
-			Comment:            `状态（1: 启动, 2: 停止, 3: 故障）`,
+			Comment:            `状态（0: 启动, 1: 暂停, 2: 停止）`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",

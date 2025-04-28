@@ -17,42 +17,51 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_exhibition_hall
+Table: o_ebcp_holiday_date
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
-[ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 5] date                                           DATE                 null: false  primary: false  isArray: false  auto: false  col: DATE            len: -1      default: []
+[ 6] name                                           VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
+[ 7] type                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 8] year                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 9] remarks                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "GGvJwOhwqEoePHBUEWgUdxVdJ",    "created_by": "PFAVgsNUoBspaDkOsbDMrkbSc",    "created_time": 65,    "updated_by": "ukBVkooxomqhISXhMvDtmVYip",    "updated_time": 84,    "name": "XpifCRhyeDbLyxMIOfCHkthQO",    "remarks": "NTMmnmglpwjBUWgCXbQgYYWwT"}
+{    "id": "aYOfqaKVRIwoMBfjaTBMDsPNk",    "created_by": "KAeoFvskEqYBmfKavsmsmIxvi",    "created_time": 83,    "updated_by": "VfUOlOkkiIjQOHgjqisyrlKWu",    "updated_time": 99,    "date": "2244-02-26T01:59:13.953520623+08:00",    "name": "HKbNwrlcbQWKNdSBDRfAKrsTI",    "type": 33,    "year": 10,    "remarks": "ihfhyxMtnFYvgLxItNmoVdjxH"}
 
 
 
 */
 
 var (
-	Ebcp_exhibition_hall_FIELD_NAME_id = "id"
+	Ebcp_holiday_date_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_hall_FIELD_NAME_created_by = "created_by"
+	Ebcp_holiday_date_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_exhibition_hall_FIELD_NAME_created_time = "created_time"
+	Ebcp_holiday_date_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_exhibition_hall_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_holiday_date_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_exhibition_hall_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_holiday_date_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_exhibition_hall_FIELD_NAME_name = "name"
+	Ebcp_holiday_date_FIELD_NAME_date = "date"
 
-	Ebcp_exhibition_hall_FIELD_NAME_remarks = "remarks"
+	Ebcp_holiday_date_FIELD_NAME_name = "name"
+
+	Ebcp_holiday_date_FIELD_NAME_type = "type"
+
+	Ebcp_holiday_date_FIELD_NAME_year = "year"
+
+	Ebcp_holiday_date_FIELD_NAME_remarks = "remarks"
 )
 
-// Ebcp_exhibition_hall struct is a row record of the o_ebcp_exhibition_hall table in the  database
-type Ebcp_exhibition_hall struct {
+// Ebcp_holiday_date struct is a row record of the o_ebcp_holiday_date table in the  database
+type Ebcp_holiday_date struct {
 	ID string `json:"id"` //id
 
 	CreatedBy string `json:"created_by"` //created_by
@@ -63,14 +72,20 @@ type Ebcp_exhibition_hall struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Name string `json:"name"` //展馆名称
+	Date time.Time `json:"date"` //日期
+
+	Name string `json:"name"` //节假日名称
+
+	Type int32 `json:"type"` //类型(1:法定节假日, 2:调休工作日, 3:周末调休, 4:闭馆日)
+
+	Year int32 `json:"year"` //年份
 
 	Remarks string `json:"remarks"` //备注
 
 }
 
-var Ebcp_exhibition_hallTableInfo = &TableInfo{
-	Name: "o_ebcp_exhibition_hall",
+var Ebcp_holiday_dateTableInfo = &TableInfo{
+	Name: "o_ebcp_holiday_date",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
@@ -180,10 +195,94 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "name",
-			Comment:            `展馆名称`,
+			Name:               "date",
+			Comment:            `日期`,
 			Notes:              ``,
 			Nullable:           false,
+			DatabaseTypeName:   "DATE",
+			DatabaseTypePretty: "DATE",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "DATE",
+			ColumnLength:       -1,
+			GoFieldName:        "Date",
+			GoFieldType:        "time.Time",
+			JSONFieldName:      "date",
+			ProtobufFieldName:  "date",
+			ProtobufType:       "google.protobuf.Timestamp",
+			ProtobufPos:        6,
+		},
+
+		&ColumnInfo{
+			Index:              6,
+			Name:               "name",
+			Comment:            `节假日名称`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(100)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       100,
+			GoFieldName:        "Name",
+			GoFieldType:        "string",
+			JSONFieldName:      "name",
+			ProtobufFieldName:  "name",
+			ProtobufType:       "string",
+			ProtobufPos:        7,
+		},
+
+		&ColumnInfo{
+			Index:              7,
+			Name:               "type",
+			Comment:            `类型(1:法定节假日, 2:调休工作日, 3:周末调休, 4:闭馆日)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Type",
+			GoFieldType:        "int32",
+			JSONFieldName:      "type",
+			ProtobufFieldName:  "type",
+			ProtobufType:       "int32",
+			ProtobufPos:        8,
+		},
+
+		&ColumnInfo{
+			Index:              8,
+			Name:               "year",
+			Comment:            `年份`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Year",
+			GoFieldType:        "int32",
+			JSONFieldName:      "year",
+			ProtobufFieldName:  "year",
+			ProtobufType:       "int32",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "remarks",
+			Comment:            `备注`,
+			Notes:              ``,
+			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(255)",
 			IsPrimaryKey:       false,
@@ -191,57 +290,36 @@ var Ebcp_exhibition_hallTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       255,
-			GoFieldName:        "Name",
-			GoFieldType:        "string",
-			JSONFieldName:      "name",
-			ProtobufFieldName:  "name",
-			ProtobufType:       "string",
-			ProtobufPos:        6,
-		},
-
-		&ColumnInfo{
-			Index:              6,
-			Name:               "remarks",
-			Comment:            `备注`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TEXT",
-			DatabaseTypePretty: "TEXT",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TEXT",
-			ColumnLength:       -1,
 			GoFieldName:        "Remarks",
 			GoFieldType:        "string",
 			JSONFieldName:      "remarks",
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
-			ProtobufPos:        7,
+			ProtobufPos:        10,
 		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_exhibition_hall) TableName() string {
-	return "o_ebcp_exhibition_hall"
+func (e *Ebcp_holiday_date) TableName() string {
+	return "o_ebcp_holiday_date"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_exhibition_hall) BeforeSave() error {
+func (e *Ebcp_holiday_date) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_exhibition_hall) Prepare() {
+func (e *Ebcp_holiday_date) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_exhibition_hall) Validate(action Action) error {
+func (e *Ebcp_holiday_date) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_exhibition_hall) TableInfo() *TableInfo {
-	return Ebcp_exhibition_hallTableInfo
+func (e *Ebcp_holiday_date) TableInfo() *TableInfo {
+	return Ebcp_holiday_dateTableInfo
 }

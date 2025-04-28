@@ -22,4 +22,5 @@ func InitRoute(r chi.Router) {
 	InitEbcp_exhibition_item_infoRoute(r)
 	InitEbcp_player_infoRoute(r)
 	InitEbcp_player_program_infoRoute(r)
+	InitEbcp_holiday_dateRoute(r)
 }

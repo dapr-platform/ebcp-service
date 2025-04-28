@@ -27,11 +27,12 @@ Table: o_ebcp_item_schedule
 [ 6] start_time                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] stop_time                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 9] enabled                                        INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "UdCwDjmlLnxguTNkopfXSItoy",    "created_by": "wCMSWyuMrhLlmnEYTxOdyrCyT",    "created_time": 82,    "updated_by": "EIpSUGQGReRohNFvbawUhjFxe",    "updated_time": 94,    "item_id": "yPEdcYNtbRfrGFaIupSUooFIF",    "start_time": "CHsJTxRuhMctPRXuYOMYkCkkh",    "stop_time": "yBBoLrrxasvhiWrCCTxZtBFEn",    "cycle_type": 2}
+{    "id": "OHcswiJjsmhJRqeTqbwUewBeC",    "created_by": "LAWmlMOEwyvTjIykKpHdnMQyO",    "created_time": 44,    "updated_by": "ohZBNiJwrIiSPTaKiPanODgGZ",    "updated_time": 30,    "item_id": "LswsRbQxITwVsPVImFYcfEEtd",    "start_time": "WhJlesvJVBBdGbrmXjIEHwwif",    "stop_time": "qAufipUHlottIxlgjvVEeiSqt",    "cycle_type": 19,    "enabled": 76}
 
 
 
@@ -55,6 +56,8 @@ var (
 	Ebcp_item_schedule_FIELD_NAME_stop_time = "stop_time"
 
 	Ebcp_item_schedule_FIELD_NAME_cycle_type = "cycle_type"
+
+	Ebcp_item_schedule_FIELD_NAME_enabled = "enabled"
 )
 
 // Ebcp_item_schedule struct is a row record of the o_ebcp_item_schedule table in the  database
@@ -76,6 +79,8 @@ type Ebcp_item_schedule struct {
 	StopTime string `json:"stop_time"` //停止时间
 
 	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
+
+	Enabled int32 `json:"enabled"` //是否启用(0: 禁用, 1: 启用)
 
 }
 
@@ -270,6 +275,27 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			ProtobufFieldName:  "cycle_type",
 			ProtobufType:       "int32",
 			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "enabled",
+			Comment:            `是否启用(0: 禁用, 1: 启用)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Enabled",
+			GoFieldType:        "int32",
+			JSONFieldName:      "enabled",
+			ProtobufFieldName:  "enabled",
+			ProtobufType:       "int32",
+			ProtobufPos:        10,
 		},
 	},
 }

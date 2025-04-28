@@ -230,7 +230,7 @@ definitions:
         description: 所属展厅ID
         type: string
       status:
-        description: '状态（1: 启动, 2: 停止, 3: 故障）'
+        description: '状态（0: 启动, 1: 暂停, 2: 停止）'
         type: integer
       type:
         description: 展项类型（media、static）
@@ -391,6 +391,39 @@ definitions:
         description: 展厅状态
         type: integer
     type: object
+  model.Ebcp_holiday_date:
+    properties:
+      created_by:
+        description: created_by
+        type: string
+      created_time:
+        description: created_time
+        type: string
+      date:
+        description: 日期
+        type: string
+      id:
+        description: id
+        type: string
+      name:
+        description: 节假日名称
+        type: string
+      remarks:
+        description: 备注
+        type: string
+      type:
+        description: 类型(1:法定节假日, 2:调休工作日, 3:周末调休, 4:闭馆日)
+        type: integer
+      updated_by:
+        description: updated_by
+        type: string
+      updated_time:
+        description: updated_time
+        type: string
+      year:
+        description: 年份
+        type: integer
+    type: object
   model.Ebcp_item_device_relation:
     properties:
       created_by:
@@ -431,6 +464,9 @@ definitions:
         type: string
       cycle_type:
         description: 循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
+        type: integer
+      enabled:
+        description: '是否启用(0: 禁用, 1: 启用)'
         type: integer
       id:
         description: id
@@ -3145,6 +3181,164 @@ paths:
       summary: page query
       tags:
       - 展览
+  /ebcp-holiday-date:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: date
+        in: query
+        name: date
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: type
+        in: query
+        name: type
+        type: string
+      - description: year
+        in: query
+        name: year
+        type: string
+      - description: remarks
+        in: query
+        name: remarks
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_holiday_date'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - 节假日日期
+  /ebcp-holiday-date/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: date
+        in: query
+        name: date
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: type
+        in: query
+        name: type
+        type: string
+      - description: year
+        in: query
+        name: year
+        type: string
+      - description: remarks
+        in: query
+        name: remarks
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.Page'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/model.Ebcp_holiday_date'
+                        type: array
+                    type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 节假日日期
   /ebcp-item-device-relation:
     get:
       description: query objects
@@ -3458,6 +3652,10 @@ paths:
         in: query
         name: cycle_type
         type: string
+      - description: enabled
+        in: query
+        name: enabled
+        type: string
       produces:
       - application/json
       responses:
@@ -3648,6 +3846,10 @@ paths:
       - description: cycle_type
         in: query
         name: cycle_type
+        type: string
+      - description: enabled
+        in: query
+        name: enabled
         type: string
       produces:
       - application/json
