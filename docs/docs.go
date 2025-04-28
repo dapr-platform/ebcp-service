@@ -7299,19 +7299,19 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "id",
+                    "description": "展馆ID",
                     "type": "string"
                 },
                 "name": {
-                    "description": "name",
+                    "description": "展馆名称",
                     "type": "string"
                 },
                 "remarks": {
-                    "description": "remarks",
+                    "description": "展馆备注",
                     "type": "string"
                 },
                 "rooms": {
-                    "description": "rooms"
+                    "description": "展馆下的展厅列表（JSON格式）"
                 }
             }
         },
@@ -7411,76 +7411,76 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "control_devices": {
-                    "description": "control_devices"
+                    "description": "关联的中控设备列表（JSON格式）"
                 },
                 "exhibition_id": {
-                    "description": "exhibition_id",
+                    "description": "所属展览ID",
                     "type": "string"
                 },
                 "exhibition_name": {
-                    "description": "exhibition_name",
+                    "description": "所属展览名称",
                     "type": "string"
                 },
                 "export_info": {
-                    "description": "export_info",
+                    "description": "展项输出信息",
                     "type": "string"
                 },
                 "id": {
-                    "description": "id",
+                    "description": "展项ID",
                     "type": "string"
                 },
                 "name": {
-                    "description": "name",
+                    "description": "展项名称",
                     "type": "string"
                 },
                 "player_devices": {
-                    "description": "player_devices"
+                    "description": "关联的播放设备列表（JSON格式）"
                 },
                 "remarks": {
-                    "description": "remarks",
+                    "description": "展项备注",
                     "type": "string"
                 },
                 "room_floor": {
-                    "description": "room_floor",
+                    "description": "所属展厅楼层",
                     "type": "string"
                 },
                 "room_floor_name": {
-                    "description": "room_floor_name",
+                    "description": "所属展厅楼层名称",
                     "type": "string"
                 },
                 "room_floor_value": {
-                    "description": "room_floor_value",
+                    "description": "所属展厅楼层值",
                     "type": "string"
                 },
                 "room_id": {
-                    "description": "room_id",
+                    "description": "所属展厅ID",
                     "type": "string"
                 },
                 "room_location": {
-                    "description": "room_location",
+                    "description": "所属展厅位置",
                     "type": "string"
                 },
                 "room_location_name": {
-                    "description": "room_location_name",
+                    "description": "所属展厅位置名称",
                     "type": "string"
                 },
                 "room_location_value": {
-                    "description": "room_location_value",
+                    "description": "所属展厅位置值",
                     "type": "string"
                 },
                 "room_name": {
-                    "description": "room_name",
+                    "description": "所属展厅名称",
                     "type": "string"
                 },
                 "schedule": {
-                    "description": "schedule"
+                    "description": "关联的定时任务信息（JSON格式）"
                 },
                 "status": {
-                    "description": "status",
+                    "description": "展项状态",
                     "type": "integer"
                 },
                 "type": {
-                    "description": "type",
+                    "description": "展项类型",
                     "type": "string"
                 }
             }
@@ -7542,70 +7542,70 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "exhibition_end_time": {
-                    "description": "exhibition_end_time",
+                    "description": "所属展览结束时间",
                     "type": "string"
                 },
                 "exhibition_id": {
-                    "description": "exhibition_id",
+                    "description": "所属展览ID",
                     "type": "string"
                 },
                 "exhibition_name": {
-                    "description": "exhibition_name",
+                    "description": "所属展览名称",
                     "type": "string"
                 },
                 "exhibition_start_time": {
-                    "description": "exhibition_start_time",
+                    "description": "所属展览开始时间",
                     "type": "string"
                 },
                 "exhibition_status": {
-                    "description": "exhibition_status",
+                    "description": "所属展览状态",
                     "type": "integer"
                 },
                 "floor": {
-                    "description": "floor",
+                    "description": "展厅楼层",
                     "type": "string"
                 },
                 "floor_name": {
-                    "description": "floor_name",
+                    "description": "展厅楼层名称",
                     "type": "string"
                 },
                 "floor_value": {
-                    "description": "floor_value",
+                    "description": "展厅楼层值",
                     "type": "string"
                 },
                 "id": {
-                    "description": "id",
+                    "description": "展厅ID",
                     "type": "string"
                 },
                 "item_count": {
-                    "description": "item_count",
+                    "description": "展厅内展项数量",
                     "type": "integer"
                 },
                 "items": {
-                    "description": "items"
+                    "description": "展厅内的展项列表（JSON格式）"
                 },
                 "location": {
-                    "description": "location",
+                    "description": "展厅位置",
                     "type": "string"
                 },
                 "location_name": {
-                    "description": "location_name",
+                    "description": "展厅位置名称",
                     "type": "string"
                 },
                 "location_value": {
-                    "description": "location_value",
+                    "description": "展厅位置值",
                     "type": "string"
                 },
                 "name": {
-                    "description": "name",
+                    "description": "展厅名称",
                     "type": "string"
                 },
                 "remarks": {
-                    "description": "remarks",
+                    "description": "展厅备注",
                     "type": "string"
                 },
                 "status": {
-                    "description": "status",
+                    "description": "展厅状态",
                     "type": "integer"
                 }
             }

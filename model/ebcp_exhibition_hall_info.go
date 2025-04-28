@@ -26,7 +26,7 @@ Table: v_ebcp_exhibition_hall_info
 
 JSON Sample
 -------------------------------------
-{    "id": "ITeyYHZhZoCHwZItsQqOmljQb",    "name": "hSXLkAbwBdvKQZOvJSawlajLv",    "remarks": "yRDRtqksUTAwEFvuIlpcHvOCb",    "rooms": 64}
+{    "id": "jXaalYjQnmiPkIUvKqAoYGCNU",    "name": "MIdimJODgmNHvDWJNDfAlMOGb",    "remarks": "UIqXZmyMPlTcHPoMbgfNipMUB",    "rooms": 37}
 
 
 Comments
@@ -51,13 +51,13 @@ var (
 
 // Ebcp_exhibition_hall_info struct is a row record of the v_ebcp_exhibition_hall_info table in the  database
 type Ebcp_exhibition_hall_info struct {
-	ID string `json:"id"` //id
+	ID string `json:"id"` //展馆ID
 
-	Name string `json:"name"` //name
+	Name string `json:"name"` //展馆名称
 
-	Remarks string `json:"remarks"` //remarks
+	Remarks string `json:"remarks"` //展馆备注
 
-	Rooms any `json:"rooms"` //rooms
+	Rooms any `json:"rooms"` //展馆下的展厅列表（JSON格式）
 
 }
 
@@ -68,7 +68,7 @@ var Ebcp_exhibition_hall_infoTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:   0,
 			Name:    "id",
-			Comment: `id`,
+			Comment: `展馆ID`,
 			Notes: `Warning table: v_ebcp_exhibition_hall_info does not have a primary key defined, setting col position 1 id as primary key
 Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable column, setting it as NOT NULL
 `,
@@ -91,7 +91,7 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              1,
 			Name:               "name",
-			Comment:            `name`,
+			Comment:            `展馆名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -112,7 +112,7 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              2,
 			Name:               "remarks",
-			Comment:            `remarks`,
+			Comment:            `展馆备注`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -133,7 +133,7 @@ Warning table: v_ebcp_exhibition_hall_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              3,
 			Name:               "rooms",
-			Comment:            `rooms`,
+			Comment:            `展馆下的展厅列表（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",

@@ -41,7 +41,7 @@ Table: v_ebcp_exhibition_item_info
 
 JSON Sample
 -------------------------------------
-{    "id": "LDawcmTgyQKDRSXIBEgvBreXQ",    "name": "kuLCYcHAPjTKwXQOJPQcQMIZD",    "type": "nSjmJaFwHZCmDSXSAetVWDMpP",    "status": 78,    "remarks": "pnemmjykDKVSlHteHurKZDPCX",    "export_info": "NPbmpKPWtrEsGLrwmkZtasbZt",    "room_id": "wAcBbeDybSTJQjbJAtWXAnhdS",    "room_name": "wCnJJseJovaGlLlsaIiwaHUHq",    "room_floor": "CQksNiedvuuupZSCphjfVHRXv",    "room_floor_value": "yEQZhSokagyqRvCmYyYgNVypF",    "room_floor_name": "vxvjHiLkZebUKMYgZyOvlBOxw",    "room_location": "ixqGetUVXPkFNCZALmUjoXQob",    "room_location_value": "tYeNDVwfXFQmViHNCNENhOEBW",    "room_location_name": "XqpSTCWtADrsAfwexBmLsufEl",    "exhibition_id": "GMYMAUtwpIftSIARDoqZPOvYx",    "exhibition_name": "QMGiYBwDwdawmjWmfDvWOucyR",    "player_devices": 36,    "control_devices": 8,    "schedule": 4}
+{    "id": "hVOUHduRoKeMPKlophYgiDZFj",    "name": "yuVyLeTsnKXInKXAwawWxjwCo",    "type": "IIiLsNkisXIlNDHMxXZFBgpNd",    "status": 36,    "remarks": "FuSqeJRFlMBYsWEHkXACtBfxF",    "export_info": "PVRjYmYIgpYcfnXxFhxKZXUjO",    "room_id": "jGnZuwCffcuGxmjSJqOrGIHvc",    "room_name": "PkFGOItpBuWsivMEkGcLRHemi",    "room_floor": "UhKBLGeaaJFScKCVklNdBJWlZ",    "room_floor_value": "ojSSHPfKKFXfCASqepeSkFKwu",    "room_floor_name": "qFDqTnWHUUubqKaNnahSLuUNm",    "room_location": "lDiShuxAoUNVePWywuiFIkBeZ",    "room_location_value": "VmonVQCWMSgOBxkIWWJfQbbNg",    "room_location_name": "tAmhLXnMFKhKGuqrfwYWTKuRr",    "exhibition_id": "CynZZetGElgvPdSFKoIdiLhaO",    "exhibition_name": "fUQLRukhKCrmGpFpbJUYeIGjs",    "player_devices": 81,    "control_devices": 86,    "schedule": 11}
 
 
 Comments
@@ -96,43 +96,43 @@ var (
 
 // Ebcp_exhibition_item_info struct is a row record of the v_ebcp_exhibition_item_info table in the  database
 type Ebcp_exhibition_item_info struct {
-	ID string `json:"id"` //id
+	ID string `json:"id"` //展项ID
 
-	Name string `json:"name"` //name
+	Name string `json:"name"` //展项名称
 
-	Type string `json:"type"` //type
+	Type string `json:"type"` //展项类型
 
-	Status int32 `json:"status"` //status
+	Status int32 `json:"status"` //展项状态
 
-	Remarks string `json:"remarks"` //remarks
+	Remarks string `json:"remarks"` //展项备注
 
-	ExportInfo string `json:"export_info"` //export_info
+	ExportInfo string `json:"export_info"` //展项输出信息
 
-	RoomID string `json:"room_id"` //room_id
+	RoomID string `json:"room_id"` //所属展厅ID
 
-	RoomName string `json:"room_name"` //room_name
+	RoomName string `json:"room_name"` //所属展厅名称
 
-	RoomFloor string `json:"room_floor"` //room_floor
+	RoomFloor string `json:"room_floor"` //所属展厅楼层
 
-	RoomFloorValue string `json:"room_floor_value"` //room_floor_value
+	RoomFloorValue string `json:"room_floor_value"` //所属展厅楼层值
 
-	RoomFloorName string `json:"room_floor_name"` //room_floor_name
+	RoomFloorName string `json:"room_floor_name"` //所属展厅楼层名称
 
-	RoomLocation string `json:"room_location"` //room_location
+	RoomLocation string `json:"room_location"` //所属展厅位置
 
-	RoomLocationValue string `json:"room_location_value"` //room_location_value
+	RoomLocationValue string `json:"room_location_value"` //所属展厅位置值
 
-	RoomLocationName string `json:"room_location_name"` //room_location_name
+	RoomLocationName string `json:"room_location_name"` //所属展厅位置名称
 
-	ExhibitionID string `json:"exhibition_id"` //exhibition_id
+	ExhibitionID string `json:"exhibition_id"` //所属展览ID
 
-	ExhibitionName string `json:"exhibition_name"` //exhibition_name
+	ExhibitionName string `json:"exhibition_name"` //所属展览名称
 
-	PlayerDevices any `json:"player_devices"` //player_devices
+	PlayerDevices any `json:"player_devices"` //关联的播放设备列表（JSON格式）
 
-	ControlDevices any `json:"control_devices"` //control_devices
+	ControlDevices any `json:"control_devices"` //关联的中控设备列表（JSON格式）
 
-	Schedule any `json:"schedule"` //schedule
+	Schedule any `json:"schedule"` //关联的定时任务信息（JSON格式）
 
 }
 
@@ -143,7 +143,7 @@ var Ebcp_exhibition_item_infoTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:   0,
 			Name:    "id",
-			Comment: `id`,
+			Comment: `展项ID`,
 			Notes: `Warning table: v_ebcp_exhibition_item_info does not have a primary key defined, setting col position 1 id as primary key
 Warning table: v_ebcp_exhibition_item_info primary key column id is nullable column, setting it as NOT NULL
 `,
@@ -166,7 +166,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              1,
 			Name:               "name",
-			Comment:            `name`,
+			Comment:            `展项名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -187,7 +187,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              2,
 			Name:               "type",
-			Comment:            `type`,
+			Comment:            `展项类型`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -208,7 +208,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              3,
 			Name:               "status",
-			Comment:            `status`,
+			Comment:            `展项状态`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "INT4",
@@ -229,7 +229,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              4,
 			Name:               "remarks",
-			Comment:            `remarks`,
+			Comment:            `展项备注`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -250,7 +250,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              5,
 			Name:               "export_info",
-			Comment:            `export_info`,
+			Comment:            `展项输出信息`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -271,7 +271,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              6,
 			Name:               "room_id",
-			Comment:            `room_id`,
+			Comment:            `所属展厅ID`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -292,7 +292,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              7,
 			Name:               "room_name",
-			Comment:            `room_name`,
+			Comment:            `所属展厅名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -313,7 +313,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              8,
 			Name:               "room_floor",
-			Comment:            `room_floor`,
+			Comment:            `所属展厅楼层`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -334,7 +334,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              9,
 			Name:               "room_floor_value",
-			Comment:            `room_floor_value`,
+			Comment:            `所属展厅楼层值`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -355,7 +355,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              10,
 			Name:               "room_floor_name",
-			Comment:            `room_floor_name`,
+			Comment:            `所属展厅楼层名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -376,7 +376,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              11,
 			Name:               "room_location",
-			Comment:            `room_location`,
+			Comment:            `所属展厅位置`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -397,7 +397,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              12,
 			Name:               "room_location_value",
-			Comment:            `room_location_value`,
+			Comment:            `所属展厅位置值`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -418,7 +418,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              13,
 			Name:               "room_location_name",
-			Comment:            `room_location_name`,
+			Comment:            `所属展厅位置名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -439,7 +439,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              14,
 			Name:               "exhibition_id",
-			Comment:            `exhibition_id`,
+			Comment:            `所属展览ID`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -460,7 +460,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              15,
 			Name:               "exhibition_name",
-			Comment:            `exhibition_name`,
+			Comment:            `所属展览名称`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "VARCHAR",
@@ -481,7 +481,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              16,
 			Name:               "player_devices",
-			Comment:            `player_devices`,
+			Comment:            `关联的播放设备列表（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -502,7 +502,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              17,
 			Name:               "control_devices",
-			Comment:            `control_devices`,
+			Comment:            `关联的中控设备列表（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -523,7 +523,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              18,
 			Name:               "schedule",
-			Comment:            `schedule`,
+			Comment:            `关联的定时任务信息（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
