@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"ebcp-service/config"
 	"ebcp-service/model"
 	"fmt"
 	"time"
 
 	"github.com/dapr-platform/common"
+	"github.com/spf13/cast"
 )
 
 const (
@@ -251,6 +253,18 @@ func isHoliday(t time.Time) bool {
 }
 
 func isCloseDay(t time.Time) bool {
+	// 首先检查是否是节假日，如果是节假日则不闭馆
+	if isHoliday(t) {
+		return false
+	}
+
+	// 检查是否是周一
+	closeWeekDay := config.CLOSE_WEEK_DAY
+	if t.Weekday() == time.Weekday(cast.ToInt(closeWeekDay)) {
+		return true
+	}
+
+	// 检查是否是特殊闭馆日（从数据库配置）
 	year := t.Year()
 	holidays, ok := cacheHolidayDates[year]
 	if !ok {
