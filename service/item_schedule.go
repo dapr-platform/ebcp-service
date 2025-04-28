@@ -41,6 +41,7 @@ func init() {
 }
 
 func scheduleRefreshHolidayDates(ctx context.Context) {
+	cacheHolidayDates = make(map[int][]model.Ebcp_holiday_date)
 	defer func() {
 		if err := recover(); err != nil {
 			common.Logger.Errorf("scheduleRefreshHolidayDates panic: %v", err)
@@ -48,6 +49,7 @@ func scheduleRefreshHolidayDates(ctx context.Context) {
 			go scheduleRefreshHolidayDates(context.Background())
 		}
 	}()
+
 	refreshHolidayDates()
 	ticker := time.NewTicker(time.Hour * 24)
 	defer ticker.Stop()
@@ -63,11 +65,16 @@ func scheduleRefreshHolidayDates(ctx context.Context) {
 
 func refreshHolidayDates() {
 	year := getCurrentYear()
-	holidays, err := getHolidayDates(year)
-	if err != nil {
-		common.Logger.Errorf("获取节假日日期失败: %v", err)
+	for {
+		holidays, err := getHolidayDates(year)
+		if err != nil {
+			common.Logger.Errorf("获取节假日日期失败: %v", err)
+			time.Sleep(time.Second * 5)
+			continue
+		}
+		cacheHolidayDates[year] = holidays
+		break
 	}
-	cacheHolidayDates[year] = holidays
 }
 
 // 获取节假日日期
