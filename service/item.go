@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	ItemStatusStart = 1
+	ItemStatusStart = 0
+	ItemStatusPause = 1
 	ItemStatusStop  = 2
 )
 
@@ -174,6 +175,32 @@ func StopExhibitionItem(id string) error {
 	return nil
 }
 
+// PauseExhibitionItem 暂停单个展项
+func PauseExhibitionItem(id string) error {
+	// 获取展项信息
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_itemTableInfo.Name,
+		"id="+id)
+	if err != nil {
+		return fmt.Errorf("获取展项信息失败: %v", err)
+	}
+	if item == nil {
+		return fmt.Errorf("展项不存在")	
+	}
+
+	// 更新展项状态为暂停
+	item.Status = ItemStatusPause
+	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {	
+		return fmt.Errorf("更新展项状态失败: %v", err)
+	}
+
+	return nil
+}
+
+
+
+
 // BatchStartExhibitionItems 批量启动展项
 func BatchStartExhibitionItems(ids []string) error {
 	if len(ids) == 0 {
@@ -267,6 +294,57 @@ func BatchStopExhibitionItems(ids []string) error {
 		r := <-results
 		if r.err != nil {
 			errors = append(errors, fmt.Sprintf("停止展项 %s 失败: %v", r.id, r.err))
+		}
+	}
+
+	if len(errors) > 0 {
+		return fmt.Errorf(strings.Join(errors, "\n"))
+	}
+	return nil
+}
+
+// BatchPauseExhibitionItems 批量暂停展项
+func BatchPauseExhibitionItems(ids []string) error {
+	if len(ids) == 0 {
+		return fmt.Errorf("展项ID列表为空")
+	}
+
+	type result struct {
+		id  string
+		err error
+	}
+
+	// 使用worker pool限制并发数
+	maxWorkers := 5
+	if len(ids) < maxWorkers {
+		maxWorkers = len(ids)
+	}
+
+	jobs := make(chan string, len(ids))
+	results := make(chan result, len(ids))
+
+	// 启动workers
+	for w := 0; w < maxWorkers; w++ {
+		go func() {
+			for id := range jobs {
+				err := PauseExhibitionItem(id)
+				results <- result{id: id, err: err}
+			}
+		}()	
+	}
+
+	// 发送任务
+	for _, id := range ids {
+		jobs <- id
+	}
+	close(jobs)
+
+	// 收集结果
+	var errors []string
+	for i := 0; i < len(ids); i++ {
+		r := <-results
+		if r.err != nil {
+			errors = append(errors, fmt.Sprintf("暂停展项 %s 失败: %v", r.id, r.err))
 		}
 	}
 

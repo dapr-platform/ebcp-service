@@ -2165,6 +2165,29 @@ paths:
       summary: delete
       tags:
       - 展项
+  /ebcp-exhibition-item/{id}/pause:
+    post:
+      description: Pause an exhibition item by ID
+      parameters:
+      - description: Exhibition Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Pause exhibition item
+      tags:
+      - 展项
   /ebcp-exhibition-item/{id}/start:
     post:
       description: Start an exhibition item by ID
@@ -2237,6 +2260,34 @@ paths:
           schema:
             $ref: '#/definitions/common.Response'
       summary: batch delete
+      tags:
+      - 展项
+  /ebcp-exhibition-item/batch-pause:
+    post:
+      consumes:
+      - application/json
+      description: Pause multiple exhibition items
+      parameters:
+      - description: Array of Exhibition Item IDs
+        in: body
+        name: ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Batch pause exhibition items
       tags:
       - 展项
   /ebcp-exhibition-item/batch-start:

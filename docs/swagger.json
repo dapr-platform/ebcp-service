@@ -2368,6 +2368,49 @@
                 }
             }
         },
+        "/ebcp-exhibition-item/batch-pause": {
+            "post": {
+                "description": "Pause multiple exhibition items",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Batch pause exhibition items",
+                "parameters": [
+                    {
+                        "description": "Array of Exhibition Item IDs",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-item/batch-start": {
             "post": {
                 "description": "Start multiple exhibition items",
@@ -2685,6 +2728,41 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-item/{id}/pause": {
+            "post": {
+                "description": "Pause an exhibition item by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Pause exhibition item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exhibition Item ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
                         }

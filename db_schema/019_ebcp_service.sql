@@ -91,7 +91,7 @@ COMMENT ON COLUMN o_ebcp_exhibition_item.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.room_id IS '所属展厅ID';
 COMMENT ON COLUMN o_ebcp_exhibition_item.type IS '展项类型（media、static）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.export_info IS '输出信息';
-COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（1: 启动, 2: 停止, 3: 故障）';
+COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（0: 启动, 1: 暂停, 2: 停止）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.remarks IS '备注';
 
 -- 播放设备表
@@ -378,6 +378,10 @@ GROUP BY
     eh.id, eh.name, eh.remarks;
 
 COMMENT ON VIEW v_ebcp_exhibition_hall_info IS '展馆详细视图，包含展馆信息及其关联的展厅和展项信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_hall_info.id IS '展馆ID';
+COMMENT ON COLUMN v_ebcp_exhibition_hall_info.name IS '展馆名称';
+COMMENT ON COLUMN v_ebcp_exhibition_hall_info.remarks IS '展馆备注';
+COMMENT ON COLUMN v_ebcp_exhibition_hall_info.rooms IS '展馆下的展厅列表（JSON格式）';
 
 -- 展厅详细视图
 CREATE VIEW v_ebcp_exhibition_room_info AS
@@ -418,6 +422,23 @@ GROUP BY
     e.id, e.name, e.start_time, e.end_time, e.status;
 
 COMMENT ON VIEW v_ebcp_exhibition_room_info IS '展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.id IS '展厅ID';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.name IS '展厅名称';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.floor IS '展厅楼层';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.floor_value IS '展厅楼层值';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.floor_name IS '展厅楼层名称';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.location IS '展厅位置';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.location_value IS '展厅位置值';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.location_name IS '展厅位置名称';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.status IS '展厅状态';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.remarks IS '展厅备注';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.exhibition_id IS '所属展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.exhibition_name IS '所属展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.exhibition_start_time IS '所属展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.exhibition_end_time IS '所属展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.exhibition_status IS '所属展览状态';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.item_count IS '展厅内展项数量';
+COMMENT ON COLUMN v_ebcp_exhibition_room_info.items IS '展厅内的展项列表（JSON格式）';
 
 -- 展项详细视图
 CREATE VIEW v_ebcp_exhibition_item_info AS
@@ -508,6 +529,26 @@ JOIN
     o_ebcp_exhibition e ON ei.exhibition_id = e.id;
 
 COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.id IS '展项ID';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.name IS '展项名称';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.type IS '展项类型';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.status IS '展项状态';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.remarks IS '展项备注';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.export_info IS '展项输出信息';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_id IS '所属展厅ID';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_name IS '所属展厅名称';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_floor IS '所属展厅楼层';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_floor_value IS '所属展厅楼层值';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_floor_name IS '所属展厅楼层名称';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_location IS '所属展厅位置';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_location_value IS '所属展厅位置值';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_location_name IS '所属展厅位置名称';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_id IS '所属展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_name IS '所属展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.player_devices IS '关联的播放设备列表（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.control_devices IS '关联的中控设备列表（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.schedule IS '关联的定时任务信息（JSON格式）';
+
 
 -- 播放设备详细视图
 CREATE VIEW v_ebcp_player_info AS
