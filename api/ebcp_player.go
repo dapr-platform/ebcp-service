@@ -102,6 +102,7 @@ func batchUpsertEbcp_playerHandler(w http.ResponseWriter, r *http.Request) {
 // @Param version query string false "version"
 // @Param item_id query string false "item_id"
 // @Param current_program_id query string false "current_program_id"
+// @Param current_program_state query string false "current_program_state"
 // @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_player}} "objects array"
@@ -135,6 +136,7 @@ func Ebcp_playerPageListHandler(w http.ResponseWriter, r *http.Request) {
 // @Param version query string false "version"
 // @Param item_id query string false "item_id"
 // @Param current_program_id query string false "current_program_id"
+// @Param current_program_state query string false "current_program_state"
 // @Param status query string false "status"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_player} "objects array"

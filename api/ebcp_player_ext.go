@@ -136,13 +136,7 @@ func PauseProgramHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
-
-	err = client.PauseProgram(uint32(programId))
+	err = service.PauseProgram(id, programIdStr)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -170,13 +164,7 @@ func PlayProgramHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
-
-	err = client.PlayProgram(uint32(programId))
+	err = service.PlayProgram(id, programIdStr)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -204,13 +192,7 @@ func StopProgramHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := service.GetPlayerClient(id)
-	if client == nil {
-		common.HttpResult(w, common.ErrService.AppendMsg("player not found"))
-		return
-	}
-
-	err = client.StopProgram(uint32(programId))
+	err = service.StopProgram(id, programIdStr)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return

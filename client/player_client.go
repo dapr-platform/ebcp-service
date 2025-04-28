@@ -4,16 +4,11 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/hex"
-	"errors"
 	"fmt"
-	"io"
 	"net"
 	"strings"
 	"sync"
 	"time"
-
-	"golang.org/x/text/encoding/simplifiedchinese"
-	"golang.org/x/text/transform"
 )
 
 const (
@@ -36,6 +31,7 @@ const (
 	TagGetAllProgramMedia   uint16 = 276 // 获取节目中所有媒体
 	TagControlLayerProgress uint16 = 283 // 控制图层的播放进度
 	TagQueryLayerProgress   uint16 = 293 // 查询图层的播放进度
+	TagGetCurrentProgram    uint16 = 294 // 查询舞台当前播放节目ID
 
 	// Sound control tags
 	TagOpenGlobalSound  uint16 = 262 // 0x0106
@@ -45,11 +41,33 @@ const (
 	TagDecreaseVolume   uint16 = 329 // 0x0149
 
 	// Connection constants
-	connectTimeout = 5 * time.Second
-	readTimeout    = 10 * time.Second
+	connectTimeout = 2 * time.Second
+	readTimeout    = 3 * time.Second
 
 	bufferSize = 655360
+
+	DEBUG = false
 )
+
+// TimeoutError represents a timeout error
+type TimeoutError struct {
+	message string
+}
+
+func (e *TimeoutError) Error() string {
+	return e.message
+}
+
+// IsTimeoutError checks if an error is a TimeoutError
+func IsTimeoutError(err error) bool {
+	_, ok := err.(*TimeoutError)
+	return ok
+}
+
+// NewTimeoutError creates a new TimeoutError
+func NewTimeoutError(message string) error {
+	return &TimeoutError{message: message}
+}
 
 // Program represents a program in the player
 type Program struct {
@@ -83,6 +101,13 @@ type LayerProgressResponse struct {
 type ProgramListResponse struct {
 	TotalCount int
 	Programs   []Program
+}
+
+// CurrentProgramResponse represents the response of GetCurrentProgram
+type CurrentProgramResponse struct {
+	Success   bool   // 执行结果，true表示成功，false表示失败
+	ProgramID int32  // 节目ID，-1表示没有节目
+	ProgState uint32 // 节目状态：0=播放，1=暂停，2=停止
 }
 
 // PlayerClient represents a client to control media player
@@ -156,8 +181,8 @@ func isValidPacketHeader(data []byte, offset int) bool {
 		data[offset+2] == 0xCC && data[offset+3] == 0x55
 }
 
-// sendCommand sends command and returns response
-func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
+// sendCommandWithTimeout sends command and returns response with timeout
+func (c *PlayerClient) sendCommandWithTimeout(tag uint16, data []byte, timeout time.Duration) ([]byte, error) {
 	// 创建连接
 	conn, err := net.DialTimeout("tcp", c.addr, connectTimeout)
 	if err != nil {
@@ -165,23 +190,17 @@ func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
 	}
 	defer conn.Close()
 
-	// 为大型响应设置更长的读取超时
-	var maxWaitTime time.Duration
-	if tag == TagGetProgramList || tag == TagGetAllProgramMedia {
-		// 程序列表和媒体列表可能很大，设置更长的超时时间
-		maxWaitTime = 30 * time.Second
-	} else {
-		maxWaitTime = readTimeout
-	}
-
-	err = conn.SetReadDeadline(time.Now().Add(maxWaitTime))
+	// 设置读取超时
+	err = conn.SetReadDeadline(time.Now().Add(timeout))
 	if err != nil {
 		return nil, fmt.Errorf("set read deadline failed: %v", err)
 	}
 
 	// 构建数据包
 	packet := c.buildPacket(tag, data)
-	fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
+	if DEBUG {
+		fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
+	}
 
 	// 发送数据
 	_, err = conn.Write(packet)
@@ -189,9 +208,17 @@ func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
 		return nil, fmt.Errorf("write failed: %v", err)
 	}
 
-	// 对于大型响应命令，预分配更大的缓冲区
+	// 如果timeout为0，则不等待响应，直接返回
+	if timeout == 0 {
+		if DEBUG {
+			fmt.Printf("Timeout is 0, not waiting for response\n")
+		}
+		return nil, nil
+	}
+
+	// 为大型响应命令预分配更大的缓冲区
 	var buffer []byte
-	if tag == TagGetProgramList || tag == TagGetAllProgramMedia {
+	if tag == TagGetProgramList {
 		buffer = make([]byte, bufferSize*2) // 为大型响应分配更大的缓冲区
 	} else {
 		buffer = make([]byte, bufferSize)
@@ -202,156 +229,92 @@ func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
 	receiveStartTime := time.Now()
 
 	// 设置绝对超时，防止无限等待
-	absoluteTimeout := time.Now().Add(maxWaitTime)
+	absoluteTimeout := time.Now().Add(timeout)
 
 	// 读取响应数据，可能需要多次读取
-	for time.Now().Before(absoluteTimeout) {
-		// 根据距离上次接收数据的时间来调整读取超时
-		timeLeft := absoluteTimeout.Sub(time.Now())
-		if timeLeft <= 0 {
-			break // 已达到绝对超时时间
+	for {
+		// 检查是否达到绝对超时
+		if time.Now().After(absoluteTimeout) {
+			return nil, NewTimeoutError(fmt.Sprintf("absolute timeout reached after %v", timeout))
 		}
 
-		// 计算本次读取的超时时间
-		var readTimeout time.Duration
-		if totalRead == 0 {
-			// 第一次读取给予更长的等待时间
-			readTimeout = 5 * time.Second
-		} else if time.Since(lastDataTime) > 2*time.Second {
-			// 如果距离上次读取数据超过2秒，使用短超时
-			readTimeout = 1 * time.Second
-		} else {
-			// 正常读取中使用中等超时
-			readTimeout = 2 * time.Second
+		// 设置读取超时
+		readDeadline := time.Now().Add(500 * time.Millisecond)
+		if readDeadline.After(absoluteTimeout) {
+			readDeadline = absoluteTimeout
 		}
+		conn.SetReadDeadline(readDeadline)
 
-		// 超时不应超过剩余的绝对超时时间
-		if readTimeout > timeLeft {
-			readTimeout = timeLeft
-		}
-
-		// 设置本次读取的截止时间
-		err = conn.SetReadDeadline(time.Now().Add(readTimeout))
-		if err != nil {
-			return nil, fmt.Errorf("set read deadline failed: %v", err)
-		}
-
+		// 读取数据
 		n, err := conn.Read(buffer[totalRead:])
-		currentTime := time.Now()
-
 		if err != nil {
-			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-				// 超时错误处理
-				if totalRead > 0 {
-					// 如果已经有数据且满足以下条件之一，认为传输完成:
-					// 1. 距离第一个字节接收时间已超过最大等待时间的80%
-					// 2. 距离上次接收数据已超过3秒
-					if time.Since(receiveStartTime) > maxWaitTime*4/5 ||
-						time.Since(lastDataTime) > 3*time.Second {
-						fmt.Printf("Read timeout after receiving %d bytes, considering complete\n", totalRead)
-						break
+			if err, ok := err.(net.Error); ok && err.Timeout() {
+				// 读取超时，检查是否已完成数据接收
+				if totalRead > 0 && time.Since(lastDataTime) > 500*time.Millisecond {
+					// 特殊命令可能要接收大量数据，需要特殊处理
+					if tag == TagGetProgramList {
+						// 这些命令可能返回多个包，需要等待更长时间
+						// 检查是否有足够的完整包
+						if isEnoughDataForCommand(buffer[:totalRead], tag) {
+							if DEBUG {
+								fmt.Printf("Received enough data for the command after %v\n", time.Since(receiveStartTime))
+							}
+							break
+						}
+
+						// 如果还没有接收到足够的数据，但已经超过一定时间没有新数据，也认为接收完成
+						if time.Since(lastDataTime) > 2*time.Second {
+							if DEBUG {
+								fmt.Printf("No more data received for %v, assuming completed\n", time.Since(lastDataTime))
+							}
+							break
+						}
+
+						// 继续等待更多数据
+						continue
 					}
+					// 对于其他命令，如果已经接收到数据且超过500ms没有新数据，认为接收完成
+					break
 				}
-				// 否则继续尝试读取
+				// 未接收到数据或者距离上次接收数据时间不够长，继续等待
 				continue
 			}
-			// 非超时错误
+			// 如果已经读取了一些数据，返回已读取的数据
+			if totalRead > 0 {
+				break
+			}
 			return nil, fmt.Errorf("read failed: %v", err)
 		}
 
-		if n == 0 {
-			// 连接关闭
-			break
-		}
-
-		// 更新计时器
-		if totalRead == 0 {
-			receiveStartTime = currentTime // 第一个字节的接收时间
-		}
-		lastDataTime = currentTime
-
 		totalRead += n
-		fmt.Printf("Received %d bytes, total %d bytes\n", n, totalRead)
 
 		// 检查缓冲区容量，需要时扩展
-		if totalRead > len(buffer)*3/4 {
-			// 当缓冲区使用超过75%时扩展
+		if totalRead >= len(buffer)-4096 {
+			// 扩展缓冲区
 			newBuffer := make([]byte, len(buffer)*2)
 			copy(newBuffer, buffer)
 			buffer = newBuffer
-			fmt.Printf("Expanded buffer to %d bytes\n", len(buffer))
 		}
 
-		// 特殊命令可能要接收大量数据，需要特殊处理
-		if tag == TagGetProgramList || tag == TagGetAllProgramMedia {
-			// 这些命令可能返回多个包，需要等待更长时间
-			// 检查是否有足够的完整包
-			if isEnoughDataForCommand(buffer[:totalRead], tag) {
-				fmt.Printf("Received enough data for command %d\n", tag)
+		// 更新最后接收数据的时间
+		lastDataTime = time.Now()
+
+		// 检查是否已接收完整数据
+		// 对于简单命令，如果已读取到足够的数据则认为完成
+		if totalRead >= 16 && !isBigDataCommand(tag) {
+			// 检查TLV长度是否已接收完整
+			if isCompletePacket(buffer[:totalRead]) {
 				break
 			}
-			continue
-		}
-
-		// 检查是否收到完整响应
-		if totalRead >= 16 {
-			if isValidPacketHeader(buffer, 0) {
-				contentLength := binary.LittleEndian.Uint16(buffer[10:12])
-				if totalRead >= int(contentLength)+12 { // 12是头部长度
-					// 尝试再读取一次，看是否有更多数据
-					extraTimeout := 500 * time.Millisecond
-					if extraTimeout > timeLeft {
-						extraTimeout = timeLeft
-					}
-
-					conn.SetReadDeadline(time.Now().Add(extraTimeout))
-					time.Sleep(100 * time.Millisecond)
-
-					n, err = conn.Read(buffer[totalRead:])
-					if err != nil {
-						if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-							// 超时且没有更多数据，认为传输完成
-							break
-						}
-						if n == 0 {
-							// 连接已关闭，完成读取
-							break
-						}
-						// 只有在非超时且非连接关闭的情况下返回错误
-						return nil, fmt.Errorf("final read failed: %v", err)
-					}
-
-					if n > 0 {
-						// 还有更多数据，继续读取
-						totalRead += n
-						lastDataTime = time.Now()
-						fmt.Printf("Additional data received: %d bytes, total %d bytes\n", n, totalRead)
-						continue
-					}
-
-					// 没有更多数据，完成读取
-					break
-				}
-			}
 		}
 	}
 
-	// 如果完全没有读到数据，返回错误
-	if totalRead == 0 {
-		return nil, fmt.Errorf("no data received after %v", time.Since(receiveStartTime))
-	}
-
-	// 验证响应
+	// 输出调试信息
 	if totalRead < 16 {
-		return nil, fmt.Errorf("response too short: received only %d bytes", totalRead)
+		return nil, fmt.Errorf("response too short: %d bytes", totalRead)
 	}
 
-	// 验证帧头
-	if !isValidPacketHeader(buffer, 0) {
-		return nil, errors.New("invalid packet header")
-	}
-
-	// 提取响应信息
+	// 解析帧头和TLV信息
 	packetHeader := binary.LittleEndian.Uint32(buffer[0:4])
 	packetType := binary.LittleEndian.Uint16(buffer[4:6])
 	protocolVersion := binary.LittleEndian.Uint16(buffer[6:8])
@@ -360,32 +323,35 @@ func (c *PlayerClient) sendCommand(tag uint16, data []byte) ([]byte, error) {
 	tlvTag := binary.LittleEndian.Uint16(buffer[12:14])
 	tlvLength := binary.LittleEndian.Uint16(buffer[14:16])
 
-	fmt.Printf("Response details:\n")
-	fmt.Printf("  Header: 0x%08X\n", packetHeader)
-	fmt.Printf("  Packet Type: %d\n", packetType)
-	fmt.Printf("  Protocol Version: 0x%04X\n", protocolVersion)
-	fmt.Printf("  Sequence: %d\n", sequence)
-	fmt.Printf("  Content Length: %d\n", contentLength)
-	fmt.Printf("  TLV Tag: %d (0x%04X) (Expected: %d)\n", tlvTag, tlvTag, tag)
-	fmt.Printf("  TLV Length: %d\n", tlvLength)
-	fmt.Printf("  Total bytes received: %d\n", totalRead)
-	fmt.Printf("  Total receive time: %v\n", time.Since(receiveStartTime))
-
-	// 特殊情况处理：
-	// 1. 某些服务器实现可能返回TLV标签为0
-	// 2. QueryLayerProgress命令(293/0x0125)可能返回标签28(0x001C)
-	if tlvTag != tag && tlvTag != 0 {
-		// 如果是QueryLayerProgress并且返回标签是28，这是正常的
-		if tag == TagQueryLayerProgress && tlvTag == 28 {
-			fmt.Printf("  Accepting tag 28(0x001C) as valid response for QueryLayerProgress\n")
-		} else {
-			// 其他情况下标签不匹配视为错误
-			return nil, fmt.Errorf("unexpected TLV tag: got %d (0x%04X), want %d (0x%04X)",
-				tlvTag, tlvTag, tag, tag)
-		}
+	if DEBUG {
+		fmt.Printf("Response details:\n")
+		fmt.Printf("  Header: 0x%08X\n", packetHeader)
+		fmt.Printf("  Packet Type: %d\n", packetType)
+		fmt.Printf("  Protocol Version: 0x%04X\n", protocolVersion)
+		fmt.Printf("  Sequence: %d\n", sequence)
+		fmt.Printf("  Content Length: %d\n", contentLength)
+		fmt.Printf("  TLV Tag: %d (0x%04X) (Expected: %d)\n", tlvTag, tlvTag, tag)
+		fmt.Printf("  TLV Length: %d\n", tlvLength)
+		fmt.Printf("  Total bytes received: %d\n", totalRead)
+		fmt.Printf("  Total receive time: %v\n", time.Since(receiveStartTime))
 	}
 
 	return buffer[:totalRead], nil
+}
+
+// isBigDataCommand 判断命令是否可能返回大量数据
+func isBigDataCommand(tag uint16) bool {
+	return tag == TagGetProgramList
+}
+
+// isCompletePacket 检查数据包是否接收完整
+func isCompletePacket(data []byte) bool {
+	if len(data) < 16 {
+		return false
+	}
+
+	contentLength := binary.LittleEndian.Uint16(data[10:12])
+	return len(data) >= int(contentLength)+12 // 12是包头长度
 }
 
 // isEnoughDataForCommand 检查是否接收到足够的数据来处理特定命令
@@ -406,7 +372,9 @@ func isEnoughDataForCommand(data []byte, tag uint16) bool {
 		}
 
 		programCount := int(binary.LittleEndian.Uint16(data[16:18]))
-		fmt.Printf("Program count in response: %d\n", programCount)
+		if DEBUG {
+			fmt.Printf("Program count in response: %d\n", programCount)
+		}
 
 		// 寻找至少3个有效的程序包或所有程序（如果程序总数小于3）
 		minPrograms := 3
@@ -460,220 +428,6 @@ func isEnoughDataForCommand(data []byte, tag uint16) bool {
 	return false
 }
 
-// sendCommandWithTimeout sends command with a specific timeout and returns response
-func (c *PlayerClient) sendCommandWithTimeout(tag uint16, data []byte, timeout time.Duration) ([]byte, error) {
-	// 创建连接
-	conn, err := net.DialTimeout("tcp", c.addr, connectTimeout)
-	if err != nil {
-		return nil, fmt.Errorf("connect failed: %v", err)
-	}
-	defer conn.Close()
-
-	// 设置特定的读取超时
-	err = conn.SetReadDeadline(time.Now().Add(timeout))
-	if err != nil {
-		return nil, fmt.Errorf("set read deadline failed: %v", err)
-	}
-
-	// 构建数据包
-	packet := c.buildPacket(tag, data)
-	fmt.Printf("Send packet: %s\n", bytesToHexString(packet))
-
-	// 发送数据
-	_, err = conn.Write(packet)
-	if err != nil {
-		return nil, fmt.Errorf("write failed: %v", err)
-	}
-
-	// 对于GetProgramList命令，预分配更大的缓冲区
-	buffer := make([]byte, bufferSize*2) // 为程序列表分配更大的缓冲区
-
-	totalRead := 0
-	lastDataTime := time.Now()
-	receiveStartTime := time.Now()
-
-	// 设置绝对超时，防止无限等待
-	absoluteTimeout := time.Now().Add(timeout)
-
-	// 读取响应数据，可能需要多次读取
-	for time.Now().Before(absoluteTimeout) {
-		// 根据距离上次接收数据的时间来调整读取超时
-		timeLeft := absoluteTimeout.Sub(time.Now())
-		if timeLeft <= 0 {
-			break // 已达到绝对超时时间
-		}
-
-		// 计算本次读取的超时时间
-		var readTimeout time.Duration
-		if totalRead == 0 {
-			// 第一次读取给予更长的等待时间
-			readTimeout = 5 * time.Second
-		} else if time.Since(lastDataTime) > 2*time.Second {
-			// 如果距离上次读取数据超过2秒，使用短超时
-			readTimeout = 1 * time.Second
-		} else {
-			// 正常读取中使用中等超时
-			readTimeout = 2 * time.Second
-		}
-
-		// 超时不应超过剩余的绝对超时时间
-		if readTimeout > timeLeft {
-			readTimeout = timeLeft
-		}
-
-		// 设置本次读取的截止时间
-		err = conn.SetReadDeadline(time.Now().Add(readTimeout))
-		if err != nil {
-			return nil, fmt.Errorf("set read deadline failed: %v", err)
-		}
-
-		n, err := conn.Read(buffer[totalRead:])
-		currentTime := time.Now()
-
-		if err != nil {
-			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-				// 超时错误处理
-				if totalRead > 0 {
-					// 如果已经有数据且满足以下条件之一，认为传输完成:
-					// 1. 距离第一个字节接收时间已超过最大等待时间的80%
-					// 2. 距离上次接收数据已超过3秒
-					if time.Since(receiveStartTime) > timeout*4/5 ||
-						time.Since(lastDataTime) > 3*time.Second {
-						fmt.Printf("Read timeout after receiving %d bytes, considering complete\n", totalRead)
-						break
-					}
-				}
-				// 否则继续尝试读取
-				continue
-			}
-			// 非超时错误
-			return nil, fmt.Errorf("read failed: %v", err)
-		}
-
-		if n == 0 {
-			// 连接关闭
-			break
-		}
-
-		// 更新计时器
-		if totalRead == 0 {
-			receiveStartTime = currentTime // 第一个字节的接收时间
-		}
-		lastDataTime = currentTime
-
-		totalRead += n
-		fmt.Printf("Received %d bytes, total %d bytes\n", n, totalRead)
-
-		// 检查缓冲区容量，需要时扩展
-		if totalRead > len(buffer)*3/4 {
-			// 当缓冲区使用超过75%时扩展
-			newBuffer := make([]byte, len(buffer)*2)
-			copy(newBuffer, buffer)
-			buffer = newBuffer
-			fmt.Printf("Expanded buffer to %d bytes\n", len(buffer))
-		}
-
-		// 对于大型响应，我们需要接收尽可能多的数据
-		if tag == TagGetProgramList {
-			// 持续接收直到超时或者收到足够多的数据
-			continue
-		}
-
-		// 检查是否收到完整响应
-		if totalRead >= 16 {
-			if isValidPacketHeader(buffer, 0) {
-				contentLength := binary.LittleEndian.Uint16(buffer[10:12])
-				if totalRead >= int(contentLength)+12 { // 12是头部长度
-					// 尝试再读取一次，看是否有更多数据
-					extraTimeout := 500 * time.Millisecond
-					if extraTimeout > timeLeft {
-						extraTimeout = timeLeft
-					}
-
-					conn.SetReadDeadline(time.Now().Add(extraTimeout))
-					time.Sleep(100 * time.Millisecond)
-
-					n, err = conn.Read(buffer[totalRead:])
-					if err != nil {
-						if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-							// 超时且没有更多数据，认为传输完成
-							break
-						}
-						if n == 0 {
-							// 连接已关闭，完成读取
-							break
-						}
-						// 只有在非超时且非连接关闭的情况下返回错误
-						return nil, fmt.Errorf("final read failed: %v", err)
-					}
-
-					if n > 0 {
-						// 还有更多数据，继续读取
-						totalRead += n
-						lastDataTime = time.Now()
-						fmt.Printf("Additional data received: %d bytes, total %d bytes\n", n, totalRead)
-						continue
-					}
-
-					// 没有更多数据，完成读取
-					break
-				}
-			}
-		}
-	}
-
-	// 如果完全没有读到数据，返回错误
-	if totalRead == 0 {
-		return nil, fmt.Errorf("no data received after %v", time.Since(receiveStartTime))
-	}
-
-	// 验证响应
-	if totalRead < 16 {
-		return nil, fmt.Errorf("response too short: received only %d bytes", totalRead)
-	}
-
-	// 验证帧头
-	if !isValidPacketHeader(buffer, 0) {
-		return nil, errors.New("invalid packet header")
-	}
-
-	// 提取响应信息
-	packetHeader := binary.LittleEndian.Uint32(buffer[0:4])
-	packetType := binary.LittleEndian.Uint16(buffer[4:6])
-	protocolVersion := binary.LittleEndian.Uint16(buffer[6:8])
-	sequence := binary.LittleEndian.Uint16(buffer[8:10])
-	contentLength := binary.LittleEndian.Uint16(buffer[10:12])
-	tlvTag := binary.LittleEndian.Uint16(buffer[12:14])
-	tlvLength := binary.LittleEndian.Uint16(buffer[14:16])
-
-	fmt.Printf("Response details:\n")
-	fmt.Printf("  Header: 0x%08X\n", packetHeader)
-	fmt.Printf("  Packet Type: %d\n", packetType)
-	fmt.Printf("  Protocol Version: 0x%04X\n", protocolVersion)
-	fmt.Printf("  Sequence: %d\n", sequence)
-	fmt.Printf("  Content Length: %d\n", contentLength)
-	fmt.Printf("  TLV Tag: %d (0x%04X) (Expected: %d)\n", tlvTag, tlvTag, tag)
-	fmt.Printf("  TLV Length: %d\n", tlvLength)
-	fmt.Printf("  Total bytes received: %d\n", totalRead)
-	fmt.Printf("  Total receive time: %v\n", time.Since(receiveStartTime))
-
-	// 特殊情况处理：
-	// 1. 某些服务器实现可能返回TLV标签为0
-	// 2. QueryLayerProgress命令(293/0x0125)可能返回标签28(0x001C)
-	if tlvTag != tag && tlvTag != 0 {
-		// 如果是QueryLayerProgress并且返回标签是28，这是正常的
-		if tag == TagQueryLayerProgress && tlvTag == 28 {
-			fmt.Printf("  Accepting tag 28(0x001C) as valid response for QueryLayerProgress\n")
-		} else {
-			// 其他情况下标签不匹配视为错误
-			return nil, fmt.Errorf("unexpected TLV tag: got %d (0x%04X), want %d (0x%04X)",
-				tlvTag, tlvTag, tag, tag)
-		}
-	}
-
-	return buffer[:totalRead], nil
-}
-
 // GetProgramList gets the list of programs from the player
 func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 	// 设置超时时间
@@ -685,14 +439,18 @@ func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 	for retries := 0; retries < 3; retries++ {
 		resp, err = c.sendCommandWithTimeout(TagGetProgramList, nil, timeout)
 		if err != nil {
-			fmt.Printf("Failed to get program list (attempt %d): %v\n", retries+1, err)
+			if DEBUG {
+				fmt.Printf("Failed to get program list (attempt %d): %v\n", retries+1, err)
+			}
 			time.Sleep(time.Second)
 			continue
 		}
 
 		// 验证响应长度是否足够
 		if len(resp) < 20 {
-			fmt.Printf("Response too short (attempt %d): %d bytes\n", retries+1, len(resp))
+			if DEBUG {
+				fmt.Printf("Response too short (attempt %d): %d bytes\n", retries+1, len(resp))
+			}
 			time.Sleep(time.Second)
 			continue
 		}
@@ -721,7 +479,9 @@ func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 	}
 
 	for i := 0; i < len(resp); i += programSize {
-		fmt.Printf("Program %d: %s\n", i, bytesToHexString(resp[i:i+programSize]))
+		if DEBUG {
+			fmt.Printf("Program %d: %s\n", i, bytesToHexString(resp[i:i+programSize]))
+		}
 		// 节目数据开始位置（跳过包头）
 		dataStart := i + programHeaderSize + programCountSize
 
@@ -743,8 +503,10 @@ func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 		isEmpty := isEmptyByte == 0
 
 		// 打印调试信息
-		fmt.Printf("Program %d raw details: Index=%d, ID=%d, isEmpty byte=0x%02X at position %d, isEmpty=%v\n",
-			i, programIndex, programId, isEmptyByte, isEmptyPos, isEmpty)
+		if DEBUG {
+			fmt.Printf("Program %d raw details: Index=%d, ID=%d, isEmpty byte=0x%02X at position %d, isEmpty=%v\n",
+				i, programIndex, programId, isEmptyByte, isEmptyPos, isEmpty)
+		}
 
 		// 创建程序对象
 		program := Program{
@@ -762,107 +524,101 @@ func (c *PlayerClient) GetProgramList() (*ProgramListResponse, error) {
 	return result, nil
 }
 
-// FadeProgram fades to specified program
+// FadeProgram fades to the specified program
 func (c *PlayerClient) FadeProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
-	_, err := c.sendCommand(TagFadeProgram, data)
+	_, err := c.sendCommandWithTimeout(TagFadeProgram, data, 0)
 	return err
 }
 
-// CutProgram cuts to specified program
+// CutProgram cuts to the specified program
 func (c *PlayerClient) CutProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
-	_, err := c.sendCommand(TagCutProgram, data)
+	_, err := c.sendCommandWithTimeout(TagCutProgram, data, 0)
 	return err
 }
 
-// PauseProgram pauses specified program
+// PauseProgram pauses the current program
 func (c *PlayerClient) PauseProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
-	_, err := c.sendCommand(TagPauseProgram, data)
+	_, err := c.sendCommandWithTimeout(TagPauseProgram, data, 0)
 	return err
 }
 
-// PlayProgram plays specified program
+// PlayProgram plays the specified program
 func (c *PlayerClient) PlayProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
-	_, err := c.sendCommand(TagPlayProgram, data)
+	_, err := c.sendCommandWithTimeout(TagPlayProgram, data, 0)
 	return err
 }
 
-// StopProgram stops specified program
+// StopProgram stops the specified program
 func (c *PlayerClient) StopProgram(programID uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
-	_, err := c.sendCommand(TagStopProgram, data)
+	_, err := c.sendCommandWithTimeout(TagStopProgram, data, 0)
 	return err
 }
 
-// OpenGlobalSound opens global sound
+// OpenGlobalSound opens the global sound
 func (c *PlayerClient) OpenGlobalSound() error {
-	_, err := c.sendCommand(TagOpenGlobalSound, nil)
+	_, err := c.sendCommandWithTimeout(TagOpenGlobalSound, nil, 0)
 	return err
 }
 
-// CloseGlobalSound closes global sound
+// CloseGlobalSound closes the global sound
 func (c *PlayerClient) CloseGlobalSound() error {
-	_, err := c.sendCommand(TagCloseGlobalSound, nil)
+	_, err := c.sendCommandWithTimeout(TagCloseGlobalSound, nil, 0)
 	return err
 }
 
-// SetGlobalVolume sets global volume (0-100)
-func (c *PlayerClient) SetGlobalVolume(volume uint8) error {
-	if volume > 100 {
-		return fmt.Errorf("volume must be between 0 and 100")
-	}
-	data := []byte{volume}
-	_, err := c.sendCommand(TagSetGlobalVolume, data)
+// SetGlobalVolume sets the global volume
+func (c *PlayerClient) SetGlobalVolume(volume uint32) error {
+	data := make([]byte, 4)
+	binary.LittleEndian.PutUint32(data, volume)
+	_, err := c.sendCommandWithTimeout(TagSetGlobalVolume, data, readTimeout)
 	return err
 }
 
-// IncreaseGlobalVolume increases global volume by step
+// IncreaseGlobalVolume increases the global volume
 func (c *PlayerClient) IncreaseGlobalVolume(step uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, step)
-	_, err := c.sendCommand(TagIncreaseVolume, data)
+	_, err := c.sendCommandWithTimeout(TagIncreaseVolume, data, readTimeout)
 	return err
 }
 
-// DecreaseGlobalVolume decreases global volume by step
+// DecreaseGlobalVolume decreases the global volume
 func (c *PlayerClient) DecreaseGlobalVolume(step uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, step)
-	_, err := c.sendCommand(TagDecreaseVolume, data)
+	_, err := c.sendCommandWithTimeout(TagDecreaseVolume, data, readTimeout)
 	return err
 }
 
-// GetAllProgramMedia gets all media in a program
+// GetAllProgramMedia gets the media list of all programs
 func (c *PlayerClient) GetAllProgramMedia(programID uint32) (*MediaListResponse, error) {
-	// Prepare request data
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, programID)
 
-	// Send command
-	resp, err := c.sendCommand(TagGetAllProgramMedia, data)
+	resp, err := c.sendCommandWithTimeout(TagGetAllProgramMedia, data, readTimeout)
 	if err != nil {
-		return nil, fmt.Errorf("GetAllProgramMedia failed: %v", err)
+		return nil, err
 	}
 
-	// Parse response
-	if len(resp) < 16 {
-		return nil, errors.New("response too short")
+	// 检查响应的有效性
+	if len(resp) < 16+4 {
+		return nil, fmt.Errorf("get all program media response too short: %d bytes", len(resp))
 	}
 
-	// Create result structure
 	result := &MediaListResponse{
 		ProgramID: programID,
 		Media:     make([]Media, 0),
 	}
-	fmt.Printf("Media resp: % x \n", resp)
 
 	// 获取实际的TLV长度
 	// Each media item has: MediaId(4 bytes) + MediaName(32 bytes)
@@ -874,183 +630,77 @@ func (c *PlayerClient) GetAllProgramMedia(programID uint32) (*MediaListResponse,
 		mediaItemSize = mediaIdSize + mediaNameSize
 	)
 
-	// 获取实际的TLV长度
-	tlvLength := binary.LittleEndian.Uint16(resp[14:16])
-	fmt.Printf("TLV length from response: %d\n", tlvLength)
+	if len(resp) < headerSize+tlvHeaderSize {
+		return nil, fmt.Errorf("response too short, len=%d", len(resp))
+	}
 
-	// 根据TLV长度计算媒体项数量，而不是使用固定的计算方式
+	// Get TLV length
+	tlvLength := binary.LittleEndian.Uint16(resp[14:16])
+	if DEBUG {
+		fmt.Printf("TLV length: %d bytes\n", tlvLength)
+	}
+
 	// 这样可以适应不同的服务器实现
 	dataSize := int(tlvLength)
 
 	if dataSize < 0 {
-		return nil, errors.New("invalid response size")
+		return nil, fmt.Errorf("invalid dataSize: %d", dataSize)
 	}
 
-	// 检查是否有至少一个媒体项
-	if dataSize < mediaItemSize {
-		fmt.Printf("Warning: Data size (%d) less than one media item size (%d)\n", dataSize, mediaItemSize)
-		// 如果消息很短但不为零，尝试从中解析任何可能的媒体项
-		if dataSize > 0 {
-			fmt.Printf("Attempting to parse partial data: %x\n", resp[headerSize+tlvHeaderSize:])
-		} else {
-			// 没有媒体项数据，返回空列表
-			return result, nil
-		}
-	}
-
+	// 通过TLV长度计算媒体项数量，取最小值以防止越界
 	mediaCount := dataSize / mediaItemSize
-	dataStart := headerSize + tlvHeaderSize
-
-	// 记录实际解析出的媒体项数量
-	parsedCount := 0
-
-	fmt.Printf("Media resp dataSize: %d, expected mediaCount: %d, data: %x\n", dataSize, mediaCount, resp)
-
-	// 如果数据量不是mediaItemSize的整数倍，可能有额外的头部或尾部
-	if dataSize%mediaItemSize != 0 {
-		fmt.Printf("Warning: data size %d is not a multiple of media item size %d\n", dataSize, mediaItemSize)
-		// 尝试调整起始位置，查找有效数据的起始
-		for offset := dataStart; offset < len(resp)-mediaIdSize; offset++ {
-			// 寻找可能的媒体ID标记
-			if resp[offset] == 0 && resp[offset+1] == 0 && resp[offset+2] == 0 && resp[offset+3] == 0 {
-				potentialMediaStart := offset
-				fmt.Printf("Potential media data starts at offset %d: %x\n", potentialMediaStart, resp[potentialMediaStart:potentialMediaStart+8])
-				// 如果找到可能的媒体起始位置，调整dataStart
-				if potentialMediaStart != dataStart {
-					fmt.Printf("Adjusting dataStart from %d to %d\n", dataStart, potentialMediaStart)
-					dataStart = potentialMediaStart
-					break
-				}
-			}
-		}
+	if mediaCount*mediaItemSize > dataSize {
+		mediaCount-- // 如果有不完整的项，则减少计数
 	}
 
-	// Extract each media item - 使用剩余可用空间来计算可提取的媒体项数
-	availableBytes := len(resp) - dataStart
-	availableMediaItems := availableBytes / mediaItemSize
-
-	// 如果可用的媒体项数少于预期的媒体项数，调整mediaCount
-	if availableMediaItems < mediaCount {
-		fmt.Printf("Warning: Can only extract %d media items from available data, instead of expected %d\n",
-			availableMediaItems, mediaCount)
-		mediaCount = availableMediaItems
+	if DEBUG {
+		fmt.Printf("Media count based on dataSize (%d) and mediaItemSize (%d): %d\n",
+			dataSize, mediaItemSize, mediaCount)
 	}
 
-	for i := 0; i < mediaCount; i++ {
-		offset := dataStart + (i * mediaItemSize)
-		if offset+mediaItemSize > len(resp) {
-			fmt.Printf("Warning: offset %d + mediaItemSize %d exceeds response length %d\n", offset, mediaItemSize, len(resp))
-			break
-		}
-
-		// 检查当前媒体项位置的数据是否有效
-		if offset+mediaIdSize > len(resp) {
-			fmt.Printf("Warning: Not enough data for media ID at offset %d\n", offset)
-			break
-		}
-
+	// 解析每个媒体项
+	offset := headerSize + tlvHeaderSize
+	for i := 0; i < mediaCount && offset+mediaItemSize <= len(resp); i++ {
+		// 读取媒体ID
 		mediaId := binary.LittleEndian.Uint32(resp[offset : offset+mediaIdSize])
-		fmt.Printf("Media %d ID: %d, raw data: %x\n", i, mediaId, resp[offset:min(offset+mediaItemSize, len(resp))])
 
-		media := Media{
-			ID: mediaId,
-		}
+		// 读取媒体名称
+		nameOffset := offset + mediaIdSize
+		nameBytes := resp[nameOffset : nameOffset+mediaNameSize]
 
-		// 检查是否有足够的空间来读取媒体名称
-		if offset+mediaIdSize+mediaNameSize > len(resp) {
-			fmt.Printf("Warning: Not enough data for media name at offset %d\n", offset+mediaIdSize)
-			// 即使名称不完整，仍添加这个媒体项
-			result.Media = append(result.Media, media)
-			parsedCount++
-			break
-		}
-
-		// Read null-terminated media name
-		// 协议文档说明：字符串数组最后一位为'\0'
-		nameBytes := resp[offset+mediaIdSize : offset+mediaIdSize+mediaNameSize]
+		// 去除尾部的NULL字符
+		var name string
 		nullPos := bytes.IndexByte(nameBytes, 0)
-
-		var rawNameBytes []byte
 		if nullPos != -1 {
-			// 找到空字符，取空字符之前的有效数据
-			rawNameBytes = nameBytes[:nullPos]
+			name = string(nameBytes[:nullPos])
 		} else {
-			// 没有找到空字符，去掉尾部的空字节
-			rawNameBytes = bytes.TrimRight(nameBytes, "\x00")
-		}
-		fmt.Printf("Media %d rawNameBytes: %x\n", i, rawNameBytes)
-
-		// 先检查是否已经是有效的UTF-8编码
-		if utf8Valid(rawNameBytes) {
-			media.Name = string(rawNameBytes)
-			fmt.Printf("Media %d is utf8: %s\n", i, media.Name)
-		} else {
-			// 尝试不同的中文编码转换
-			converted := false
-
-			// 尝试GBK (中国大陆最常用的中文编码)
-			utf8NameBytes, err := io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.GBK.NewDecoder()))
-			if err == nil && utf8Valid(utf8NameBytes) {
-				media.Name = string(utf8NameBytes)
-				fmt.Printf("Media %d is gbk: %s\n", i, media.Name)
-				converted = true
-			}
-
-			// 如果GBK失败，尝试GB18030 (GBK的超集，包含更多字符)
-			if !converted {
-				utf8NameBytes, err = io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.GB18030.NewDecoder()))
-				if err == nil && utf8Valid(utf8NameBytes) {
-					media.Name = string(utf8NameBytes)
-					fmt.Printf("Media %d is gb18030: %s\n", i, media.Name)
-					converted = true
-				}
-			}
-
-			// 如果GB18030失败，尝试HZGB2312 (另一种常见中文编码)
-			if !converted {
-				utf8NameBytes, err = io.ReadAll(transform.NewReader(bytes.NewReader(rawNameBytes), simplifiedchinese.HZGB2312.NewDecoder()))
-				if err == nil && utf8Valid(utf8NameBytes) {
-					media.Name = string(utf8NameBytes)
-					fmt.Printf("Media is hzgb2312: %d: %s\n", i, media.Name)
-					converted = true
-				}
-			}
-
-			// 如果所有尝试都失败，使用原始字节
-			if !converted {
-				media.Name = string(rawNameBytes)
-				fmt.Printf("Media is raw: %d: %s\n", i, media.Name)
-			}
+			name = string(bytes.TrimRight(nameBytes, "\x00"))
 		}
 
+		// 创建媒体项
+		media := Media{
+			ID:   mediaId,
+			Name: name,
+		}
+		if DEBUG {
+			fmt.Printf("Parsed media: ID=%d, Name=%s\n", media.ID, media.Name)
+		}
+
+		// 添加到结果
 		result.Media = append(result.Media, media)
-		parsedCount++
-	}
 
-	// 打印实际解析的媒体项数量
-	fmt.Printf("Successfully parsed %d/%d media items\n", parsedCount, mediaCount)
+		// 移动到下一个媒体项
+		offset += mediaItemSize
+	}
 
 	return result, nil
-}
-
-// min returns the minimum of two integers
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-// utf8Valid checks if a byte slice contains valid UTF-8 data
-func utf8Valid(data []byte) bool {
-	return strings.HasPrefix(strings.ToValidUTF8(string(data), ""), string(data))
 }
 
 // PlayLayerMedia plays media in the specified layer of current program
 func (c *PlayerClient) PlayLayerMedia(layerIndex uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, layerIndex)
-	_, err := c.sendCommand(TagPlayLayerMedia, data)
+	_, err := c.sendCommandWithTimeout(TagPlayLayerMedia, data, readTimeout)
 	return err
 }
 
@@ -1058,7 +708,7 @@ func (c *PlayerClient) PlayLayerMedia(layerIndex uint32) error {
 func (c *PlayerClient) PauseLayerMedia(layerIndex uint32) error {
 	data := make([]byte, 4)
 	binary.LittleEndian.PutUint32(data, layerIndex)
-	_, err := c.sendCommand(TagPauseLayerMedia, data)
+	_, err := c.sendCommandWithTimeout(TagPauseLayerMedia, data, readTimeout)
 	return err
 }
 
@@ -1067,7 +717,7 @@ func (c *PlayerClient) MuteMediaSound(col, row uint32) error {
 	data := make([]byte, 8)
 	binary.LittleEndian.PutUint32(data[0:4], col)
 	binary.LittleEndian.PutUint32(data[4:8], row)
-	_, err := c.sendCommand(TagMuteMediaSound, data)
+	_, err := c.sendCommandWithTimeout(TagMuteMediaSound, data, readTimeout)
 	return err
 }
 
@@ -1088,37 +738,40 @@ func (c *PlayerClient) ControlLayerProgress(triggerID string, remainTime, totalT
 	binary.LittleEndian.PutUint32(data[40:44], totalTime)
 	binary.LittleEndian.PutUint16(data[44:46], layerIndex)
 
-	_, err := c.sendCommand(TagControlLayerProgress, data)
+	_, err := c.sendCommandWithTimeout(TagControlLayerProgress, data, readTimeout)
 	return err
 }
 
 // QueryLayerProgress queries playback progress of specified layer
 func (c *PlayerClient) QueryLayerProgress(layerIndex uint16) (*LayerProgressResponse, error) {
-	// Prepare request data
 	data := make([]byte, 2)
 	binary.LittleEndian.PutUint16(data, layerIndex)
 
-	// Send command
-	resp, err := c.sendCommand(TagQueryLayerProgress, data)
+	resp, err := c.sendCommandWithTimeout(TagQueryLayerProgress, data, readTimeout)
 	if err != nil {
 		return nil, fmt.Errorf("QueryLayerProgress failed: %v", err)
 	}
 
-	// Parse response
-	if len(resp) < 16+11 { // header(12) + tlv(4) + success(1) + layerIndex(2) + remainTime(4) + totalTime(4)
-		return nil, errors.New("response too short")
+	if len(resp) < 16+1+2+4+4 {
+		return nil, fmt.Errorf("response too short: %d bytes", len(resp))
 	}
 
-	// 解析响应
 	result := &LayerProgressResponse{
-		Success:    resp[16] == 1,
-		LayerIndex: binary.LittleEndian.Uint16(resp[17:19]),
-		RemainTime: binary.LittleEndian.Uint32(resp[19:23]),
-		TotalTime:  binary.LittleEndian.Uint32(resp[23:27]),
+		LayerIndex: layerIndex,
 	}
 
-	fmt.Printf("Progress data: success=%v, layerIndex=%d, remainTime=%d, totalTime=%d\n",
-		result.Success, result.LayerIndex, result.RemainTime, result.TotalTime)
+	// 响应格式: CC 55 CC 55 + header(12) + TLV头(4) + Success(1) + LayerIndex(2) + RemainTime(4) + TotalTime(4)
+	// Success字段位于响应的第17个字节
+	result.Success = resp[16] != 0
+
+	// LayerIndex位于Success之后
+	result.LayerIndex = binary.LittleEndian.Uint16(resp[17:19])
+
+	// RemainTime位于LayerIndex之后
+	result.RemainTime = binary.LittleEndian.Uint32(resp[19:23])
+
+	// TotalTime位于RemainTime之后
+	result.TotalTime = binary.LittleEndian.Uint32(resp[23:27])
 
 	return result, nil
 }
@@ -1131,4 +784,38 @@ func (c *PlayerClient) Close() error {
 // GetAddress returns the address of the client connection
 func (c *PlayerClient) GetAddress() string {
 	return c.addr
+}
+
+// GetCurrentProgram queries the current playing program ID and state
+func (c *PlayerClient) GetCurrentProgram() (*CurrentProgramResponse, error) {
+	// 发送获取当前节目的命令，不需要参数
+	resp, err := c.sendCommandWithTimeout(TagGetCurrentProgram, nil, readTimeout)
+	if err != nil {
+		return nil, fmt.Errorf("get current program failed: %v", err)
+	}
+
+	// 检查响应的有效性
+	// 响应格式: CC 55 CC 55 + header(12) + TLV头(4) + Success(1) + ProgramID(4) + ProgState(4)
+	if len(resp) < 16+1+4+4 {
+		return nil, fmt.Errorf("response too short: %d bytes", len(resp))
+	}
+
+	// 创建响应结构体
+	result := &CurrentProgramResponse{}
+
+	// 解析Success字段（第17个字节，索引16）
+	result.Success = resp[16] != 0
+
+	// 解析ProgramID（4字节，位于Success之后）
+	result.ProgramID = int32(binary.LittleEndian.Uint32(resp[17:21]))
+
+	// 解析ProgState（4字节，位于ProgramID之后）
+	result.ProgState = binary.LittleEndian.Uint32(resp[21:25])
+
+	if DEBUG {
+		fmt.Printf("Current Program: Success=%v, ProgramID=%d, State=%d\n",
+			result.Success, result.ProgramID, result.ProgState)
+	}
+
+	return result, nil
 }

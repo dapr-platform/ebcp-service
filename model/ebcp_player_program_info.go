@@ -27,18 +27,20 @@ Table: v_ebcp_player_program_info
 [ 6] player_ip_address                              VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 7] player_port                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 8] player_status                                  INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 9] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[10] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[11] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[12] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[13] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[14] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[15] medias                                         JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[ 9] player_current_program_id                      VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[10] player_current_program_state                   INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[11] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[12] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[13] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[14] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[15] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[16] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[17] medias                                         JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "qORhJvpfZmTPSCguHyjrEtylU",    "name": "glZhTMTBafBbQMvgWfgWqCxGB",    "program_id": "bdSJrGbxBHPRAkNTBfiXtsxnD",    "program_index": 67,    "player_id": "VbQSRdPTpoXIhdGtiNlAooixZ",    "player_name": "JYmvQARfxsSdglLUblPsrXcsD",    "player_ip_address": "FhUXBynCFeDTDmZLoSjmXdGVA",    "player_port": 17,    "player_status": 13,    "item_id": "YkIYWaKnbZQuJyAUGiRWhFUSS",    "item_name": "RlVRhwyUmMevMMadiBaUdHckT",    "room_id": "mMmENCwmPMHhRJedhyXaKylJd",    "room_name": "AFyxudyuDjevFpxvpHkuDhIjN",    "exhibition_id": "xwiDfUuIDdgGeUmNihiYlUqXO",    "exhibition_name": "BcrdLAjRfvuLbIWTZUBcjxVhw",    "medias": 79}
+{    "id": "PoxSHKNWxUmqrGvElHXXtXPla",    "name": "rEULVpefDKRQemjabJYXWVxhe",    "program_id": "cdrAyUuAMxKZtlQufwrENcUhN",    "program_index": 94,    "player_id": "rjVSfarHCZExUSQqGUNfCmHyU",    "player_name": "NpuPugJsDVqABTUREOMRgwXTF",    "player_ip_address": "sLaKnGknHcrEirQqsjRJhEwdT",    "player_port": 35,    "player_status": 91,    "player_current_program_id": "cZsYonQBSFjcAIDtnhIUTcomh",    "player_current_program_state": 49,    "item_id": "enGpQvYoNbYMNOYHxMWnXMhdq",    "item_name": "wIFWsVnViGUDAjrfHylauSZEX",    "room_id": "HvRYkBbRFHylYpYTklCrFXRSD",    "room_name": "pxEdBrUwNrhfnZAeSqogNoSIv",    "exhibition_id": "tpkljkwQFmnkbRTPUApnefvju",    "exhibition_name": "CttspSTBeUjMaLUIruhKjfKoM",    "medias": 0}
 
 
 Comments
@@ -69,6 +71,10 @@ var (
 	Ebcp_player_program_info_FIELD_NAME_player_port = "player_port"
 
 	Ebcp_player_program_info_FIELD_NAME_player_status = "player_status"
+
+	Ebcp_player_program_info_FIELD_NAME_player_current_program_id = "player_current_program_id"
+
+	Ebcp_player_program_info_FIELD_NAME_player_current_program_state = "player_current_program_state"
 
 	Ebcp_player_program_info_FIELD_NAME_item_id = "item_id"
 
@@ -104,6 +110,10 @@ type Ebcp_player_program_info struct {
 	PlayerPort int32 `json:"player_port"` //player_port
 
 	PlayerStatus int32 `json:"player_status"` //player_status
+
+	PlayerCurrentProgramID string `json:"player_current_program_id"` //player_current_program_id
+
+	PlayerCurrentProgramState int32 `json:"player_current_program_state"` //player_current_program_state
 
 	ItemID string `json:"item_id"` //item_id
 
@@ -318,6 +328,48 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 
 		&ColumnInfo{
 			Index:              9,
+			Name:               "player_current_program_id",
+			Comment:            `player_current_program_id`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "PlayerCurrentProgramID",
+			GoFieldType:        "string",
+			JSONFieldName:      "player_current_program_id",
+			ProtobufFieldName:  "player_current_program_id",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
+			Name:               "player_current_program_state",
+			Comment:            `player_current_program_state`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "PlayerCurrentProgramState",
+			GoFieldType:        "int32",
+			JSONFieldName:      "player_current_program_state",
+			ProtobufFieldName:  "player_current_program_state",
+			ProtobufType:       "int32",
+			ProtobufPos:        11,
+		},
+
+		&ColumnInfo{
+			Index:              11,
 			Name:               "item_id",
 			Comment:            `item_id`,
 			Notes:              ``,
@@ -334,11 +386,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "item_id",
 			ProtobufFieldName:  "item_id",
 			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
-			Index:              10,
+			Index:              12,
 			Name:               "item_name",
 			Comment:            `item_name`,
 			Notes:              ``,
@@ -355,11 +407,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "item_name",
 			ProtobufFieldName:  "item_name",
 			ProtobufType:       "string",
-			ProtobufPos:        11,
+			ProtobufPos:        13,
 		},
 
 		&ColumnInfo{
-			Index:              11,
+			Index:              13,
 			Name:               "room_id",
 			Comment:            `room_id`,
 			Notes:              ``,
@@ -376,11 +428,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "room_id",
 			ProtobufFieldName:  "room_id",
 			ProtobufType:       "string",
-			ProtobufPos:        12,
+			ProtobufPos:        14,
 		},
 
 		&ColumnInfo{
-			Index:              12,
+			Index:              14,
 			Name:               "room_name",
 			Comment:            `room_name`,
 			Notes:              ``,
@@ -397,11 +449,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "room_name",
 			ProtobufFieldName:  "room_name",
 			ProtobufType:       "string",
-			ProtobufPos:        13,
+			ProtobufPos:        15,
 		},
 
 		&ColumnInfo{
-			Index:              13,
+			Index:              15,
 			Name:               "exhibition_id",
 			Comment:            `exhibition_id`,
 			Notes:              ``,
@@ -418,11 +470,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_id",
 			ProtobufFieldName:  "exhibition_id",
 			ProtobufType:       "string",
-			ProtobufPos:        14,
+			ProtobufPos:        16,
 		},
 
 		&ColumnInfo{
-			Index:              14,
+			Index:              16,
 			Name:               "exhibition_name",
 			Comment:            `exhibition_name`,
 			Notes:              ``,
@@ -439,11 +491,11 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_name",
 			ProtobufFieldName:  "exhibition_name",
 			ProtobufType:       "string",
-			ProtobufPos:        15,
+			ProtobufPos:        17,
 		},
 
 		&ColumnInfo{
-			Index:              15,
+			Index:              17,
 			Name:               "medias",
 			Comment:            `medias`,
 			Notes:              ``,
@@ -460,7 +512,7 @@ Warning table: v_ebcp_player_program_info primary key column id is nullable colu
 			JSONFieldName:      "medias",
 			ProtobufFieldName:  "medias",
 			ProtobufType:       "string",
-			ProtobufPos:        16,
+			ProtobufPos:        18,
 		},
 	},
 }

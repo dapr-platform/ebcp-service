@@ -462,6 +462,9 @@ definitions:
       current_program_id:
         description: 当前节目ID
         type: string
+      current_program_state:
+        description: 当前节目状态,0:播放,1:暂停,2:停止
+        type: integer
       id:
         description: id
         type: string
@@ -492,6 +495,12 @@ definitions:
     type: object
   model.Ebcp_player_info:
     properties:
+      current_program_id:
+        description: 当前节目ID
+        type: string
+      current_program_state:
+        description: 当前节目状态,0:播放,1:暂停,2:停止
+        type: integer
       exhibition_id:
         description: 所属展览ID
         type: string
@@ -537,7 +546,7 @@ definitions:
         description: 所属展厅名称
         type: string
       status:
-        description: 状态
+        description: 状态,1:正常,2:离线,3:故障
         type: integer
       version:
         description: 版本
@@ -595,6 +604,12 @@ definitions:
       name:
         description: name
         type: string
+      player_current_program_id:
+        description: player_current_program_id
+        type: string
+      player_current_program_state:
+        description: player_current_program_state
+        type: integer
       player_id:
         description: player_id
         type: string
@@ -3665,6 +3680,10 @@ paths:
         in: query
         name: current_program_id
         type: string
+      - description: current_program_state
+        in: query
+        name: current_program_state
+        type: string
       - description: status
         in: query
         name: status
@@ -3755,6 +3774,14 @@ paths:
       - description: status
         in: query
         name: status
+        type: string
+      - description: current_program_id
+        in: query
+        name: current_program_id
+        type: string
+      - description: current_program_state
+        in: query
+        name: current_program_state
         type: string
       - description: item_id
         in: query
@@ -3863,6 +3890,14 @@ paths:
       - description: status
         in: query
         name: status
+        type: string
+      - description: current_program_id
+        in: query
+        name: current_program_id
+        type: string
+      - description: current_program_state
+        in: query
+        name: current_program_state
         type: string
       - description: item_id
         in: query
@@ -4051,6 +4086,14 @@ paths:
         in: query
         name: player_status
         type: string
+      - description: player_current_program_id
+        in: query
+        name: player_current_program_id
+        type: string
+      - description: player_current_program_state
+        in: query
+        name: player_current_program_state
+        type: string
       - description: item_id
         in: query
         name: item_id
@@ -4154,6 +4197,14 @@ paths:
       - description: player_status
         in: query
         name: player_status
+        type: string
+      - description: player_current_program_id
+        in: query
+        name: player_current_program_id
+        type: string
+      - description: player_current_program_state
+        in: query
+        name: player_current_program_state
         type: string
       - description: item_id
         in: query
@@ -5030,6 +5081,10 @@ paths:
       - description: current_program_id
         in: query
         name: current_program_id
+        type: string
+      - description: current_program_state
+        in: query
+        name: current_program_state
         type: string
       - description: status
         in: query

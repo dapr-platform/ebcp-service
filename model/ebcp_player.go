@@ -29,12 +29,13 @@ Table: o_ebcp_player
 [ 8] version                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 9] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] current_program_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[11] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[11] current_program_state                          INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[12] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "hgOTWHidtREpKCYVPQXGpMxJE",    "created_by": "gNgPDhOrUKFqfXdthNNWmUBLT",    "created_time": 29,    "updated_by": "njNXgOPpGOBeOOQitdraydMGT",    "updated_time": 80,    "name": "wMiwKnNUVqKYEepHSOSRNXpXH",    "ip_address": "CZegMOsGftSGQWEjCyEkNkoQY",    "port": 58,    "version": "qPgFcIhyrMTxlOlCgIWLNJOaL",    "item_id": "eQXjyRHiNXPCroEVIjrSosGsy",    "current_program_id": "cLhrMJhIPqKQpIvIBtXDUjHHx",    "status": 62}
+{    "id": "RDZeZuPMFSXNfoncmHpLIakAN",    "created_by": "BnPBpgmIohgdnxkpkoNgaMqfl",    "created_time": 9,    "updated_by": "GMLjIrDGmAOhvJUnsKytqcXJd",    "updated_time": 73,    "name": "DZUIxgnvOrkCxkmsyUiTNAuZW",    "ip_address": "VkaZffdIifVrjVGhPUnWEefxA",    "port": 68,    "version": "xhfomXgGKqFrrLJwlnuiBvEyo",    "item_id": "SBUqxWHcrxPgtAApFnYiENeJL",    "current_program_id": "LKbIioSyZcThHdVcQlTwJouYL",    "current_program_state": 68,    "status": 59}
 
 
 
@@ -63,6 +64,8 @@ var (
 
 	Ebcp_player_FIELD_NAME_current_program_id = "current_program_id"
 
+	Ebcp_player_FIELD_NAME_current_program_state = "current_program_state"
+
 	Ebcp_player_FIELD_NAME_status = "status"
 )
 
@@ -89,6 +92,8 @@ type Ebcp_player struct {
 	ItemID string `json:"item_id"` //所属展项ID
 
 	CurrentProgramID string `json:"current_program_id"` //当前节目ID
+
+	CurrentProgramState int32 `json:"current_program_state"` //当前节目状态,0:播放,1:暂停,2:停止
 
 	Status int32 `json:"status"` //状态（1: 正常, 2: 离线, 3: 故障）
 
@@ -331,6 +336,27 @@ var Ebcp_playerTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              11,
+			Name:               "current_program_state",
+			Comment:            `当前节目状态,0:播放,1:暂停,2:停止`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "CurrentProgramState",
+			GoFieldType:        "int32",
+			JSONFieldName:      "current_program_state",
+			ProtobufFieldName:  "current_program_state",
+			ProtobufType:       "int32",
+			ProtobufPos:        12,
+		},
+
+		&ColumnInfo{
+			Index:              12,
 			Name:               "status",
 			Comment:            `状态（1: 正常, 2: 离线, 3: 故障）`,
 			Notes:              ``,
@@ -347,7 +373,7 @@ var Ebcp_playerTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        12,
+			ProtobufPos:        13,
 		},
 	},
 }

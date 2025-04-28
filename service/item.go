@@ -9,6 +9,10 @@ import (
 	"github.com/dapr-platform/common"
 	"github.com/spf13/cast"
 )
+const (
+	ItemStatusStart = 1
+	ItemStatusStop  = 2
+)
 
 // StartExhibitionItem 启动单个展项
 func StartExhibitionItem(id string) error {
@@ -26,31 +30,20 @@ func StartExhibitionItem(id string) error {
 	}
 	errors := make([]string, 0)
 	for _, player := range players {
-		if player.CurrentProgramID == "" {
-			common.Logger.Errorf("播放设备 %s 没有当前节目", player.ID)
-			errors = append(errors, fmt.Sprintf("播放设备 %s 没有当前节目", player.ID))
-			continue
-		}
-		client := GetPlayerClient(player.ID)
-		if client == nil {
-			common.Logger.Errorf("播放设备 %s 未找到", player.ID)
-			errors = append(errors, fmt.Sprintf("播放设备 %s 未找到", player.ID))
-			continue
-		}
-
-		err = client.PlayProgram(cast.ToUint32(player.CurrentProgramID))
+		err := PlayerPlay(&player)
 		if err != nil {
 			common.Logger.Errorf("播放设备 %s 播放节目失败: %v", player.ID, err)
 			errors = append(errors, fmt.Sprintf("播放设备 %s 播放节目失败: %v", player.ID, err))
 			continue
 		}
+		
 
 	}
 	if len(errors) > 0 {
 		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
 	// 更新展项状态为启动
-	item.Status = 1
+	item.Status = ItemStatusStart
 	err = common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
 	if err != nil {
 		return fmt.Errorf("更新展项状态失败: %v", err)
@@ -75,31 +68,19 @@ func StopExhibitionItem(id string) error {
 	}
 	errors := make([]string, 0)
 	for _, player := range players {
-		if player.CurrentProgramID == "" {
-			common.Logger.Errorf("播放设备 %s 没有当前节目", player.ID)
-			errors = append(errors, fmt.Sprintf("播放设备 %s 没有当前节目", player.ID))
-			continue
-		}
-		client := GetPlayerClient(player.ID)
-		if client == nil {
-			common.Logger.Errorf("播放设备 %s 未找到", player.ID)
-			errors = append(errors, fmt.Sprintf("播放设备 %s 未找到", player.ID))
-			continue
-		}
-
-		err = client.StopProgram(cast.ToUint32(player.CurrentProgramID))
+		err := PlayerStop(&player)
 		if err != nil {
 			common.Logger.Errorf("播放设备 %s 停止节目失败: %v", player.ID, err)
 			errors = append(errors, fmt.Sprintf("播放设备 %s 停止节目失败: %v", player.ID, err))
 			continue
 		}
-
+		
 	}
 	if len(errors) > 0 {
 		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
 	// 更新展项状态为停止
-	item.Status = 2
+	item.Status = ItemStatusStop
 	err = common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
 	if err != nil {
 		return fmt.Errorf("更新展项状态失败: %v", err)

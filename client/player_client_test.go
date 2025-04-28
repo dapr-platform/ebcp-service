@@ -56,7 +56,7 @@ func TestGetAllProgramMedia(t *testing.T) {
 	fmt.Printf("GetProgramList response: total=%d, programs=%+v\n", programs.TotalCount, programs.Programs)
 	time.Sleep(time.Second)
 	// 只查询前3个程序或更少（如果程序总数小于3）
-	count := 2
+	count := 1
 	if len(programs.Programs) < count {
 		count = len(programs.Programs)
 	}
@@ -136,7 +136,7 @@ func TestPauseProgram(t *testing.T) {
 }
 
 func TestPlayProgram(t *testing.T) {
-	client, err := NewTCPClient("182.92.117.41:40306")
+	client, err := NewTCPClient("192.168.3.234:17613")
 	if err != nil {
 		t.Fatalf("Failed to create TCP client: %v", err)
 	}
@@ -153,7 +153,7 @@ func TestPlayProgram(t *testing.T) {
 }
 
 func TestStopProgram(t *testing.T) {
-	client, err := NewTCPClient("182.92.117.41:40306")
+	client, err := NewTCPClient("192.168.3.234:17613")
 	if err != nil {
 		t.Fatalf("Failed to create TCP client: %v", err)
 	}
@@ -167,4 +167,21 @@ func TestStopProgram(t *testing.T) {
 		t.Errorf("StopProgram failed: %v", err)
 	}
 	fmt.Println("StopProgram executed successfully")
+}
+
+func TestGetCurrentProgram(t *testing.T) {
+	client, err := NewTCPClient("192.168.3.234:17613")
+	if err != nil {
+		t.Fatalf("Failed to create TCP client: %v", err)
+	}
+	defer client.Close()
+
+	// Wait for connection
+	time.Sleep(time.Second)
+
+	currentProgram, err := client.GetCurrentProgram()
+	if err != nil {
+		t.Errorf("GetCurrentProgram failed: %v", err)
+	}
+	fmt.Printf("GetCurrentProgram response: %+v\n", currentProgram)
 }

@@ -41,7 +41,7 @@ Table: v_ebcp_exhibition_item_info
 
 JSON Sample
 -------------------------------------
-{    "id": "XbhtMjZVeggrVyrEPDBZtmIDO",    "name": "kOiPFEmyAPtWrAmSsdBuQiqRd",    "type": "XCxLwikmsdaYFyiLEnsNJpDxb",    "status": 90,    "remarks": "yyuAueAxxcUOaSnXtUFCsrgFA",    "export_info": "PLEAghmAebdAkvYksxDmeyPTt",    "room_id": "PBqZsbTMmjvmFOrQCIKFQmEQh",    "room_name": "rJlfTLCBjhkgVjTEtoDAtLJkh",    "room_floor": "IuSRreZhkOKPlyeIxNiXxUrDF",    "room_floor_value": "RpIFcFKQaHnUbNhnaYfXMpJyx",    "room_floor_name": "TKYqivbUSlpJDccTnTVqHibjt",    "room_location": "NqDNCGfVRWmuUEqnndXrviDfH",    "room_location_value": "YoJFQbfaBSFNXZfkUFRSwCGMf",    "room_location_name": "vqAlIhKwBcQkdeEJjTIFuhkAe",    "exhibition_id": "NNZQwyRxjsjqanNKerrJOCthm",    "exhibition_name": "XtEqHFKYfjBFZlfPkSTZVYKSw",    "player_devices": 45,    "control_devices": 56,    "schedule": 95}
+{    "id": "LDawcmTgyQKDRSXIBEgvBreXQ",    "name": "kuLCYcHAPjTKwXQOJPQcQMIZD",    "type": "nSjmJaFwHZCmDSXSAetVWDMpP",    "status": 78,    "remarks": "pnemmjykDKVSlHteHurKZDPCX",    "export_info": "NPbmpKPWtrEsGLrwmkZtasbZt",    "room_id": "wAcBbeDybSTJQjbJAtWXAnhdS",    "room_name": "wCnJJseJovaGlLlsaIiwaHUHq",    "room_floor": "CQksNiedvuuupZSCphjfVHRXv",    "room_floor_value": "yEQZhSokagyqRvCmYyYgNVypF",    "room_floor_name": "vxvjHiLkZebUKMYgZyOvlBOxw",    "room_location": "ixqGetUVXPkFNCZALmUjoXQob",    "room_location_value": "tYeNDVwfXFQmViHNCNENhOEBW",    "room_location_name": "XqpSTCWtADrsAfwexBmLsufEl",    "exhibition_id": "GMYMAUtwpIftSIARDoqZPOvYx",    "exhibition_name": "QMGiYBwDwdawmjWmfDvWOucyR",    "player_devices": 36,    "control_devices": 8,    "schedule": 4}
 
 
 Comments

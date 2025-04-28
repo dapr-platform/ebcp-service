@@ -107,6 +107,7 @@ CREATE TABLE o_ebcp_player (
     version VARCHAR(255),
     item_id VARCHAR(32),
     current_program_id VARCHAR(32),
+    current_program_state INTEGER,
     status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
@@ -118,6 +119,7 @@ COMMENT ON COLUMN o_ebcp_player.port IS '端口';
 COMMENT ON COLUMN o_ebcp_player.version IS '版本';
 COMMENT ON COLUMN o_ebcp_player.item_id IS '所属展项ID';
 COMMENT ON COLUMN o_ebcp_player.current_program_id IS '当前节目ID';
+COMMENT ON COLUMN o_ebcp_player.current_program_state IS '当前节目状态,0:播放,1:暂停,2:停止';
 COMMENT ON COLUMN o_ebcp_player.status IS '状态（1: 正常, 2: 离线, 3: 故障）';
 
 -- 播放设备节目表
@@ -446,6 +448,7 @@ SELECT
                 'port', p.port,
                 'status', p.status,
                 'current_program_id', p.current_program_id,
+                'current_program_state', p.current_program_state,
                 'programs', (
                     SELECT json_agg(
                         json_build_object(
@@ -462,7 +465,7 @@ SELECT
                                     )
                                 )
                                 FROM o_ebcp_player_program_media ppm
-                                WHERE ppm.player_program_id = pp.id
+                                WHERE ppm.program_id = pp.id
                             )
                         )
                     )
@@ -515,6 +518,8 @@ SELECT
     p.port AS port,
     p.version AS version,
     p.status AS status,
+    p.current_program_id AS current_program_id,
+    p.current_program_state AS current_program_state,
     ei.id AS item_id,
     ei.name AS item_name,
     ei.type AS item_type,
@@ -541,7 +546,7 @@ SELECT
                         )
                     )
                     FROM o_ebcp_player_program_media ppm
-                    WHERE ppm.player_program_id = pp.id
+                    WHERE ppm.program_id = pp.id
                 )
             )
         )
@@ -563,7 +568,9 @@ COMMENT ON COLUMN v_ebcp_player_info.name IS '设备名称';
 COMMENT ON COLUMN v_ebcp_player_info.ip_address IS 'IP地址';
 COMMENT ON COLUMN v_ebcp_player_info.port IS '端口';
 COMMENT ON COLUMN v_ebcp_player_info.version IS '版本';
-COMMENT ON COLUMN v_ebcp_player_info.status IS '状态';
+COMMENT ON COLUMN v_ebcp_player_info.status IS '状态,1:正常,2:离线,3:故障';
+COMMENT ON COLUMN v_ebcp_player_info.current_program_id IS '当前节目ID';
+COMMENT ON COLUMN v_ebcp_player_info.current_program_state IS '当前节目状态,0:播放,1:暂停,2:停止';
 COMMENT ON COLUMN v_ebcp_player_info.item_id IS '所属展项ID';
 COMMENT ON COLUMN v_ebcp_player_info.item_name IS '所属展项名称';
 COMMENT ON COLUMN v_ebcp_player_info.item_type IS '所属展项类型';
@@ -588,6 +595,8 @@ SELECT
     p.ip_address AS player_ip_address,
     p.port AS player_port,
     p.status AS player_status,
+    p.current_program_id AS player_current_program_id,
+    p.current_program_state AS player_current_program_state,
     ei.id AS item_id,
     ei.name AS item_name,
     er.id AS room_id,

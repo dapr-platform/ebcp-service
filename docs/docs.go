@@ -4771,6 +4771,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "current_program_state",
+                        "name": "current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -4914,6 +4920,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_id",
+                        "name": "current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_state",
+                        "name": "current_program_state",
                         "in": "query"
                     },
                     {
@@ -5079,6 +5097,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_id",
+                        "name": "current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_state",
+                        "name": "current_program_state",
                         "in": "query"
                     },
                     {
@@ -5379,6 +5409,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "player_current_program_id",
+                        "name": "player_current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_current_program_state",
+                        "name": "player_current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "item_id",
                         "name": "item_id",
                         "in": "query"
@@ -5534,6 +5576,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "player_status",
                         "name": "player_status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_current_program_id",
+                        "name": "player_current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_current_program_state",
+                        "name": "player_current_program_state",
                         "in": "query"
                     },
                     {
@@ -6183,6 +6237,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_program_id",
                         "name": "current_program_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "current_program_state",
+                        "name": "current_program_state",
                         "in": "query"
                     },
                     {
@@ -7569,6 +7629,10 @@ const docTemplate = `{
                     "description": "当前节目ID",
                     "type": "string"
                 },
+                "current_program_state": {
+                    "description": "当前节目状态,0:播放,1:暂停,2:停止",
+                    "type": "integer"
+                },
                 "id": {
                     "description": "id",
                     "type": "string"
@@ -7610,6 +7674,14 @@ const docTemplate = `{
         "model.Ebcp_player_info": {
             "type": "object",
             "properties": {
+                "current_program_id": {
+                    "description": "当前节目ID",
+                    "type": "string"
+                },
+                "current_program_state": {
+                    "description": "当前节目状态,0:播放,1:暂停,2:停止",
+                    "type": "integer"
+                },
                 "exhibition_id": {
                     "description": "所属展览ID",
                     "type": "string"
@@ -7670,7 +7742,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "description": "状态",
+                    "description": "状态,1:正常,2:离线,3:故障",
                     "type": "integer"
                 },
                 "version": {
@@ -7749,6 +7821,14 @@ const docTemplate = `{
                 "name": {
                     "description": "name",
                     "type": "string"
+                },
+                "player_current_program_id": {
+                    "description": "player_current_program_id",
+                    "type": "string"
+                },
+                "player_current_program_state": {
+                    "description": "player_current_program_state",
+                    "type": "integer"
                 },
                 "player_id": {
                     "description": "player_id",

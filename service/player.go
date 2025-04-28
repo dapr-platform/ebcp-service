@@ -14,6 +14,15 @@ import (
 	"github.com/spf13/cast"
 )
 
+const (
+	PlayerStatusOnline  = 1
+	PlayerStatusOffline = 2
+	PlayerStatusError   = 3
+	ProgramStatePlay    = 0
+	ProgramStatePause   = 1
+	ProgramStateStop    = 2
+)
+
 var (
 	playerClients = make(map[string]*client.PlayerClient)
 	playerMu      sync.RWMutex
@@ -90,12 +99,25 @@ func updatePlayerPrograms() {
 
 		// 使用复制的映射处理程序更新
 		for playerId, playerClient := range clientsCopy {
-			go func(id string, client *client.PlayerClient) {
+			go func(id string, cli *client.PlayerClient) {
 				common.Logger.Infof("开始更新播放器 [%s] 的节目列表", id)
-
-				programs, err := client.GetProgramList()
+				player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+					model.Ebcp_playerTableInfo.Name, "id="+id)
+				if err != nil {
+					common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", id, err)
+					return
+				}
+				if player == nil {
+					common.Logger.Errorf("播放器 [%s] 不存在", id)
+					return
+				}
+				programs, err := cli.GetProgramList()
 				if err != nil {
 					common.Logger.Errorf("获取播放器 [%s] 节目列表失败: %v", id, err)
+					if client.IsTimeoutError(err) {
+						player.Status = 2
+						common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+					}
 					return
 				}
 
@@ -138,6 +160,7 @@ func updatePlayerPrograms() {
 
 					// 检查是否为新增或更新
 					isNewProgram := true
+
 					for _, existingProgram := range exists {
 						if existingProgram.ProgramID == programIdStr {
 							isNewProgram = false
@@ -158,7 +181,7 @@ func updatePlayerPrograms() {
 							common.Logger.Debugf("更新播放器 [%s] 节目 [%s:%s]", id, programIdStr, program.Name)
 						}
 
-						syncPlayerProgramMedia(client, id, cast.ToString(playerProgram.ID), program.ID)
+						syncPlayerProgramMedia(cli, id, cast.ToString(playerProgram.ID), program.ID)
 						addedMap[programIdStr] = true
 					}
 				}
@@ -202,13 +225,34 @@ func updatePlayerPrograms() {
 					}
 				}
 
+				currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+				if err != nil {
+					common.Logger.Errorf("获取播放器 [%s] 当前播放节目失败: %v", id, err)
+
+					return
+				}
+				player.CurrentProgramID = currentProgramId
+				player.CurrentProgramState = cast.ToInt32(currentProgramState)
+				err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+				if err != nil {
+					common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
+				}
 			}(playerId, playerClient)
 		}
 
 		common.Logger.Info("播放器程序更新任务已启动，等待所有更新完成")
 	}
 }
-
+func GetPlayerCurrentProgram(client *client.PlayerClient) (programId string, state int, err error) {
+	currentProgram, err := client.GetCurrentProgram()
+	if err != nil {
+		common.Logger.Errorf("Failed to get current program: %v", err)
+		return
+	}
+	programId = cast.ToString(currentProgram.ProgramID)
+	state = int(currentProgram.ProgState)
+	return
+}
 func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId string, playerProgramID uint32) {
 	common.Logger.Infof("Syncing program media for player %s program %s", playerId, programId)
 	medias, err := client.GetAllProgramMedia(playerProgramID)
@@ -264,39 +308,195 @@ func GetPlayerPrograms(playerId string) ([]model.Ebcp_player_program_info, error
 	}
 	return programs, nil
 }
-func PlayProgramMedia(playerId, programId, mediaId string) error {
-	player := GetPlayerClient(playerId)
-	if player == nil {
+func PlayerPlay(player *model.Ebcp_player) error {
+	playerClient := GetPlayerClient(player.ID)
+	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
-	return player.PlayLayerMedia(cast.ToUint32(mediaId))
+	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	player.CurrentProgramID = currentProgramId
+	player.CurrentProgramState = cast.ToInt32(currentProgramState)
+	if player.CurrentProgramState != ProgramStatePlay {
+		err = playerClient.PlayProgram(cast.ToUint32(player.CurrentProgramID))
+		if err != nil {
+			return fmt.Errorf("播放播放器 [%s] 节目失败: %v", player.ID, err)
+		}
+		player.CurrentProgramState = ProgramStatePlay
+		err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+		if err != nil {
+			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+		}
+	}
+	return nil
+}
+func PlayerPause(player *model.Ebcp_player) error {
+	playerClient := GetPlayerClient(player.ID)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	player.CurrentProgramID = currentProgramId
+	player.CurrentProgramState = cast.ToInt32(currentProgramState)
+	if player.CurrentProgramState != ProgramStatePause {
+		err = playerClient.PauseProgram(cast.ToUint32(player.CurrentProgramID))
+		if err != nil {
+			return fmt.Errorf("暂停播放器 [%s] 节目失败: %v", player.ID, err)
+		}
+		player.CurrentProgramState = ProgramStatePause
+		err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+		if err != nil {
+			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+		}
+	}
+	return nil
+}
+func PlayerStop(player *model.Ebcp_player) error {
+	playerClient := GetPlayerClient(player.ID)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	player.CurrentProgramID = currentProgramId
+	player.CurrentProgramState = cast.ToInt32(currentProgramState)
+	if player.CurrentProgramState != ProgramStateStop {
+		err = playerClient.StopProgram(cast.ToUint32(player.CurrentProgramID))
+		if err != nil {
+			return fmt.Errorf("停止播放器 [%s] 节目失败: %v", player.ID, err)
+		}
+		player.CurrentProgramState = ProgramStateStop
+		err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+		if err != nil {
+			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+		}
+	}
+	return nil
+}
+func PlayProgram(playerId, programId string) error {
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+	}
+	if player == nil {
+		return fmt.Errorf("播放器 [%s] 不存在", playerId)
+	}
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err = playerClient.PlayProgram(cast.ToUint32(programId))
+	if err != nil {
+		return fmt.Errorf("播放播放器 [%s] 节目失败: %v", playerId, err)
+	}
+
+	player.CurrentProgramID = programId
+	player.CurrentProgramState = ProgramStatePlay
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+
+	return nil
+}
+func PauseProgram(playerId, programId string) error {
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+	}
+	if player == nil {
+		return fmt.Errorf("播放器 [%s] 不存在", playerId)
+	}
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err = playerClient.PauseProgram(cast.ToUint32(programId))
+	if err != nil {
+		return fmt.Errorf("暂停播放器 [%s] 节目失败: %v", playerId, err)
+	}
+	player.CurrentProgramState = ProgramStatePause
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	return nil
+}
+func StopProgram(playerId, programId string) error {
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+	}
+	if player == nil {
+		return fmt.Errorf("播放器 [%s] 不存在", playerId)
+	}
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err = playerClient.StopProgram(cast.ToUint32(programId))
+	if err != nil {
+		return fmt.Errorf("停止播放器 [%s] 节目失败: %v", playerId, err)
+	}
+	player.CurrentProgramState = ProgramStateStop
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	return nil
+}
+func PlayProgramMedia(playerId, programId, mediaId string) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.PlayLayerMedia(cast.ToUint32(mediaId))
+	if err != nil {
+		return fmt.Errorf("播放播放器 [%s] 节目媒体失败: %v", playerId, err)
+	}
+	return nil
 }
 
 func PauseProgramMedia(playerId, programId, mediaId string) error {
-	player := GetPlayerClient(playerId)
-	if player == nil {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
-	return player.PauseLayerMedia(cast.ToUint32(mediaId))
+	err := playerClient.PauseLayerMedia(cast.ToUint32(mediaId))
+	if err != nil {
+		return fmt.Errorf("暂停播放器 [%s] 节目媒体失败: %v", playerId, err)
+	}
+	return nil
 }
 
 func GetProgramMediaProcess(playerId, programId, mediaId string) (int, int, error) {
-	player := GetPlayerClient(playerId)
-	if player == nil {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
 		return 0, 0, fmt.Errorf("player not found")
 	}
-	progress, err := player.QueryLayerProgress(cast.ToUint16(mediaId))
+	progress, err := playerClient.QueryLayerProgress(cast.ToUint16(mediaId))
 	if err != nil {
 		return 0, 0, err
 	}
 	return int(progress.RemainTime), int(progress.TotalTime), nil
 }
 func SetProgramMediaProcess(playerId, programId, mediaId string, remainTime, totalTime int) error {
-	player := GetPlayerClient(playerId)
-	if player == nil {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
-	return player.ControlLayerProgress(programId, uint32(remainTime), uint32(totalTime), cast.ToUint16(mediaId))
+	err := playerClient.ControlLayerProgress(programId, uint32(remainTime), uint32(totalTime), cast.ToUint16(mediaId))
+	if err != nil {
+		return fmt.Errorf("设置播放器 [%s] 节目媒体进度失败: %v", playerId, err)
+	}
+	return nil
 }
 
 // checkConnections verifies and refreshes player connections
