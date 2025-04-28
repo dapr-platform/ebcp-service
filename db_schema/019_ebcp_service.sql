@@ -216,6 +216,8 @@ CREATE TABLE o_ebcp_item_schedule (
     item_id VARCHAR(32) NOT NULL,
     start_time VARCHAR(32) NOT NULL,
     stop_time VARCHAR(32) NOT NULL,
+    start_date VARCHAR(32) NOT NULL DEFAULT '',
+    stop_date VARCHAR(32) NOT NULL DEFAULT '',
     cycle_type INTEGER NOT NULL,
     enabled INTEGER NOT NULL DEFAULT 1,
                                        PRIMARY KEY (id)
@@ -227,6 +229,8 @@ COMMENT ON COLUMN o_ebcp_item_schedule.start_time IS '开始时间';
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_time IS '停止时间'; 
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
 COMMENT ON COLUMN o_ebcp_item_schedule.enabled IS '是否启用(0: 禁用, 1: 启用)';
+COMMENT ON COLUMN o_ebcp_item_schedule.start_date IS '开始日期';
+COMMENT ON COLUMN o_ebcp_item_schedule.stop_date IS '停止日期';
 
 -- 节假日日期表
 CREATE TABLE o_ebcp_holiday_date (
@@ -574,7 +578,7 @@ COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_name IS '所属展览名称';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.player_devices IS '关联的播放设备列表（JSON格式）';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.control_devices IS '关联的中控设备列表（JSON格式）';
-COMMENT ON COLUMN v_ebcp_exhibition_item_info.schedule IS '关联的定时任务信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.schedules IS '关联的定时任务信息（JSON格式）';
 
 
 -- 播放设备详细视图

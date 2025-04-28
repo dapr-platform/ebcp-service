@@ -99,6 +99,8 @@ func batchUpsertEbcp_item_scheduleHandler(w http.ResponseWriter, r *http.Request
 // @Param item_id query string false "item_id"
 // @Param start_time query string false "start_time"
 // @Param stop_time query string false "stop_time"
+// @Param start_date query string false "start_date"
+// @Param stop_date query string false "stop_date"
 // @Param cycle_type query string false "cycle_type"
 // @Param enabled query string false "enabled"
 // @Produce  json
@@ -130,6 +132,8 @@ func Ebcp_item_schedulePageListHandler(w http.ResponseWriter, r *http.Request) {
 // @Param item_id query string false "item_id"
 // @Param start_time query string false "start_time"
 // @Param stop_time query string false "stop_time"
+// @Param start_date query string false "start_date"
+// @Param stop_date query string false "stop_date"
 // @Param cycle_type query string false "cycle_type"
 // @Param enabled query string false "enabled"
 // @Produce  json
