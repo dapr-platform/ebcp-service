@@ -68,6 +68,13 @@ func GetPlayerClient(id string) *client.PlayerClient {
 
 // maintainConnections periodically checks and maintains player connections
 func maintainConnections() {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("maintainConnections panic: %v", err)
+			// 重启该goroutine
+			go maintainConnections()
+		}
+	}()
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
@@ -78,6 +85,13 @@ func maintainConnections() {
 
 // updatePlayerPrograms periodically updates program list for each player
 func updatePlayerPrograms() {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("updatePlayerPrograms panic: %v", err)
+			// 重启该goroutine
+			go updatePlayerPrograms()
+		}
+	}()
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
@@ -105,6 +119,11 @@ func updatePlayerPrograms() {
 		// 使用复制的映射处理程序更新
 		for playerId, playerClient := range clientsCopy {
 			go func(id string, cli *client.PlayerClient) {
+				defer func() {
+					if err := recover(); err != nil {
+						common.Logger.Errorf("updatePlayerPrograms goroutine for player %s panic: %v", id, err)
+					}
+				}()
 				common.Logger.Infof("开始更新播放器 [%s] 的节目列表", id)
 				player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
 					model.Ebcp_playerTableInfo.Name, "id="+id)

@@ -38,6 +38,13 @@ func StopService() {
 }
 
 func refreshItemStatus(ctx context.Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("refreshItemStatus panic: %v", err)
+			// 重启该goroutine
+			go refreshItemStatus(context.Background())
+		}
+	}()
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 

@@ -41,6 +41,13 @@ func init() {
 }
 
 func scheduleRefreshHolidayDates(ctx context.Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("scheduleRefreshHolidayDates panic: %v", err)
+			// 重启该goroutine
+			go scheduleRefreshHolidayDates(context.Background())
+		}
+	}()
 	refreshHolidayDates()
 	ticker := time.NewTicker(time.Hour * 24)
 	defer ticker.Stop()
@@ -89,6 +96,13 @@ func StopScheduleService() {
 
 // 调度服务主循环
 func scheduleService(ctx context.Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			common.Logger.Errorf("scheduleService panic: %v", err)
+			// 重启该goroutine
+			go scheduleService(context.Background())
+		}
+	}()
 	ticker := time.NewTicker(time.Minute)
 	defer ticker.Stop()
 
