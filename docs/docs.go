@@ -7204,8 +7204,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Remain Time,整数，单位秒",
-                        "name": "remainTime",
+                        "description": "Current Time,整数，单位秒",
+                        "name": "currentTime",
                         "in": "query",
                         "required": true
                     },

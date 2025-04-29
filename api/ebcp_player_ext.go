@@ -297,7 +297,7 @@ func GetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
 // @Param id path string true "Player ID"
 // @Param programId path string true "Program ID,整数id，0，1，2..."
 // @Param mediaId path string true "Media ID,整数id，0，1，2..."
-// @Param remainTime query string true "Remain Time,整数，单位秒"
+// @Param currentTime query string true "Current Time,整数，单位秒"
 // @Param totalTime query string true "Total Time,整数，单位秒"
 // @Produce json
 // @Success 200 {object} common.Response "Success"

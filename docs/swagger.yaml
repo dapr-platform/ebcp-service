@@ -5136,9 +5136,9 @@ paths:
         name: mediaId
         required: true
         type: string
-      - description: Remain Time,整数，单位秒
+      - description: Current Time,整数，单位秒
         in: query
-        name: remainTime
+        name: currentTime
         required: true
         type: string
       - description: Total Time,整数，单位秒
