@@ -15,6 +15,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/debug/schedule-day-judge": {
+            "get": {
+                "description": "测试日期类型接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "调试接口"
+                ],
+                "summary": "测试日期类型接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "日期",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-control-device": {
             "get": {
                 "description": "query objects",

@@ -102,6 +102,20 @@ func StopScheduleService() {
 	}
 }
 
+func JudgeScheduleDay(date string) (map[string]bool, error) {
+	t, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return nil, fmt.Errorf("解析日期失败: %v", err)
+	}
+	result := make(map[string]bool)
+	result["isWorkday"] = isWorkday(t)
+	result["isWeekend"] = isWeekend(t)
+	result["isHoliday"] = isHoliday(t)
+	result["isAdjustmentWorkday"] = isAdjustmentWorkday(t)
+	result["isCloseDay"] = isCloseDay(t)
+	return result, nil
+}
+
 // 调度服务主循环
 func scheduleService(ctx context.Context) {
 	defer func() {

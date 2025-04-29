@@ -719,6 +719,27 @@ info:
   title: ebcp-service API
   version: "1.0"
 paths:
+  /debug/schedule-day-judge:
+    get:
+      consumes:
+      - application/json
+      description: 测试日期类型接口
+      parameters:
+      - description: 日期
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 测试日期类型接口
+      tags:
+      - 调试接口
   /ebcp-control-device:
     get:
       description: query objects
