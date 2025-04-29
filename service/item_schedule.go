@@ -249,21 +249,26 @@ func processSchedule(ctx context.Context, schedule *model.Ebcp_item_schedule, no
 
 	return nil
 }
-
 // 检查是否满足调度条件
 func shouldScheduleWithDateType(schedule *model.Ebcp_item_schedule, now time.Time) bool {
 	switch schedule.CycleType {
 	case CycleTypeWorkday:
-		return isWorkday(now)
+		// 工作日：是普通工作日(周一至周五)或调休工作日，且不是法定节假日
+		return (isWorkday(now) || isAdjustmentWorkday(now)) && !isHoliday(now)
 	case CycleTypeWeekend:
-		return isWeekend(now)
+		// 周末：是周末(周六日)且不是法定节假日
+		return isWeekend(now) && !isHoliday(now) && !isAdjustmentWorkday(now)
 	case CycleTypeHoliday:
+		// 节假日：是法定节假日
 		return isHoliday(now)
 	case CycleTypeClosing:
-		return isCloseDay(now)
+		// 闭馆日：是闭馆日且不是法定节假日
+		return isCloseDay(now) && !isHoliday(now)
 	case CycleTypeEveryday:
+		// 每天：无条件满足
 		return true
 	default:
+		// 未知类型：不满足条件
 		return false
 	}
 }
@@ -275,7 +280,7 @@ func isHoliday(t time.Time) bool {
 		return false
 	}
 	for _, holiday := range holidays {
-		if holiday.Date.Format("2006-01-02") == t.Format("2006-01-02") && holiday.Type != HolidayTypeClosing {
+		if time.Time(holiday.Date).Format("2006-01-02") == t.Format("2006-01-02") && holiday.Type == HolidayTypeNational {
 			return true
 		}
 	}
@@ -283,10 +288,6 @@ func isHoliday(t time.Time) bool {
 }
 
 func isCloseDay(t time.Time) bool {
-	// 首先检查是否是节假日，如果是节假日则不闭馆
-	if isHoliday(t) {
-		return false
-	}
 
 	// 检查是否是周一
 	closeWeekDay := config.CLOSE_WEEK_DAY
@@ -301,15 +302,29 @@ func isCloseDay(t time.Time) bool {
 		return false
 	}
 	for _, holiday := range holidays {
-		if holiday.Date.Format("2006-01-02") == t.Format("2006-01-02") && holiday.Type == HolidayTypeClosing {
+		if time.Time(holiday.Date).Format("2006-01-02") == t.Format("2006-01-02") && holiday.Type == HolidayTypeClosing {
+			return true
+		}
+	}
+	return false
+}
+func isAdjustmentWorkday(t time.Time) bool {
+	year := t.Year()
+	holidays, ok := cacheHolidayDates[year]
+	if !ok {
+		return false
+	}
+	for _, holiday := range holidays {
+		if time.Time(holiday.Date).Format("2006-01-02") == t.Format("2006-01-02") && (holiday.Type == HolidayTypeAdjustment || holiday.Type == HolidayTypeWeekendAdjustment) {
 			return true
 		}
 	}
 	return false
 }
 
-// 判断是否是工作日（周一到周五）
+// 判断是否是工作日（周一到周五,调休日）
 func isWorkday(t time.Time) bool {
+
 	weekday := t.Weekday()
 	return weekday >= time.Monday && weekday <= time.Friday
 }
@@ -317,6 +332,7 @@ func isWorkday(t time.Time) bool {
 // 判断是否是周末（周六和周日）
 func isWeekend(t time.Time) bool {
 	weekday := t.Weekday()
+
 	return weekday == time.Saturday || weekday == time.Sunday
 }
 

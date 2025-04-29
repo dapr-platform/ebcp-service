@@ -116,7 +116,7 @@ def generate_sql(year):
     date, name, type, year, remarks
 ) VALUES (
     '{id}', '{system_user}', '{current_time}', '{system_user}', '{current_time}',
-    '{holiday_info["date"]}', '{holiday_info["name"]}', {holiday_type}, {year},
+    '{holiday_info["date"]} 00:00:00', '{holiday_info["name"]}', {holiday_type}, {year},
     '{remarks}'
 );"""
             sql_lines.append(sql)

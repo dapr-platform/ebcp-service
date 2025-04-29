@@ -23,7 +23,7 @@ Table: o_ebcp_holiday_date
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
-[ 5] date                                           DATE                 null: false  primary: false  isArray: false  auto: false  col: DATE            len: -1      default: []
+[ 5] date                                           TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
 [ 6] name                                           VARCHAR(100)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 100     default: []
 [ 7] type                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 8] year                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
@@ -32,7 +32,7 @@ Table: o_ebcp_holiday_date
 
 JSON Sample
 -------------------------------------
-{    "id": "aYOfqaKVRIwoMBfjaTBMDsPNk",    "created_by": "KAeoFvskEqYBmfKavsmsmIxvi",    "created_time": 83,    "updated_by": "VfUOlOkkiIjQOHgjqisyrlKWu",    "updated_time": 99,    "date": "2244-02-26T01:59:13.953520623+08:00",    "name": "HKbNwrlcbQWKNdSBDRfAKrsTI",    "type": 33,    "year": 10,    "remarks": "ihfhyxMtnFYvgLxItNmoVdjxH"}
+{    "id": "lVbKYpOeyLyZnorbDsUjdLCGJ",    "created_by": "ZkkGGjWJvendBbnULhbkrgZXG",    "created_time": 41,    "updated_by": "IqDlpCqkUrsiCfoKocrnQnHKE",    "updated_time": 58,    "date": 35,    "name": "dNkTAPhqNZwoSVjyKWSvWSaIU",    "type": 1,    "year": 66,    "remarks": "ceWCunJvJlDkRIQsigZXMJuDV"}
 
 
 
@@ -72,7 +72,7 @@ type Ebcp_holiday_date struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Date time.Time `json:"date"` //日期
+	Date common.LocalTime `json:"date"` //日期
 
 	Name string `json:"name"` //节假日名称
 
@@ -199,18 +199,18 @@ var Ebcp_holiday_dateTableInfo = &TableInfo{
 			Comment:            `日期`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "DATE",
-			DatabaseTypePretty: "DATE",
+			DatabaseTypeName:   "TIMESTAMP",
+			DatabaseTypePretty: "TIMESTAMP",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "DATE",
+			ColumnType:         "TIMESTAMP",
 			ColumnLength:       -1,
 			GoFieldName:        "Date",
-			GoFieldType:        "time.Time",
+			GoFieldType:        "common.LocalTime",
 			JSONFieldName:      "date",
 			ProtobufFieldName:  "date",
-			ProtobufType:       "google.protobuf.Timestamp",
+			ProtobufType:       "uint64",
 			ProtobufPos:        6,
 		},
 
