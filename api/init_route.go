@@ -25,4 +25,5 @@ func InitRoute(r chi.Router) {
 	InitEbcp_holiday_dateRoute(r)
 	InitEbcp_exhibition_hallExtRoute(r)
 	InitDebugRoute(r)
+	InitEbcp_item_schedule_extRoute(r)
 }

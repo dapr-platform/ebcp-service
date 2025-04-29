@@ -102,6 +102,26 @@ func StopScheduleService() {
 	}
 }
 
+func BatchSaveEbcp_item_schedule(itemId string, ebcp_item_schedules []model.Ebcp_item_schedule) error {
+	err := common.DbDeleteByOps(context.Background(), common.GetDaprClient(),
+		model.Ebcp_item_scheduleTableInfo.Name,
+		[]string{"item_id"},
+		[]string{"="},
+		[]any{itemId})
+	if err != nil {
+		return fmt.Errorf("删除调度任务失败: %v", err)
+	}
+	if len(ebcp_item_schedules) > 0 {
+		err = common.DbBatchInsert[model.Ebcp_item_schedule](context.Background(), common.GetDaprClient(),
+			ebcp_item_schedules, model.Ebcp_item_scheduleTableInfo.Name)
+		if err != nil {
+			return fmt.Errorf("保存调度任务失败: %v", err)
+		}
+	}
+
+	return nil
+}
+
 func JudgeScheduleDay(date string) (map[string]bool, error) {
 	t, err := time.Parse("2006-01-02", date)
 	if err != nil {
@@ -263,6 +283,7 @@ func processSchedule(ctx context.Context, schedule *model.Ebcp_item_schedule, no
 
 	return nil
 }
+
 // 检查是否满足调度条件
 func shouldScheduleWithDateType(schedule *model.Ebcp_item_schedule, now time.Time) bool {
 	switch schedule.CycleType {

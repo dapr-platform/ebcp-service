@@ -7439,6 +7439,47 @@
                     }
                 }
             }
+        },
+        "/ebcp_item_schedule/{itemId}/batch-save": {
+            "post": {
+                "description": "批量保存ebcp_item_schedule",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "批量保存ebcp_item_schedule",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "itemId",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "ebcp_item_schedule",
+                        "name": "ebcp_item_schedules",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Ebcp_item_schedule"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
