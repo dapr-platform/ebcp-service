@@ -13,19 +13,20 @@ func InitEbcp_item_schedule_extRoute(r chi.Router) {
 	r.Post(common.BASE_CONTEXT+"/ebcp_item_schedule/batch-save", batchSaveEbcp_item_scheduleHandler)
 }
 
-// @Summary 批量保存ebcp_item_schedule
-// @Description 批量保存ebcp_item_schedule
+// @Summary 批量保存展项定时任务
+// @Description 批量保存展项定时任务，删除原有任务，新增新的任务
+// @Tags 展项定时任务
 // @Accept json
 // @Produce json
-// @Param itemId path string true "itemId"
+// @Param item-id path string true "item-id"
 // @Param ebcp_item_schedules body []model.Ebcp_item_schedule true "ebcp_item_schedule"
 // @Success 200 {string} common.Response ""
-// @Router /ebcp_item_schedule/{itemId}/batch-save [post]
+// @Router /ebcp_item_schedule/{item-id}/batch-save [post]
 func batchSaveEbcp_item_scheduleHandler(w http.ResponseWriter, r *http.Request) {
 
-	itemId := chi.URLParam(r, "itemId")
+	itemId := chi.URLParam(r, "item-id")
 	if itemId == "" {
-		common.HttpResult(w, common.ErrParam.AppendMsg("itemId is required"))
+		common.HttpResult(w, common.ErrParam.AppendMsg("item-id is required"))
 		return
 	}
 

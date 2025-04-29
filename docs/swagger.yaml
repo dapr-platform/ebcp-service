@@ -5450,15 +5450,15 @@ paths:
       summary: page query
       tags:
       - 播放设备
-  /ebcp_item_schedule/{itemId}/batch-save:
+  /ebcp_item_schedule/{item-id}/batch-save:
     post:
       consumes:
       - application/json
-      description: 批量保存ebcp_item_schedule
+      description: 批量保存展项定时任务，删除原有任务，新增新的任务
       parameters:
-      - description: itemId
+      - description: item-id
         in: path
-        name: itemId
+        name: item-id
         required: true
         type: string
       - description: ebcp_item_schedule
@@ -5476,5 +5476,7 @@ paths:
           description: OK
           schema:
             type: string
-      summary: 批量保存ebcp_item_schedule
+      summary: 批量保存展项定时任务
+      tags:
+      - 展项定时任务
 swagger: "2.0"
