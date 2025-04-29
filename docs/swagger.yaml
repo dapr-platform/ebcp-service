@@ -290,7 +290,7 @@ definitions:
       room_name:
         description: 所属展厅名称
         type: string
-      schedule:
+      schedules:
         description: 关联的定时任务信息（JSON格式）
       status:
         description: 展项状态
@@ -617,6 +617,9 @@ definitions:
       program_index:
         description: 节目序号
         type: integer
+      state:
+        description: '节目状态,0: 播放, 1: 暂停, 2: 停止'
+        type: integer
       updated_by:
         description: updated_by
         type: string
@@ -679,6 +682,9 @@ definitions:
       room_name:
         description: room_name
         type: string
+      state:
+        description: state
+        type: integer
     type: object
   model.Ebcp_player_program_media:
     properties:
@@ -2092,9 +2098,9 @@ paths:
         in: query
         name: control_devices
         type: string
-      - description: schedule
+      - description: schedules
         in: query
-        name: schedule
+        name: schedules
         type: string
       produces:
       - application/json
@@ -2208,9 +2214,9 @@ paths:
         in: query
         name: control_devices
         type: string
-      - description: schedule
+      - description: schedules
         in: query
-        name: schedule
+        name: schedules
         type: string
       produces:
       - application/json
@@ -4351,6 +4357,10 @@ paths:
         in: query
         name: program_index
         type: string
+      - description: state
+        in: query
+        name: state
+        type: string
       produces:
       - application/json
       responses:
@@ -4399,6 +4409,10 @@ paths:
       - description: program_index
         in: query
         name: program_index
+        type: string
+      - description: state
+        in: query
+        name: state
         type: string
       - description: player_id
         in: query
@@ -4511,6 +4525,10 @@ paths:
       - description: program_index
         in: query
         name: program_index
+        type: string
+      - description: state
+        in: query
+        name: state
         type: string
       - description: player_id
         in: query
@@ -4806,6 +4824,10 @@ paths:
       - description: program_index
         in: query
         name: program_index
+        type: string
+      - description: state
+        in: query
+        name: state
         type: string
       produces:
       - application/json

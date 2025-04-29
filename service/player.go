@@ -139,10 +139,24 @@ func updatePlayerPrograms() {
 				if err != nil {
 					common.Logger.Errorf("获取播放器 [%s] 节目列表失败: %v", id, err)
 					if client.IsTimeoutError(err) {
-						player.Status = 2
+						player.Status = PlayerStatusError
 						common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 					}
 					return
+				}
+				
+
+				currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+				if err != nil {
+					common.Logger.Errorf("获取播放器 [%s] 当前播放节目失败: %v", id, err)
+
+					return
+				}
+				player.CurrentProgramID = currentProgramId
+				player.CurrentProgramState = cast.ToInt32(currentProgramState)
+				err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+				if err != nil {
+					common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
 				}
 
 				common.Logger.Infof("播放器 [%s] 获取到 %d 个节目", id, len(programs.Programs))
@@ -159,18 +173,19 @@ func updatePlayerPrograms() {
 				addedMap := make(map[string]bool)
 				updatedCount := 0
 				addedCount := 0
-				firstProgramId := ""
 
 				// Insert new programs
 				for _, program := range programs.Programs {
 					if program.IsEmpty {
 						continue
 					}
-					if firstProgramId == "" {
-						firstProgramId = cast.ToString(program.ID)
-					}
-
+					
+					
+					var state = int32(ProgramStateStop)
 					programIdStr := cast.ToString(program.ID)
+					if programIdStr == player.CurrentProgramID {
+						state = player.CurrentProgramState
+					}
 					playerProgram := model.Ebcp_player_program{
 						ID:          common.GetMD5Hash(id + "_" + programIdStr),
 						CreatedBy:   "admin",
@@ -180,6 +195,7 @@ func updatePlayerPrograms() {
 						ProgramID:   programIdStr,
 						Name:        program.Name,
 						PlayerID:    id,
+						State:       state,
 					}
 
 					// 检查是否为新增或更新
@@ -228,39 +244,8 @@ func updatePlayerPrograms() {
 				common.Logger.Infof("播放器 [%s] 节目同步完成: 新增 %d 个, 更新 %d 个, 删除 %d 个",
 					id, addedCount, updatedCount, deleteCount)
 
-				if firstProgramId != "" {
-					player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
-						model.Ebcp_playerTableInfo.Name, "id="+id)
-					if err != nil {
-						common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", id, err)
-						return
-					}
-					if player == nil {
-						common.Logger.Errorf("播放器 [%s] 不存在", id)
-						return
-					}
-					if player.CurrentProgramID == "" {
-						common.Logger.Infof("初始化播放器 [%s] 当前播放节目为 [%s]", id, firstProgramId)
-						player.CurrentProgramID = firstProgramId
-						err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
-						if err != nil {
-							common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
-						}
-					}
-				}
 
-				currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
-				if err != nil {
-					common.Logger.Errorf("获取播放器 [%s] 当前播放节目失败: %v", id, err)
-
-					return
-				}
-				player.CurrentProgramID = currentProgramId
-				player.CurrentProgramState = cast.ToInt32(currentProgramState)
-				err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
-				if err != nil {
-					common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
-				}
+				
 			}(playerId, playerClient)
 		}
 
@@ -354,8 +339,28 @@ func PlayerPlay(player *model.Ebcp_player) error {
 			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 		}
 	}
+	return updatePlayerProgramState(player, ProgramStatePlay)
+}
+
+func updatePlayerProgramState(player *model.Ebcp_player, state int32) error {
+	programs, err := common.DbQuery[model.Ebcp_player_program](context.Background(), common.GetDaprClient(), model.Ebcp_player_programTableInfo.Name, "player_id="+player.ID)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 节目列表失败: %v", player.ID, err)
+	}
+	for _, program := range programs {
+		if program.ProgramID == player.CurrentProgramID {
+			program.State = state
+		} else {
+			program.State = ProgramStateStop
+		}
+		err = common.DbUpsert[model.Ebcp_player_program](context.Background(), common.GetDaprClient(), program, model.Ebcp_player_programTableInfo.Name, "id")
+		if err != nil {
+			return fmt.Errorf("更新播放器 [%s] 节目状态失败: %v", player.ID, err)
+		}
+	}
 	return nil
 }
+
 func PlayerPause(player *model.Ebcp_player) error {
 	playerClient := GetPlayerClient(player.ID)
 	if playerClient == nil {
@@ -378,7 +383,7 @@ func PlayerPause(player *model.Ebcp_player) error {
 			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 		}
 	}
-	return nil
+	return updatePlayerProgramState(player, ProgramStatePause)
 }
 func PlayerStop(player *model.Ebcp_player) error {
 	playerClient := GetPlayerClient(player.ID)
@@ -402,7 +407,7 @@ func PlayerStop(player *model.Ebcp_player) error {
 			return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 		}
 	}
-	return nil
+	return updatePlayerProgramState(player, ProgramStateStop)
 }
 func PlayProgram(playerId, programId string) error {
 	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "id="+playerId)
@@ -511,12 +516,12 @@ func GetProgramMediaProcess(playerId, programId, mediaId string) (int, int, erro
 	}
 	return int(progress.RemainTime), int(progress.TotalTime), nil
 }
-func SetProgramMediaProcess(playerId, programId, mediaId string, remainTime, totalTime int) error {
+func SetProgramMediaProcess(playerId, programId, mediaId string, currentTime, totalTime int) error {
 	playerClient := GetPlayerClient(playerId)
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
-	err := playerClient.ControlLayerProgress(programId, uint32(remainTime), uint32(totalTime), cast.ToUint16(mediaId))
+	err := playerClient.ControlLayerProgress(programId, uint32(currentTime), uint32(totalTime), cast.ToUint16(mediaId))
 	if err != nil {
 		return fmt.Errorf("设置播放器 [%s] 节目媒体进度失败: %v", playerId, err)
 	}

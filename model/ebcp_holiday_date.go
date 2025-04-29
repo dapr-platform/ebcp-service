@@ -32,7 +32,7 @@ Table: o_ebcp_holiday_date
 
 JSON Sample
 -------------------------------------
-{    "id": "lVbKYpOeyLyZnorbDsUjdLCGJ",    "created_by": "ZkkGGjWJvendBbnULhbkrgZXG",    "created_time": 41,    "updated_by": "IqDlpCqkUrsiCfoKocrnQnHKE",    "updated_time": 58,    "date": 35,    "name": "dNkTAPhqNZwoSVjyKWSvWSaIU",    "type": 1,    "year": 66,    "remarks": "ceWCunJvJlDkRIQsigZXMJuDV"}
+{    "id": "itfmisuZgpanvjYEdVRPWlWUx",    "created_by": "DkdUftBSBJVDrecsjogLUDNut",    "created_time": 22,    "updated_by": "uCtnOCYlASBCKjGuVkWbdCsnj",    "updated_time": 89,    "date": 43,    "name": "jXDEABUQcrLxBDWTJJMQyEnVt",    "type": 28,    "year": 40,    "remarks": "NSFEQTyTCCIPSYbYheCqaYdTU"}
 
 
 

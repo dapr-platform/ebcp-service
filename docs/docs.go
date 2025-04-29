@@ -2197,8 +2197,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "schedule",
-                        "name": "schedule",
+                        "description": "schedules",
+                        "name": "schedules",
                         "in": "query"
                     }
                 ],
@@ -2374,8 +2374,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "schedule",
-                        "name": "schedule",
+                        "description": "schedules",
+                        "name": "schedules",
                         "in": "query"
                     }
                 ],
@@ -5751,6 +5751,12 @@ const docTemplate = `{
                         "description": "program_index",
                         "name": "program_index",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -5829,6 +5835,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "program_index",
                         "name": "program_index",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
                         "in": "query"
                     },
                     {
@@ -6000,6 +6012,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "program_index",
                         "name": "program_index",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
                         "in": "query"
                     },
                     {
@@ -6463,6 +6481,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "program_index",
                         "name": "program_index",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
                         "in": "query"
                     }
                 ],
@@ -7892,7 +7916,7 @@ const docTemplate = `{
                     "description": "所属展厅名称",
                     "type": "string"
                 },
-                "schedule": {
+                "schedules": {
                     "description": "关联的定时任务信息（JSON格式）"
                 },
                 "status": {
@@ -8337,6 +8361,10 @@ const docTemplate = `{
                     "description": "节目序号",
                     "type": "integer"
                 },
+                "state": {
+                    "description": "节目状态,0: 播放, 1: 暂停, 2: 停止",
+                    "type": "integer"
+                },
                 "updated_by": {
                     "description": "updated_by",
                     "type": "string"
@@ -8420,6 +8448,10 @@ const docTemplate = `{
                 "room_name": {
                     "description": "room_name",
                     "type": "string"
+                },
+                "state": {
+                    "description": "state",
+                    "type": "integer"
                 }
             }
         },

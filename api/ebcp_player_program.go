@@ -33,6 +33,7 @@ func InitEbcp_player_programRoute(r chi.Router) {
 // @Param player_id query string false "player_id"
 // @Param program_id query string false "program_id"
 // @Param program_index query string false "program_index"
+// @Param state query string false "state"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_player_program}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -63,6 +64,7 @@ func Ebcp_player_programPageListHandler(w http.ResponseWriter, r *http.Request) 
 // @Param player_id query string false "player_id"
 // @Param program_id query string false "program_id"
 // @Param program_index query string false "program_index"
+// @Param state query string false "state"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_player_program} "objects array"
 // @Failure 500 {object} common.Response ""

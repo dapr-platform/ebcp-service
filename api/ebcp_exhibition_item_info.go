@@ -42,7 +42,7 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"
 // @Param control_devices query string false "control_devices"
-// @Param schedule query string false "schedule"
+// @Param schedules query string false "schedules"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_item_info}} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -82,7 +82,7 @@ func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"
 // @Param control_devices query string false "control_devices"
-// @Param schedule query string false "schedule"
+// @Param schedules query string false "schedules"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_item_info} "objects array"
 // @Failure 500 {object} common.Response ""

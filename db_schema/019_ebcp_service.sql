@@ -133,6 +133,7 @@ CREATE TABLE o_ebcp_player_program (
     player_id VARCHAR(32) NOT NULL,
     program_id VARCHAR(32) NOT NULL,
     program_index INTEGER NOT NULL,
+    state INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 
@@ -141,6 +142,7 @@ COMMENT ON COLUMN o_ebcp_player_program.name IS '节目名称';
 COMMENT ON COLUMN o_ebcp_player_program.player_id IS '播放设备ID';
 COMMENT ON COLUMN o_ebcp_player_program.program_id IS '节目ID';
 COMMENT ON COLUMN o_ebcp_player_program.program_index IS '节目序号';
+COMMENT ON COLUMN o_ebcp_player_program.state IS '节目状态,0: 播放, 1: 暂停, 2: 停止';
 
 -- 播放设备节目媒体表
 CREATE TABLE o_ebcp_player_program_media (
@@ -506,6 +508,7 @@ SELECT
                             'name', pp.name,
                             'program_id', pp.program_id,
                             'program_index', pp.program_index,
+                            'state', pp.state,
                             'medias', (
                                 SELECT json_agg(
                                     json_build_object(
@@ -609,6 +612,7 @@ SELECT
                 'name', pp.name,
                 'program_id', pp.program_id,
                 'program_index', pp.program_index,
+                'state', pp.state,
                 'medias', (
                     SELECT json_agg(
                         json_build_object(
@@ -662,6 +666,7 @@ SELECT
     pp.name AS name,
     pp.program_id AS program_id,
     pp.program_index AS program_index,
+    pp.state AS state,
     p.id AS player_id,
     p.name AS player_name,
     p.ip_address AS player_ip_address,

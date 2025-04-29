@@ -27,11 +27,12 @@ Table: o_ebcp_player_program
 [ 6] player_id                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] program_id                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] program_index                                  INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 9] state                                          INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [0]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "XekqThnVvQbtXxlAqgJRiNkpT",    "created_by": "kABoToHIbriIjshOBqHilMnyj",    "created_time": 88,    "updated_by": "PMiNULIOFaZOtAVNhgLNskXdv",    "updated_time": 5,    "name": "wJoQDGWunlRHDaoeDQdcvZYyk",    "player_id": "MHLPSgPdMykvFwMQReRmJiyBa",    "program_id": "PxmxWUNMNSLSDMBmbbZuQWlDQ",    "program_index": 74}
+{    "id": "QeIyqKFxmbFcqycTZIsWpYbuc",    "created_by": "OPIUkZUOwthKRylhXcIMoyoxw",    "created_time": 1,    "updated_by": "UPQgRpNloDvlUZwMSytTKEvoe",    "updated_time": 56,    "name": "eVXsWaaZRoWsSdtlKsaDRELVx",    "player_id": "rHYpYkLHmRWBadPWAAwQVmjjv",    "program_id": "tJtsCbAqaPjjDoorTDqIvknkV",    "program_index": 21,    "state": 94}
 
 
 
@@ -55,6 +56,8 @@ var (
 	Ebcp_player_program_FIELD_NAME_program_id = "program_id"
 
 	Ebcp_player_program_FIELD_NAME_program_index = "program_index"
+
+	Ebcp_player_program_FIELD_NAME_state = "state"
 )
 
 // Ebcp_player_program struct is a row record of the o_ebcp_player_program table in the  database
@@ -76,6 +79,8 @@ type Ebcp_player_program struct {
 	ProgramID string `json:"program_id"` //节目ID
 
 	ProgramIndex int32 `json:"program_index"` //节目序号
+
+	State int32 `json:"state"` //节目状态,0: 播放, 1: 暂停, 2: 停止
 
 }
 
@@ -270,6 +275,27 @@ var Ebcp_player_programTableInfo = &TableInfo{
 			ProtobufFieldName:  "program_index",
 			ProtobufType:       "int32",
 			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "state",
+			Comment:            `节目状态,0: 播放, 1: 暂停, 2: 停止`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "State",
+			GoFieldType:        "int32",
+			JSONFieldName:      "state",
+			ProtobufFieldName:  "state",
+			ProtobufType:       "int32",
+			ProtobufPos:        10,
 		},
 	},
 }

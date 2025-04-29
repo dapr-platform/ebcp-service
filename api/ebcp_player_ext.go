@@ -283,12 +283,12 @@ func GetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 	mediaIdStr := chi.URLParam(r, "mediaId")
-	remainTime, totalTime, err := service.GetProgramMediaProcess(id, programIdStr, mediaIdStr)
+	currentTime, totalTime, err := service.GetProgramMediaProcess(id, programIdStr, mediaIdStr)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{"remainTime": remainTime, "totalTime": totalTime}))
+	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{"currentTime": currentTime, "totalTime": totalTime}))
 }
 
 // @Summary Set Program Media Process
@@ -307,9 +307,9 @@ func SetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 	mediaIdStr := chi.URLParam(r, "mediaId")
-	remainTimeStr := r.URL.Query().Get("remainTime")
+	currentTimeStr := r.URL.Query().Get("currentTime")
 	totalTimeStr := r.URL.Query().Get("totalTime")
-	remainTime, err := strconv.ParseUint(remainTimeStr, 10, 32)
+	currentTime, err := strconv.ParseUint(currentTimeStr, 10, 32)
 	if err != nil {
 		common.HttpResult(w, common.ErrParam.AppendMsg("invalid remain time"))
 		return
@@ -319,7 +319,7 @@ func SetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
 		common.HttpResult(w, common.ErrParam.AppendMsg("invalid total time"))
 		return
 	}
-	err = service.SetProgramMediaProcess(id, programIdStr, mediaIdStr, int(remainTime), int(totalTime))
+	err = service.SetProgramMediaProcess(id, programIdStr, mediaIdStr, int(currentTime), int(totalTime))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
