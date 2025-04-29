@@ -89,9 +89,15 @@ func updateItemStatus(ctx context.Context, item *model.Ebcp_exhibition_item) err
 
 	var newStatus int32 = ItemStatusStop
 	for _, player := range players {
-		if player.Status == PlayerStatusOnline && player.CurrentProgramState == ProgramStatePlay {
-			newStatus = ItemStatusStart
-			break
+		if player.Status == PlayerStatusOnline {
+			if player.CurrentProgramState == ProgramStatePlay {
+				newStatus = ItemStatusStart
+				break
+			}
+			if player.CurrentProgramState == ProgramStatePause {
+				newStatus = ItemStatusPause
+				break
+			}
 		}
 	}
 
