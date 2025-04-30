@@ -10,7 +10,7 @@ import (
 )
 
 func InitEbcp_item_schedule_extRoute(r chi.Router) {
-	r.Post(common.BASE_CONTEXT+"/ebcp_item_schedule/batch-save", batchSaveEbcp_item_scheduleHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp_item_schedule/{item-id}/batch-save", batchSaveEbcp_item_scheduleHandler)
 }
 
 // @Summary 批量保存展项定时任务
