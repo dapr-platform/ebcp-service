@@ -29,12 +29,13 @@ Table: o_ebcp_item_schedule
 [ 8] start_date                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 9] stop_date                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] cycle_type                                     INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[11] enabled                                        INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[11] action_type                                    INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[12] enabled                                        INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "kLWEtyVCBtrYACYdNakHUpLHU",    "created_by": "utgegTQfqvTKXGfEpkvMFLCYN",    "created_time": 3,    "updated_by": "EuNSLmFUTuQBiXGsrRaYmDcTi",    "updated_time": 30,    "item_id": "DpluQsEQFWPvvJSOtapNdQPUB",    "start_time": "rBkBPLhjNgAqVWmDbyVjmyNfw",    "stop_time": "ZFKoscxIEuAtlZxhVDNBrEICR",    "start_date": "NwCGQnCGgHOmnIwSgVhvXrwkS",    "stop_date": "UjWKBmliCsYLZFKgQCqsOTQUm",    "cycle_type": 94,    "enabled": 81}
+{    "id": "qJUWdMcISqCpQDSebAiNwEVwo",    "created_by": "NvBYZUNKyTKINNlkXtjnitynb",    "created_time": 27,    "updated_by": "RisIPpogvNECNcphHgPPpIQsh",    "updated_time": 0,    "item_id": "pwxCUbaSJkomAuFPPDheDYBXg",    "start_time": "irppVdHrEHErekQMgfhTqAnva",    "stop_time": "ddnrvxFfnHcRXJpycnXdnwhNJ",    "start_date": "bQYPLlxcJLDvFCOTiOQnMiOhZ",    "stop_date": "aXBIvCDvbTdSBJTLRipHwTLwu",    "cycle_type": 12,    "action_type": 37,    "enabled": 64}
 
 
 
@@ -63,6 +64,8 @@ var (
 
 	Ebcp_item_schedule_FIELD_NAME_cycle_type = "cycle_type"
 
+	Ebcp_item_schedule_FIELD_NAME_action_type = "action_type"
+
 	Ebcp_item_schedule_FIELD_NAME_enabled = "enabled"
 )
 
@@ -89,6 +92,8 @@ type Ebcp_item_schedule struct {
 	StopDate string `json:"stop_date"` //停止日期
 
 	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
+
+	ActionType int32 `json:"action_type"` //动作类型(0: 停止, 1: 播放)
 
 	Enabled int32 `json:"enabled"` //是否启用(0: 禁用, 1: 启用)
 
@@ -331,6 +336,27 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              11,
+			Name:               "action_type",
+			Comment:            `动作类型(0: 停止, 1: 播放)`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "ActionType",
+			GoFieldType:        "int32",
+			JSONFieldName:      "action_type",
+			ProtobufFieldName:  "action_type",
+			ProtobufType:       "int32",
+			ProtobufPos:        12,
+		},
+
+		&ColumnInfo{
+			Index:              12,
 			Name:               "enabled",
 			Comment:            `是否启用(0: 禁用, 1: 启用)`,
 			Notes:              ``,
@@ -347,7 +373,7 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 			JSONFieldName:      "enabled",
 			ProtobufFieldName:  "enabled",
 			ProtobufType:       "int32",
-			ProtobufPos:        12,
+			ProtobufPos:        13,
 		},
 	},
 }

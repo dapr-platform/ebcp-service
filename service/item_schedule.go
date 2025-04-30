@@ -22,6 +22,9 @@ const (
 	HolidayTypeAdjustment        = 2 // 调休工作日
 	HolidayTypeWeekendAdjustment = 3 // 周末调休
 	HolidayTypeClosing           = 4 // 闭馆日
+
+	ActionTypeStop = 0 // 停止
+	ActionTypePlay = 1 // 播放
 )
 
 var (
@@ -167,7 +170,7 @@ func processSchedules(ctx context.Context) error {
 	// 只获取启用的调度任务
 	schedules, err := common.DbQuery[model.Ebcp_item_schedule](ctx, common.GetDaprClient(),
 		model.Ebcp_item_scheduleTableInfo.Name,
-		"")
+		"enabled=1")
 	if err != nil {
 		return fmt.Errorf("获取调度任务失败: %v", err)
 	}
@@ -189,13 +192,13 @@ func processSchedules(ctx context.Context) error {
 }
 
 func processItemSchedule(ctx context.Context, itemID string, schedules []model.Ebcp_item_schedule, now time.Time) error {
-	// 首先检查是否有满足时间条件但被禁用的调度计划
+	// 首先检查是否有满足时间条件但是是停止的调度计划
 	for _, schedule := range schedules {
 		// 检查是否满足调度条件（不考虑enabled状态）
 		if matchScheduleTime(ctx, &schedule, now) {
 			// 如果满足时间条件但是被禁用，则跳过该展项的所有调度计划
-			if schedule.Enabled == 0 {
-				common.Logger.Infof("展项 %s 存在满足条件但被禁用的调度计划 %s，跳过所有调度", itemID, schedule.ID)
+			if schedule.ActionType == ActionTypeStop {
+				common.Logger.Infof("展项 %s 存在满足条件但被停止的调度计划 %s，跳过所有调度", itemID, schedule.ID)
 				return nil
 			}
 		}
@@ -203,7 +206,7 @@ func processItemSchedule(ctx context.Context, itemID string, schedules []model.E
 
 	// 如果没有满足条件的禁用计划，则处理所有启用的调度计划
 	for _, schedule := range schedules {
-		if schedule.Enabled == 1 {
+		if schedule.ActionType == ActionTypePlay {
 			if err := processSchedule(ctx, &schedule, now); err != nil {
 				common.Logger.Errorf("处理调度任务 %s 失败: %v", schedule.ID, err)
 				continue

@@ -456,6 +456,9 @@ definitions:
     type: object
   model.Ebcp_item_schedule:
     properties:
+      action_type:
+        description: '动作类型(0: 停止, 1: 播放)'
+        type: integer
       created_by:
         description: created_by
         type: string
@@ -3731,6 +3734,10 @@ paths:
         in: query
         name: cycle_type
         type: string
+      - description: action_type
+        in: query
+        name: action_type
+        type: string
       - description: enabled
         in: query
         name: enabled
@@ -3933,6 +3940,10 @@ paths:
       - description: cycle_type
         in: query
         name: cycle_type
+        type: string
+      - description: action_type
+        in: query
+        name: action_type
         type: string
       - description: enabled
         in: query

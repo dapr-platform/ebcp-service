@@ -4767,6 +4767,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "action_type",
+                        "name": "action_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "enabled",
                         "name": "enabled",
                         "in": "query"
@@ -5035,6 +5041,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "cycle_type",
                         "name": "cycle_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "action_type",
+                        "name": "action_type",
                         "in": "query"
                     },
                     {
@@ -8143,6 +8155,10 @@ const docTemplate = `{
         "model.Ebcp_item_schedule": {
             "type": "object",
             "properties": {
+                "action_type": {
+                    "description": "动作类型(0: 停止, 1: 播放)",
+                    "type": "integer"
+                },
                 "created_by": {
                     "description": "created_by",
                     "type": "string"

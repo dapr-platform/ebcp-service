@@ -221,6 +221,7 @@ CREATE TABLE o_ebcp_item_schedule (
     start_date VARCHAR(32) NOT NULL DEFAULT '',
     stop_date VARCHAR(32) NOT NULL DEFAULT '',
     cycle_type INTEGER NOT NULL,
+    action_type INTEGER NOT NULL,
     enabled INTEGER NOT NULL DEFAULT 1,
                                        PRIMARY KEY (id)
 );
@@ -233,6 +234,7 @@ COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 
 COMMENT ON COLUMN o_ebcp_item_schedule.enabled IS '是否启用(0: 禁用, 1: 启用)';
 COMMENT ON COLUMN o_ebcp_item_schedule.start_date IS '开始日期';
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_date IS '停止日期';
+COMMENT ON COLUMN o_ebcp_item_schedule.action_type IS '动作类型(0: 停止, 1: 播放)';
 
 -- 节假日日期表
 CREATE TABLE o_ebcp_holiday_date (
@@ -549,7 +551,8 @@ SELECT
                 'start_time', s.start_time,
                 'stop_time', s.stop_time,
                 'cycle_type', s.cycle_type,
-                'enabled', s.enabled
+                'enabled', s.enabled,
+                'action_type', s.action_type
             )
         )
         FROM o_ebcp_item_schedule s
