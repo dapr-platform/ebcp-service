@@ -115,6 +115,13 @@ func BatchSaveEbcp_item_schedule(itemId string, ebcp_item_schedules []model.Ebcp
 		return fmt.Errorf("删除调度任务失败: %v", err)
 	}
 	if len(ebcp_item_schedules) > 0 {
+		for i := range ebcp_item_schedules {
+			if ebcp_item_schedules[i].ID == "" {
+				ebcp_item_schedules[i].ID = common.NanoId()
+			}
+			// 确保item_id被正确设置
+			ebcp_item_schedules[i].ItemID = itemId
+		}
 		err = common.DbBatchInsert[model.Ebcp_item_schedule](context.Background(), common.GetDaprClient(),
 			ebcp_item_schedules, model.Ebcp_item_scheduleTableInfo.Name)
 		if err != nil {
