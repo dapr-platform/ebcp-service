@@ -189,11 +189,12 @@ func (c *PlayerClient) sendCommandWithTimeout(tag uint16, data []byte, timeout t
 		return nil, fmt.Errorf("connect failed: %v", err)
 	}
 	defer conn.Close()
-
-	// 设置读取超时
-	err = conn.SetReadDeadline(time.Now().Add(timeout))
-	if err != nil {
-		return nil, fmt.Errorf("set read deadline failed: %v", err)
+	if timeout > 0 {
+		// 设置读取超时
+		err = conn.SetReadDeadline(time.Now().Add(timeout))
+		if err != nil {
+			return nil, fmt.Errorf("set read deadline failed: %v", err)
+		}
 	}
 
 	// 构建数据包
@@ -208,11 +209,12 @@ func (c *PlayerClient) sendCommandWithTimeout(tag uint16, data []byte, timeout t
 		return nil, fmt.Errorf("write failed: %v", err)
 	}
 
-	// 如果timeout为0，则不等待响应，直接返回
+	// 如果timeout为0，则不等待响应，延时500ms后直接返回
 	if timeout == 0 {
 		if DEBUG {
 			fmt.Printf("Timeout is 0, not waiting for response\n")
 		}
+		time.Sleep(500 * time.Millisecond)
 		return nil, nil
 	}
 
