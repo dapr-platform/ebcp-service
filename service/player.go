@@ -26,7 +26,29 @@ const (
 var (
 	playerClients = make(map[string]*client.PlayerClient)
 	playerMu      sync.RWMutex
+	// 新增播放器状态锁映射，用于同步对单个播放器状态的修改
+	playerStateLocks = make(map[string]*sync.Mutex)
+	playerStateMu    sync.RWMutex
 )
+
+// 获取播放器状态锁
+func getPlayerStateLock(playerId string) *sync.Mutex {
+	playerStateMu.RLock()
+	lock, exists := playerStateLocks[playerId]
+	playerStateMu.RUnlock()
+
+	if !exists {
+		playerStateMu.Lock()
+		lock, exists = playerStateLocks[playerId]
+		if !exists {
+			lock = &sync.Mutex{}
+			playerStateLocks[playerId] = lock
+		}
+		playerStateMu.Unlock()
+	}
+
+	return lock
+}
 
 func init() {
 	defer func() {
@@ -161,13 +183,16 @@ func updatePlayerPrograms() {
 					}
 					return
 				}
-				
+
+				// 获取播放器状态锁
+				stateLock := getPlayerStateLock(id)
+				stateLock.Lock()
 
 				common.Logger.Debugf("获取播放器 [%s] 当前播放节目信息", id)
 				currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
 				if err != nil {
 					common.Logger.Errorf("获取播放器 [%s] 当前播放节目失败: %v", id, err)
-
+					stateLock.Unlock()
 					return
 				}
 				common.Logger.Infof("播放器 [%s] 当前播放节目ID: %s, 状态: %d", id, currentProgramId, currentProgramState)
@@ -179,6 +204,8 @@ func updatePlayerPrograms() {
 				} else {
 					common.Logger.Debugf("成功更新播放器 [%s] 当前播放节目信息", id)
 				}
+
+				stateLock.Unlock()
 
 				common.Logger.Infof("播放器 [%s] 获取到 %d 个节目", id, len(programs.Programs))
 
@@ -203,8 +230,7 @@ func updatePlayerPrograms() {
 						common.Logger.Debugf("跳过空节目记录")
 						continue
 					}
-					
-					
+
 					var state = int32(ProgramStateStop)
 					programIdStr := cast.ToString(program.ID)
 					if programIdStr == player.CurrentProgramID {
@@ -272,8 +298,6 @@ func updatePlayerPrograms() {
 				common.Logger.Infof("播放器 [%s] 节目同步完成: 新增 %d 个, 更新 %d 个, 删除 %d 个",
 					id, addedCount, updatedCount, deleteCount)
 
-
-				
 			}(playerId, playerClient)
 		}
 
@@ -302,7 +326,7 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 		return
 	}
 	common.Logger.Debugf("播放器 [%s] 节目 [%d] 有 %d 个媒体文件", playerId, playerProgramID, len(medias.Media))
-	
+
 	common.Logger.Debugf("查询数据库中播放器 [%s] 节目 [%s] 已有媒体文件", playerId, programId)
 	exists, err := common.DbQuery[model.Ebcp_player_program_media](context.Background(), common.GetDaprClient(),
 		model.Ebcp_player_program_mediaTableInfo.Name, "program_id="+programId)
@@ -311,15 +335,15 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 		return
 	}
 	common.Logger.Debugf("数据库中播放器 [%s] 节目 [%s] 有 %d 个媒体文件记录", playerId, programId, len(exists))
-	
+
 	addedMap := make(map[string]bool)
 	addedCount := 0
 	updatedCount := 0
-	
+
 	for _, media := range medias.Media {
 		mediaIdStr := cast.ToString(media.ID)
 		common.Logger.Debugf("处理媒体文件 [%s:%s]", mediaIdStr, media.Name)
-		
+
 		playerProgramMedia := model.Ebcp_player_program_media{
 			ID:              common.GetMD5Hash(playerId + "_" + programId + "_" + mediaIdStr),
 			CreatedBy:       "admin",
@@ -332,7 +356,7 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 			ProgramID:       programId,
 			PlayerProgramID: cast.ToString(playerProgramID),
 		}
-		
+
 		// 检查是否为新增或更新
 		isNewMedia := true
 		for _, existingMedia := range exists {
@@ -341,7 +365,7 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 				break
 			}
 		}
-		
+
 		err = common.DbUpsert[model.Ebcp_player_program_media](context.Background(), common.GetDaprClient(),
 			playerProgramMedia, model.Ebcp_player_program_mediaTableInfo.Name, "id")
 		if err != nil {
@@ -357,7 +381,7 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 			addedMap[mediaIdStr] = true
 		}
 	}
-	
+
 	deleteCount := 0
 	for _, media := range exists {
 		if !addedMap[media.MediaID] {
@@ -371,8 +395,8 @@ func syncPlayerProgramMedia(client *client.PlayerClient, playerId, programId str
 			}
 		}
 	}
-	
-	common.Logger.Infof("播放器 [%s] 节目 [%s] 媒体同步完成: 新增 %d 个, 更新 %d 个, 删除 %d 个", 
+
+	common.Logger.Infof("播放器 [%s] 节目 [%s] 媒体同步完成: 新增 %d 个, 更新 %d 个, 删除 %d 个",
 		playerId, programId, addedCount, updatedCount, deleteCount)
 }
 
@@ -392,6 +416,12 @@ func PlayerPlay(player *model.Ebcp_player) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(player.ID)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	common.Logger.Debugf("获取播放器 [%s] 当前播放节目", player.ID)
 	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
 	if err != nil {
@@ -448,6 +478,12 @@ func PlayerPause(player *model.Ebcp_player) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(player.ID)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	common.Logger.Debugf("获取播放器 [%s] 当前播放节目", player.ID)
 	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
 	if err != nil {
@@ -479,6 +515,12 @@ func PlayerStop(player *model.Ebcp_player) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(player.ID)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	common.Logger.Debugf("获取播放器 [%s] 当前播放节目", player.ID)
 	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
 	if err != nil {
@@ -517,6 +559,12 @@ func PlayProgram(playerId, programId string) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(playerId)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
 	if err != nil {
 		return fmt.Errorf("获取播放器 [%s] 当前播放节目失败: %v", playerId, err)
@@ -526,7 +574,7 @@ func PlayProgram(playerId, programId string) error {
 		common.Logger.Infof("播放器 [%s] 当前节目已经是 [%s], 无需重复播放", playerId, programId)
 		return nil
 	}
-	if currentProgramId!= programId{
+	if currentProgramId != programId {
 		if currentProgramState == ProgramStatePlay {
 			common.Logger.Infof("播放器 [%s] 当前节目不是 [%s], 发送停止命令", playerId, programId)
 			err = playerClient.StopProgram(cast.ToUint32(currentProgramId))
@@ -564,6 +612,12 @@ func PauseProgram(playerId, programId string) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(playerId)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	err = playerClient.PauseProgram(cast.ToUint32(programId))
 	if err != nil {
 		return fmt.Errorf("暂停播放器 [%s] 节目失败: %v", playerId, err)
@@ -587,6 +641,12 @@ func StopProgram(playerId, programId string) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+
+	// 获取播放器状态锁
+	stateLock := getPlayerStateLock(playerId)
+	stateLock.Lock()
+	defer stateLock.Unlock()
+
 	err = playerClient.StopProgram(cast.ToUint32(programId))
 	if err != nil {
 		return fmt.Errorf("停止播放器 [%s] 节目失败: %v", playerId, err)
