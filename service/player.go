@@ -517,6 +517,24 @@ func PlayProgram(playerId, programId string) error {
 	if playerClient == nil {
 		return fmt.Errorf("player not found")
 	}
+	currentProgramId, currentProgramState, err := GetPlayerCurrentProgram(playerClient)
+	if err != nil {
+		return fmt.Errorf("获取播放器 [%s] 当前播放节目失败: %v", playerId, err)
+	}
+	common.Logger.Infof("播放器 [%s] 当前节目ID: %s, 状态: %d", playerId, currentProgramId, currentProgramState)
+	if currentProgramId == programId && currentProgramState == ProgramStatePlay {
+		common.Logger.Infof("播放器 [%s] 当前节目已经是 [%s], 无需重复播放", playerId, programId)
+		return nil
+	}
+	if currentProgramId!= programId{
+		if currentProgramState == ProgramStatePlay {
+			common.Logger.Infof("播放器 [%s] 当前节目不是 [%s], 发送停止命令", playerId, programId)
+			err = playerClient.StopProgram(cast.ToUint32(currentProgramId))
+			if err != nil {
+				return fmt.Errorf("停止播放器 [%s] 节目失败: %v", playerId, err)
+			}
+		}
+	}
 	common.Logger.Debugf("向播放器 [%s] 发送播放节目 [%s] 命令", playerId, programId)
 	err = playerClient.PlayProgram(cast.ToUint32(programId))
 	if err != nil {
