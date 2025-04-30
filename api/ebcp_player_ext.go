@@ -283,12 +283,12 @@ func GetProgramMediaProcessHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	programIdStr := chi.URLParam(r, "programId")
 	mediaIdStr := chi.URLParam(r, "mediaId")
-	currentTime, totalTime, err := service.GetProgramMediaProcess(id, programIdStr, mediaIdStr)
+	remainTime, totalTime, err := service.GetProgramMediaProcess(id, programIdStr, mediaIdStr)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
-	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{"currentTime": currentTime, "totalTime": totalTime}))
+	common.HttpSuccess(w, common.OK.WithData(map[string]interface{}{"remainTime": remainTime, "totalTime": totalTime}))
 }
 
 // @Summary Set Program Media Process
