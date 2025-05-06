@@ -24,11 +24,13 @@ func InitEbcp_exhibition_hallExtRoute(r chi.Router) {
 // @Tags 展馆
 // @Accept  json
 // @Produce  json
+// @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
 // @Success 200 {object} common.Response ""
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-hall/start [post]
 func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
-	err := service.StartHall()
+	itemType := r.URL.Query().Get("type")
+	err := service.StartHall(itemType)
 	if err != nil {
 		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
 	}
@@ -40,11 +42,13 @@ func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
 // @Tags 展馆
 // @Accept  json
 // @Produce  json
+// @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
 // @Success 200 {object} common.Response ""
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-hall/stop [post]
 func Ebcp_exhibition_hallStopHandler(w http.ResponseWriter, r *http.Request) {
-	err := service.StopHall()
+	itemType := r.URL.Query().Get("type")
+	err := service.StopHall(itemType)
 	if err != nil {
 		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
 	}

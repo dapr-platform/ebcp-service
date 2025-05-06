@@ -18,7 +18,7 @@ type itemResult struct {
 	err    error
 }
 
-func StartHall() error {
+func StartHall(itemType string) error {
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 		model.Ebcp_exhibition_itemTableInfo.Name,
 		"")
@@ -94,7 +94,7 @@ func StartHall() error {
 	return nil
 }
 
-func StopHall() error {
+func StopHall(itemType string) error {
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 		model.Ebcp_exhibition_itemTableInfo.Name,
 		"")

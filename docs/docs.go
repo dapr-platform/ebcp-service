@@ -1557,6 +1557,15 @@ const docTemplate = `{
                     "展馆"
                 ],
                 "summary": "展馆一键启动",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1586,6 +1595,15 @@ const docTemplate = `{
                     "展馆"
                 ],
                 "summary": "展馆一键停止",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

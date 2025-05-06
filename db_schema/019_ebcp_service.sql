@@ -232,8 +232,8 @@ COMMENT ON COLUMN o_ebcp_item_schedule.start_time IS '开始时间';
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_time IS '停止时间'; 
 COMMENT ON COLUMN o_ebcp_item_schedule.cycle_type IS '循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)';
 COMMENT ON COLUMN o_ebcp_item_schedule.enabled IS '是否启用(0: 禁用, 1: 启用)';
-COMMENT ON COLUMN o_ebcp_item_schedule.start_date IS '开始日期';
-COMMENT ON COLUMN o_ebcp_item_schedule.stop_date IS '停止日期';
+COMMENT ON COLUMN o_ebcp_item_schedule.start_date IS '开始日期,暂时不用（预留寒暑假延长时间）';
+COMMENT ON COLUMN o_ebcp_item_schedule.stop_date IS '停止日期,暂时不用（预留寒暑假延长时间）';
 COMMENT ON COLUMN o_ebcp_item_schedule.action_type IS '动作类型(0: 停止, 1: 播放)';
 
 -- 节假日日期表

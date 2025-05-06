@@ -1723,6 +1723,12 @@ paths:
       consumes:
       - application/json
       description: 展馆一键启动
+      parameters:
+      - description: type,1:数字展项，2:静态展项，不传默认全部
+        in: query
+        name: type
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1742,6 +1748,12 @@ paths:
       consumes:
       - application/json
       description: 展馆一键停止
+      parameters:
+      - description: type,1:数字展项，2:静态展项，不传默认全部
+        in: query
+        name: type
+        required: true
+        type: string
       produces:
       - application/json
       responses:
