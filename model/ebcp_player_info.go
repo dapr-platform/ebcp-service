@@ -26,22 +26,24 @@ Table: v_ebcp_player_info
 [ 5] status                                         INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 6] current_program_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] current_program_state                          INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 8] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[ 9] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[10] item_type                                      VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[11] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[12] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[13] room_floor                                     VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[14] room_floor_value                               VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[15] room_floor_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[16] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[17] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[18] programs                                       JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[ 8] volume                                         INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[ 9] sound_state                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[10] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[11] item_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[12] item_type                                      VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[13] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[14] room_name                                      VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[15] room_floor                                     VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[16] room_floor_value                               VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[17] room_floor_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[18] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[19] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[20] programs                                       JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "HWBJolfhFDHwTwXmPkWTUIEUw",    "name": "FrKgKnCwfmRnngaboONGpMbRD",    "ip_address": "kHhnjlHGNDeOEnLVPKOHlkBTP",    "port": 20,    "version": "slkSLqtBoPRNGFiRgidEtfXBC",    "status": 10,    "current_program_id": "QTGLUlBEmqkflEEixZjwgFfHD",    "current_program_state": 24,    "item_id": "BTCHkxtbcBaWkrZjvsDXJIULW",    "item_name": "YuZbEjjHsendgJghTKhtXCRnk",    "item_type": "cPkVGHjMDvffsIWeeWHNJZYWh",    "room_id": "mEpOKwWihPJStiQJjoXIErlGh",    "room_name": "oQrUBKbjnxZLPVIGlOeFxsDxr",    "room_floor": "cSxZUkUJcZTJxyBWKiAuNmVsa",    "room_floor_value": "xcySVtVJASZSaobTOlYjiqlAu",    "room_floor_name": "DBsulVxfaaoXgkUsETbMZmqAU",    "exhibition_id": "oKTwXGRxPcIKBUBSOdHcDZKSy",    "exhibition_name": "GDGrOYaLTvTxrqpoJotgpxOwJ",    "programs": 61}
+{    "id": "rVrPuaMThjYNRFxwCdbkKZbnb",    "name": "raMepUiOExobHuEduoJVhsxwg",    "ip_address": "yUJiNKgVqgWmBajDDoQvyLIjU",    "port": 60,    "version": "vsnBnpueqPwlXwPwFLtLVHEkv",    "status": 43,    "current_program_id": "JaqlHlbOsCbYcmTjmQUpmYjpt",    "current_program_state": 67,    "volume": 75,    "sound_state": 84,    "item_id": "HguLTfGpadRSptLSSwJwlYbLF",    "item_name": "TtRWXKsclECQXqJMoPpQSoheM",    "item_type": "tFLFbQEwouRQvMNoIAPPddOYW",    "room_id": "AITRUVAKvPIHWJkBAbjdoYjUb",    "room_name": "osHnGZVirZEkliyYXaEInQSKa",    "room_floor": "KpfaEiSBhLwcdAXECsRnByDRq",    "room_floor_value": "aUrBhKJsyRTQOWgPfStEBmYTc",    "room_floor_name": "rmabSTGTwZwOZoleCYFoqEqyw",    "exhibition_id": "HmxSNPiIARXXKnDdssjAOPMSm",    "exhibition_name": "WkmejcPkMHRHVuehUYqnaVhSv",    "programs": 52}
 
 
 Comments
@@ -70,6 +72,10 @@ var (
 	Ebcp_player_info_FIELD_NAME_current_program_id = "current_program_id"
 
 	Ebcp_player_info_FIELD_NAME_current_program_state = "current_program_state"
+
+	Ebcp_player_info_FIELD_NAME_volume = "volume"
+
+	Ebcp_player_info_FIELD_NAME_sound_state = "sound_state"
 
 	Ebcp_player_info_FIELD_NAME_item_id = "item_id"
 
@@ -111,6 +117,10 @@ type Ebcp_player_info struct {
 	CurrentProgramID string `json:"current_program_id"` //当前节目ID
 
 	CurrentProgramState int32 `json:"current_program_state"` //当前节目状态,0:播放,1:暂停,2:停止
+
+	Volume int32 `json:"volume"` //音量(0-100)
+
+	SoundState int32 `json:"sound_state"` //音量状态,0:静音,1:非静音
 
 	ItemID string `json:"item_id"` //所属展项ID
 
@@ -312,6 +322,48 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 
 		&ColumnInfo{
 			Index:              8,
+			Name:               "volume",
+			Comment:            `音量(0-100)`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Volume",
+			GoFieldType:        "int32",
+			JSONFieldName:      "volume",
+			ProtobufFieldName:  "volume",
+			ProtobufType:       "int32",
+			ProtobufPos:        9,
+		},
+
+		&ColumnInfo{
+			Index:              9,
+			Name:               "sound_state",
+			Comment:            `音量状态,0:静音,1:非静音`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "SoundState",
+			GoFieldType:        "int32",
+			JSONFieldName:      "sound_state",
+			ProtobufFieldName:  "sound_state",
+			ProtobufType:       "int32",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
 			Name:               "item_id",
 			Comment:            `所属展项ID`,
 			Notes:              ``,
@@ -328,11 +380,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "item_id",
 			ProtobufFieldName:  "item_id",
 			ProtobufType:       "string",
-			ProtobufPos:        9,
+			ProtobufPos:        11,
 		},
 
 		&ColumnInfo{
-			Index:              9,
+			Index:              11,
 			Name:               "item_name",
 			Comment:            `所属展项名称`,
 			Notes:              ``,
@@ -349,11 +401,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "item_name",
 			ProtobufFieldName:  "item_name",
 			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
-			Index:              10,
+			Index:              12,
 			Name:               "item_type",
 			Comment:            `所属展项类型`,
 			Notes:              ``,
@@ -370,11 +422,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "item_type",
 			ProtobufFieldName:  "item_type",
 			ProtobufType:       "string",
-			ProtobufPos:        11,
+			ProtobufPos:        13,
 		},
 
 		&ColumnInfo{
-			Index:              11,
+			Index:              13,
 			Name:               "room_id",
 			Comment:            `所属展厅ID`,
 			Notes:              ``,
@@ -391,11 +443,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "room_id",
 			ProtobufFieldName:  "room_id",
 			ProtobufType:       "string",
-			ProtobufPos:        12,
+			ProtobufPos:        14,
 		},
 
 		&ColumnInfo{
-			Index:              12,
+			Index:              14,
 			Name:               "room_name",
 			Comment:            `所属展厅名称`,
 			Notes:              ``,
@@ -412,11 +464,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "room_name",
 			ProtobufFieldName:  "room_name",
 			ProtobufType:       "string",
-			ProtobufPos:        13,
+			ProtobufPos:        15,
 		},
 
 		&ColumnInfo{
-			Index:              13,
+			Index:              15,
 			Name:               "room_floor",
 			Comment:            `所属展厅楼层`,
 			Notes:              ``,
@@ -433,11 +485,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "room_floor",
 			ProtobufFieldName:  "room_floor",
 			ProtobufType:       "string",
-			ProtobufPos:        14,
+			ProtobufPos:        16,
 		},
 
 		&ColumnInfo{
-			Index:              14,
+			Index:              16,
 			Name:               "room_floor_value",
 			Comment:            `所属展厅楼层值`,
 			Notes:              ``,
@@ -454,11 +506,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "room_floor_value",
 			ProtobufFieldName:  "room_floor_value",
 			ProtobufType:       "string",
-			ProtobufPos:        15,
+			ProtobufPos:        17,
 		},
 
 		&ColumnInfo{
-			Index:              15,
+			Index:              17,
 			Name:               "room_floor_name",
 			Comment:            `所属展厅楼层名称`,
 			Notes:              ``,
@@ -475,11 +527,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "room_floor_name",
 			ProtobufFieldName:  "room_floor_name",
 			ProtobufType:       "string",
-			ProtobufPos:        16,
+			ProtobufPos:        18,
 		},
 
 		&ColumnInfo{
-			Index:              16,
+			Index:              18,
 			Name:               "exhibition_id",
 			Comment:            `所属展览ID`,
 			Notes:              ``,
@@ -496,11 +548,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "exhibition_id",
 			ProtobufFieldName:  "exhibition_id",
 			ProtobufType:       "string",
-			ProtobufPos:        17,
+			ProtobufPos:        19,
 		},
 
 		&ColumnInfo{
-			Index:              17,
+			Index:              19,
 			Name:               "exhibition_name",
 			Comment:            `所属展览名称`,
 			Notes:              ``,
@@ -517,11 +569,11 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "exhibition_name",
 			ProtobufFieldName:  "exhibition_name",
 			ProtobufType:       "string",
-			ProtobufPos:        18,
+			ProtobufPos:        20,
 		},
 
 		&ColumnInfo{
-			Index:              18,
+			Index:              20,
 			Name:               "programs",
 			Comment:            `关联的节目信息`,
 			Notes:              ``,
@@ -538,7 +590,7 @@ Warning table: v_ebcp_player_info primary key column id is nullable column, sett
 			JSONFieldName:      "programs",
 			ProtobufFieldName:  "programs",
 			ProtobufType:       "string",
-			ProtobufPos:        19,
+			ProtobufPos:        21,
 		},
 	},
 }

@@ -478,13 +478,13 @@ definitions:
         description: 展项ID
         type: string
       start_date:
-        description: 开始日期
+        description: 开始日期,暂时不用（预留寒暑假延长时间）
         type: string
       start_time:
         description: 开始时间
         type: string
       stop_date:
-        description: 停止日期
+        description: 停止日期,暂时不用（预留寒暑假延长时间）
         type: string
       stop_time:
         description: 停止时间
@@ -525,6 +525,9 @@ definitions:
       port:
         description: 端口
         type: integer
+      sound_state:
+        description: 音量状态,0:静音,1:非静音
+        type: integer
       status:
         description: '状态（1: 正常, 2: 离线, 3: 故障）'
         type: integer
@@ -537,6 +540,9 @@ definitions:
       version:
         description: 版本
         type: string
+      volume:
+        description: 音量(0-100)
+        type: integer
     type: object
   model.Ebcp_player_info:
     properties:
@@ -590,12 +596,18 @@ definitions:
       room_name:
         description: 所属展厅名称
         type: string
+      sound_state:
+        description: 音量状态,0:静音,1:非静音
+        type: integer
       status:
         description: 状态,1:正常,2:离线,3:故障
         type: integer
       version:
         description: 版本
         type: string
+      volume:
+        description: 音量(0-100)
+        type: integer
     type: object
   model.Ebcp_player_program:
     properties:
@@ -670,8 +682,14 @@ definitions:
       player_port:
         description: player_port
         type: integer
+      player_sound_state:
+        description: player_sound_state
+        type: integer
       player_status:
         description: player_status
+        type: integer
+      player_volume:
+        description: player_volume
         type: integer
       program_id:
         description: program_id
@@ -4047,6 +4065,14 @@ paths:
         in: query
         name: current_program_state
         type: string
+      - description: volume
+        in: query
+        name: volume
+        type: string
+      - description: sound_state
+        in: query
+        name: sound_state
+        type: string
       - description: status
         in: query
         name: status
@@ -4145,6 +4171,14 @@ paths:
       - description: current_program_state
         in: query
         name: current_program_state
+        type: string
+      - description: volume
+        in: query
+        name: volume
+        type: string
+      - description: sound_state
+        in: query
+        name: sound_state
         type: string
       - description: item_id
         in: query
@@ -4261,6 +4295,14 @@ paths:
       - description: current_program_state
         in: query
         name: current_program_state
+        type: string
+      - description: volume
+        in: query
+        name: volume
+        type: string
+      - description: sound_state
+        in: query
+        name: sound_state
         type: string
       - description: item_id
         in: query
@@ -4465,6 +4507,14 @@ paths:
         in: query
         name: player_current_program_state
         type: string
+      - description: player_volume
+        in: query
+        name: player_volume
+        type: string
+      - description: player_sound_state
+        in: query
+        name: player_sound_state
+        type: string
       - description: item_id
         in: query
         name: item_id
@@ -4580,6 +4630,14 @@ paths:
       - description: player_current_program_state
         in: query
         name: player_current_program_state
+        type: string
+      - description: player_volume
+        in: query
+        name: player_volume
+        type: string
+      - description: player_sound_state
+        in: query
+        name: player_sound_state
         type: string
       - description: item_id
         in: query
@@ -5464,6 +5522,14 @@ paths:
       - description: current_program_state
         in: query
         name: current_program_state
+        type: string
+      - description: volume
+        in: query
+        name: volume
+        type: string
+      - description: sound_state
+        in: query
+        name: sound_state
         type: string
       - description: status
         in: query

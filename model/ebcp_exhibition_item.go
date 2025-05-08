@@ -34,7 +34,7 @@ Table: o_ebcp_exhibition_item
 
 JSON Sample
 -------------------------------------
-{    "id": "HCLyVLnGYFfaADfpRQdxWEdyl",    "created_by": "ZFdgPtDLlmPbKKPJqtPDMRQtX",    "created_time": 75,    "updated_by": "lVEeoXrmGYiopylsvGANwZWgn",    "updated_time": 40,    "name": "fpHFPZmAaVEwXjLyVuVhpdOsS",    "exhibition_id": "savipepbWUXmCrwcNRciGaWst",    "room_id": "gLrNYAgZfgHufPLmUlQvMIeui",    "type": "CCDrOgNCqTIfNGGLtPTCRwKSR",    "export_info": "VVrMBOoemxxmtQCieNZqTMUdZ",    "status": 78,    "remarks": "fFtWEMREWdNdJaWnYYajCIAyZ"}
+{    "id": "qDpexPFmkqkObYTSkOuVGhiSO",    "created_by": "NvOmMcdCItVEfJjbRbtTpKWWw",    "created_time": 14,    "updated_by": "BWpmjTyUbiMBokxKwNCxIwWrw",    "updated_time": 81,    "name": "hclkYWAnCuxkDoXNgwdYvlPRh",    "exhibition_id": "rhnXRaInSBWUHDAuZFcehbZQT",    "room_id": "ZAhoMPYxBoKQTeGiSrqOcMvGq",    "type": "RlpbAXRAtJCIEbwXNIXTOGNPw",    "export_info": "GfRQeZNGlNnQHcdgxbcVpQQsI",    "status": 88,    "remarks": "RGEHjUqKIjgYftpAWBBpRjuan"}
 
 
 

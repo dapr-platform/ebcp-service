@@ -108,6 +108,8 @@ CREATE TABLE o_ebcp_player (
     item_id VARCHAR(32),
     current_program_id VARCHAR(32),
     current_program_state INTEGER,
+    volume INTEGER,
+    sound_state INTEGER,
     status INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
@@ -120,6 +122,8 @@ COMMENT ON COLUMN o_ebcp_player.version IS '版本';
 COMMENT ON COLUMN o_ebcp_player.item_id IS '所属展项ID';
 COMMENT ON COLUMN o_ebcp_player.current_program_id IS '当前节目ID';
 COMMENT ON COLUMN o_ebcp_player.current_program_state IS '当前节目状态,0:播放,1:暂停,2:停止';
+COMMENT ON COLUMN o_ebcp_player.volume IS '音量(0-100)';
+COMMENT ON COLUMN o_ebcp_player.sound_state IS '音量状态,0:静音,1:非静音';
 COMMENT ON COLUMN o_ebcp_player.status IS '状态（1: 正常, 2: 离线, 3: 故障）';
 
 -- 播放设备节目表
@@ -503,6 +507,8 @@ SELECT
                 'status', p.status,
                 'current_program_id', p.current_program_id,
                 'current_program_state', p.current_program_state,
+                'volume', p.volume,
+                'sound_state', p.sound_state,
                 'programs', (
                     SELECT json_agg(
                         json_build_object(
@@ -598,6 +604,8 @@ SELECT
     p.status AS status,
     p.current_program_id AS current_program_id,
     p.current_program_state AS current_program_state,
+    p.volume AS volume,
+    p.sound_state AS sound_state,
     ei.id AS item_id,
     ei.name AS item_name,
     ei.type AS item_type,
@@ -650,6 +658,8 @@ COMMENT ON COLUMN v_ebcp_player_info.version IS '版本';
 COMMENT ON COLUMN v_ebcp_player_info.status IS '状态,1:正常,2:离线,3:故障';
 COMMENT ON COLUMN v_ebcp_player_info.current_program_id IS '当前节目ID';
 COMMENT ON COLUMN v_ebcp_player_info.current_program_state IS '当前节目状态,0:播放,1:暂停,2:停止';
+COMMENT ON COLUMN v_ebcp_player_info.volume IS '音量(0-100)';
+COMMENT ON COLUMN v_ebcp_player_info.sound_state IS '音量状态,0:静音,1:非静音';
 COMMENT ON COLUMN v_ebcp_player_info.item_id IS '所属展项ID';
 COMMENT ON COLUMN v_ebcp_player_info.item_name IS '所属展项名称';
 COMMENT ON COLUMN v_ebcp_player_info.item_type IS '所属展项类型';
@@ -677,6 +687,8 @@ SELECT
     p.status AS player_status,
     p.current_program_id AS player_current_program_id,
     p.current_program_state AS player_current_program_state,
+    p.volume AS player_volume,
+    p.sound_state AS player_sound_state,
     ei.id AS item_id,
     ei.name AS item_name,
     er.id AS room_id,

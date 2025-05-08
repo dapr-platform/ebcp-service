@@ -198,6 +198,14 @@ func updatePlayerPrograms() {
 				common.Logger.Infof("播放器 [%s] 当前播放节目ID: %s, 状态: %d", id, currentProgramId, currentProgramState)
 				player.CurrentProgramID = currentProgramId
 				player.CurrentProgramState = cast.ToInt32(currentProgramState)
+
+				volume, muteState, err := GetPlayerVolumeAndMuteState(playerClient)
+				if err != nil {
+					common.Logger.Errorf("获取播放器 [%s] 音量和静音状态失败: %v", id, err)
+				} else {
+					player.Volume = int32(volume)
+					player.SoundState = int32(muteState)
+				}
 				err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 				if err != nil {
 					common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
@@ -303,6 +311,16 @@ func updatePlayerPrograms() {
 
 		common.Logger.Info("播放器程序更新任务已启动，等待所有更新完成")
 	}
+}
+func GetPlayerVolumeAndMuteState(client *client.PlayerClient) (volume int, muteState int, err error) {
+	common.Logger.Debug("获取播放器音量和静音状态")
+	resp, err := client.QueryLayerVolumeMuteStatus(0)
+	if err != nil {
+		common.Logger.Errorf("获取播放器音量和静音状态失败: %v", err)
+		return
+	}
+	common.Logger.Debugf("播放器音量: %d, 静音状态: %d", resp.Volume, resp.MuteFlag)
+	return int(resp.Volume), int(resp.MuteFlag), nil
 }
 func GetPlayerCurrentProgram(client *client.PlayerClient) (programId string, state int, err error) {
 	common.Logger.Debug("获取当前播放节目信息")

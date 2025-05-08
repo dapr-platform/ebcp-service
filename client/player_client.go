@@ -110,6 +110,18 @@ type CurrentProgramResponse struct {
 	ProgState uint32 // 节目状态：0=播放，1=暂停，2=停止
 }
 
+// LayerVolumeMuteStatusResponse 表示查询图层音量和静音状态的响应结构
+//
+// 响应格式:
+//
+//	CC 55 CC 55 + header(12) + TLV头(4) + Bsucceed(1) + LayerIndex(2) + Volume(1) + MuteFlag(1)
+type LayerVolumeMuteStatusResponse struct {
+	Success    bool   // 执行结果，true为成功，false为失败
+	LayerIndex uint16 // 图层索引
+	Volume     uint8  // 音量大小
+	MuteFlag   uint8  // 是否静音，1为静音，0为非静音
+}
+
 // PlayerClient represents a client to control media player
 type PlayerClient struct {
 	addr     string
@@ -818,6 +830,33 @@ func (c *PlayerClient) GetCurrentProgram() (*CurrentProgramResponse, error) {
 		fmt.Printf("Current Program: Success=%v, ProgramID=%d, State=%d\n",
 			result.Success, result.ProgramID, result.ProgState)
 	}
+
+	return result, nil
+}
+
+// QueryLayerVolumeMuteStatus 查询指定图层的音量和静音状态
+// 参数: layerIndex 图层索引（从0开始）
+// 返回: LayerVolumeMuteStatusResponse, error
+func (c *PlayerClient) QueryLayerVolumeMuteStatus(layerIndex uint16) (*LayerVolumeMuteStatusResponse, error) {
+	const TagQueryLayerVolumeMuteStatus uint16 = 322 // 0x0142
+	data := make([]byte, 2)
+	binary.LittleEndian.PutUint16(data, layerIndex)
+
+	resp, err := c.sendCommandWithTimeout(TagQueryLayerVolumeMuteStatus, data, readTimeout)
+	if err != nil {
+		return nil, err
+	}
+
+	// 响应格式: CC 55 CC 55 + header(12) + TLV头(4) + Bsucceed(1) + LayerIndex(2) + Volume(1) + MuteFlag(1)
+	if len(resp) < 16+1+2+1+1 {
+		return nil, fmt.Errorf("response too short: %d bytes", len(resp))
+	}
+
+	result := &LayerVolumeMuteStatusResponse{}
+	result.Success = resp[16] != 0
+	result.LayerIndex = binary.LittleEndian.Uint16(resp[17:19])
+	result.Volume = resp[19]
+	result.MuteFlag = resp[20]
 
 	return result, nil
 }

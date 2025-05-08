@@ -35,7 +35,7 @@ Table: o_ebcp_item_schedule
 
 JSON Sample
 -------------------------------------
-{    "id": "qJUWdMcISqCpQDSebAiNwEVwo",    "created_by": "NvBYZUNKyTKINNlkXtjnitynb",    "created_time": 27,    "updated_by": "RisIPpogvNECNcphHgPPpIQsh",    "updated_time": 0,    "item_id": "pwxCUbaSJkomAuFPPDheDYBXg",    "start_time": "irppVdHrEHErekQMgfhTqAnva",    "stop_time": "ddnrvxFfnHcRXJpycnXdnwhNJ",    "start_date": "bQYPLlxcJLDvFCOTiOQnMiOhZ",    "stop_date": "aXBIvCDvbTdSBJTLRipHwTLwu",    "cycle_type": 12,    "action_type": 37,    "enabled": 64}
+{    "id": "qxTwVJEVavlAoRYlTTnabgYjR",    "created_by": "WrREAKSrfnjHUSrMPpwpNXxjm",    "created_time": 95,    "updated_by": "NFdfgMsuTgDDeEqafvXeUqhYy",    "updated_time": 98,    "item_id": "mOnPYrsFNdXBuklvCdjDhiMUl",    "start_time": "gvrITlwClhkIaHlfEisZjyGxB",    "stop_time": "NuuBdZEhbPEOhFqQmewTHWWVX",    "start_date": "WxHwrhKiInqQOYFwxjyCWwVrr",    "stop_date": "XwfLNJphEtnECsfVBGuYTLkTC",    "cycle_type": 23,    "action_type": 78,    "enabled": 20}
 
 
 
@@ -87,9 +87,9 @@ type Ebcp_item_schedule struct {
 
 	StopTime string `json:"stop_time"` //停止时间
 
-	StartDate string `json:"start_date"` //开始日期
+	StartDate string `json:"start_date"` //开始日期,暂时不用（预留寒暑假延长时间）
 
-	StopDate string `json:"stop_date"` //停止日期
+	StopDate string `json:"stop_date"` //停止日期,暂时不用（预留寒暑假延长时间）
 
 	CycleType int32 `json:"cycle_type"` //循环方式(1:工作日, 2:周末, 3:节假日, 4:闭馆日, 5:每天)
 
@@ -274,7 +274,7 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              8,
 			Name:               "start_date",
-			Comment:            `开始日期`,
+			Comment:            `开始日期,暂时不用（预留寒暑假延长时间）`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -295,7 +295,7 @@ var Ebcp_item_scheduleTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              9,
 			Name:               "stop_date",
-			Comment:            `停止日期`,
+			Comment:            `停止日期,暂时不用（预留寒暑假延长时间）`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",

@@ -5261,6 +5261,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "volume",
+                        "name": "volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sound_state",
+                        "name": "sound_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -5416,6 +5428,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_program_state",
                         "name": "current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "volume",
+                        "name": "volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sound_state",
+                        "name": "sound_state",
                         "in": "query"
                     },
                     {
@@ -5593,6 +5617,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_program_state",
                         "name": "current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "volume",
+                        "name": "volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sound_state",
+                        "name": "sound_state",
                         "in": "query"
                     },
                     {
@@ -5917,6 +5953,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "player_volume",
+                        "name": "player_volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_sound_state",
+                        "name": "player_sound_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "item_id",
                         "name": "item_id",
                         "in": "query"
@@ -6090,6 +6138,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "player_current_program_state",
                         "name": "player_current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_volume",
+                        "name": "player_volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "player_sound_state",
+                        "name": "player_sound_state",
                         "in": "query"
                     },
                     {
@@ -6751,6 +6811,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "current_program_state",
                         "name": "current_program_state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "volume",
+                        "name": "volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sound_state",
+                        "name": "sound_state",
                         "in": "query"
                     },
                     {
@@ -8202,7 +8274,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "start_date": {
-                    "description": "开始日期",
+                    "description": "开始日期,暂时不用（预留寒暑假延长时间）",
                     "type": "string"
                 },
                 "start_time": {
@@ -8210,7 +8282,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "stop_date": {
-                    "description": "停止日期",
+                    "description": "停止日期,暂时不用（预留寒暑假延长时间）",
                     "type": "string"
                 },
                 "stop_time": {
@@ -8266,6 +8338,10 @@ const docTemplate = `{
                     "description": "端口",
                     "type": "integer"
                 },
+                "sound_state": {
+                    "description": "音量状态,0:静音,1:非静音",
+                    "type": "integer"
+                },
                 "status": {
                     "description": "状态（1: 正常, 2: 离线, 3: 故障）",
                     "type": "integer"
@@ -8281,6 +8357,10 @@ const docTemplate = `{
                 "version": {
                     "description": "版本",
                     "type": "string"
+                },
+                "volume": {
+                    "description": "音量(0-100)",
+                    "type": "integer"
                 }
             }
         },
@@ -8354,6 +8434,10 @@ const docTemplate = `{
                     "description": "所属展厅名称",
                     "type": "string"
                 },
+                "sound_state": {
+                    "description": "音量状态,0:静音,1:非静音",
+                    "type": "integer"
+                },
                 "status": {
                     "description": "状态,1:正常,2:离线,3:故障",
                     "type": "integer"
@@ -8361,6 +8445,10 @@ const docTemplate = `{
                 "version": {
                     "description": "版本",
                     "type": "string"
+                },
+                "volume": {
+                    "description": "音量(0-100)",
+                    "type": "integer"
                 }
             }
         },
@@ -8463,8 +8551,16 @@ const docTemplate = `{
                     "description": "player_port",
                     "type": "integer"
                 },
+                "player_sound_state": {
+                    "description": "player_sound_state",
+                    "type": "integer"
+                },
                 "player_status": {
                     "description": "player_status",
+                    "type": "integer"
+                },
+                "player_volume": {
+                    "description": "player_volume",
                     "type": "integer"
                 },
                 "program_id": {

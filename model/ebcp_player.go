@@ -30,12 +30,14 @@ Table: o_ebcp_player
 [ 9] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] current_program_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [11] current_program_state                          INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[12] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[12] volume                                         INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[13] sound_state                                    INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[14] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "ItWqLyAoZwVyDaajcGGYCdCqB",    "created_by": "WuVnMEuNvZXMKFeLFyeDYfcTY",    "created_time": 7,    "updated_by": "opHjFToQGbCDPgrtluYydhpcN",    "updated_time": 18,    "name": "abTUqcChuVqGplKUYXjnQnmSq",    "ip_address": "RHcPiqCLSISlwwWCJHQjORhbu",    "port": 77,    "version": "AKvYMjMUAZqEcErHJKjIaQGNI",    "item_id": "vFrnKAsBwRsMRRGIccOsGuhvX",    "current_program_id": "WZueMRSidXGSMxubGEwlnlsHr",    "current_program_state": 40,    "status": 93}
+{    "id": "HElVuIiQNSPrNbuoBBWCNoCOl",    "created_by": "vOrNAFjHxfLeAeeFygafVYlZQ",    "created_time": 59,    "updated_by": "ntWOCvLMTXkgwnnwauBYANBhh",    "updated_time": 89,    "name": "QsjlismFajrFwAhjsDMfpKxvU",    "ip_address": "DMxnjcXwutnPndRxTiBRMEiQf",    "port": 12,    "version": "GTccKAqEiqaTTKresFqIgBZRJ",    "item_id": "MfhWyHfkOAHUCxKobkNPHbJES",    "current_program_id": "xwSTBuDqEIKUjAJndKHSGNmhB",    "current_program_state": 88,    "volume": 4,    "sound_state": 58,    "status": 20}
 
 
 
@@ -66,6 +68,10 @@ var (
 
 	Ebcp_player_FIELD_NAME_current_program_state = "current_program_state"
 
+	Ebcp_player_FIELD_NAME_volume = "volume"
+
+	Ebcp_player_FIELD_NAME_sound_state = "sound_state"
+
 	Ebcp_player_FIELD_NAME_status = "status"
 )
 
@@ -94,6 +100,10 @@ type Ebcp_player struct {
 	CurrentProgramID string `json:"current_program_id"` //当前节目ID
 
 	CurrentProgramState int32 `json:"current_program_state"` //当前节目状态,0:播放,1:暂停,2:停止
+
+	Volume int32 `json:"volume"` //音量(0-100)
+
+	SoundState int32 `json:"sound_state"` //音量状态,0:静音,1:非静音
 
 	Status int32 `json:"status"` //状态（1: 正常, 2: 离线, 3: 故障）
 
@@ -357,6 +367,48 @@ var Ebcp_playerTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              12,
+			Name:               "volume",
+			Comment:            `音量(0-100)`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Volume",
+			GoFieldType:        "int32",
+			JSONFieldName:      "volume",
+			ProtobufFieldName:  "volume",
+			ProtobufType:       "int32",
+			ProtobufPos:        13,
+		},
+
+		&ColumnInfo{
+			Index:              13,
+			Name:               "sound_state",
+			Comment:            `音量状态,0:静音,1:非静音`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "SoundState",
+			GoFieldType:        "int32",
+			JSONFieldName:      "sound_state",
+			ProtobufFieldName:  "sound_state",
+			ProtobufType:       "int32",
+			ProtobufPos:        14,
+		},
+
+		&ColumnInfo{
+			Index:              14,
 			Name:               "status",
 			Comment:            `状态（1: 正常, 2: 离线, 3: 故障）`,
 			Notes:              ``,
@@ -373,7 +425,7 @@ var Ebcp_playerTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        13,
+			ProtobufPos:        15,
 		},
 	},
 }
