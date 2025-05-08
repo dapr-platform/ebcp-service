@@ -344,7 +344,7 @@ func OpenGlobalSoundHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := client.OpenGlobalSound()
+	err := service.OpenPlayerSound(id)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -369,7 +369,7 @@ func CloseGlobalSoundHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := client.CloseGlobalSound()
+	err := service.ClosePlayerSound(id)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -403,7 +403,7 @@ func SetGlobalVolumeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.SetGlobalVolume(uint32(volume))
+	err = service.SetPlayerVolume(id, int(volume))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -436,7 +436,7 @@ func IncreaseVolumeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.IncreaseGlobalVolume(uint32(step))
+	err = service.IncreasePlayerVolume(id, int(step))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
@@ -469,7 +469,7 @@ func DecreaseVolumeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = client.DecreaseGlobalVolume(uint32(step))
+	err = service.DecreasePlayerVolume(id, int(step))
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return

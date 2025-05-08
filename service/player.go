@@ -322,6 +322,130 @@ func GetPlayerVolumeAndMuteState(client *client.PlayerClient) (volume int, muteS
 	common.Logger.Debugf("播放器音量: %d, 静音状态: %d", resp.Volume, resp.MuteFlag)
 	return int(resp.Volume), int(resp.MuteFlag), nil
 }
+
+func OpenPlayerSound(playerId string) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.OpenGlobalSound()
+	if err != nil {
+		common.Logger.Errorf("打开播放器 [%s] 音量失败: %v", playerId, err)
+		return err
+	}
+	common.Logger.Debugf("打开播放器 [%s] 音量成功", playerId)
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+		return err
+	}
+	player.SoundState = 1
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		common.Logger.Errorf("更新播放器 [%s] 音量状态失败: %v", playerId, err)
+	}
+	return nil
+}
+func ClosePlayerSound(playerId string) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.CloseGlobalSound()
+	if err != nil {
+		common.Logger.Errorf("关闭播放器 [%s] 音量失败: %v", playerId, err)
+		return err
+	}
+	common.Logger.Debugf("关闭播放器 [%s] 音量成功", playerId)
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+		return err
+	}
+	player.SoundState = 0
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		common.Logger.Errorf("更新播放器 [%s] 音量状态失败: %v", playerId, err)
+	}
+	return nil
+}
+
+func SetPlayerVolume(playerId string, volume int) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.SetGlobalVolume(uint32(volume))
+	if err != nil {
+		common.Logger.Errorf("设置播放器 [%s] 音量失败: %v", playerId, err)
+		return err
+	}
+	common.Logger.Debugf("设置播放器 [%s] 音量成功", playerId)
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+		return err
+	}
+	player.Volume = int32(volume)
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		common.Logger.Errorf("更新播放器 [%s] 音量失败: %v", playerId, err)
+	}
+	return nil
+}
+
+func IncreasePlayerVolume(playerId string, step int) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.IncreaseGlobalVolume(uint32(step))
+	if err != nil {
+		common.Logger.Errorf("增加播放器 [%s] 音量失败: %v", playerId, err)
+		return err
+	}
+	common.Logger.Debugf("增加播放器 [%s] 音量成功", playerId)
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+		return err
+	}
+	player.Volume = int32(player.Volume + int32(step))
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		common.Logger.Errorf("更新播放器 [%s] 音量失败: %v", playerId, err)
+	}
+	return nil
+}
+
+func DecreasePlayerVolume(playerId string, step int) error {
+	playerClient := GetPlayerClient(playerId)
+	if playerClient == nil {
+		return fmt.Errorf("player not found")
+	}
+	err := playerClient.DecreaseGlobalVolume(uint32(step))
+	if err != nil {
+		common.Logger.Errorf("减少播放器 [%s] 音量失败: %v", playerId, err)
+		return err
+	}
+	common.Logger.Debugf("减少播放器 [%s] 音量成功", playerId)
+	player, err := common.DbGetOne[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+		model.Ebcp_playerTableInfo.Name, "id="+playerId)
+	if err != nil {
+		common.Logger.Errorf("获取播放器 [%s] 信息失败: %v", playerId, err)
+		return err
+	}
+	player.Volume = int32(player.Volume - int32(step))
+	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
+	if err != nil {
+		common.Logger.Errorf("更新播放器 [%s] 音量失败: %v", playerId, err)
+	}
+	return nil
+}
 func GetPlayerCurrentProgram(client *client.PlayerClient) (programId string, state int, err error) {
 	common.Logger.Debug("获取当前播放节目信息")
 	currentProgram, err := client.GetCurrentProgram()
