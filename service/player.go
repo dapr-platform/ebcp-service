@@ -738,7 +738,43 @@ func PlayProgram(playerId, programId string) error {
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 	}
+	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStatePlay)
+	if err != nil {
+		common.Logger.Errorf("更新展项 [%s] 状态失败: %v", player.ItemID, err)
+	}
 
+	return nil
+}
+func changeItemStateByPlayerState(itemId, playerId string, state int32) error {
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "id="+itemId)
+	if err != nil {
+		return fmt.Errorf("获取展项 [%s] 信息失败: %v", itemId, err)
+	}
+	if item == nil {
+		return fmt.Errorf("展项 [%s] 不存在", itemId)
+	}
+	allPlayers, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+itemId)
+	if err != nil {
+		return fmt.Errorf("获取播放器列表失败: %v", err)
+	}
+	shouldUpdate := true
+	for _, player := range allPlayers {
+		if player.ID == playerId {
+			continue
+		} else {
+			if state != player.CurrentProgramState {
+				shouldUpdate = false
+				break
+			}
+		}
+	}
+	if shouldUpdate {
+		item.Status = state
+		err = common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+		if err != nil {
+			return fmt.Errorf("更新展项 [%s] 状态失败: %v", itemId, err)
+		}
+	}
 	return nil
 }
 func PauseProgram(playerId, programId string) error {
@@ -769,6 +805,10 @@ func PauseProgram(playerId, programId string) error {
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 	}
+	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStatePause)
+	if err != nil {
+		common.Logger.Errorf("更新展项 [%s] 状态失败: %v", player.ItemID, err)
+	}
 	return nil
 }
 func StopProgram(playerId, programId string) error {
@@ -797,6 +837,10 @@ func StopProgram(playerId, programId string) error {
 	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStateStop)
+	if err != nil {
+		common.Logger.Errorf("更新展项 [%s] 状态失败: %v", player.ItemID, err)
 	}
 	return nil
 }
