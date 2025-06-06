@@ -63,7 +63,9 @@ func refreshItemStatus(ctx context.Context) {
 }
 
 func doRefreshItemStatus(ctx context.Context) error {
-	items, err := common.DbQuery[model.Ebcp_exhibition_item](ctx, common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "status=1")
+	// 这里只查询status=1的展项,可能会漏掉其他状态的展项
+	// 建议去掉status=1的过滤条件,查询所有展项
+	items, err := common.DbQuery[model.Ebcp_exhibition_item](ctx, common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, "")
 	if err != nil {
 		return fmt.Errorf("获取展项信息失败: %v", err)
 	}
