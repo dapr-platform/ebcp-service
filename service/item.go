@@ -102,7 +102,9 @@ func updateItemStatus(ctx context.Context, item *model.Ebcp_exhibition_item) err
 			}
 		}
 	}
-
+	if item.Status == newStatus {
+		return nil
+	}
 	item.Status = newStatus
 	return common.DbUpsert[model.Ebcp_exhibition_item](ctx, common.GetDaprClient(), *item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
 }
