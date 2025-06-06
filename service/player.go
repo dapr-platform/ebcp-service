@@ -176,11 +176,8 @@ func updatePlayerPrograms() {
 				programs, err := cli.GetProgramList()
 				if err != nil {
 					common.Logger.Errorf("获取播放器 [%s] 节目列表失败: %v", id, err)
-					if client.IsTimeoutError(err) {
-						common.Logger.Warnf("播放器 [%s] 连接超时，标记为错误状态", id)
-						player.Status = PlayerStatusError
-						common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
-					}
+					player.Status = PlayerStatusError
+					common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 					return
 				}
 
