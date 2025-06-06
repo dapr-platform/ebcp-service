@@ -203,6 +203,7 @@ func updatePlayerPrograms() {
 					player.Volume = int32(volume)
 					player.SoundState = int32(muteState)
 				}
+				player.Status = PlayerStatusOnline
 				err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 				if err != nil {
 					common.Logger.Errorf("更新播放器 [%s] 当前播放节目失败: %v", id, err)
