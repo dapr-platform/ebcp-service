@@ -2,9 +2,10 @@ package api
 
 import (
 	"ebcp-service/service"
+	"net/http"
+
 	"github.com/dapr-platform/common"
 	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
 func InitEbcp_exhibition_itemExtRoute(r chi.Router) {
@@ -14,6 +15,40 @@ func InitEbcp_exhibition_itemExtRoute(r chi.Router) {
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-start", BatchStartExhibitionItemHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-pause", BatchPauseExhibitionItemHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-stop", BatchStopExhibitionItemHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/static-control/{id}", StaticControlExhibitionItemHandler)
+}
+
+type StaticControlExhibitionItemRequest struct {
+	DeviceIP   string `json:"device_ip"`
+	DevicePort int32  `json:"device_port"`
+	Command    string `json:"command"`
+}
+
+// @Summary Static control exhibition item
+// @Description Static control an exhibition item by ID
+// @Tags 展项
+// @Param id path string true "Exhibition Item ID"
+// @Param command_request body StaticControlExhibitionItemRequest true "Static Control Exhibition Item Request"
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-exhibition-item/static-control/{id} [post]
+func StaticControlExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	var request StaticControlExhibitionItemRequest
+	err := common.ReadRequestBody(r, &request)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg(err.Error()))
+		return
+	}
+
+	err = service.ControlDeviceCommand(request.DeviceIP, request.DevicePort, request.Command)
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+
+	common.HttpSuccess(w, common.OK)
 }
 
 // @Summary Start exhibition item
@@ -55,6 +90,7 @@ func StopExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	common.HttpSuccess(w, common.OK)
 }
+
 // @Summary Pause exhibition item
 // @Description Pause an exhibition item by ID
 // @Tags 展项
@@ -74,8 +110,6 @@ func PauseExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	common.HttpSuccess(w, common.OK)
 }
-
-
 
 // @Summary Batch start exhibition items
 // @Description Start multiple exhibition items
@@ -159,7 +193,7 @@ func BatchPauseExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
 	if len(ids) == 0 {
 		common.HttpResult(w, common.ErrParam.AppendMsg("no ids provided"))
 		return
-	}	
+	}
 
 	err = service.BatchPauseExhibitionItems(ids)
 	if err != nil {
@@ -169,5 +203,3 @@ func BatchPauseExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	common.HttpSuccess(w, common.OK)
 }
-
-

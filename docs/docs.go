@@ -114,8 +114,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "version",
+                        "name": "version",
                         "in": "query"
                     },
                     {
@@ -128,6 +140,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
                         "in": "query"
                     }
                 ],
@@ -332,6 +350,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -374,8 +399,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "item_id",
-                        "name": "item_id",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "version",
+                        "name": "version",
                         "in": "query"
                     },
                     {
@@ -388,6 +425,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
                         "in": "query"
                     }
                 ],
@@ -403,22 +446,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_control_device"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_control_device"
                                         }
                                     }
                                 }
@@ -877,6 +905,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "room_id",
                         "name": "room_id",
                         "in": "query"
@@ -984,22 +1019,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_area_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_area_info"
                                         }
                                     }
                                 }
@@ -1274,6 +1294,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -1309,22 +1336,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_hall_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_hall_info"
                                         }
                                     }
                                 }
@@ -1460,6 +1472,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -1513,22 +1532,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_hall"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_hall"
                                         }
                                     }
                                 }
@@ -1809,6 +1813,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -1874,22 +1885,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_info"
                                         }
                                     }
                                 }
@@ -1984,6 +1980,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "sub_type",
+                        "name": "sub_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "export_info",
                         "name": "export_info",
                         "in": "query"
@@ -1998,6 +2000,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "device_id",
+                        "name": "device_id",
                         "in": "query"
                     }
                 ],
@@ -2209,14 +2223,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "control_devices",
-                        "name": "control_devices",
+                        "description": "control_device",
+                        "name": "control_device",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "schedules",
                         "name": "schedules",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sub_type",
+                        "name": "sub_type",
                         "in": "query"
                     }
                 ],
@@ -2281,6 +2307,13 @@ const docTemplate = `{
                         "description": "order",
                         "name": "_order",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -2386,14 +2419,26 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "control_devices",
-                        "name": "control_devices",
+                        "description": "control_device",
+                        "name": "control_device",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "schedules",
                         "name": "schedules",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sub_type",
+                        "name": "sub_type",
                         "in": "query"
                     }
                 ],
@@ -2409,22 +2454,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_item_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_item_info"
                                         }
                                     }
                                 }
@@ -2689,6 +2719,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -2743,6 +2780,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "sub_type",
+                        "name": "sub_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "export_info",
                         "name": "export_info",
                         "in": "query"
@@ -2758,6 +2801,18 @@ const docTemplate = `{
                         "description": "remarks",
                         "name": "remarks",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "commands",
+                        "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "device_id",
+                        "name": "device_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2772,22 +2827,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_item"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_item"
                                         }
                                     }
                                 }
@@ -2796,6 +2836,50 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-item/static-control/{id}": {
+            "post": {
+                "description": "Static control an exhibition item by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展项"
+                ],
+                "summary": "Static control exhibition item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exhibition Item ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Static Control Exhibition Item Request",
+                        "name": "command_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.StaticControlExhibitionItemRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
                         }
@@ -3256,6 +3340,12 @@ const docTemplate = `{
                         "description": "items",
                         "name": "items",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "control_devices",
+                        "name": "control_devices",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -3319,6 +3409,13 @@ const docTemplate = `{
                         "description": "order",
                         "name": "_order",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -3421,6 +3518,12 @@ const docTemplate = `{
                         "description": "items",
                         "name": "items",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "control_devices",
+                        "name": "control_devices",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -3435,22 +3538,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_room_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_room_info"
                                         }
                                     }
                                 }
@@ -3586,6 +3674,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -3669,22 +3764,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition_room"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_room"
                                         }
                                     }
                                 }
@@ -3693,6 +3773,43 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-room/static-control": {
+            "post": {
+                "description": "Static control an exhibition room by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展厅"
+                ],
+                "summary": "Static control exhibition room",
+                "parameters": [
+                    {
+                        "description": "Static Control Exhibition Room Request",
+                        "name": "command_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.StaticControlExhibitionRoomRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
                         "schema": {
                             "$ref": "#/definitions/common.Response"
                         }
@@ -3867,6 +3984,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -3944,22 +4068,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_exhibition"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition"
                                         }
                                     }
                                 }
@@ -4551,6 +4660,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -4616,22 +4732,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_item_device_relation"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_item_device_relation"
                                         }
                                     }
                                 }
@@ -4997,6 +5098,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -5086,22 +5194,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_item_schedule"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_item_schedule"
                                         }
                                     }
                                 }
@@ -5573,6 +5666,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -5710,22 +5810,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_player_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_player_info"
                                         }
                                     }
                                 }
@@ -6070,6 +6155,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -6207,22 +6299,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_player_program_info"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_player_program_info"
                                         }
                                     }
                                 }
@@ -6743,6 +6820,13 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "id",
                         "name": "id",
                         "in": "query"
@@ -6844,22 +6928,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/common.Page"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "items": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/model.Ebcp_player"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_player"
                                         }
                                     }
                                 }
@@ -7619,10 +7688,338 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "api.StaticControlExhibitionItemRequest": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "device_ip": {
+                    "type": "string"
+                },
+                "device_port": {
+                    "type": "integer"
+                }
+            }
+        },
+        "api.StaticControlExhibitionRoomRequest": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "device_ip": {
+                    "type": "string"
+                },
+                "device_port": {
+                    "type": "integer"
+                }
+            }
+        },
         "common.Page": {
             "type": "object",
             "properties": {
                 "items": {},
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_control_device": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_control_device"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_area_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_area_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_hall": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_hall"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_hall_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_hall_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_item": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_item"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_item_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_item_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_room": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_room"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_room_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_room_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_item_device_relation": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_item_device_relation"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_item_schedule": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_item_schedule"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_player": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_player"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_player_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_player_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_player_program_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_player_program_info"
+                    }
+                },
                 "page": {
                     "type": "integer"
                 },
@@ -7649,6 +8046,10 @@ const docTemplate = `{
         "model.Ebcp_control_device": {
             "type": "object",
             "properties": {
+                "commands": {
+                    "description": "commands",
+                    "type": "string"
+                },
                 "created_by": {
                     "description": "created_by",
                     "type": "string"
@@ -7665,13 +8066,17 @@ const docTemplate = `{
                     "description": "id",
                     "type": "string"
                 },
-                "item_id": {
-                    "description": "所属展项ID",
+                "ip_address": {
+                    "description": "ip_address",
                     "type": "string"
                 },
                 "name": {
                     "description": "设备名称",
                     "type": "string"
+                },
+                "port": {
+                    "description": "port",
+                    "type": "integer"
                 },
                 "room_id": {
                     "description": "所属展厅ID",
@@ -7687,6 +8092,10 @@ const docTemplate = `{
                 },
                 "updated_time": {
                     "description": "updated_time",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "version",
                     "type": "string"
                 }
             }
@@ -7903,12 +8312,20 @@ const docTemplate = `{
         "model.Ebcp_exhibition_item": {
             "type": "object",
             "properties": {
+                "commands": {
+                    "description": "命令列表,json格式,例如[{\"name\":\"开启\",\"command\":\"FA 01 01\"},{\"name\":\"关闭\",\"command\":\"FA 01 02\"}]",
+                    "type": "string"
+                },
                 "created_by": {
                     "description": "created_by",
                     "type": "string"
                 },
                 "created_time": {
                     "description": "created_time",
+                    "type": "string"
+                },
+                "device_id": {
+                    "description": "中控设备ID",
                     "type": "string"
                 },
                 "exhibition_id": {
@@ -7939,6 +8356,10 @@ const docTemplate = `{
                     "description": "状态（0: 启动, 1: 暂停, 2: 停止）",
                     "type": "integer"
                 },
+                "sub_type": {
+                    "description": "展项子类型（static时需要,分为power,light）",
+                    "type": "string"
+                },
                 "type": {
                     "description": "展项类型（media、static）",
                     "type": "string"
@@ -7956,8 +8377,12 @@ const docTemplate = `{
         "model.Ebcp_exhibition_item_info": {
             "type": "object",
             "properties": {
-                "control_devices": {
-                    "description": "关联的中控设备列表（JSON格式）"
+                "commands": {
+                    "description": "commands",
+                    "type": "string"
+                },
+                "control_device": {
+                    "description": "关联的中控设备信息（JSON格式）"
                 },
                 "exhibition_id": {
                     "description": "所属展览ID",
@@ -8025,6 +8450,10 @@ const docTemplate = `{
                     "description": "展项状态",
                     "type": "integer"
                 },
+                "sub_type": {
+                    "description": "sub_type",
+                    "type": "string"
+                },
                 "type": {
                     "description": "展项类型",
                     "type": "string"
@@ -8087,6 +8516,9 @@ const docTemplate = `{
         "model.Ebcp_exhibition_room_info": {
             "type": "object",
             "properties": {
+                "control_devices": {
+                    "description": "展厅内的中控设备列表（JSON格式）"
+                },
                 "exhibition_end_time": {
                     "description": "所属展览结束时间",
                     "type": "string"

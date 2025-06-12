@@ -27,14 +27,17 @@ Table: o_ebcp_exhibition_item
 [ 6] exhibition_id                                  VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 7] room_id                                        VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 8] type                                           VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 9] export_info                                    TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[11] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 9] sub_type                                       VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[10] export_info                                    TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[11] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[12] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[14] device_id                                      VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "qDpexPFmkqkObYTSkOuVGhiSO",    "created_by": "NvOmMcdCItVEfJjbRbtTpKWWw",    "created_time": 14,    "updated_by": "BWpmjTyUbiMBokxKwNCxIwWrw",    "updated_time": 81,    "name": "hclkYWAnCuxkDoXNgwdYvlPRh",    "exhibition_id": "rhnXRaInSBWUHDAuZFcehbZQT",    "room_id": "ZAhoMPYxBoKQTeGiSrqOcMvGq",    "type": "RlpbAXRAtJCIEbwXNIXTOGNPw",    "export_info": "GfRQeZNGlNnQHcdgxbcVpQQsI",    "status": 88,    "remarks": "RGEHjUqKIjgYftpAWBBpRjuan"}
+{    "id": "BIVJExXToRxHJkWTyoHDPgQjC",    "created_by": "WVBShQEJSMhBhGZkytVDJxKnT",    "created_time": 69,    "updated_by": "FwbQlIVfqxLZDpuaXcGlUuPKW",    "updated_time": 64,    "name": "SVyXsuVWjSGUBjHZTyEvnXMcp",    "exhibition_id": "bZchVRTKDZVTNVXLCOFRLSGrT",    "room_id": "tmZgGsUQtbQHLsKuqQgMeEidY",    "type": "JPUAQYoupxpYvLnfjbiXAdOgi",    "sub_type": "hTwMqiAurAqFLNStdxecgTBbC",    "export_info": "AachsnpkopljErMyRamQvEGHc",    "status": 87,    "remarks": "kYJMxNCjOfLryCpnrlSloSqxF",    "commands": "TFWcoLjDkiRFpqPWWQyRAEuAv",    "device_id": "KYUrIOPedEAFZvEbHMXxFBDPt"}
 
 
 
@@ -59,11 +62,17 @@ var (
 
 	Ebcp_exhibition_item_FIELD_NAME_type = "type"
 
+	Ebcp_exhibition_item_FIELD_NAME_sub_type = "sub_type"
+
 	Ebcp_exhibition_item_FIELD_NAME_export_info = "export_info"
 
 	Ebcp_exhibition_item_FIELD_NAME_status = "status"
 
 	Ebcp_exhibition_item_FIELD_NAME_remarks = "remarks"
+
+	Ebcp_exhibition_item_FIELD_NAME_commands = "commands"
+
+	Ebcp_exhibition_item_FIELD_NAME_device_id = "device_id"
 )
 
 // Ebcp_exhibition_item struct is a row record of the o_ebcp_exhibition_item table in the  database
@@ -86,11 +95,17 @@ type Ebcp_exhibition_item struct {
 
 	Type string `json:"type"` //展项类型（media、static）
 
+	SubType string `json:"sub_type"` //展项子类型（static时需要,分为power,light）
+
 	ExportInfo string `json:"export_info"` //输出信息
 
 	Status int32 `json:"status"` //状态（0: 启动, 1: 暂停, 2: 停止）
 
 	Remarks string `json:"remarks"` //备注
+
+	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]
+
+	DeviceID string `json:"device_id"` //中控设备ID
 
 }
 
@@ -289,6 +304,27 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              9,
+			Name:               "sub_type",
+			Comment:            `展项子类型（static时需要,分为power,light）`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(50)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       50,
+			GoFieldName:        "SubType",
+			GoFieldType:        "string",
+			JSONFieldName:      "sub_type",
+			ProtobufFieldName:  "sub_type",
+			ProtobufType:       "string",
+			ProtobufPos:        10,
+		},
+
+		&ColumnInfo{
+			Index:              10,
 			Name:               "export_info",
 			Comment:            `输出信息`,
 			Notes:              ``,
@@ -305,11 +341,11 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			JSONFieldName:      "export_info",
 			ProtobufFieldName:  "export_info",
 			ProtobufType:       "string",
-			ProtobufPos:        10,
+			ProtobufPos:        11,
 		},
 
 		&ColumnInfo{
-			Index:              10,
+			Index:              11,
 			Name:               "status",
 			Comment:            `状态（0: 启动, 1: 暂停, 2: 停止）`,
 			Notes:              ``,
@@ -326,11 +362,11 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        11,
+			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
-			Index:              11,
+			Index:              12,
 			Name:               "remarks",
 			Comment:            `备注`,
 			Notes:              ``,
@@ -347,7 +383,49 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			JSONFieldName:      "remarks",
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
-			ProtobufPos:        12,
+			ProtobufPos:        13,
+		},
+
+		&ColumnInfo{
+			Index:              13,
+			Name:               "commands",
+			Comment:            `命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
+			GoFieldName:        "Commands",
+			GoFieldType:        "string",
+			JSONFieldName:      "commands",
+			ProtobufFieldName:  "commands",
+			ProtobufType:       "string",
+			ProtobufPos:        14,
+		},
+
+		&ColumnInfo{
+			Index:              14,
+			Name:               "device_id",
+			Comment:            `中控设备ID`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "DeviceID",
+			GoFieldType:        "string",
+			JSONFieldName:      "device_id",
+			ProtobufFieldName:  "device_id",
+			ProtobufType:       "string",
+			ProtobufPos:        15,
 		},
 	},
 }

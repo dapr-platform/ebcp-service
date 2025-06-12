@@ -24,6 +24,7 @@ func InitEbcp_player_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param id query string false "id"
 // @Param name query string false "name"
 // @Param ip_address query string false "ip_address"
@@ -46,7 +47,7 @@ func InitEbcp_player_infoRoute(r chi.Router) {
 // @Param exhibition_name query string false "exhibition_name"
 // @Param programs query string false "programs"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_player_info}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_player_info]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-player-info/page [get]
 func Ebcp_player_infoPageListHandler(w http.ResponseWriter, r *http.Request) {

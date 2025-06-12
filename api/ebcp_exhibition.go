@@ -99,6 +99,7 @@ func batchUpsertEbcp_exhibitionHandler(w http.ResponseWriter, r *http.Request) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param id query string false "id"
 // @Param created_by query string false "created_by"
 // @Param created_time query string false "created_time"
@@ -111,7 +112,7 @@ func batchUpsertEbcp_exhibitionHandler(w http.ResponseWriter, r *http.Request) {
 // @Param hall_id query string false "hall_id"
 // @Param status query string false "status"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition/page [get]
 func Ebcp_exhibitionPageListHandler(w http.ResponseWriter, r *http.Request) {

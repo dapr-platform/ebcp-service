@@ -91,6 +91,7 @@ func batchUpsertEbcp_item_scheduleHandler(w http.ResponseWriter, r *http.Request
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param id query string false "id"
 // @Param created_by query string false "created_by"
 // @Param created_time query string false "created_time"
@@ -105,7 +106,7 @@ func batchUpsertEbcp_item_scheduleHandler(w http.ResponseWriter, r *http.Request
 // @Param action_type query string false "action_type"
 // @Param enabled query string false "enabled"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_item_schedule}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_item_schedule]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-item-schedule/page [get]
 func Ebcp_item_schedulePageListHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,221 @@
 basePath: /swagger/ebcp-service
 definitions:
+  api.StaticControlExhibitionItemRequest:
+    properties:
+      command:
+        type: string
+      device_ip:
+        type: string
+      device_port:
+        type: integer
+    type: object
+  api.StaticControlExhibitionRoomRequest:
+    properties:
+      command:
+        type: string
+      device_ip:
+        type: string
+      device_port:
+        type: integer
+    type: object
   common.Page:
     properties:
       items: {}
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_control_device:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_control_device'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_area_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_area_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_hall:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_hall'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_hall_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_hall_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_item:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_item'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_item_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_item_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_room:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_room'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_room_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_room_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_item_device_relation:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_item_device_relation'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_item_schedule:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_item_schedule'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_player:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_player'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_player_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_player_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_player_program_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_player_program_info'
+        type: array
       page:
         type: integer
       page_size:
@@ -20,6 +233,9 @@ definitions:
     type: object
   model.Ebcp_control_device:
     properties:
+      commands:
+        description: commands
+        type: string
       created_by:
         description: created_by
         type: string
@@ -32,12 +248,15 @@ definitions:
       id:
         description: id
         type: string
-      item_id:
-        description: 所属展项ID
+      ip_address:
+        description: ip_address
         type: string
       name:
         description: 设备名称
         type: string
+      port:
+        description: port
+        type: integer
       room_id:
         description: 所属展厅ID
         type: string
@@ -49,6 +268,9 @@ definitions:
         type: string
       updated_time:
         description: updated_time
+        type: string
+      version:
+        description: version
         type: string
     type: object
   model.Ebcp_exhibition:
@@ -205,11 +427,18 @@ definitions:
     type: object
   model.Ebcp_exhibition_item:
     properties:
+      commands:
+        description: 命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA
+          01 02"}]
+        type: string
       created_by:
         description: created_by
         type: string
       created_time:
         description: created_time
+        type: string
+      device_id:
+        description: 中控设备ID
         type: string
       exhibition_id:
         description: 所属展览ID
@@ -232,6 +461,9 @@ definitions:
       status:
         description: '状态（0: 启动, 1: 暂停, 2: 停止）'
         type: integer
+      sub_type:
+        description: 展项子类型（static时需要,分为power,light）
+        type: string
       type:
         description: 展项类型（media、static）
         type: string
@@ -244,8 +476,11 @@ definitions:
     type: object
   model.Ebcp_exhibition_item_info:
     properties:
-      control_devices:
-        description: 关联的中控设备列表（JSON格式）
+      commands:
+        description: commands
+        type: string
+      control_device:
+        description: 关联的中控设备信息（JSON格式）
       exhibition_id:
         description: 所属展览ID
         type: string
@@ -295,6 +530,9 @@ definitions:
       status:
         description: 展项状态
         type: integer
+      sub_type:
+        description: sub_type
+        type: string
       type:
         description: 展项类型
         type: string
@@ -340,6 +578,8 @@ definitions:
     type: object
   model.Ebcp_exhibition_room_info:
     properties:
+      control_devices:
+        description: 展厅内的中控设备列表（JSON格式）
       exhibition_end_time:
         description: 所属展览结束时间
         type: string
@@ -807,9 +1047,17 @@ paths:
         in: query
         name: device_type
         type: string
-      - description: item_id
+      - description: ip_address
         in: query
-        name: item_id
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
+      - description: version
+        in: query
+        name: version
         type: string
       - description: room_id
         in: query
@@ -818,6 +1066,10 @@ paths:
       - description: status
         in: query
         name: status
+        type: string
+      - description: commands
+        in: query
+        name: commands
         type: string
       produces:
       - application/json
@@ -974,6 +1226,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -1002,9 +1259,17 @@ paths:
         in: query
         name: device_type
         type: string
-      - description: item_id
+      - description: ip_address
         in: query
-        name: item_id
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
+      - description: version
+        in: query
+        name: version
         type: string
       - description: room_id
         in: query
@@ -1013,6 +1278,10 @@ paths:
       - description: status
         in: query
         name: status
+        type: string
+      - description: commands
+        in: query
+        name: commands
         type: string
       produces:
       - application/json
@@ -1024,14 +1293,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_control_device'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_control_device'
               type: object
         "500":
           description: Internal Server Error
@@ -1287,6 +1549,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: room_id
         in: query
         name: room_id
@@ -1361,14 +1628,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_area_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_area_info'
               type: object
         "500":
           description: Internal Server Error
@@ -1536,6 +1796,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -1562,14 +1827,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_hall_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_hall_info'
               type: object
         "500":
           description: Internal Server Error
@@ -1682,6 +1940,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -1720,14 +1983,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_hall'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_hall'
               type: object
         "500":
           description: Internal Server Error
@@ -1874,6 +2130,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -1920,14 +2181,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_info'
               type: object
         "500":
           description: Internal Server Error
@@ -1984,6 +2238,10 @@ paths:
         in: query
         name: type
         type: string
+      - description: sub_type
+        in: query
+        name: sub_type
+        type: string
       - description: export_info
         in: query
         name: export_info
@@ -1995,6 +2253,14 @@ paths:
       - description: remarks
         in: query
         name: remarks
+        type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: device_id
+        in: query
+        name: device_id
         type: string
       produces:
       - application/json
@@ -2127,13 +2393,21 @@ paths:
         in: query
         name: player_devices
         type: string
-      - description: control_devices
+      - description: control_device
         in: query
-        name: control_devices
+        name: control_device
         type: string
       - description: schedules
         in: query
         name: schedules
+        type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: sub_type
+        in: query
+        name: sub_type
         type: string
       produces:
       - application/json
@@ -2174,6 +2448,11 @@ paths:
       - description: order
         in: query
         name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
         type: string
       - description: id
         in: query
@@ -2243,13 +2522,21 @@ paths:
         in: query
         name: player_devices
         type: string
-      - description: control_devices
+      - description: control_device
         in: query
-        name: control_devices
+        name: control_device
         type: string
       - description: schedules
         in: query
         name: schedules
+        type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: sub_type
+        in: query
+        name: sub_type
         type: string
       produces:
       - application/json
@@ -2261,14 +2548,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_item_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_item_info'
               type: object
         "500":
           description: Internal Server Error
@@ -2534,6 +2814,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -2570,6 +2855,10 @@ paths:
         in: query
         name: type
         type: string
+      - description: sub_type
+        in: query
+        name: sub_type
+        type: string
       - description: export_info
         in: query
         name: export_info
@@ -2582,6 +2871,14 @@ paths:
         in: query
         name: remarks
         type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: device_id
+        in: query
+        name: device_id
+        type: string
       produces:
       - application/json
       responses:
@@ -2592,20 +2889,42 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_item'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_item'
               type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.Response'
       summary: page query
+      tags:
+      - 展项
+  /ebcp-exhibition-item/static-control/{id}:
+    post:
+      description: Static control an exhibition item by ID
+      parameters:
+      - description: Exhibition Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Static Control Exhibition Item Request
+        in: body
+        name: command_request
+        required: true
+        schema:
+          $ref: '#/definitions/api.StaticControlExhibitionItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Static control exhibition item
       tags:
       - 展项
   /ebcp-exhibition-room:
@@ -2799,6 +3118,10 @@ paths:
         in: query
         name: items
         type: string
+      - description: control_devices
+        in: query
+        name: control_devices
+        type: string
       produces:
       - application/json
       responses:
@@ -2838,6 +3161,11 @@ paths:
       - description: order
         in: query
         name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
         type: string
       - description: id
         in: query
@@ -2907,6 +3235,10 @@ paths:
         in: query
         name: items
         type: string
+      - description: control_devices
+        in: query
+        name: control_devices
+        type: string
       produces:
       - application/json
       responses:
@@ -2917,14 +3249,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_room_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_room_info'
               type: object
         "500":
           description: Internal Server Error
@@ -3037,6 +3362,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -3095,20 +3425,37 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition_room'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_room'
               type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.Response'
       summary: page query
+      tags:
+      - 展厅
+  /ebcp-exhibition-room/static-control:
+    post:
+      description: Static control an exhibition room by ID
+      parameters:
+      - description: Static Control Exhibition Room Request
+        in: body
+        name: command_request
+        required: true
+        schema:
+          $ref: '#/definitions/api.StaticControlExhibitionRoomRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Static control exhibition room
       tags:
       - 展厅
   /ebcp-exhibition/{id}:
@@ -3215,6 +3562,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -3269,14 +3621,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_exhibition'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition'
               type: object
         "500":
           description: Internal Server Error
@@ -3646,6 +3991,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -3692,14 +4042,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_item_device_relation'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_item_device_relation'
               type: object
         "500":
           description: Internal Server Error
@@ -3927,6 +4270,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -3989,14 +4337,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_item_schedule'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_item_schedule'
               type: object
         "500":
           description: Internal Server Error
@@ -4264,6 +4605,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -4358,14 +4704,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_player_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_player_info'
               type: object
         "500":
           description: Internal Server Error
@@ -4583,6 +4922,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -4677,14 +5021,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_player_program_info'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_player_program_info'
               type: object
         "500":
           description: Internal Server Error
@@ -5475,6 +5812,11 @@ paths:
         in: query
         name: _order
         type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
       - description: id
         in: query
         name: id
@@ -5545,14 +5887,7 @@ paths:
             - $ref: '#/definitions/common.Response'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.Page'
-                  - properties:
-                      items:
-                        items:
-                          $ref: '#/definitions/model.Ebcp_player'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_player'
               type: object
         "500":
           description: Internal Server Error

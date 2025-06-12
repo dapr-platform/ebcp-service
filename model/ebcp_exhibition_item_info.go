@@ -35,13 +35,15 @@ Table: v_ebcp_exhibition_item_info
 [14] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [15] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [16] player_devices                                 JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
-[17] control_devices                                JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[17] control_device                                 JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 [18] schedules                                      JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[19] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[20] sub_type                                       VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "WwTTKjgQwJpSQNMJuhPmPNsGF",    "name": "dfVRufqesAEJWQisQxWGmgjtH",    "type": "GpncPNEUkhOAQJxKFZKeRWqKK",    "status": 6,    "remarks": "HeNfdQAgviZuMuPmxTYLWtDpm",    "export_info": "vyQeZwQFfwXEgdAXNfCgdbLpF",    "room_id": "oTkXOqNsRWQrbLmjEwqCVUmBA",    "room_name": "rErPMbYlRbFjkKOiEVxphKwjN",    "room_floor": "YrdcjuxpKlgYbrbjfLysNMFRe",    "room_floor_value": "qaLhTrKtHeFfpoKGBfTEfUbte",    "room_floor_name": "thgFEpXoHKVndrOTxbIpwgvVL",    "room_location": "ZFHuBGDhTWIJGDomfmXoVvjuD",    "room_location_value": "JgJDOaJlQNIqYXIwpgpvpmCCE",    "room_location_name": "MnPgRroqkAXXByiQoFHjXPCak",    "exhibition_id": "QYWXuejOrpAIrZpVytXwuXLcV",    "exhibition_name": "skeJSsnxvoVUpgZEOAjqjETvo",    "player_devices": 78,    "control_devices": 30,    "schedules": 26}
+{    "id": "MganjQtTVmYDcDrFBYgWyfUNN",    "name": "CwPMIoByYxAyRyreMacXwXhSV",    "type": "VFyVfQjLnUfHbCFgnafdoIZPu",    "status": 82,    "remarks": "GpsHdNNJGtxYopoAgERNylFoB",    "export_info": "GLwpytZUZBWhwaBLkqVuasjga",    "room_id": "epTxQPOAahZQGGuOdryLhIBer",    "room_name": "eBlOliMLPQYZZUJuLVukxNaeH",    "room_floor": "LTmiHkihYITWcaNJYbNrlBOAw",    "room_floor_value": "qspBWPGrGTAmCVbSGIKSpXJXU",    "room_floor_name": "vqhVVkaJCovimdkQgwFByqvWy",    "room_location": "wNNqVljqdVwLxXuKeMMqboBva",    "room_location_value": "qyleJksPFcgRbRQGkQIHkrukI",    "room_location_name": "KueKqmcoCETYyHEafqHFPxLyx",    "exhibition_id": "PLiwirKLjqIXgKTmLypAfDHGH",    "exhibition_name": "oQpbseUUCpLvRnFkkNciEtIJO",    "player_devices": 64,    "control_device": 8,    "schedules": 31,    "commands": "htFVZDIMWeHJqlrDmEqbrGqAH",    "sub_type": "rgwbNspjZBNMsEyGWkOujsNix"}
 
 
 Comments
@@ -89,9 +91,13 @@ var (
 
 	Ebcp_exhibition_item_info_FIELD_NAME_player_devices = "player_devices"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_control_devices = "control_devices"
+	Ebcp_exhibition_item_info_FIELD_NAME_control_device = "control_device"
 
 	Ebcp_exhibition_item_info_FIELD_NAME_schedules = "schedules"
+
+	Ebcp_exhibition_item_info_FIELD_NAME_commands = "commands"
+
+	Ebcp_exhibition_item_info_FIELD_NAME_sub_type = "sub_type"
 )
 
 // Ebcp_exhibition_item_info struct is a row record of the v_ebcp_exhibition_item_info table in the  database
@@ -130,9 +136,13 @@ type Ebcp_exhibition_item_info struct {
 
 	PlayerDevices any `json:"player_devices"` //关联的播放设备列表（JSON格式）
 
-	ControlDevices any `json:"control_devices"` //关联的中控设备列表（JSON格式）
+	ControlDevice any `json:"control_device"` //关联的中控设备信息（JSON格式）
 
 	Schedules any `json:"schedules"` //关联的定时任务信息（JSON格式）
+
+	Commands string `json:"commands"` //commands
+
+	SubType string `json:"sub_type"` //sub_type
 
 }
 
@@ -501,8 +511,8 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 
 		&ColumnInfo{
 			Index:              17,
-			Name:               "control_devices",
-			Comment:            `关联的中控设备列表（JSON格式）`,
+			Name:               "control_device",
+			Comment:            `关联的中控设备信息（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -512,10 +522,10 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 			IsArray:            false,
 			ColumnType:         "JSON",
 			ColumnLength:       -1,
-			GoFieldName:        "ControlDevices",
+			GoFieldName:        "ControlDevice",
 			GoFieldType:        "any",
-			JSONFieldName:      "control_devices",
-			ProtobufFieldName:  "control_devices",
+			JSONFieldName:      "control_device",
+			ProtobufFieldName:  "control_device",
 			ProtobufType:       "string",
 			ProtobufPos:        18,
 		},
@@ -539,6 +549,48 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 			ProtobufFieldName:  "schedules",
 			ProtobufType:       "string",
 			ProtobufPos:        19,
+		},
+
+		&ColumnInfo{
+			Index:              19,
+			Name:               "commands",
+			Comment:            `commands`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
+			GoFieldName:        "Commands",
+			GoFieldType:        "string",
+			JSONFieldName:      "commands",
+			ProtobufFieldName:  "commands",
+			ProtobufType:       "string",
+			ProtobufPos:        20,
+		},
+
+		&ColumnInfo{
+			Index:              20,
+			Name:               "sub_type",
+			Comment:            `sub_type`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(50)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       50,
+			GoFieldName:        "SubType",
+			GoFieldType:        "string",
+			JSONFieldName:      "sub_type",
+			ProtobufFieldName:  "sub_type",
+			ProtobufType:       "string",
+			ProtobufPos:        21,
 		},
 	},
 }

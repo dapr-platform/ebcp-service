@@ -24,6 +24,7 @@ func InitEbcp_exhibition_area_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param room_id query string false "room_id"
 // @Param room_name query string false "room_name"
 // @Param room_floor query string false "room_floor"
@@ -41,7 +42,7 @@ func InitEbcp_exhibition_area_infoRoute(r chi.Router) {
 // @Param exhibition_status query string false "exhibition_status"
 // @Param items query string false "items"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_area_info}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_area_info]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-area-info/page [get]
 func Ebcp_exhibition_area_infoPageListHandler(w http.ResponseWriter, r *http.Request) {

@@ -35,11 +35,12 @@ Table: v_ebcp_exhibition_room_info
 [14] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [15] item_count                                     INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
 [16] items                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[17] control_devices                                JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "WoVXHihvBApOuJdGDVxfjBmWu",    "name": "vKsIvVoCBccWSBFNQmlroDHDS",    "floor": "jdEtjdVBblPlWihqJIyLCHCLf",    "floor_value": "rJbvNaxlJUvkOwqKOuQLpUknv",    "floor_name": "BCvsNZaGyTFAIMENKBPNVNVMT",    "location": "LMxKofZwRtwhGVkNnSgjiwVaG",    "location_value": "DgWfhymrsJFyWBsMibALrXXDu",    "location_name": "kaEAClhNDpPvUehEOUvaZbREN",    "status": 65,    "remarks": "KgJobCPOXbpctQIglvPdAMHWB",    "exhibition_id": "TevJfXcJaaJDGmMdAAaxjyuUI",    "exhibition_name": "PxtepZVboYTjbXfZHHyLbjCxC",    "exhibition_start_time": 99,    "exhibition_end_time": 76,    "exhibition_status": 26,    "item_count": 41,    "items": 61}
+{    "id": "hIPdTbFmfgPALUbxiBUquoqKY",    "name": "lqbWjjVpstXZJDtRFEuxcqQnW",    "floor": "WwGcJifIwihmbInJoHQLZIDld",    "floor_value": "avACfDGiplPMNjiyqPRqWcUuV",    "floor_name": "utXnsBPDaVNvkDwcFuqcAgcMx",    "location": "TxPODXRwhNhppQOSUWcIXqHBP",    "location_value": "LRINxPuUNoxolgqVlAWubdNHu",    "location_name": "VnqqkeZtVBIMueFYSclOuUnLd",    "status": 26,    "remarks": "kGAtHfUuAsZmoNoVrWbpdLrNb",    "exhibition_id": "nhjbmFpjEXeKhZwvSmSpsMZeI",    "exhibition_name": "wtTixqnsFDeYjptwPQgYiWRmZ",    "exhibition_start_time": 88,    "exhibition_end_time": 59,    "exhibition_status": 32,    "item_count": 28,    "items": 7,    "control_devices": 95}
 
 
 Comments
@@ -86,6 +87,8 @@ var (
 	Ebcp_exhibition_room_info_FIELD_NAME_item_count = "item_count"
 
 	Ebcp_exhibition_room_info_FIELD_NAME_items = "items"
+
+	Ebcp_exhibition_room_info_FIELD_NAME_control_devices = "control_devices"
 )
 
 // Ebcp_exhibition_room_info struct is a row record of the v_ebcp_exhibition_room_info table in the  database
@@ -123,6 +126,8 @@ type Ebcp_exhibition_room_info struct {
 	ItemCount int32 `json:"item_count"` //展厅内展项数量
 
 	Items any `json:"items"` //展厅内的展项列表（JSON格式）
+
+	ControlDevices any `json:"control_devices"` //展厅内的中控设备列表（JSON格式）
 
 }
 
@@ -487,6 +492,27 @@ Warning table: v_ebcp_exhibition_room_info primary key column id is nullable col
 			ProtobufFieldName:  "items",
 			ProtobufType:       "string",
 			ProtobufPos:        17,
+		},
+
+		&ColumnInfo{
+			Index:              17,
+			Name:               "control_devices",
+			Comment:            `展厅内的中控设备列表（JSON格式）`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "JSON",
+			DatabaseTypePretty: "JSON",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "JSON",
+			ColumnLength:       -1,
+			GoFieldName:        "ControlDevices",
+			GoFieldType:        "any",
+			JSONFieldName:      "control_devices",
+			ProtobufFieldName:  "control_devices",
+			ProtobufType:       "string",
+			ProtobufPos:        18,
 		},
 	},
 }

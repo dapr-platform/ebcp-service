@@ -24,6 +24,7 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param id query string false "id"
 // @Param name query string false "name"
 // @Param type query string false "type"
@@ -41,10 +42,12 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 // @Param exhibition_id query string false "exhibition_id"
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"
-// @Param control_devices query string false "control_devices"
+// @Param control_device query string false "control_device"
 // @Param schedules query string false "schedules"
+// @Param commands query string false "commands"
+// @Param sub_type query string false "sub_type"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_item_info}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_item_info]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-item-info/page [get]
 func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Request) {
@@ -81,8 +84,10 @@ func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param exhibition_id query string false "exhibition_id"
 // @Param exhibition_name query string false "exhibition_name"
 // @Param player_devices query string false "player_devices"
-// @Param control_devices query string false "control_devices"
+// @Param control_device query string false "control_device"
 // @Param schedules query string false "schedules"
+// @Param commands query string false "commands"
+// @Param sub_type query string false "sub_type"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_item_info} "objects array"
 // @Failure 500 {object} common.Response ""

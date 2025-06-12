@@ -91,6 +91,7 @@ func batchUpsertEbcp_exhibition_itemHandler(w http.ResponseWriter, r *http.Reque
 // @Param _page query int true "current page"
 // @Param _page_size query int true "page size"
 // @Param _order query string false "order"
+// @Param _select query string true "_select"
 // @Param id query string false "id"
 // @Param created_by query string false "created_by"
 // @Param created_time query string false "created_time"
@@ -100,11 +101,14 @@ func batchUpsertEbcp_exhibition_itemHandler(w http.ResponseWriter, r *http.Reque
 // @Param exhibition_id query string false "exhibition_id"
 // @Param room_id query string false "room_id"
 // @Param type query string false "type"
+// @Param sub_type query string false "sub_type"
 // @Param export_info query string false "export_info"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
+// @Param commands query string false "commands"
+// @Param device_id query string false "device_id"
 // @Produce  json
-// @Success 200 {object} common.Response{data=common.Page{items=[]model.Ebcp_exhibition_item}} "objects array"
+// @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_item]} "objects array"
 // @Failure 500 {object} common.Response ""
 // @Router /ebcp-exhibition-item/page [get]
 func Ebcp_exhibition_itemPageListHandler(w http.ResponseWriter, r *http.Request) {
@@ -133,9 +137,12 @@ func Ebcp_exhibition_itemPageListHandler(w http.ResponseWriter, r *http.Request)
 // @Param exhibition_id query string false "exhibition_id"
 // @Param room_id query string false "room_id"
 // @Param type query string false "type"
+// @Param sub_type query string false "sub_type"
 // @Param export_info query string false "export_info"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
+// @Param commands query string false "commands"
+// @Param device_id query string false "device_id"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_item} "objects array"
 // @Failure 500 {object} common.Response ""

@@ -21,7 +21,8 @@ INSERT INTO o_ops_dict (
     (md5('location_typeNORTHWEST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '西北侧', 'NORTHWEST', 3, NULL),
     (md5('location_typeNORTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '东北侧', 'NORTHEAST', 4, NULL),
     (md5('location_typeNORTH'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '北侧', 'NORTH', 5, NULL),
-    (md5('location_typeSOUTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '东南侧', 'SOUTHEAST', 6, NULL);
+    (md5('location_typeSOUTHEAST'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '东南侧', 'SOUTHEAST', 6, NULL),
+    (md5('location_typeCENTER'), 'admin', NOW(), 'admin', NOW(), 'location_type', '位置', '中心', 'CENTER', 7, NULL);
 
 -- 初始化展馆数据
 INSERT INTO o_ebcp_exhibition_hall (
@@ -63,8 +64,10 @@ INSERT INTO o_ebcp_exhibition (
     '抗美援朝战争馆', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
     
     (md5('新民主主义革命时期陈列'), 'admin', NOW(), 'admin', NOW(), 
-    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1);
-
+    '新民主主义革命时期陈列', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1),
+  
+    (md5('IOC大屏监控'), 'admin', NOW(), 'admin', NOW(), 
+    'IOC大屏监控', NOW(), NOW() + INTERVAL '10 year', NULL, md5('中国人民革命军事博物馆'), 1);
 -- 初始化展厅数据
 INSERT INTO o_ebcp_exhibition_room (
     id, created_by, created_time, updated_by, updated_time,
@@ -82,6 +85,13 @@ INSERT INTO o_ebcp_exhibition_room (
     (md5('2F北侧'), 'admin', NOW(), 'admin', NOW(), '2F北侧', md5('location_typeNORTH'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('核武器与核技术和平利用厅'), 1, '核武器与核技术和平利用厅'),
     (md5('2F东北侧'), 'admin', NOW(), 'admin', NOW(), '2F东北侧', md5('location_typeNORTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type2F'), md5('海军武器装备技术厅'), 1, '海军武器装备技术厅'),
     (md5('3F东南侧'), 'admin', NOW(), 'admin', NOW(), '3F东南侧', md5('location_typeSOUTHEAST'), md5('中国人民革命军事博物馆'), md5('floor_type3F'), md5('抗美援朝战争馆'), 1, '抗美援朝战争馆');
+  
+  --静态展项展厅
+  insert into o_ebcp_exhibition_room (
+    id, created_by, created_time, updated_by, updated_time,
+    name, location, exhibition_hall_id, floor, exhibition_id, status, remarks
+) VALUES
+    (md5('IOC一层监控厅'), 'admin', NOW(), 'admin', NOW(), 'IOC一层监控厅', md5('location_typeCENTER'), md5('中国人民革命军事博物馆'), md5('floor_type1F'), md5('IOC大屏监控'), 1, 'IOC大屏监控');
 
 -- 初始化展项数据
 INSERT INTO o_ebcp_exhibition_item (
@@ -166,6 +176,67 @@ INSERT INTO o_ebcp_exhibition_item (
     (md5('抗美援朝地图展示'), 'admin', NOW(), 'admin', NOW(), '抗美援朝地图展示', 
     md5('抗美援朝战争馆'), md5('3F东南侧'), 'media', 1, 'PC工作站+播控软件', 'LED大屏');
 
+insert into o_ebcp_exhibition_item (
+    id, created_by, created_time, updated_by, updated_time,
+    name, exhibition_id, room_id, type, sub_type,status, commands,device_id
+) values
+    (md5('分布式电源'), 'admin', NOW(), 'admin', NOW(), '分布式电源', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'power', 1, '[{"name":"开启","command":"FB 01 01"},{"name":"关闭","command":"FB 01 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('方图设备电源'), 'admin', NOW(), 'admin', NOW(), '方图设备电源', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'power', 1, '[{"name":"开启","command":"FB 02 01"},{"name":"关闭","command":"FB 02 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('音频电源'), 'admin', NOW(), 'admin', NOW(), '音频电源', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'power', 1, '[{"name":"开启","command":"FB 03 01"},{"name":"关闭","command":"FB 03 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('东侧筒灯'), 'admin', NOW(), 'admin', NOW(), '东侧筒灯', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 01 01"},{"name":"关闭","command":"FC 01 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('南侧筒灯1'), 'admin', NOW(), 'admin', NOW(), '南侧筒灯1', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 02 01"},{"name":"关闭","command":"FC 02 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('南侧筒灯2'), 'admin', NOW(), 'admin', NOW(), '南侧筒灯2', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 03 01"},{"name":"关闭","command":"FC 03 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('天花灯带'), 'admin', NOW(), 'admin', NOW(), '天花灯带', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 04 01"},{"name":"关闭","command":"FC 04 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('天花筒灯'), 'admin', NOW(), 'admin', NOW(), '天花筒灯', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 05 01"},{"name":"关闭","command":"FC 05 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('两侧筒灯'), 'admin', NOW(), 'admin', NOW(), '两侧筒灯', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 06 01"},{"name":"关闭","command":"FC 06 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯1'), 'admin', NOW(), 'admin', NOW(), '软膜灯1', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 07 01"},{"name":"关闭","command":"FC 07 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯2'), 'admin', NOW(), 'admin', NOW(), '软膜灯2', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FC 08 01"},{"name":"关闭","command":"FC 08 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯3'), 'admin', NOW(), 'admin', NOW(), '软膜灯3', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 01 01"},{"name":"关闭","command":"FD 01 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯4'), 'admin', NOW(), 'admin', NOW(), '软膜灯4', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 02 01"},{"name":"关闭","command":"FD 02 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯5'), 'admin', NOW(), 'admin', NOW(), '软膜灯5', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 03 01"},{"name":"关闭","command":"FD 03 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯6'), 'admin', NOW(), 'admin', NOW(), '软膜灯6', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 04 01"},{"name":"关闭","command":"FD 04 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('软膜灯7'), 'admin', NOW(), 'admin', NOW(), '软膜灯7', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 05 01"},{"name":"关闭","command":"FD 05 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('五角星'), 'admin', NOW(), 'admin', NOW(), '五角星', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 06 01"},{"name":"关闭","command":"FD 06 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('地台灯带'), 'admin', NOW(), 'admin', NOW(), '地台灯带', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 07 01"},{"name":"关闭","command":"FD 07 02"}]',md5('IOC一层监控厅中控设备')),
+    
+    (md5('大屏灯带'), 'admin', NOW(), 'admin', NOW(), '大屏灯带', 
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","command":"FD 08 01"},{"name":"关闭","command":"FD 08 02"}]',md5('IOC一层监控厅中控设备'));
+
 -- 初始化播放器数据  
 INSERT INTO o_ebcp_player (
     id, created_by, created_time, updated_by, updated_time,
@@ -174,6 +245,12 @@ INSERT INTO o_ebcp_player (
     -- B1层播放设备
     (md5('player_B1_west_1'), 'admin', NOW(), 'admin', NOW(), 'B1西侧播放工作站1', '182.92.117.41', 40013, 1, md5('九五枪族'));
 
+-- 初始化中控设备数据
+INSERT INTO o_ebcp_control_device (
+    id, created_by, created_time, updated_by, updated_time,
+    name, device_type, room_id, status, ip_address, port, version, commands
+) VALUES
+    (md5('IOC一层监控厅中控设备'), 'admin', NOW(), 'admin', NOW(), 'IOC一层监控厅中控设备', '中控设备', md5('IOC一层监控厅'), 1, '192.168.10.108', 33333, '1.0', '[{"name":"一键全开","command":"FA 01 01"},{"name":"一键全关","command":"FA 01 02"},{"name":"灯光全开","command":"FA 01 03"},{"name":"灯光全关","command":"FA 01 04"}]');
 -- +goose StatementEnd
  
 -- +goose Down
