@@ -232,10 +232,10 @@ insert into o_ebcp_exhibition_item (
     md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","type":"start","command":"FD 06 01"},{"name":"关闭","type":"stop","command":"FD 06 02"},{"name":"亮度20%","type":"brightness","command":"FD 06 03"},{"name":"亮度40%","type":"brightness","command":"FD 06 04"},{"name":"亮度60%","type":"brightness","command":"FD 06 05"},{"name":"亮度80%","type":"brightness","command":"FD 06 06"},{"name":"亮度100%","type":"brightness","command":"FD 06 07"}]',md5('IOC一层监控厅中控设备')),
     
     (md5('地台灯带'), 'admin', NOW(), 'admin', NOW(), '地台灯带', 
-    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","type":"start","command":"FD 07 01"},{"name":"关闭","type":"stop","command":"FD 07 02"}]',md5('IOC一层监控厅中控设备')),
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","type":"start","command":"FD 07 01"},{"name":"关闭","type":"stop","command":"FD 07 02"},{"name":"亮度20%","type":"brightness","command":"FD 07 03"},{"name":"亮度40%","type":"brightness","command":"FD 07 04"},{"name":"亮度60%","type":"brightness","command":"FD 07 05"},{"name":"亮度80%","type":"brightness","command":"FD 07 06"},{"name":"亮度100%","type":"brightness","command":"FD 07 07"}]',md5('IOC一层监控厅中控设备')),
     
     (md5('大屏灯带'), 'admin', NOW(), 'admin', NOW(), '大屏灯带', 
-    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","type":"start","command":"FD 08 01"},{"name":"关闭","type":"stop","command":"FD 08 02"}]',md5('IOC一层监控厅中控设备'));
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'light', 1, '[{"name":"开启","type":"start","command":"FD 08 01"},{"name":"关闭","type":"stop","command":"FD 08 02"},{"name":"亮度20%","type":"brightness","command":"FD 08 03"},{"name":"亮度40%","type":"brightness","command":"FD 08 04"},{"name":"亮度60%","type":"brightness","command":"FD 08 05"},{"name":"亮度80%","type":"brightness","command":"FD 08 06"},{"name":"亮度100%","type":"brightness","command":"FD 08 07"}]',md5('IOC一层监控厅中控设备'));
 
 -- 初始化播放器数据  
 INSERT INTO o_ebcp_player (
