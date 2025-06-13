@@ -4,8 +4,6 @@ import (
 	"context"
 	"ebcp-service/model"
 	"fmt"
-	"net"
-	"strconv"
 	"strings"
 	"time"
 
@@ -80,7 +78,6 @@ func doRefreshItemStatus(ctx context.Context) error {
 	}
 	return nil
 }
-
 
 func updateItemStatus(ctx context.Context, item *model.Ebcp_exhibition_item) error {
 	if item == nil {
