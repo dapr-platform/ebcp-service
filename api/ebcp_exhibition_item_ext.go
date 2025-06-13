@@ -15,7 +15,7 @@ func InitEbcp_exhibition_itemExtRoute(r chi.Router) {
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-start", BatchStartExhibitionItemHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-pause", BatchPauseExhibitionItemHandler)
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/batch-stop", BatchStopExhibitionItemHandler)
-	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/static-control/{id}", StaticControlExhibitionItemHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-item/static-control", StaticControlExhibitionItemHandler)
 }
 
 type StaticControlExhibitionItemRequest struct {
@@ -27,14 +27,13 @@ type StaticControlExhibitionItemRequest struct {
 // @Summary Static control exhibition item
 // @Description Static control an exhibition item by ID
 // @Tags 展项
-// @Param id path string true "Exhibition Item ID"
 // @Param command_request body StaticControlExhibitionItemRequest true "Static Control Exhibition Item Request"
 // @Produce json
 // @Success 200 {object} common.Response "Success"
 // @Failure 500 {object} common.Response "Error"
-// @Router /ebcp-exhibition-item/static-control/{id} [post]
+// @Router /ebcp-exhibition-item/static-control [post]
 func StaticControlExhibitionItemHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+	// id := chi.URLParam(r, "id")
 	var request StaticControlExhibitionItemRequest
 	err := common.ReadRequestBody(r, &request)
 	if err != nil {

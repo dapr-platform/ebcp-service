@@ -2843,7 +2843,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ebcp-exhibition-item/static-control/{id}": {
+        "/ebcp-exhibition-item/static-control": {
             "post": {
                 "description": "Static control an exhibition item by ID",
                 "produces": [
@@ -2854,13 +2854,6 @@ const docTemplate = `{
                 ],
                 "summary": "Static control exhibition item",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Exhibition Item ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
                     {
                         "description": "Static Control Exhibition Item Request",
                         "name": "command_request",
