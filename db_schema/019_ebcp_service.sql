@@ -745,12 +745,105 @@ LEFT JOIN
     o_ebcp_exhibition e ON er.exhibition_id = e.id;
 
 COMMENT ON VIEW v_ebcp_player_program_info IS '节目详细视图，包含节目信息及其关联的播放设备、展项、展厅和展览信息（JSON格式）';
+
+-- 中控设备详细视图
+CREATE VIEW v_ebcp_control_device_info AS
+SELECT 
+    cd.id AS id,
+    cd.name AS name,
+    cd.device_type AS device_type,
+    cd.ip_address AS ip_address,
+    cd.port AS port,
+    cd.version AS version,
+    cd.status AS status,
+    cd.commands AS commands,
+    cd.created_time AS created_time,
+    cd.updated_time AS updated_time,
+    er.id AS room_id,
+    er.name AS room_name,
+    er.status AS room_status,
+    er.remarks AS room_remarks,
+    er.floor AS room_floor,
+    (SELECT dict_value FROM o_ops_dict WHERE id = er.floor) AS room_floor_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.floor) AS room_floor_name,
+    er.location AS room_location,
+    (SELECT dict_value FROM o_ops_dict WHERE id = er.location) AS room_location_value,
+    (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS room_location_name,
+    e.id AS exhibition_id,
+    e.name AS exhibition_name,
+    e.start_time AS exhibition_start_time,
+    e.end_time AS exhibition_end_time,
+    e.status AS exhibition_status,
+    eh.id AS exhibition_hall_id,
+    eh.name AS exhibition_hall_name,
+    eh.remarks AS exhibition_hall_remarks,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE device_id = cd.id) AS linked_items_count,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', ei.id,
+                'name', ei.name,
+                'type', ei.type,
+                'sub_type', ei.sub_type,
+                'status', ei.status,
+                'remarks', ei.remarks,
+                'export_info', ei.export_info,
+                'commands', ei.commands
+            )
+        )
+        FROM o_ebcp_exhibition_item ei
+        WHERE ei.device_id = cd.id
+    ) AS linked_items
+FROM 
+    o_ebcp_control_device cd
+LEFT JOIN 
+    o_ebcp_exhibition_room er ON cd.room_id = er.id
+LEFT JOIN 
+    o_ebcp_exhibition e ON er.exhibition_id = e.id
+LEFT JOIN 
+    o_ebcp_exhibition_hall eh ON er.exhibition_hall_id = eh.id;
+
+COMMENT ON VIEW v_ebcp_control_device_info IS '中控设备详细视图，包含设备信息及其关联的展厅、展览、展馆和展项信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_control_device_info.id IS '设备ID';
+COMMENT ON COLUMN v_ebcp_control_device_info.name IS '设备名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.device_type IS '设备类型';
+COMMENT ON COLUMN v_ebcp_control_device_info.ip_address IS 'IP地址';
+COMMENT ON COLUMN v_ebcp_control_device_info.port IS '端口';
+COMMENT ON COLUMN v_ebcp_control_device_info.version IS '版本';
+COMMENT ON COLUMN v_ebcp_control_device_info.status IS '设备状态(1: 正常, 2: 故障)';
+COMMENT ON COLUMN v_ebcp_control_device_info.commands IS '命令列表';
+COMMENT ON COLUMN v_ebcp_control_device_info.created_time IS '创建时间';
+COMMENT ON COLUMN v_ebcp_control_device_info.updated_time IS '更新时间';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_id IS '所属展厅ID';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_name IS '所属展厅名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_status IS '所属展厅状态';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_remarks IS '所属展厅备注';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_floor IS '所属展厅楼层';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_floor_value IS '所属展厅楼层值';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_floor_name IS '所属展厅楼层名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_location IS '所属展厅位置';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_location_value IS '所属展厅位置值';
+COMMENT ON COLUMN v_ebcp_control_device_info.room_location_name IS '所属展厅位置名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_id IS '所属展览ID';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_name IS '所属展览名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_start_time IS '所属展览开始时间';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_end_time IS '所属展览结束时间';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_status IS '所属展览状态';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_id IS '所属展馆ID';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_name IS '所属展馆名称';
+COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_remarks IS '所属展馆备注';
+COMMENT ON COLUMN v_ebcp_control_device_info.linked_items_count IS '直接关联的展项数量';
+COMMENT ON COLUMN v_ebcp_control_device_info.linked_items IS '直接关联的展项列表（JSON格式）';
+
+
+
+
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
-
+DROP VIEW IF EXISTS v_ebcp_control_device_info;
 DROP VIEW IF EXISTS v_ebcp_player_program_info;
 DROP VIEW IF EXISTS v_ebcp_player_info;
 DROP VIEW IF EXISTS v_ebcp_exhibition_item_info;

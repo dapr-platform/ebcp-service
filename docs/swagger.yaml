@@ -41,6 +41,19 @@ definitions:
       total:
         type: integer
     type: object
+  common.PageGeneric-model_Ebcp_control_device_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_control_device_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
   common.PageGeneric-model_Ebcp_exhibition:
     properties:
       items:
@@ -271,6 +284,98 @@ definitions:
         type: string
       version:
         description: version
+        type: string
+    type: object
+  model.Ebcp_control_device_info:
+    properties:
+      commands:
+        description: 命令列表
+        type: string
+      created_time:
+        description: 创建时间
+        type: string
+      device_type:
+        description: 设备类型
+        type: string
+      exhibition_end_time:
+        description: 所属展览结束时间
+        type: string
+      exhibition_hall_id:
+        description: 所属展馆ID
+        type: string
+      exhibition_hall_name:
+        description: 所属展馆名称
+        type: string
+      exhibition_hall_remarks:
+        description: 所属展馆备注
+        type: string
+      exhibition_id:
+        description: 所属展览ID
+        type: string
+      exhibition_name:
+        description: 所属展览名称
+        type: string
+      exhibition_start_time:
+        description: 所属展览开始时间
+        type: string
+      exhibition_status:
+        description: 所属展览状态
+        type: integer
+      id:
+        description: 设备ID
+        type: string
+      ip_address:
+        description: IP地址
+        type: string
+      linked_items:
+        description: 直接关联的展项列表（JSON格式）
+      linked_items_count:
+        description: 直接关联的展项数量
+        type: integer
+      name:
+        description: 设备名称
+        type: string
+      port:
+        description: 端口
+        type: integer
+      room_floor:
+        description: 所属展厅楼层
+        type: string
+      room_floor_name:
+        description: 所属展厅楼层名称
+        type: string
+      room_floor_value:
+        description: 所属展厅楼层值
+        type: string
+      room_id:
+        description: 所属展厅ID
+        type: string
+      room_location:
+        description: 所属展厅位置
+        type: string
+      room_location_name:
+        description: 所属展厅位置名称
+        type: string
+      room_location_value:
+        description: 所属展厅位置值
+        type: string
+      room_name:
+        description: 所属展厅名称
+        type: string
+      room_remarks:
+        description: 所属展厅备注
+        type: string
+      room_status:
+        description: 所属展厅状态
+        type: integer
+      status:
+        description: '设备状态(1: 正常, 2: 故障)'
+        type: integer
+      updated_time:
+        description: 更新时间
+        type: string
+      version:
+        description: 版本
         type: string
     type: object
   model.Ebcp_exhibition:
@@ -1122,6 +1227,322 @@ paths:
       summary: save
       tags:
       - 中控设备
+  /ebcp-control-device-info:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: device_type
+        in: query
+        name: device_type
+        type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
+      - description: version
+        in: query
+        name: version
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
+        type: string
+      - description: room_name
+        in: query
+        name: room_name
+        type: string
+      - description: room_status
+        in: query
+        name: room_status
+        type: string
+      - description: room_remarks
+        in: query
+        name: room_remarks
+        type: string
+      - description: room_floor
+        in: query
+        name: room_floor
+        type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
+      - description: room_location
+        in: query
+        name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
+        type: string
+      - description: exhibition_id
+        in: query
+        name: exhibition_id
+        type: string
+      - description: exhibition_name
+        in: query
+        name: exhibition_name
+        type: string
+      - description: exhibition_start_time
+        in: query
+        name: exhibition_start_time
+        type: string
+      - description: exhibition_end_time
+        in: query
+        name: exhibition_end_time
+        type: string
+      - description: exhibition_status
+        in: query
+        name: exhibition_status
+        type: string
+      - description: exhibition_hall_id
+        in: query
+        name: exhibition_hall_id
+        type: string
+      - description: exhibition_hall_name
+        in: query
+        name: exhibition_hall_name
+        type: string
+      - description: exhibition_hall_remarks
+        in: query
+        name: exhibition_hall_remarks
+        type: string
+      - description: linked_items_count
+        in: query
+        name: linked_items_count
+        type: string
+      - description: linked_items
+        in: query
+        name: linked_items
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_control_device_info'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - 中控设备详细视图，包含设备信息及其关联的展厅、展览、展馆和展项信息（JSON格式）
+  /ebcp-control-device-info/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: device_type
+        in: query
+        name: device_type
+        type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
+      - description: version
+        in: query
+        name: version
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: commands
+        in: query
+        name: commands
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: room_id
+        in: query
+        name: room_id
+        type: string
+      - description: room_name
+        in: query
+        name: room_name
+        type: string
+      - description: room_status
+        in: query
+        name: room_status
+        type: string
+      - description: room_remarks
+        in: query
+        name: room_remarks
+        type: string
+      - description: room_floor
+        in: query
+        name: room_floor
+        type: string
+      - description: room_floor_value
+        in: query
+        name: room_floor_value
+        type: string
+      - description: room_floor_name
+        in: query
+        name: room_floor_name
+        type: string
+      - description: room_location
+        in: query
+        name: room_location
+        type: string
+      - description: room_location_value
+        in: query
+        name: room_location_value
+        type: string
+      - description: room_location_name
+        in: query
+        name: room_location_name
+        type: string
+      - description: exhibition_id
+        in: query
+        name: exhibition_id
+        type: string
+      - description: exhibition_name
+        in: query
+        name: exhibition_name
+        type: string
+      - description: exhibition_start_time
+        in: query
+        name: exhibition_start_time
+        type: string
+      - description: exhibition_end_time
+        in: query
+        name: exhibition_end_time
+        type: string
+      - description: exhibition_status
+        in: query
+        name: exhibition_status
+        type: string
+      - description: exhibition_hall_id
+        in: query
+        name: exhibition_hall_id
+        type: string
+      - description: exhibition_hall_name
+        in: query
+        name: exhibition_hall_name
+        type: string
+      - description: exhibition_hall_remarks
+        in: query
+        name: exhibition_hall_remarks
+        type: string
+      - description: linked_items_count
+        in: query
+        name: linked_items_count
+        type: string
+      - description: linked_items
+        in: query
+        name: linked_items
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_control_device_info'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 中控设备详细视图，包含设备信息及其关联的展厅、展览、展馆和展项信息（JSON格式）
   /ebcp-control-device/{id}:
     delete:
       description: delete
