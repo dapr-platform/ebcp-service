@@ -38,7 +38,7 @@ Table: v_ebcp_exhibition_area_info
 
 JSON Sample
 -------------------------------------
-{    "room_id": "SVxByIZNhBfgdQQeCHjZVxOUP",    "room_name": "qISgBstGCSNCRWOpANBcNmhwZ",    "room_floor": "GnSrwqOLACkCCUWCMXpMugMMl",    "room_floor_value": "YndeuQpyDaMyyfvInOthjBgXc",    "room_floor_name": "KMHEXpyIleUAYSxPbBswrGLIN",    "room_location": "mFDGxCXwtAyafyqWOAJUDDmbH",    "room_location_value": "dXYSEiIKKlmwDMMeoxFJmIgll",    "room_location_name": "eVZsdlsuXmktOsMQCKtSRRJjl",    "room_status": 73,    "room_remarks": "VMVSetBjMmPHBUtqqoaVOLnwn",    "exhibition_id": "sNbIQAjWEESIdFNFlOgJfPVPc",    "exhibition_name": "TEGvHSDZKbPdOduOopiXflyGk",    "exhibition_start_time": 18,    "exhibition_end_time": 35,    "exhibition_status": 72,    "items": 83}
+{    "room_id": "kOvprOlNfAGSCshpvfeOkGBwc",    "room_name": "hPrpFIsvlebbdmsNKLkOWnWtT",    "room_floor": "hZnlYprIYvgVhLiVGkIRfVsyk",    "room_floor_value": "lyPNjOorRccEvxUVBAvwFmsRl",    "room_floor_name": "cIGAJPaOHqyrNYebosDPamICK",    "room_location": "sZAkeyTAlOpYrDCoLIhupjNKq",    "room_location_value": "NZsxRXsElDdecsIcnEdOfwUSI",    "room_location_name": "uDEJDwpERotVtGybSwEOxUpVI",    "room_status": 59,    "room_remarks": "GwrtCNrfgiEjkustqfJSLKexD",    "exhibition_id": "IiKkSqdIfYlAnNbadnqidakKV",    "exhibition_name": "MXcqAugCpCtjXQSMoQrkScxWn",    "exhibition_start_time": 23,    "exhibition_end_time": 84,    "exhibition_status": 82,    "items": 4}
 
 
 Comments
@@ -117,7 +117,7 @@ type Ebcp_exhibition_area_info struct {
 
 	ExhibitionStatus int32 `json:"exhibition_status"` //展览状态
 
-	Items any `json:"items"` //展厅内的展项列表
+	Items any `json:"items"` //展厅内的展项列表（包含关联的播放设备和中控设备信息）
 
 }
 
@@ -445,7 +445,7 @@ Warning table: v_ebcp_exhibition_area_info primary key column room_id is nullabl
 		&ColumnInfo{
 			Index:              15,
 			Name:               "items",
-			Comment:            `展厅内的展项列表`,
+			Comment:            `展厅内的展项列表（包含关联的播放设备和中控设备信息）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",

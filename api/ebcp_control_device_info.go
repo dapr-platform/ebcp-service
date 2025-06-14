@@ -53,8 +53,7 @@ func InitEbcp_control_device_infoRoute(r chi.Router) {
 // @Param exhibition_hall_id query string false "exhibition_hall_id"
 // @Param exhibition_hall_name query string false "exhibition_hall_name"
 // @Param exhibition_hall_remarks query string false "exhibition_hall_remarks"
-// @Param linked_items_count query string false "linked_items_count"
-// @Param linked_items query string false "linked_items"
+// @Param linked_item query string false "linked_item"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_control_device_info]} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -104,8 +103,7 @@ func Ebcp_control_device_infoPageListHandler(w http.ResponseWriter, r *http.Requ
 // @Param exhibition_hall_id query string false "exhibition_hall_id"
 // @Param exhibition_hall_name query string false "exhibition_hall_name"
 // @Param exhibition_hall_remarks query string false "exhibition_hall_remarks"
-// @Param linked_items_count query string false "linked_items_count"
-// @Param linked_items query string false "linked_items"
+// @Param linked_item query string false "linked_item"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_control_device_info} "objects array"
 // @Failure 500 {object} common.Response ""

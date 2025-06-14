@@ -29,13 +29,14 @@ Table: o_ebcp_control_device
 [ 8] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 [ 9] version                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [10] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[11] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[12] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[11] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[12] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
+[13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "ZWucWryjRkguSLABwAMiIuZoY",    "created_by": "fvgqmwhEPmxaqvGvBbSCuIDtZ",    "created_time": 86,    "updated_by": "xKwMUXuuRqNIKXDGXlEcAKGiM",    "updated_time": 17,    "name": "SkTGdaiHWZIkjBmXpmTZrGaIy",    "device_type": "orxnrTvMYgbWwsqLcdQHaJngN",    "ip_address": "kscTRwStjLOqZVOXfaLlQOmCp",    "port": 67,    "version": "mCrmCqNYUaNXtwUrBInZDwgjl",    "room_id": "lcfGKOuODaMnSOoqktEJqUKZW",    "status": 38,    "commands": "DlUQcfhTTtAdqMpEJMdUFVJGP"}
+{    "id": "NwWhPkHHqdWuHTtVrIwRnUkQF",    "created_by": "mZDIIqUbGfiPEqroBtTfqTUnk",    "created_time": 58,    "updated_by": "ULuNDmAgwxteRXdXMThAxTnlL",    "updated_time": 19,    "name": "MFJldfNnWyOVJdRvVqqVZuOmL",    "device_type": "QwGFocQvSKskZoxjAWodmlFfA",    "ip_address": "yfBofBUvkjvYErIUaKvXSvPyN",    "port": 57,    "version": "hluvxwpPyldRToNtIxWwZnrqG",    "room_id": "cURyYoUqnKqnEhyDkJcwHbItG",    "item_id": "fIhNpZHyomCYsaETKsgcFGjJR",    "status": 72,    "commands": "DuPINDMaHEkqQJhrmmyWkAMsW"}
 
 
 
@@ -64,6 +65,8 @@ var (
 
 	Ebcp_control_device_FIELD_NAME_room_id = "room_id"
 
+	Ebcp_control_device_FIELD_NAME_item_id = "item_id"
+
 	Ebcp_control_device_FIELD_NAME_status = "status"
 
 	Ebcp_control_device_FIELD_NAME_commands = "commands"
@@ -83,7 +86,7 @@ type Ebcp_control_device struct {
 
 	Name string `json:"name"` //设备名称
 
-	DeviceType string `json:"device_type"` //设备类型
+	DeviceType string `json:"device_type"` //设备类型(power,light)
 
 	IPAddress string `json:"ip_address"` //ip_address
 
@@ -93,9 +96,11 @@ type Ebcp_control_device struct {
 
 	RoomID string `json:"room_id"` //所属展厅ID
 
+	ItemID string `json:"item_id"` //所属展项ID
+
 	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
 
-	Commands string `json:"commands"` //commands
+	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]
 
 }
 
@@ -232,7 +237,7 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              6,
 			Name:               "device_type",
-			Comment:            `设备类型`,
+			Comment:            `设备类型(power,light)`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -336,6 +341,27 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              11,
+			Name:               "item_id",
+			Comment:            `所属展项ID`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "ItemID",
+			GoFieldType:        "string",
+			JSONFieldName:      "item_id",
+			ProtobufFieldName:  "item_id",
+			ProtobufType:       "string",
+			ProtobufPos:        12,
+		},
+
+		&ColumnInfo{
+			Index:              12,
 			Name:               "status",
 			Comment:            `状态(1: 正常, 2: 故障)`,
 			Notes:              ``,
@@ -352,13 +378,13 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			JSONFieldName:      "status",
 			ProtobufFieldName:  "status",
 			ProtobufType:       "int32",
-			ProtobufPos:        12,
+			ProtobufPos:        13,
 		},
 
 		&ColumnInfo{
-			Index:              12,
+			Index:              13,
 			Name:               "commands",
-			Comment:            `commands`,
+			Comment:            `命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -373,7 +399,7 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			JSONFieldName:      "commands",
 			ProtobufFieldName:  "commands",
 			ProtobufType:       "string",
-			ProtobufPos:        13,
+			ProtobufPos:        14,
 		},
 	},
 }

@@ -32,12 +32,11 @@ Table: o_ebcp_exhibition_item
 [11] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 [12] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[14] device_id                                      VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "BIVJExXToRxHJkWTyoHDPgQjC",    "created_by": "WVBShQEJSMhBhGZkytVDJxKnT",    "created_time": 69,    "updated_by": "FwbQlIVfqxLZDpuaXcGlUuPKW",    "updated_time": 64,    "name": "SVyXsuVWjSGUBjHZTyEvnXMcp",    "exhibition_id": "bZchVRTKDZVTNVXLCOFRLSGrT",    "room_id": "tmZgGsUQtbQHLsKuqQgMeEidY",    "type": "JPUAQYoupxpYvLnfjbiXAdOgi",    "sub_type": "hTwMqiAurAqFLNStdxecgTBbC",    "export_info": "AachsnpkopljErMyRamQvEGHc",    "status": 87,    "remarks": "kYJMxNCjOfLryCpnrlSloSqxF",    "commands": "TFWcoLjDkiRFpqPWWQyRAEuAv",    "device_id": "KYUrIOPedEAFZvEbHMXxFBDPt"}
+{    "id": "iCSOdnJEvUeUDljRYqUFdqvvs",    "created_by": "WbVUHrDWkFhqmbFwEfBgajHjX",    "created_time": 83,    "updated_by": "QuehoOJYWdgpYmKhWYCIVbpZl",    "updated_time": 72,    "name": "TTnaQegyScfJEWHrgAOsCIqqv",    "exhibition_id": "qVNfOvXqjqIHChcgWoEcKtjSs",    "room_id": "RjPnXyglEidOBqIyNnNlxGsFE",    "type": "kbpEBbOkCQfVLePNBaoTimDup",    "sub_type": "rqggvWAVvaTyRTGfcHlGJjhtL",    "export_info": "rkLNTYAXOvlBlvvxSvApireSw",    "status": 19,    "remarks": "kTZeFNpMiSveeZvarPHxpPqiQ",    "commands": "KACeEPOhgjgcpKwbkBIjjJqkw"}
 
 
 
@@ -71,8 +70,6 @@ var (
 	Ebcp_exhibition_item_FIELD_NAME_remarks = "remarks"
 
 	Ebcp_exhibition_item_FIELD_NAME_commands = "commands"
-
-	Ebcp_exhibition_item_FIELD_NAME_device_id = "device_id"
 )
 
 // Ebcp_exhibition_item struct is a row record of the o_ebcp_exhibition_item table in the  database
@@ -103,9 +100,7 @@ type Ebcp_exhibition_item struct {
 
 	Remarks string `json:"remarks"` //备注
 
-	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]
-
-	DeviceID string `json:"device_id"` //中控设备ID
+	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","type":"start","command":"FA 01 01"},{"name":"关闭","type":"stop","command":"FA 01 02"}]
 
 }
 
@@ -389,7 +384,7 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 		&ColumnInfo{
 			Index:              13,
 			Name:               "commands",
-			Comment:            `命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]`,
+			Comment:            `命令列表,json格式,例如[{"name":"开启","type":"start","command":"FA 01 01"},{"name":"关闭","type":"stop","command":"FA 01 02"}]`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -405,27 +400,6 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			ProtobufFieldName:  "commands",
 			ProtobufType:       "string",
 			ProtobufPos:        14,
-		},
-
-		&ColumnInfo{
-			Index:              14,
-			Name:               "device_id",
-			Comment:            `中控设备ID`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(32)",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "VARCHAR",
-			ColumnLength:       32,
-			GoFieldName:        "DeviceID",
-			GoFieldType:        "string",
-			JSONFieldName:      "device_id",
-			ProtobufFieldName:  "device_id",
-			ProtobufType:       "string",
-			ProtobufPos:        15,
 		},
 	},
 }

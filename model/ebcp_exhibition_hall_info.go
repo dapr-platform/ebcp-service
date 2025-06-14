@@ -26,7 +26,7 @@ Table: v_ebcp_exhibition_hall_info
 
 JSON Sample
 -------------------------------------
-{    "id": "qlGLRAhVwQrPRYnIbPmIGQTNh",    "name": "nkglepLkaSCpfQKHUXuQubgGO",    "remarks": "UsyBiCnuXKCqZkfxekNVHoAGb",    "rooms": 43}
+{    "id": "SdPsegNidDUeJZfgAkHSHhTtQ",    "name": "YvxfNNymTvqjMPDlcbWeCRwWZ",    "remarks": "GjJRZIlkPDHbKgFRZEpfVCxfZ",    "rooms": 7}
 
 
 Comments

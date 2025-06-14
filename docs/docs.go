@@ -138,6 +138,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "status",
                         "name": "status",
                         "in": "query"
@@ -423,14 +429,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "linked_items_count",
-                        "name": "linked_items_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "linked_items",
-                        "name": "linked_items",
+                        "description": "linked_item",
+                        "name": "linked_item",
                         "in": "query"
                     }
                 ],
@@ -673,14 +673,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "linked_items_count",
-                        "name": "linked_items_count",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "linked_items",
-                        "name": "linked_items",
+                        "description": "linked_item",
+                        "name": "linked_item",
                         "in": "query"
                     }
                 ],
@@ -901,6 +895,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "room_id",
                         "name": "room_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
                         "in": "query"
                     },
                     {
@@ -2489,12 +2489,6 @@ const docTemplate = `{
                         "description": "commands",
                         "name": "commands",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "device_id",
-                        "name": "device_id",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2705,8 +2699,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "control_device",
-                        "name": "control_device",
+                        "description": "control_devices",
+                        "name": "control_devices",
                         "in": "query"
                     },
                     {
@@ -2901,8 +2895,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "control_device",
-                        "name": "control_device",
+                        "description": "control_devices",
+                        "name": "control_devices",
                         "in": "query"
                     },
                     {
@@ -3288,12 +3282,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "commands",
                         "name": "commands",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "device_id",
-                        "name": "device_id",
                         "in": "query"
                     }
                 ],
@@ -8542,7 +8530,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "commands": {
-                    "description": "commands",
+                    "description": "命令列表,json格式,例如[{\"name\":\"开启\",\"command\":\"FA 01 01\"},{\"name\":\"关闭\",\"command\":\"FA 01 02\"}]",
                     "type": "string"
                 },
                 "created_by": {
@@ -8554,7 +8542,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "device_type": {
-                    "description": "设备类型",
+                    "description": "设备类型(power,light)",
                     "type": "string"
                 },
                 "id": {
@@ -8563,6 +8551,10 @@ const docTemplate = `{
                 },
                 "ip_address": {
                     "description": "ip_address",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "所属展项ID",
                     "type": "string"
                 },
                 "name": {
@@ -8650,12 +8642,8 @@ const docTemplate = `{
                     "description": "IP地址",
                     "type": "string"
                 },
-                "linked_items": {
-                    "description": "直接关联的展项列表（JSON格式）"
-                },
-                "linked_items_count": {
-                    "description": "直接关联的展项数量",
-                    "type": "integer"
+                "linked_item": {
+                    "description": "直接关联的展项（JSON格式）"
                 },
                 "name": {
                     "description": "设备名称",
@@ -8792,7 +8780,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "items": {
-                    "description": "展厅内的展项列表"
+                    "description": "展厅内的展项列表（包含关联的播放设备和中控设备信息）"
                 },
                 "room_floor": {
                     "description": "展厅楼层",
@@ -8932,7 +8920,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "commands": {
-                    "description": "命令列表,json格式,例如[{\"name\":\"开启\",\"command\":\"FA 01 01\"},{\"name\":\"关闭\",\"command\":\"FA 01 02\"}]",
+                    "description": "命令列表,json格式,例如[{\"name\":\"开启\",\"type\":\"start\",\"command\":\"FA 01 01\"},{\"name\":\"关闭\",\"type\":\"stop\",\"command\":\"FA 01 02\"}]",
                     "type": "string"
                 },
                 "created_by": {
@@ -8941,10 +8929,6 @@ const docTemplate = `{
                 },
                 "created_time": {
                     "description": "created_time",
-                    "type": "string"
-                },
-                "device_id": {
-                    "description": "中控设备ID",
                     "type": "string"
                 },
                 "exhibition_id": {
@@ -9000,8 +8984,8 @@ const docTemplate = `{
                     "description": "commands",
                     "type": "string"
                 },
-                "control_device": {
-                    "description": "关联的中控设备信息（JSON格式）"
+                "control_devices": {
+                    "description": "关联的中控设备列表（JSON格式）"
                 },
                 "exhibition_id": {
                     "description": "所属展览ID",

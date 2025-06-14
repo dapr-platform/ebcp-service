@@ -46,13 +46,12 @@ Table: v_ebcp_control_device_info
 [25] exhibition_hall_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [26] exhibition_hall_name                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [27] exhibition_hall_remarks                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[28] linked_items_count                             INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
-[29] linked_items                                   JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[28] linked_item                                    JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "utCPjynxdgkkiarYlKtLgoFkv",    "name": "XuxKmYTpXLefvAwOVTHCddxVX",    "device_type": "tgurcLAYaGFyJEskRMyewBLLN",    "ip_address": "nrZiGxXfLhAbkiRUlLRTVJMDi",    "port": 25,    "version": "nhUXCndMgMTYPFVKERagPOkgp",    "status": 89,    "commands": "yAyCCoWeabhueifslohpPNxld",    "created_time": 14,    "updated_time": 39,    "room_id": "BZCaehlJMsVOmYEGCVbxnWBjF",    "room_name": "GaFTuJxcnRXLSxdvyasnNQsOb",    "room_status": 27,    "room_remarks": "QZEBUAFPMdcDSEZfyoKPXSAfu",    "room_floor": "vlRixQaSALwQWouoyaLhTapuR",    "room_floor_value": "VJpAxsJKUHVfujTdGIVZAEmiQ",    "room_floor_name": "djgLWiotpHuJHXoGsLRvIOgdY",    "room_location": "wHNEqZZNHJDXQKnchWjvkmLLL",    "room_location_value": "cCpuchpfGRmsSnawyVFRtMqKS",    "room_location_name": "GHVkKtdbwZXiNOXYGFOqEtTwK",    "exhibition_id": "kLKCZUWfRcDnImfBqoEYjMZan",    "exhibition_name": "NTvbgPxIiUHKVyGSJoFfcWltu",    "exhibition_start_time": 40,    "exhibition_end_time": 12,    "exhibition_status": 96,    "exhibition_hall_id": "nUjTJkDSicvKneJgqECgVfhvP",    "exhibition_hall_name": "cHUTAiZKxxOMALxaYDEXSTgTG",    "exhibition_hall_remarks": "PPQYkcosNGFhjjfALQZkOMYfo",    "linked_items_count": 72,    "linked_items": 99}
+{    "id": "RkduwfLKdgKpDtoopLQbpmKjb",    "name": "lQuCGraVxScLnmunekYaAJVyZ",    "device_type": "kiKcExeZskQRrJsMsQEfwnnJb",    "ip_address": "yMnELKutWHqUFtishRGosDItN",    "port": 56,    "version": "pQBPsKyKnVmkdBhvRbJJbqUiA",    "status": 31,    "commands": "IYkSDjPJsuOyGaXfoVslddCcQ",    "created_time": 66,    "updated_time": 10,    "room_id": "gseeaEcnqNObCuidnZHPMtect",    "room_name": "LhqIvBYCURALlViAjOrRXiZZK",    "room_status": 25,    "room_remarks": "GpigsTQkWhmWiJveykcjGnFAK",    "room_floor": "VbFMAAFmkbkWWphKDFWqByCHx",    "room_floor_value": "EZrIVHECDWHeEyKuEkGHiJsFB",    "room_floor_name": "KlpYsLUPfRZBpFOgoiPNsjXlI",    "room_location": "ibHUdoSgsvulUsJBsbmPIjEPp",    "room_location_value": "tGFjujxvIeBRhfiYjLgDpeMRt",    "room_location_name": "dniGeCHSxruGLHfaDiVnshlbV",    "exhibition_id": "NEwBHUuRgUmTlpNumQumFUruY",    "exhibition_name": "yndgfcmKMrxgRmLtIWuiBHMdd",    "exhibition_start_time": 21,    "exhibition_end_time": 10,    "exhibition_status": 71,    "exhibition_hall_id": "xOqrkxknbHghhyDZNENGcHKoY",    "exhibition_hall_name": "avDBsFpKcgkgyrFRrSZBpPeHQ",    "exhibition_hall_remarks": "tVAcAXNXHvqSpyEIhNPmWdCOY",    "linked_item": 17}
 
 
 Comments
@@ -122,9 +121,7 @@ var (
 
 	Ebcp_control_device_info_FIELD_NAME_exhibition_hall_remarks = "exhibition_hall_remarks"
 
-	Ebcp_control_device_info_FIELD_NAME_linked_items_count = "linked_items_count"
-
-	Ebcp_control_device_info_FIELD_NAME_linked_items = "linked_items"
+	Ebcp_control_device_info_FIELD_NAME_linked_item = "linked_item"
 )
 
 // Ebcp_control_device_info struct is a row record of the v_ebcp_control_device_info table in the  database
@@ -185,9 +182,7 @@ type Ebcp_control_device_info struct {
 
 	ExhibitionHallRemarks string `json:"exhibition_hall_remarks"` //所属展馆备注
 
-	LinkedItemsCount int32 `json:"linked_items_count"` //直接关联的展项数量
-
-	LinkedItems any `json:"linked_items"` //直接关联的展项列表（JSON格式）
+	LinkedItem any `json:"linked_item"` //直接关联的展项（JSON格式）
 
 }
 
@@ -787,29 +782,8 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 
 		&ColumnInfo{
 			Index:              28,
-			Name:               "linked_items_count",
-			Comment:            `直接关联的展项数量`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "INT8",
-			DatabaseTypePretty: "INT8",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "INT8",
-			ColumnLength:       -1,
-			GoFieldName:        "LinkedItemsCount",
-			GoFieldType:        "int32",
-			JSONFieldName:      "linked_items_count",
-			ProtobufFieldName:  "linked_items_count",
-			ProtobufType:       "int32",
-			ProtobufPos:        29,
-		},
-
-		&ColumnInfo{
-			Index:              29,
-			Name:               "linked_items",
-			Comment:            `直接关联的展项列表（JSON格式）`,
+			Name:               "linked_item",
+			Comment:            `直接关联的展项（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -819,12 +793,12 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			IsArray:            false,
 			ColumnType:         "JSON",
 			ColumnLength:       -1,
-			GoFieldName:        "LinkedItems",
+			GoFieldName:        "LinkedItem",
 			GoFieldType:        "any",
-			JSONFieldName:      "linked_items",
-			ProtobufFieldName:  "linked_items",
+			JSONFieldName:      "linked_item",
+			ProtobufFieldName:  "linked_item",
 			ProtobufType:       "string",
-			ProtobufPos:        30,
+			ProtobufPos:        29,
 		},
 	},
 }

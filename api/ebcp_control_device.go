@@ -103,6 +103,7 @@ func batchUpsertEbcp_control_deviceHandler(w http.ResponseWriter, r *http.Reques
 // @Param port query string false "port"
 // @Param version query string false "version"
 // @Param room_id query string false "room_id"
+// @Param item_id query string false "item_id"
 // @Param status query string false "status"
 // @Param commands query string false "commands"
 // @Produce  json
@@ -137,6 +138,7 @@ func Ebcp_control_devicePageListHandler(w http.ResponseWriter, r *http.Request) 
 // @Param port query string false "port"
 // @Param version query string false "version"
 // @Param room_id query string false "room_id"
+// @Param item_id query string false "item_id"
 // @Param status query string false "status"
 // @Param commands query string false "commands"
 // @Produce  json

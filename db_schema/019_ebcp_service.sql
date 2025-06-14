@@ -84,7 +84,6 @@ CREATE TABLE o_ebcp_exhibition_item (
     status INTEGER NOT NULL DEFAULT 1,
     remarks TEXT,
     commands TEXT,
-    device_id VARCHAR(32),
                                        PRIMARY KEY (id)
 );
 
@@ -97,8 +96,7 @@ COMMENT ON COLUMN o_ebcp_exhibition_item.sub_type IS '展项子类型（static�
 COMMENT ON COLUMN o_ebcp_exhibition_item.export_info IS '输出信息';
 COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（0: 启动, 1: 暂停, 2: 停止）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.remarks IS '备注';
-COMMENT ON COLUMN o_ebcp_exhibition_item.commands IS '命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]';
-COMMENT ON COLUMN o_ebcp_exhibition_item.device_id IS '中控设备ID';
+COMMENT ON COLUMN o_ebcp_exhibition_item.commands IS '命令列表,json格式,例如[{"name":"开启","type":"start","command":"FA 01 01"},{"name":"关闭","type":"stop","command":"FA 01 02"}]';
 
 -- 播放设备表
 CREATE TABLE o_ebcp_player (
@@ -189,6 +187,7 @@ CREATE TABLE o_ebcp_control_device (
     port INTEGER NOT NULL,
     version VARCHAR(255),
     room_id VARCHAR(32),
+    item_id VARCHAR(32),
     status INTEGER NOT NULL DEFAULT 1,
     commands TEXT,
                                      PRIMARY KEY (id)
@@ -196,9 +195,12 @@ CREATE TABLE o_ebcp_control_device (
 
 COMMENT ON TABLE o_ebcp_control_device IS '中控设备表';
 COMMENT ON COLUMN o_ebcp_control_device.name IS '设备名称';
-COMMENT ON COLUMN o_ebcp_control_device.device_type IS '设备类型';
+COMMENT ON COLUMN o_ebcp_control_device.device_type IS '设备类型(power,light)';
 COMMENT ON COLUMN o_ebcp_control_device.room_id IS '所属展厅ID';
+COMMENT ON COLUMN o_ebcp_control_device.item_id IS '所属展项ID';
 COMMENT ON COLUMN o_ebcp_control_device.status IS '状态(1: 正常, 2: 故障)';
+COMMENT ON COLUMN o_ebcp_control_device.commands IS '命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]';
+
 
 -- 展项中控设备关联配置表
 CREATE TABLE o_ebcp_item_device_relation (
@@ -350,7 +352,41 @@ SELECT
                 'name', i.name,
                 'type', i.type,
                 'status', i.status,
-                'remarks', i.remarks
+                'remarks', i.remarks,
+                'player_devices', (
+                    SELECT json_agg(
+                        json_build_object(
+                            'device_id', p.id,
+                            'device_name', p.name,
+                            'device_type', 'player',
+                            'ip_address', p.ip_address,
+                            'port', p.port,
+                            'status', p.status,
+                            'current_program_id', p.current_program_id,
+                            'current_program_state', p.current_program_state,
+                            'volume', p.volume,
+                            'sound_state', p.sound_state
+                        )
+                    )
+                    FROM o_ebcp_player p
+                    WHERE p.item_id = i.id
+                ),
+                'control_devices', (
+                    SELECT json_agg(
+                        json_build_object(
+                            'device_id', cd.id,
+                            'device_name', cd.name,
+                            'device_type', cd.device_type,
+                            'status', cd.status,
+                            'ip_address', cd.ip_address,
+                            'port', cd.port,
+                            'version', cd.version,
+                            'commands', cd.commands
+                        )
+                    )
+                    FROM o_ebcp_control_device cd 
+                    WHERE cd.item_id = i.id
+                )
             )
         )
         FROM o_ebcp_exhibition_item i
@@ -375,7 +411,7 @@ COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_name IS '展览名称';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_start_time IS '展览开始时间';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_end_time IS '展览结束时间';
 COMMENT ON COLUMN v_ebcp_exhibition_area_info.exhibition_status IS '展览状态';
-COMMENT ON COLUMN v_ebcp_exhibition_area_info.items IS '展厅内的展项列表';
+COMMENT ON COLUMN v_ebcp_exhibition_area_info.items IS '展厅内的展项列表（包含关联的播放设备和中控设备信息）';
 
 -- 展馆详细视图
 CREATE VIEW v_ebcp_exhibition_hall_info AS
@@ -562,7 +598,8 @@ SELECT
         WHERE p.item_id = ei.id
     ) AS player_devices,
     (
-        SELECT json_build_object(
+        SELECT json_agg(
+            json_build_object(
             'device_id', cd.id,
             'device_name', cd.name,
             'device_type', cd.device_type,
@@ -571,10 +608,11 @@ SELECT
             'port', cd.port,
             'version', cd.version,
             'commands', cd.commands
+            )
         )
         FROM o_ebcp_control_device cd 
-        WHERE cd.id = ei.device_id
-    ) AS control_device,
+        WHERE cd.item_id = ei.id
+    ) AS control_devices,
     (
         SELECT json_agg(
             json_build_object(
@@ -593,9 +631,9 @@ SELECT
     ei.sub_type AS sub_type
 FROM 
     o_ebcp_exhibition_item ei
-JOIN 
+LEFT JOIN 
     o_ebcp_exhibition_room er ON ei.room_id = er.id
-JOIN 
+LEFT JOIN 
     o_ebcp_exhibition e ON ei.exhibition_id = e.id;
 
 COMMENT ON VIEW v_ebcp_exhibition_item_info IS '展项详细视图，包含展项信息及其关联的展厅、展览、设备和定时任务信息（JSON格式）';
@@ -616,7 +654,7 @@ COMMENT ON COLUMN v_ebcp_exhibition_item_info.room_location_name IS '所属展�
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_name IS '所属展览名称';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.player_devices IS '关联的播放设备列表（JSON格式）';
-COMMENT ON COLUMN v_ebcp_exhibition_item_info.control_device IS '关联的中控设备信息（JSON格式）';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.control_devices IS '关联的中控设备列表（JSON格式）';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.schedules IS '关联的定时任务信息（JSON格式）';
 
 
@@ -777,9 +815,8 @@ SELECT
     eh.id AS exhibition_hall_id,
     eh.name AS exhibition_hall_name,
     eh.remarks AS exhibition_hall_remarks,
-    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE device_id = cd.id) AS linked_items_count,
     (
-        SELECT json_agg(
+        SELECT 
             json_build_object(
                 'id', ei.id,
                 'name', ei.name,
@@ -790,10 +827,9 @@ SELECT
                 'export_info', ei.export_info,
                 'commands', ei.commands
             )
-        )
         FROM o_ebcp_exhibition_item ei
-        WHERE ei.device_id = cd.id
-    ) AS linked_items
+        WHERE ei.id = cd.item_id
+    ) AS linked_item
 FROM 
     o_ebcp_control_device cd
 LEFT JOIN 
@@ -832,8 +868,7 @@ COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_status IS '所属展览�
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_id IS '所属展馆ID';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_name IS '所属展馆名称';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_remarks IS '所属展馆备注';
-COMMENT ON COLUMN v_ebcp_control_device_info.linked_items_count IS '直接关联的展项数量';
-COMMENT ON COLUMN v_ebcp_control_device_info.linked_items IS '直接关联的展项列表（JSON格式）';
+COMMENT ON COLUMN v_ebcp_control_device_info.linked_item IS '直接关联的展项（JSON格式）';
 
 
 

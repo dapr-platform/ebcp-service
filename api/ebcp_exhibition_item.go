@@ -106,7 +106,6 @@ func batchUpsertEbcp_exhibition_itemHandler(w http.ResponseWriter, r *http.Reque
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
 // @Param commands query string false "commands"
-// @Param device_id query string false "device_id"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_item]} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -142,7 +141,6 @@ func Ebcp_exhibition_itemPageListHandler(w http.ResponseWriter, r *http.Request)
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
 // @Param commands query string false "commands"
-// @Param device_id query string false "device_id"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_item} "objects array"
 // @Failure 500 {object} common.Response ""

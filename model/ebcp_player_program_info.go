@@ -43,7 +43,7 @@ Table: v_ebcp_player_program_info
 
 JSON Sample
 -------------------------------------
-{    "id": "wZWxLSxcInnMvhhHNUntXvWgK",    "name": "wytfuqMcVfstPgXxqGxAIJaQJ",    "program_id": "nuhIgbfbZybbIokOFQpPiFBqu",    "program_index": 32,    "state": 32,    "player_id": "tYheSoWSwOmCqwrKoIvNLLlLE",    "player_name": "fyZBiyKxTHitxbCOaaEVLAvoN",    "player_ip_address": "SfEIBAgPiyPtghhibAEiBkQKI",    "player_port": 37,    "player_status": 60,    "player_current_program_id": "IfwqoyoSqQOKdpwjXAHaNiJfW",    "player_current_program_state": 54,    "player_volume": 62,    "player_sound_state": 4,    "item_id": "PxeYHlVhYdtFwFmLufDDyTcEV",    "item_name": "HEfgHFAdVrhjkMtYnIGUnCqGm",    "room_id": "GQEQXxylwHUQxZMBVnPcEidgm",    "room_name": "xtOTAlYPZPoHlcDqPOmyluhid",    "exhibition_id": "mdPYGsnETCJFCBnIJlQsYhZNk",    "exhibition_name": "EpNigvUmlHgnmoAsCFnWeRycv",    "medias": 79}
+{    "id": "vTvSEHffHePYHeshYOZobXGhn",    "name": "XcmqaTTuscBkDvmJGfDDXyBbC",    "program_id": "MxgMqFHwLAtxufCjGenQGQAZb",    "program_index": 56,    "state": 31,    "player_id": "fiRPFERBJNDxVJoHMOXlamVJy",    "player_name": "VpoHFUbQSaKDOcFVcyigrQeEv",    "player_ip_address": "XCibpefAowoKvFRjCBYqAxLTT",    "player_port": 36,    "player_status": 17,    "player_current_program_id": "ZiTfqKIdxlZXgDLEsXCBnVqis",    "player_current_program_state": 74,    "player_volume": 44,    "player_sound_state": 6,    "item_id": "YrJimpYvQqtNkbUNKrAITsrUv",    "item_name": "hxlBYVGPfPJcaAlhHcHvnwyxP",    "room_id": "ddDohGXbowaLnCsLaNLFWNgWn",    "room_name": "rvbDARSLjUooPTRxSmSNXDlPU",    "exhibition_id": "TIXwBAYWPqridRUpEGJEFFqbN",    "exhibition_name": "WMqoYBXPVKcgLWISGRfsxGwgI",    "medias": 6}
 
 
 Comments

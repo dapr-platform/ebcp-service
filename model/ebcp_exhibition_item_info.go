@@ -35,7 +35,7 @@ Table: v_ebcp_exhibition_item_info
 [14] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [15] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [16] player_devices                                 JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
-[17] control_device                                 JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[17] control_devices                                JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 [18] schedules                                      JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 [19] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [20] sub_type                                       VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
@@ -43,7 +43,7 @@ Table: v_ebcp_exhibition_item_info
 
 JSON Sample
 -------------------------------------
-{    "id": "jCZOIVgwyRZBFBweoPUQSvJoF",    "name": "xhaEOPlgKPZiKIrqvDCFGxApe",    "type": "McQgnfbGualajWYLlhCmHXYQQ",    "status": 46,    "remarks": "WLuSuuDLkAGECgruJJrXQVOYi",    "export_info": "hWjYEvogalfIvRYfdPIVgOGAg",    "room_id": "RUsscfsybVlflkqwemNaHiNNO",    "room_name": "DEqqHSbhhnwbmDpGZjtfTLRwx",    "room_floor": "EBeUQsRcKQkbaJeaUHqSyXRaq",    "room_floor_value": "mYyCGUoudTwOgVyvbNqFYaSnP",    "room_floor_name": "UpMWNueGFQhExgcoaBPPaGPZf",    "room_location": "EHAqBKwcwhILWKRiaqABFJqSS",    "room_location_value": "asNZMRDUGxiRKAmrVjQKjRZpm",    "room_location_name": "BfwaaIykMlgviZTtjFyRZHNdM",    "exhibition_id": "kWqKLAIKnjXfUTqDASMuoopnt",    "exhibition_name": "GpdYlbPKwrOJVIPSuQLngnFVi",    "player_devices": 7,    "control_device": 40,    "schedules": 95,    "commands": "myGnDOlkxouepxbSBhEjXIWAd",    "sub_type": "CEQDGhTeTqgyhTvivoTEstGyY"}
+{    "id": "LmkEpbyEEHTTRWsHNjPGTtWgS",    "name": "LCAwJkaAAMPZdVqZKAKPpHQbT",    "type": "aXSEJiQommntVLfJdgBBOJIek",    "status": 39,    "remarks": "hpNhJcitiksfawbBAbgmVSsyI",    "export_info": "pnsvnHIoZBqxehBPXDoTcSxNa",    "room_id": "ejatAGftDyoPGJRwkhxPriOJo",    "room_name": "PTVjXflMihsmZtRMvbhYsBldg",    "room_floor": "bIUgoejwFdPAYGeJscGAuKVhZ",    "room_floor_value": "SnwHIEtrFIcnkaWQTYHoFvbnn",    "room_floor_name": "JRXmXmcYFctJyjmLvvKdNhpWs",    "room_location": "qXfxCLFtZmTxinIlEtCtkfGZp",    "room_location_value": "mvwgxPWFXYdKbNSmeJLopRHAo",    "room_location_name": "QNbFTCxwuoJkmbxesPSKyFQiy",    "exhibition_id": "fUdGkIDjdTWHlBuDFhroDsbtX",    "exhibition_name": "NHKfqVUchpWTHiQhELsPbZBYO",    "player_devices": 52,    "control_devices": 0,    "schedules": 3,    "commands": "erbTVNuabmPtbIrWbRRtVIZib",    "sub_type": "hlCqjGTZWpKTWiBlyCyGMHLrC"}
 
 
 Comments
@@ -91,7 +91,7 @@ var (
 
 	Ebcp_exhibition_item_info_FIELD_NAME_player_devices = "player_devices"
 
-	Ebcp_exhibition_item_info_FIELD_NAME_control_device = "control_device"
+	Ebcp_exhibition_item_info_FIELD_NAME_control_devices = "control_devices"
 
 	Ebcp_exhibition_item_info_FIELD_NAME_schedules = "schedules"
 
@@ -136,7 +136,7 @@ type Ebcp_exhibition_item_info struct {
 
 	PlayerDevices any `json:"player_devices"` //关联的播放设备列表（JSON格式）
 
-	ControlDevice any `json:"control_device"` //关联的中控设备信息（JSON格式）
+	ControlDevices any `json:"control_devices"` //关联的中控设备列表（JSON格式）
 
 	Schedules any `json:"schedules"` //关联的定时任务信息（JSON格式）
 
@@ -511,8 +511,8 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 
 		&ColumnInfo{
 			Index:              17,
-			Name:               "control_device",
-			Comment:            `关联的中控设备信息（JSON格式）`,
+			Name:               "control_devices",
+			Comment:            `关联的中控设备列表（JSON格式）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -522,10 +522,10 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 			IsArray:            false,
 			ColumnType:         "JSON",
 			ColumnLength:       -1,
-			GoFieldName:        "ControlDevice",
+			GoFieldName:        "ControlDevices",
 			GoFieldType:        "any",
-			JSONFieldName:      "control_device",
-			ProtobufFieldName:  "control_device",
+			JSONFieldName:      "control_devices",
+			ProtobufFieldName:  "control_devices",
 			ProtobufType:       "string",
 			ProtobufPos:        18,
 		},
