@@ -178,10 +178,10 @@ INSERT INTO o_ebcp_exhibition_item (
 
 insert into o_ebcp_exhibition_item (
     id, created_by, created_time, updated_by, updated_time,
-    name, exhibition_id, room_id, type, sub_type,status, commands
+    name, exhibition_id, room_id, type, sub_type,status, commands,ip_address,port
 ) values
     (md5('IOC一层中控设备'), 'admin', NOW(), 'admin', NOW(), 'IOC一层中控设备', 
-    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'power', 1, '[{"name":"一键开启","type":"start","command":"FB 01 01"},{"name":"一键关闭","type":"stop","command":"FB 01 02"},{"name":"灯光全开","type":"start","command":"FB 01 03"},{"name":"灯光全关","type":"stop","command":"FB 01 04"}]');
+    md5('IOC大屏监控'), md5('IOC一层监控厅'), 'static', 'power', 1, '[{"name":"一键开启","type":"start","command":"FB 01 01"},{"name":"一键关闭","type":"stop","command":"FB 01 02"},{"name":"灯光全开","type":"start","command":"FB 01 03"},{"name":"灯光全关","type":"stop","command":"FB 01 04"}]','192.168.10.108',33333);
    
 -- 初始化播放器数据  
 INSERT INTO o_ebcp_player (

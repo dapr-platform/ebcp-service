@@ -46,6 +46,8 @@ func InitEbcp_exhibition_item_infoRoute(r chi.Router) {
 // @Param schedules query string false "schedules"
 // @Param commands query string false "commands"
 // @Param sub_type query string false "sub_type"
+// @Param ip_address query string false "ip_address"
+// @Param port query string false "port"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_item_info]} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -88,6 +90,8 @@ func Ebcp_exhibition_item_infoPageListHandler(w http.ResponseWriter, r *http.Req
 // @Param schedules query string false "schedules"
 // @Param commands query string false "commands"
 // @Param sub_type query string false "sub_type"
+// @Param ip_address query string false "ip_address"
+// @Param port query string false "port"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_item_info} "objects array"
 // @Failure 500 {object} common.Response ""

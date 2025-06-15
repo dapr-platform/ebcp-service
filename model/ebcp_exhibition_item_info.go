@@ -39,11 +39,13 @@ Table: v_ebcp_exhibition_item_info
 [18] schedules                                      JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 [19] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [20] sub_type                                       VARCHAR(50)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
+[21] ip_address                                     VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[22] port                                           INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "LmkEpbyEEHTTRWsHNjPGTtWgS",    "name": "LCAwJkaAAMPZdVqZKAKPpHQbT",    "type": "aXSEJiQommntVLfJdgBBOJIek",    "status": 39,    "remarks": "hpNhJcitiksfawbBAbgmVSsyI",    "export_info": "pnsvnHIoZBqxehBPXDoTcSxNa",    "room_id": "ejatAGftDyoPGJRwkhxPriOJo",    "room_name": "PTVjXflMihsmZtRMvbhYsBldg",    "room_floor": "bIUgoejwFdPAYGeJscGAuKVhZ",    "room_floor_value": "SnwHIEtrFIcnkaWQTYHoFvbnn",    "room_floor_name": "JRXmXmcYFctJyjmLvvKdNhpWs",    "room_location": "qXfxCLFtZmTxinIlEtCtkfGZp",    "room_location_value": "mvwgxPWFXYdKbNSmeJLopRHAo",    "room_location_name": "QNbFTCxwuoJkmbxesPSKyFQiy",    "exhibition_id": "fUdGkIDjdTWHlBuDFhroDsbtX",    "exhibition_name": "NHKfqVUchpWTHiQhELsPbZBYO",    "player_devices": 52,    "control_devices": 0,    "schedules": 3,    "commands": "erbTVNuabmPtbIrWbRRtVIZib",    "sub_type": "hlCqjGTZWpKTWiBlyCyGMHLrC"}
+{    "id": "BKyKAqPWWcshNbgtYmyKcneqx",    "name": "udWtbjaIPCVqydeEpsEQCrdgu",    "type": "feKkxAVXtRAMsjHqRTtxmBSDU",    "status": 67,    "remarks": "fLwIfflesNfRTDXbghgrkqchy",    "export_info": "WvxWjCFlGdSptoCUlyPvmyWjS",    "room_id": "eWxTOnNMLUKEesRfNTPayyyyw",    "room_name": "BCoNHmvWhNPEqqBgCQBbUsQgk",    "room_floor": "ZjJBLlsGbELFVDMGbGcTqvcZP",    "room_floor_value": "rGqgbMBQFjwGgFSwgQYrajZyG",    "room_floor_name": "nYQlROXPSRIjBMUjvlrBQrWLC",    "room_location": "IwJFiaMVVhmjbAFHnoMeuoaSM",    "room_location_value": "tlfEJNQuANRwEmdMRDwVVmZSS",    "room_location_name": "DbpOBGknJVCSKNyWRONUdrxmA",    "exhibition_id": "HZjqTZaptfvrVMNwyJQNOsmXf",    "exhibition_name": "SgjDiVjGcIaZIGDVNOGlMjXSw",    "player_devices": 18,    "control_devices": 43,    "schedules": 35,    "commands": "NeeMKDhuadyBQqNjaOqowTmql",    "sub_type": "vpvSTTwOrqElLxksFqAiYLuik",    "ip_address": "TuLcbqemgYFbiRKDTDqXVFuJK",    "port": 39}
 
 
 Comments
@@ -98,6 +100,10 @@ var (
 	Ebcp_exhibition_item_info_FIELD_NAME_commands = "commands"
 
 	Ebcp_exhibition_item_info_FIELD_NAME_sub_type = "sub_type"
+
+	Ebcp_exhibition_item_info_FIELD_NAME_ip_address = "ip_address"
+
+	Ebcp_exhibition_item_info_FIELD_NAME_port = "port"
 )
 
 // Ebcp_exhibition_item_info struct is a row record of the v_ebcp_exhibition_item_info table in the  database
@@ -140,9 +146,13 @@ type Ebcp_exhibition_item_info struct {
 
 	Schedules any `json:"schedules"` //关联的定时任务信息（JSON格式）
 
-	Commands string `json:"commands"` //commands
+	Commands string `json:"commands"` //命令列表
 
 	SubType string `json:"sub_type"` //sub_type
+
+	IPAddress string `json:"ip_address"` //IP地址
+
+	Port int32 `json:"port"` //端口
 
 }
 
@@ -554,7 +564,7 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 		&ColumnInfo{
 			Index:              19,
 			Name:               "commands",
-			Comment:            `commands`,
+			Comment:            `命令列表`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "TEXT",
@@ -591,6 +601,48 @@ Warning table: v_ebcp_exhibition_item_info primary key column id is nullable col
 			ProtobufFieldName:  "sub_type",
 			ProtobufType:       "string",
 			ProtobufPos:        21,
+		},
+
+		&ColumnInfo{
+			Index:              21,
+			Name:               "ip_address",
+			Comment:            `IP地址`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(255)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       255,
+			GoFieldName:        "IPAddress",
+			GoFieldType:        "string",
+			JSONFieldName:      "ip_address",
+			ProtobufFieldName:  "ip_address",
+			ProtobufType:       "string",
+			ProtobufPos:        22,
+		},
+
+		&ColumnInfo{
+			Index:              22,
+			Name:               "port",
+			Comment:            `端口`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Port",
+			GoFieldType:        "int32",
+			JSONFieldName:      "port",
+			ProtobufFieldName:  "port",
+			ProtobufType:       "int32",
+			ProtobufPos:        23,
 		},
 	},
 }

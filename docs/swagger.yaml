@@ -552,9 +552,15 @@ definitions:
       id:
         description: id
         type: string
+      ip_address:
+        description: IP地址
+        type: string
       name:
         description: 展项名称
         type: string
+      port:
+        description: 端口
+        type: integer
       remarks:
         description: 备注
         type: string
@@ -580,7 +586,7 @@ definitions:
   model.Ebcp_exhibition_item_info:
     properties:
       commands:
-        description: commands
+        description: 命令列表
         type: string
       control_devices:
         description: 关联的中控设备列表（JSON格式）
@@ -596,11 +602,17 @@ definitions:
       id:
         description: 展项ID
         type: string
+      ip_address:
+        description: IP地址
+        type: string
       name:
         description: 展项名称
         type: string
       player_devices:
         description: 关联的播放设备列表（JSON格式）
+      port:
+        description: 端口
+        type: integer
       remarks:
         description: 展项备注
         type: string
@@ -2677,6 +2689,14 @@ paths:
         in: query
         name: commands
         type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
       produces:
       - application/json
       responses:
@@ -2824,6 +2844,14 @@ paths:
         in: query
         name: sub_type
         type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
+        type: string
       produces:
       - application/json
       responses:
@@ -2952,6 +2980,14 @@ paths:
       - description: sub_type
         in: query
         name: sub_type
+        type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
         type: string
       produces:
       - application/json
@@ -3289,6 +3325,14 @@ paths:
       - description: commands
         in: query
         name: commands
+        type: string
+      - description: ip_address
+        in: query
+        name: ip_address
+        type: string
+      - description: port
+        in: query
+        name: port
         type: string
       produces:
       - application/json

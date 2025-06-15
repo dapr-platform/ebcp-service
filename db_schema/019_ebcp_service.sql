@@ -84,6 +84,8 @@ CREATE TABLE o_ebcp_exhibition_item (
     status INTEGER NOT NULL DEFAULT 1,
     remarks TEXT,
     commands TEXT,
+    ip_address VARCHAR(255),
+    port INTEGER,
                                        PRIMARY KEY (id)
 );
 
@@ -97,6 +99,8 @@ COMMENT ON COLUMN o_ebcp_exhibition_item.export_info IS '输出信息';
 COMMENT ON COLUMN o_ebcp_exhibition_item.status IS '状态（0: 启动, 1: 暂停, 2: 停止）';
 COMMENT ON COLUMN o_ebcp_exhibition_item.remarks IS '备注';
 COMMENT ON COLUMN o_ebcp_exhibition_item.commands IS '命令列表,json格式,例如[{"name":"开启","type":"start","command":"FA 01 01"},{"name":"关闭","type":"stop","command":"FA 01 02"}]';
+COMMENT ON COLUMN o_ebcp_exhibition_item.ip_address IS 'IP地址';
+COMMENT ON COLUMN o_ebcp_exhibition_item.port IS '端口';
 
 -- 播放设备表
 CREATE TABLE o_ebcp_player (
@@ -386,7 +390,10 @@ SELECT
                     )
                     FROM o_ebcp_control_device cd 
                     WHERE cd.item_id = i.id
-                )
+                ),
+                'commands', i.commands,
+                'ip_address', i.ip_address,
+                'port', i.port
             )
         )
         FROM o_ebcp_exhibition_item i
@@ -489,7 +496,10 @@ SELECT
             'name', ei.name,
             'type', ei.type,
             'status', ei.status,
-            'remarks', ei.remarks
+            'remarks', ei.remarks,
+            'commands', ei.commands,
+            'ip_address', ei.ip_address,
+            'port', ei.port
         )
     ) AS items,
     (
@@ -628,7 +638,9 @@ SELECT
         WHERE s.item_id = ei.id
     ) AS schedules,
     ei.commands AS commands,
-    ei.sub_type AS sub_type
+    ei.sub_type AS sub_type,
+    ei.ip_address AS ip_address,
+    ei.port AS port
 FROM 
     o_ebcp_exhibition_item ei
 LEFT JOIN 
@@ -656,7 +668,9 @@ COMMENT ON COLUMN v_ebcp_exhibition_item_info.exhibition_name IS '所属展览�
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.player_devices IS '关联的播放设备列表（JSON格式）';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.control_devices IS '关联的中控设备列表（JSON格式）';
 COMMENT ON COLUMN v_ebcp_exhibition_item_info.schedules IS '关联的定时任务信息（JSON格式）';
-
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.commands IS '命令列表';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.ip_address IS 'IP地址';
+COMMENT ON COLUMN v_ebcp_exhibition_item_info.port IS '端口';
 
 -- 播放设备详细视图
 CREATE VIEW v_ebcp_player_info AS

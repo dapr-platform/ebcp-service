@@ -33,7 +33,7 @@ Table: o_ebcp_exhibition
 
 JSON Sample
 -------------------------------------
-{    "id": "xybRnIrGraQJnyQmahJmSHGfl",    "created_by": "fHhYwTKtlUKkZEQOJMKKxknRS",    "created_time": 40,    "updated_by": "YIEIopwoocldPnKFVsIOrvgHq",    "updated_time": 78,    "name": "oQWOnBUJvZugUToEWbRFyNsKQ",    "start_time": 6,    "end_time": 24,    "remarks": "fGkonPoqUsCigalVKvqyLHbZx",    "hall_id": "HFhMFBHHseHyvlkWbjmDWOBjs",    "status": 5}
+{    "id": "oKsFHJOUktiNwXRfvwKMCMqak",    "created_by": "vlgHVlJqCNkFCYAcoTZmpSOOv",    "created_time": 36,    "updated_by": "gpFLONsgQRIHwLqCrPrSIoTBj",    "updated_time": 76,    "name": "JNhsEjvswJqgDwAUYNcrKgfLV",    "start_time": 24,    "end_time": 21,    "remarks": "BWqKggZjthPYPkdAaqMZrljHM",    "hall_id": "ZTQulgJEygGxgvnIPjBJlatdr",    "status": 2}
 
 
 

@@ -2489,6 +2489,18 @@ const docTemplate = `{
                         "description": "commands",
                         "name": "commands",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2720,6 +2732,18 @@ const docTemplate = `{
                         "description": "sub_type",
                         "name": "sub_type",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2915,6 +2939,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "sub_type",
                         "name": "sub_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
                         "in": "query"
                     }
                 ],
@@ -3282,6 +3318,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "commands",
                         "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "ip_address",
+                        "name": "ip_address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
                         "in": "query"
                     }
                 ],
@@ -8943,9 +8991,17 @@ const docTemplate = `{
                     "description": "id",
                     "type": "string"
                 },
+                "ip_address": {
+                    "description": "IP地址",
+                    "type": "string"
+                },
                 "name": {
                     "description": "展项名称",
                     "type": "string"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "integer"
                 },
                 "remarks": {
                     "description": "备注",
@@ -8981,7 +9037,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "commands": {
-                    "description": "commands",
+                    "description": "命令列表",
                     "type": "string"
                 },
                 "control_devices": {
@@ -9003,12 +9059,20 @@ const docTemplate = `{
                     "description": "展项ID",
                     "type": "string"
                 },
+                "ip_address": {
+                    "description": "IP地址",
+                    "type": "string"
+                },
                 "name": {
                     "description": "展项名称",
                     "type": "string"
                 },
                 "player_devices": {
                     "description": "关联的播放设备列表（JSON格式）"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "integer"
                 },
                 "remarks": {
                     "description": "展项备注",

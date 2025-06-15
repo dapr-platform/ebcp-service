@@ -32,11 +32,13 @@ Table: o_ebcp_exhibition_item
 [11] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 [12] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 [13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[14] ip_address                                     VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[15] port                                           INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "iCSOdnJEvUeUDljRYqUFdqvvs",    "created_by": "WbVUHrDWkFhqmbFwEfBgajHjX",    "created_time": 83,    "updated_by": "QuehoOJYWdgpYmKhWYCIVbpZl",    "updated_time": 72,    "name": "TTnaQegyScfJEWHrgAOsCIqqv",    "exhibition_id": "qVNfOvXqjqIHChcgWoEcKtjSs",    "room_id": "RjPnXyglEidOBqIyNnNlxGsFE",    "type": "kbpEBbOkCQfVLePNBaoTimDup",    "sub_type": "rqggvWAVvaTyRTGfcHlGJjhtL",    "export_info": "rkLNTYAXOvlBlvvxSvApireSw",    "status": 19,    "remarks": "kTZeFNpMiSveeZvarPHxpPqiQ",    "commands": "KACeEPOhgjgcpKwbkBIjjJqkw"}
+{    "id": "XAswJNuRZKXlcRPThZWoNsffM",    "created_by": "KRqUwmHgZqlYecFNRGjuqWlpJ",    "created_time": 77,    "updated_by": "uMWJspgXTgwsGRrXqOyBTRDPt",    "updated_time": 11,    "name": "lnQjVsIxgXTRunETyDjmKqhOU",    "exhibition_id": "vpYwafNvwNhAcRtTsqTSyuZQm",    "room_id": "ZSpdGLyjOrscBKhgjYYewEngK",    "type": "IRxUeQXyxSdUTQBJQeBQvZuIX",    "sub_type": "kFcovTOZtyXHqoFNmvhFiJrvi",    "export_info": "tfBIAIoyZOahfqZGunopfeZTU",    "status": 50,    "remarks": "OLmYAKKcxjbckNirLZclBXiGG",    "commands": "glOrZGALZjBefCCxtChrPaVZM",    "ip_address": "XYDISQqCxyRNMVKgZnmfhkWJv",    "port": 82}
 
 
 
@@ -70,6 +72,10 @@ var (
 	Ebcp_exhibition_item_FIELD_NAME_remarks = "remarks"
 
 	Ebcp_exhibition_item_FIELD_NAME_commands = "commands"
+
+	Ebcp_exhibition_item_FIELD_NAME_ip_address = "ip_address"
+
+	Ebcp_exhibition_item_FIELD_NAME_port = "port"
 )
 
 // Ebcp_exhibition_item struct is a row record of the o_ebcp_exhibition_item table in the  database
@@ -101,6 +107,10 @@ type Ebcp_exhibition_item struct {
 	Remarks string `json:"remarks"` //备注
 
 	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","type":"start","command":"FA 01 01"},{"name":"关闭","type":"stop","command":"FA 01 02"}]
+
+	IPAddress string `json:"ip_address"` //IP地址
+
+	Port int32 `json:"port"` //端口
 
 }
 
@@ -400,6 +410,48 @@ var Ebcp_exhibition_itemTableInfo = &TableInfo{
 			ProtobufFieldName:  "commands",
 			ProtobufType:       "string",
 			ProtobufPos:        14,
+		},
+
+		&ColumnInfo{
+			Index:              14,
+			Name:               "ip_address",
+			Comment:            `IP地址`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(255)",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "VARCHAR",
+			ColumnLength:       255,
+			GoFieldName:        "IPAddress",
+			GoFieldType:        "string",
+			JSONFieldName:      "ip_address",
+			ProtobufFieldName:  "ip_address",
+			ProtobufType:       "string",
+			ProtobufPos:        15,
+		},
+
+		&ColumnInfo{
+			Index:              15,
+			Name:               "port",
+			Comment:            `端口`,
+			Notes:              ``,
+			Nullable:           true,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "Port",
+			GoFieldType:        "int32",
+			JSONFieldName:      "port",
+			ProtobufFieldName:  "port",
+			ProtobufType:       "int32",
+			ProtobufPos:        16,
 		},
 	},
 }
