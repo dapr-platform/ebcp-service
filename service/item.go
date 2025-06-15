@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"ebcp-service/model"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -121,6 +122,9 @@ func StartExhibitionItem(id string) error {
 	if item == nil {
 		return fmt.Errorf("展项不存在")
 	}
+	if item.Type == "static" {
+		return startStaticItem(item)
+	}
 
 	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
 		model.Ebcp_playerTableInfo.Name,
@@ -155,6 +159,53 @@ func StartExhibitionItem(id string) error {
 
 	return nil
 }
+func startStaticItem(item *model.Ebcp_exhibition_item) error {
+	commands := item.Commands
+	if commands == "" {
+		return fmt.Errorf("展项命令为空")
+	}
+	ip_address := item.IPAddress
+	port := item.Port
+	if ip_address == "" || port == 0 {
+		return fmt.Errorf("展项IP地址或端口为空")
+	}
+	var commandList []map[string]string
+	err := json.Unmarshal([]byte(commands), &commandList)
+	if err != nil {
+		return fmt.Errorf("解析展项命令失败: %v", err)
+	}
+	for _, command := range commandList {
+		if command["type"] == "start" {
+			sendUDPCommand(ip_address, port, command["command"])
+		}
+	}
+	return nil
+}
+func stopStaticItem(item *model.Ebcp_exhibition_item) error {
+	commands := item.Commands
+	if commands == "" {
+		return fmt.Errorf("展项命令为空")
+	}
+	ip_address := item.IPAddress
+	port := item.Port
+	if ip_address == "" || port == 0 {
+		return fmt.Errorf("展项IP地址或端口为空")
+	}
+	var commandList []map[string]string
+	err := json.Unmarshal([]byte(commands), &commandList)
+	if err != nil {
+		return fmt.Errorf("解析展项命令失败: %v", err)
+	}
+	for _, command := range commandList {
+		if command["type"] == "stop" {
+			sendUDPCommand(ip_address, port, command["command"])
+		}
+	}
+	return nil
+}
+func pauseStaticItem(item *model.Ebcp_exhibition_item) error {
+	return nil
+}
 
 // StopExhibitionItem 停止单个展项
 func StopExhibitionItem(id string) error {
@@ -167,6 +218,9 @@ func StopExhibitionItem(id string) error {
 	}
 	if item == nil {
 		return fmt.Errorf("展项不存在")
+	}
+	if item.Type == "static" {
+		return stopStaticItem(item)
 	}
 
 	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
@@ -214,6 +268,9 @@ func PauseExhibitionItem(id string) error {
 	}
 	if item == nil {
 		return fmt.Errorf("展项不存在")
+	}
+	if item.Type == "static" {
+		return pauseStaticItem(item)
 	}
 
 	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
