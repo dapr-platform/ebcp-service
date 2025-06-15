@@ -1,5 +1,14 @@
 basePath: /swagger/ebcp-service
 definitions:
+  api.SendUDPCommandRequest:
+    properties:
+      command:
+        type: string
+      ip:
+        type: string
+      port:
+        type: integer
+    type: object
   api.StaticControlExhibitionItemRequest:
     properties:
       command:
@@ -1120,6 +1129,28 @@ paths:
           schema:
             type: string
       summary: 测试日期类型接口
+      tags:
+      - 调试接口
+  /debug/send-udp-command:
+    post:
+      consumes:
+      - application/json
+      description: 发送UDP命令
+      parameters:
+      - description: 请求参数
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.SendUDPCommandRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 发送UDP命令
       tags:
       - 调试接口
   /ebcp-control-device:

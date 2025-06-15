@@ -10,6 +10,36 @@ import (
 
 func InitDebugRoute(r chi.Router) {
 	r.Get(common.BASE_CONTEXT+"/debug/schedule-day-judge", DebugScheduleDayJudgeHandler)
+	r.Post(common.BASE_CONTEXT+"/debug/send-udp-command", SendUDPCommandHandler)
+}
+
+type SendUDPCommandRequest struct {
+	IP      string `json:"ip"`
+	Port    int32  `json:"port"`
+	Command string `json:"command"`
+}
+
+// @Summary 发送UDP命令
+// @Description 发送UDP命令
+// @Tags 调试接口
+// @Accept json
+// @Produce json
+// @Param request body SendUDPCommandRequest true "请求参数"
+// @Success 200 {string} string "ok"
+// @Router /debug/send-udp-command [post]
+func SendUDPCommandHandler(w http.ResponseWriter, r *http.Request) {
+	var request SendUDPCommandRequest
+	err := common.ReadRequestBody(r, &request)
+	if err != nil {
+		common.HttpResult(w, common.ErrParam.AppendMsg(err.Error()))
+		return
+	}
+	err = service.SendUDPCommand(request.IP, request.Port, request.Command)
+	if err != nil {
+		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
+		return
+	}
+	common.HttpSuccess(w, common.OK)
 }
 
 // @Summary 测试日期类型接口

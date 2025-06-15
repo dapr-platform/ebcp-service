@@ -213,7 +213,7 @@ func startHallStatic() error {
 		}
 		for _, cmd := range cmds {
 			if cmd["type"] == "start" {
-				sendUDPCommand(device.IPAddress, device.Port, cmd["command"])
+				SendUDPCommand(device.IPAddress, device.Port, cmd["command"])
 			}
 		}
 	}
@@ -317,7 +317,7 @@ func stopHallStatic() error {
 		}
 		for _, cmd := range cmds {
 			if cmd["type"] == "stop" {
-				sendUDPCommand(device.IPAddress, device.Port, cmd["command"])
+				SendUDPCommand(device.IPAddress, device.Port, cmd["command"])
 			}
 		}
 	}

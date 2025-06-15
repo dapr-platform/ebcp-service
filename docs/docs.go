@@ -47,6 +47,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/debug/send-udp-command": {
+            "post": {
+                "description": "发送UDP命令",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "调试接口"
+                ],
+                "summary": "发送UDP命令",
+                "parameters": [
+                    {
+                        "description": "请求参数",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.SendUDPCommandRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-control-device": {
             "get": {
                 "description": "query objects",
@@ -8199,6 +8233,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "api.SendUDPCommandRequest": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
         "api.StaticControlExhibitionItemRequest": {
             "type": "object",
             "properties": {

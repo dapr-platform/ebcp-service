@@ -176,7 +176,7 @@ func startStaticItem(item *model.Ebcp_exhibition_item) error {
 	}
 	for _, command := range commandList {
 		if command["type"] == "start" {
-			sendUDPCommand(ip_address, port, command["command"])
+			SendUDPCommand(ip_address, port, command["command"])
 		}
 	}
 	return nil
@@ -198,7 +198,7 @@ func stopStaticItem(item *model.Ebcp_exhibition_item) error {
 	}
 	for _, command := range commandList {
 		if command["type"] == "stop" {
-			sendUDPCommand(ip_address, port, command["command"])
+			SendUDPCommand(ip_address, port, command["command"])
 		}
 	}
 	return nil

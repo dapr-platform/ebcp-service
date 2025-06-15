@@ -24,7 +24,7 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string) err
 	}
 
 	// 发送UDP命令到设备
-	if err := sendUDPCommand(deviceIP, devicePort, command); err != nil {
+	if err := SendUDPCommand(deviceIP, devicePort, command); err != nil {
 		return fmt.Errorf("向设备 %s:%d 发送命令失败: %v", deviceIP, devicePort, err)
 	}
 
@@ -32,7 +32,7 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string) err
 	return nil
 }
 
-func sendUDPCommand(ip string, port int32, command string) error {
+func SendUDPCommand(ip string, port int32, command string) error {
 	// 构建目标地址
 	addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", ip, port))
 	if err != nil {
