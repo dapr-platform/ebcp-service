@@ -355,6 +355,18 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_id",
                         "name": "room_id",
                         "in": "query"
@@ -595,6 +607,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "updated_time",
                         "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_id",
+                        "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_name",
+                        "name": "item_name",
                         "in": "query"
                     },
                     {
@@ -8736,6 +8760,14 @@ const docTemplate = `{
                 },
                 "ip_address": {
                     "description": "IP地址",
+                    "type": "string"
+                },
+                "item_id": {
+                    "description": "item_id",
+                    "type": "string"
+                },
+                "item_name": {
+                    "description": "item_name",
                     "type": "string"
                 },
                 "linked_item": {

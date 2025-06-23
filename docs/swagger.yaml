@@ -340,6 +340,12 @@ definitions:
       ip_address:
         description: IP地址
         type: string
+      item_id:
+        description: item_id
+        type: string
+      item_name:
+        description: item_name
+        type: string
       linked_item:
         description: 直接关联的展项（JSON格式）
       name:
@@ -1324,6 +1330,14 @@ paths:
         in: query
         name: updated_time
         type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: item_name
+        in: query
+        name: item_name
+        type: string
       - description: room_id
         in: query
         name: room_id
@@ -1484,6 +1498,14 @@ paths:
       - description: updated_time
         in: query
         name: updated_time
+        type: string
+      - description: item_id
+        in: query
+        name: item_id
+        type: string
+      - description: item_name
+        in: query
+        name: item_name
         type: string
       - description: room_id
         in: query
