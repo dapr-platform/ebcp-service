@@ -346,6 +346,9 @@ definitions:
       item_name:
         description: item_name
         type: string
+      item_type:
+        description: item_type
+        type: string
       linked_item:
         description: 直接关联的展项（JSON格式）
       name:
@@ -1338,6 +1341,10 @@ paths:
         in: query
         name: item_name
         type: string
+      - description: item_type
+        in: query
+        name: item_type
+        type: string
       - description: room_id
         in: query
         name: room_id
@@ -1506,6 +1513,10 @@ paths:
       - description: item_name
         in: query
         name: item_name
+        type: string
+      - description: item_type
+        in: query
+        name: item_type
         type: string
       - description: room_id
         in: query

@@ -367,6 +367,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "room_id",
                         "name": "room_id",
                         "in": "query"
@@ -619,6 +625,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_name",
                         "name": "item_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "item_type",
+                        "name": "item_type",
                         "in": "query"
                     },
                     {
@@ -8768,6 +8780,10 @@ const docTemplate = `{
                 },
                 "item_name": {
                     "description": "item_name",
+                    "type": "string"
+                },
+                "item_type": {
+                    "description": "item_type",
                     "type": "string"
                 },
                 "linked_item": {

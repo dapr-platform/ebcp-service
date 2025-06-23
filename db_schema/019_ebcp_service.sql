@@ -813,6 +813,7 @@ SELECT
     cd.updated_time AS updated_time,
     cd.item_id AS item_id,
     (select name from o_ebcp_exhibition_item where id = cd.item_id) AS item_name,
+    (select type from o_ebcp_exhibition_item where id = cd.item_id) as item_type,
     er.id AS room_id,
     er.name AS room_name,
     er.status AS room_status,
