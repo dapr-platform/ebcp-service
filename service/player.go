@@ -736,6 +736,11 @@ func PlayProgram(playerId, programId string) error {
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 	}
+	err = updatePlayerProgramState(player, ProgramStatePlay)
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 节目状态失败: %v", playerId, err)
+	}
+	
 	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStatePlay)
 	if err != nil {
 		common.Logger.Errorf("更新展项 [%s] 状态失败: %v", player.ItemID, err)
@@ -803,6 +808,10 @@ func PauseProgram(playerId, programId string) error {
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
 	}
+	err = updatePlayerProgramState(player, ProgramStatePause)
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 节目状态失败: %v", playerId, err)
+	}
 	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStatePause)
 	if err != nil {
 		common.Logger.Errorf("更新展项 [%s] 状态失败: %v", player.ItemID, err)
@@ -835,6 +844,10 @@ func StopProgram(playerId, programId string) error {
 	err = common.DbUpsert[model.Ebcp_player](context.Background(), common.GetDaprClient(), *player, model.Ebcp_playerTableInfo.Name, "id")
 	if err != nil {
 		return fmt.Errorf("更新播放器 [%s] 当前播放节目失败: %v", player.ID, err)
+	}
+	err = updatePlayerProgramState(player, ProgramStateStop)
+	if err != nil {
+		return fmt.Errorf("更新播放器 [%s] 节目状态失败: %v", playerId, err)
 	}
 	err = changeItemStateByPlayerState(player.ItemID, playerId, ProgramStateStop)
 	if err != nil {
