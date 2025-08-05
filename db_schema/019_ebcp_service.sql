@@ -826,8 +826,6 @@ SELECT
     (SELECT dict_name FROM o_ops_dict WHERE id = er.location) AS room_location_name,
     e.id AS exhibition_id,
     e.name AS exhibition_name,
-    e.start_time AS exhibition_start_time,
-    e.end_time AS exhibition_end_time,
     e.status AS exhibition_status,
     eh.id AS exhibition_hall_id,
     eh.name AS exhibition_hall_name,
@@ -879,8 +877,6 @@ COMMENT ON COLUMN v_ebcp_control_device_info.room_location_value IS '所属展�
 COMMENT ON COLUMN v_ebcp_control_device_info.room_location_name IS '所属展厅位置名称';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_id IS '所属展览ID';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_name IS '所属展览名称';
-COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_start_time IS '所属展览开始时间';
-COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_end_time IS '所属展览结束时间';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_status IS '所属展览状态';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_id IS '所属展馆ID';
 COMMENT ON COLUMN v_ebcp_control_device_info.exhibition_hall_name IS '所属展馆名称';

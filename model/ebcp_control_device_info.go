@@ -43,18 +43,16 @@ Table: v_ebcp_control_device_info
 [22] room_location_name                             VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [23] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [24] exhibition_name                                VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[25] exhibition_start_time                          TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[26] exhibition_end_time                            TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
-[27] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[28] exhibition_hall_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[29] exhibition_hall_name                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[30] exhibition_hall_remarks                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
-[31] linked_item                                    JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
+[25] exhibition_status                              INT4                 null: true   primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
+[26] exhibition_hall_id                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[27] exhibition_hall_name                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
+[28] exhibition_hall_remarks                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[29] linked_item                                    JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "DeemBopfUsirSSbgPAiaWZLBR",    "name": "hnhUUZiQpuhmiumEkHiUfCyHL",    "device_type": "fKeQyKBxXNbIDoltILVfHthIB",    "ip_address": "rhPuCoPNxikFvwEGyHEORXWIx",    "port": 24,    "version": "KvuaqIgUKCvxlAoiGxLaHaZwC",    "status": 20,    "commands": "CpyUnTgXqjYDMHeKVfVcEPHBg",    "created_time": 44,    "updated_time": 29,    "item_id": "afvuBNRCtbysjqgAYwyCRLfSV",    "item_name": "sHMZeqYZoBTeoIZWPcGHbkOVS",    "item_type": "bDqnYPNlsYQOHPKgvybDMVVeO",    "room_id": "cBOVRVwKvDrNNkZGmQPdEDIXX",    "room_name": "VGtlICrgERdgvQdLKCndvaEqo",    "room_status": 2,    "room_remarks": "AycfdoYRPayKrwuljEXNCkkkw",    "room_floor": "iVDGHVyAQHhJDHRQTVBSPNjwR",    "room_floor_value": "xTnZFIadpKGjcVUGcYtYZnoYN",    "room_floor_name": "MPYuKndsNSCTAqIoDtHMoaslI",    "room_location": "iikZQRUJMwwSpgSqGjLxCKLgZ",    "room_location_value": "KJyblwiAJfsAwlovlofrwnUws",    "room_location_name": "BhAWBFSSdkOGRuTqbgNDTuBVU",    "exhibition_id": "QTBjnJSoLxLFpbyLEkZbVMOtU",    "exhibition_name": "BhoTISjdPXJMaJJptMOAVwYqh",    "exhibition_start_time": 69,    "exhibition_end_time": 81,    "exhibition_status": 86,    "exhibition_hall_id": "hyPpdKAufpAFWubfbUbgLqJsx",    "exhibition_hall_name": "euArnarQbMPaMtlbSvkCQxsJL",    "exhibition_hall_remarks": "ERvuBXhMZdUqTVsiAwOGXlPdi",    "linked_item": 87}
+{    "id": "nNMqstfbLxZHfyJOCvaXXXhcq",    "name": "OcwpyIghPxFTqTBfyPVxxHaYJ",    "device_type": "nYEVYfwgUaOOiIxLVWDPMMnFM",    "ip_address": "doyHIUlGLejFjRLnKjEJumwkK",    "port": 19,    "version": "XQKAqPiDYxgUYDEaWgXmRRGsI",    "status": 75,    "commands": "DQbEkbLlxXBoNxAEBkVYasOye",    "created_time": 36,    "updated_time": 82,    "item_id": "CmIrTHcGwxZUrKtuHCsvWgEOp",    "item_name": "YyIdueKTOqoJJKAvZXkXxvNuu",    "item_type": "TKAJjALIRetndDqwegvYTilDF",    "room_id": "XhbrnqFSWMlcAbMNfLoLohkJJ",    "room_name": "fgcVoIiKaEfIYcLKRWEsUkhSS",    "room_status": 52,    "room_remarks": "MBpMHfqbFFoLfZECxPfJJkeDB",    "room_floor": "hJAEOVxpTbFLfCYnvykQfTNoG",    "room_floor_value": "gQJZpKNCVHbGsSMUsIIyUfHYd",    "room_floor_name": "pCccNCpKINXjWgjrDCvDlmojy",    "room_location": "kEKwfrIVXjcLmZpxxaDRMVeIm",    "room_location_value": "RqCYkpCZpTExOMwBrjcNEUUsb",    "room_location_name": "ECYrlyeFCxCDLJNgAeVNAYQox",    "exhibition_id": "RFMxvfGlfNsQFXxRiWxXRkJlM",    "exhibition_name": "TeZfCWQEPXGveGxdQkxVxDqXY",    "exhibition_status": 64,    "exhibition_hall_id": "lSschAhXuSherZSoOifxAvdQc",    "exhibition_hall_name": "AospckhWRNvdkLDxuccldNrcH",    "exhibition_hall_remarks": "LdkjsrWKfGpNqiEQaJiOZFfry",    "linked_item": 39}
 
 
 Comments
@@ -118,10 +116,6 @@ var (
 
 	Ebcp_control_device_info_FIELD_NAME_exhibition_name = "exhibition_name"
 
-	Ebcp_control_device_info_FIELD_NAME_exhibition_start_time = "exhibition_start_time"
-
-	Ebcp_control_device_info_FIELD_NAME_exhibition_end_time = "exhibition_end_time"
-
 	Ebcp_control_device_info_FIELD_NAME_exhibition_status = "exhibition_status"
 
 	Ebcp_control_device_info_FIELD_NAME_exhibition_hall_id = "exhibition_hall_id"
@@ -184,10 +178,6 @@ type Ebcp_control_device_info struct {
 	ExhibitionID string `json:"exhibition_id"` //所属展览ID
 
 	ExhibitionName string `json:"exhibition_name"` //所属展览名称
-
-	ExhibitionStartTime common.LocalTime `json:"exhibition_start_time"` //所属展览开始时间
-
-	ExhibitionEndTime common.LocalTime `json:"exhibition_end_time"` //所属展览结束时间
 
 	ExhibitionStatus int32 `json:"exhibition_status"` //所属展览状态
 
@@ -734,48 +724,6 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 
 		&ColumnInfo{
 			Index:              25,
-			Name:               "exhibition_start_time",
-			Comment:            `所属展览开始时间`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TIMESTAMP",
-			DatabaseTypePretty: "TIMESTAMP",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TIMESTAMP",
-			ColumnLength:       -1,
-			GoFieldName:        "ExhibitionStartTime",
-			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "exhibition_start_time",
-			ProtobufFieldName:  "exhibition_start_time",
-			ProtobufType:       "uint64",
-			ProtobufPos:        26,
-		},
-
-		&ColumnInfo{
-			Index:              26,
-			Name:               "exhibition_end_time",
-			Comment:            `所属展览结束时间`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TIMESTAMP",
-			DatabaseTypePretty: "TIMESTAMP",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TIMESTAMP",
-			ColumnLength:       -1,
-			GoFieldName:        "ExhibitionEndTime",
-			GoFieldType:        "common.LocalTime",
-			JSONFieldName:      "exhibition_end_time",
-			ProtobufFieldName:  "exhibition_end_time",
-			ProtobufType:       "uint64",
-			ProtobufPos:        27,
-		},
-
-		&ColumnInfo{
-			Index:              27,
 			Name:               "exhibition_status",
 			Comment:            `所属展览状态`,
 			Notes:              ``,
@@ -792,11 +740,11 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_status",
 			ProtobufFieldName:  "exhibition_status",
 			ProtobufType:       "int32",
-			ProtobufPos:        28,
+			ProtobufPos:        26,
 		},
 
 		&ColumnInfo{
-			Index:              28,
+			Index:              26,
 			Name:               "exhibition_hall_id",
 			Comment:            `所属展馆ID`,
 			Notes:              ``,
@@ -813,11 +761,11 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_hall_id",
 			ProtobufFieldName:  "exhibition_hall_id",
 			ProtobufType:       "string",
-			ProtobufPos:        29,
+			ProtobufPos:        27,
 		},
 
 		&ColumnInfo{
-			Index:              29,
+			Index:              27,
 			Name:               "exhibition_hall_name",
 			Comment:            `所属展馆名称`,
 			Notes:              ``,
@@ -834,11 +782,11 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_hall_name",
 			ProtobufFieldName:  "exhibition_hall_name",
 			ProtobufType:       "string",
-			ProtobufPos:        30,
+			ProtobufPos:        28,
 		},
 
 		&ColumnInfo{
-			Index:              30,
+			Index:              28,
 			Name:               "exhibition_hall_remarks",
 			Comment:            `所属展馆备注`,
 			Notes:              ``,
@@ -855,11 +803,11 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			JSONFieldName:      "exhibition_hall_remarks",
 			ProtobufFieldName:  "exhibition_hall_remarks",
 			ProtobufType:       "string",
-			ProtobufPos:        31,
+			ProtobufPos:        29,
 		},
 
 		&ColumnInfo{
-			Index:              31,
+			Index:              29,
 			Name:               "linked_item",
 			Comment:            `直接关联的展项（JSON格式）`,
 			Notes:              ``,
@@ -876,7 +824,7 @@ Warning table: v_ebcp_control_device_info primary key column id is nullable colu
 			JSONFieldName:      "linked_item",
 			ProtobufFieldName:  "linked_item",
 			ProtobufType:       "string",
-			ProtobufPos:        32,
+			ProtobufPos:        30,
 		},
 	},
 }
