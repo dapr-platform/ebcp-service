@@ -180,6 +180,19 @@ definitions:
       total:
         type: integer
     type: object
+  common.PageGeneric-model_Ebcp_exhibition_room_item_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_room_item_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
   common.PageGeneric-model_Ebcp_item_device_relation:
     properties:
       items:
@@ -769,6 +782,32 @@ definitions:
         type: string
       status:
         description: 展厅状态
+        type: integer
+    type: object
+  model.Ebcp_exhibition_room_item_info:
+    properties:
+      end_time:
+        description: 展览结束时间
+        type: string
+      id:
+        description: 展览ID
+        type: string
+      name:
+        description: 展览名称
+        type: string
+      rooms:
+        description: 展览使用的所有展厅（包含每个展厅内的展项信息）
+      start_time:
+        description: 展览开始时间
+        type: string
+      status:
+        description: '展览状态（1: 运行中, 2: 筹备中, 3: 已结束）'
+        type: integer
+      total_item_count:
+        description: 展项总数
+        type: integer
+      total_room_count:
+        description: 展厅总数
         type: integer
     type: object
   model.Ebcp_holiday_date:
@@ -3805,6 +3844,146 @@ paths:
       summary: page query
       tags:
       - 展厅详细视图，包含展厅信息及其关联的展览和展项信息（JSON格式）
+  /ebcp-exhibition-room-item-info:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: start_time
+        in: query
+        name: start_time
+        type: string
+      - description: end_time
+        in: query
+        name: end_time
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: total_room_count
+        in: query
+        name: total_room_count
+        type: string
+      - description: total_item_count
+        in: query
+        name: total_item_count
+        type: string
+      - description: rooms
+        in: query
+        name: rooms
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_exhibition_room_item_info'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - 展览展厅展项信息视图
+  /ebcp-exhibition-room-item-info/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: start_time
+        in: query
+        name: start_time
+        type: string
+      - description: end_time
+        in: query
+        name: end_time
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: total_room_count
+        in: query
+        name: total_room_count
+        type: string
+      - description: total_item_count
+        in: query
+        name: total_item_count
+        type: string
+      - description: rooms
+        in: query
+        name: rooms
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_room_item_info'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 展览展厅展项信息视图
   /ebcp-exhibition-room/{id}:
     delete:
       description: delete

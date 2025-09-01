@@ -30,4 +30,5 @@ func InitRoute(r chi.Router) {
 	InitEbcp_exhibition_roomExtRoute(r)
 	InitEbcp_control_device_infoRoute(r)
 	InitEbcp_schedule_jobRoute(r)
+	InitEbcp_exhibition_room_item_infoRoute(r)
 }

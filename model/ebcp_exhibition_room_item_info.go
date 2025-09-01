@@ -17,7 +17,7 @@ DB Table Details
 -------------------------------------
 
 
-Table: v_ebcp_exhibition_info
+Table: v_ebcp_exhibition_room_item_info
 [ 0] id                                             VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] name                                           VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
 [ 2] start_time                                     TIMESTAMP            null: true   primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: []
@@ -26,18 +26,17 @@ Table: v_ebcp_exhibition_info
 [ 5] total_room_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
 [ 6] total_item_count                               INT8                 null: true   primary: false  isArray: false  auto: false  col: INT8            len: -1      default: []
 [ 7] rooms                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
-[ 8] items                                          JSON                 null: true   primary: false  isArray: false  auto: false  col: JSON            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "HbWrIyNmhFCBmSdGNqHGdoZrT",    "name": "xKmtVMAlgjGDuamxEthwZBJAK",    "start_time": 74,    "end_time": 35,    "status": 19,    "total_room_count": 18,    "total_item_count": 93,    "rooms": 14,    "items": 34}
+{    "id": "uDSuAkXNepdNkLjKPMVJsSiXY",    "name": "LqUTveYriljBhcbsKqPEwQxKp",    "start_time": 8,    "end_time": 73,    "status": 30,    "total_room_count": 41,    "total_item_count": 51,    "rooms": 51}
 
 
 Comments
 -------------------------------------
-[ 0] Warning table: v_ebcp_exhibition_info does not have a primary key defined, setting col position 1 id as primary key
-Warning table: v_ebcp_exhibition_info primary key column id is nullable column, setting it as NOT NULL
+[ 0] Warning table: v_ebcp_exhibition_room_item_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_room_item_info primary key column id is nullable column, setting it as NOT NULL
 
 
 
@@ -45,27 +44,25 @@ Warning table: v_ebcp_exhibition_info primary key column id is nullable column, 
 */
 
 var (
-	Ebcp_exhibition_info_FIELD_NAME_id = "id"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_id = "id"
 
-	Ebcp_exhibition_info_FIELD_NAME_name = "name"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_name = "name"
 
-	Ebcp_exhibition_info_FIELD_NAME_start_time = "start_time"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_start_time = "start_time"
 
-	Ebcp_exhibition_info_FIELD_NAME_end_time = "end_time"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_end_time = "end_time"
 
-	Ebcp_exhibition_info_FIELD_NAME_status = "status"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_status = "status"
 
-	Ebcp_exhibition_info_FIELD_NAME_total_room_count = "total_room_count"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_total_room_count = "total_room_count"
 
-	Ebcp_exhibition_info_FIELD_NAME_total_item_count = "total_item_count"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_total_item_count = "total_item_count"
 
-	Ebcp_exhibition_info_FIELD_NAME_rooms = "rooms"
-
-	Ebcp_exhibition_info_FIELD_NAME_items = "items"
+	Ebcp_exhibition_room_item_info_FIELD_NAME_rooms = "rooms"
 )
 
-// Ebcp_exhibition_info struct is a row record of the v_ebcp_exhibition_info table in the  database
-type Ebcp_exhibition_info struct {
+// Ebcp_exhibition_room_item_info struct is a row record of the v_ebcp_exhibition_room_item_info table in the  database
+type Ebcp_exhibition_room_item_info struct {
 	ID string `json:"id"` //展览ID
 
 	Name string `json:"name"` //展览名称
@@ -80,22 +77,20 @@ type Ebcp_exhibition_info struct {
 
 	TotalItemCount int32 `json:"total_item_count"` //展项总数
 
-	Rooms any `json:"rooms"` //展览使用的所有展厅
-
-	Items any `json:"items"` //展览的所有展项
+	Rooms any `json:"rooms"` //展览使用的所有展厅（包含每个展厅内的展项信息）
 
 }
 
-var Ebcp_exhibition_infoTableInfo = &TableInfo{
-	Name: "v_ebcp_exhibition_info",
+var Ebcp_exhibition_room_item_infoTableInfo = &TableInfo{
+	Name: "v_ebcp_exhibition_room_item_info",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
 			Index:   0,
 			Name:    "id",
 			Comment: `展览ID`,
-			Notes: `Warning table: v_ebcp_exhibition_info does not have a primary key defined, setting col position 1 id as primary key
-Warning table: v_ebcp_exhibition_info primary key column id is nullable column, setting it as NOT NULL
+			Notes: `Warning table: v_ebcp_exhibition_room_item_info does not have a primary key defined, setting col position 1 id as primary key
+Warning table: v_ebcp_exhibition_room_item_info primary key column id is nullable column, setting it as NOT NULL
 `,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
@@ -242,7 +237,7 @@ Warning table: v_ebcp_exhibition_info primary key column id is nullable column, 
 		&ColumnInfo{
 			Index:              7,
 			Name:               "rooms",
-			Comment:            `展览使用的所有展厅`,
+			Comment:            `展览使用的所有展厅（包含每个展厅内的展项信息）`,
 			Notes:              ``,
 			Nullable:           true,
 			DatabaseTypeName:   "JSON",
@@ -259,50 +254,29 @@ Warning table: v_ebcp_exhibition_info primary key column id is nullable column, 
 			ProtobufType:       "string",
 			ProtobufPos:        8,
 		},
-
-		&ColumnInfo{
-			Index:              8,
-			Name:               "items",
-			Comment:            `展览的所有展项`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "JSON",
-			DatabaseTypePretty: "JSON",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "JSON",
-			ColumnLength:       -1,
-			GoFieldName:        "Items",
-			GoFieldType:        "any",
-			JSONFieldName:      "items",
-			ProtobufFieldName:  "items",
-			ProtobufType:       "string",
-			ProtobufPos:        9,
-		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_exhibition_info) TableName() string {
-	return "v_ebcp_exhibition_info"
+func (e *Ebcp_exhibition_room_item_info) TableName() string {
+	return "v_ebcp_exhibition_room_item_info"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_exhibition_info) BeforeSave() error {
+func (e *Ebcp_exhibition_room_item_info) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_exhibition_info) Prepare() {
+func (e *Ebcp_exhibition_room_item_info) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_exhibition_info) Validate(action Action) error {
+func (e *Ebcp_exhibition_room_item_info) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_exhibition_info) TableInfo() *TableInfo {
-	return Ebcp_exhibition_infoTableInfo
+func (e *Ebcp_exhibition_room_item_info) TableInfo() *TableInfo {
+	return Ebcp_exhibition_room_item_infoTableInfo
 }

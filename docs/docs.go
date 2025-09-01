@@ -4111,6 +4111,224 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-room-item-info": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览展厅展项信息视图"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_time",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "end_time",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_room_item_info"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-room-item-info/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览展厅展项信息视图"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_time",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "end_time",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_room_count",
+                        "name": "total_room_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "total_item_count",
+                        "name": "total_item_count",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rooms",
+                        "name": "rooms",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_room_item_info"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-room/batch-delete": {
             "post": {
                 "description": "batch delete",
@@ -9158,6 +9376,26 @@ const docTemplate = `{
                 }
             }
         },
+        "common.PageGeneric-model_Ebcp_exhibition_room_item_info": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_room_item_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "common.PageGeneric-model_Ebcp_item_device_relation": {
             "type": "object",
             "properties": {
@@ -9971,6 +10209,42 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "展厅状态",
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Ebcp_exhibition_room_item_info": {
+            "type": "object",
+            "properties": {
+                "end_time": {
+                    "description": "展览结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "展览ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "展览名称",
+                    "type": "string"
+                },
+                "rooms": {
+                    "description": "展览使用的所有展厅（包含每个展厅内的展项信息）"
+                },
+                "start_time": {
+                    "description": "展览开始时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "展览状态（1: 运行中, 2: 筹备中, 3: 已结束）",
+                    "type": "integer"
+                },
+                "total_item_count": {
+                    "description": "展项总数",
+                    "type": "integer"
+                },
+                "total_room_count": {
+                    "description": "展厅总数",
                     "type": "integer"
                 }
             }

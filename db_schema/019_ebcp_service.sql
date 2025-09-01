@@ -359,6 +359,64 @@ COMMENT ON COLUMN v_ebcp_exhibition_info.total_item_count IS '展项总数';
 COMMENT ON COLUMN v_ebcp_exhibition_info.rooms IS '展览使用的所有展厅';
 COMMENT ON COLUMN v_ebcp_exhibition_info.items IS '展览的所有展项';
 
+
+-- 创建视图
+CREATE VIEW v_ebcp_exhibition_room_item_info AS
+SELECT 
+    e.id AS id,
+    e.name AS name,
+    e.start_time AS start_time,
+    e.end_time AS end_time,
+    e.status AS status,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
+    (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,
+    (
+        SELECT json_agg(
+            json_build_object(
+                'id', r.id,
+                'name', r.name,
+                'floor', r.floor,
+                'floor_value', (SELECT dict_value FROM o_ops_dict WHERE id = r.floor),
+                'floor_name', (SELECT dict_name FROM o_ops_dict WHERE id = r.floor),
+                'location', r.location,
+                'location_value', (SELECT dict_value FROM o_ops_dict WHERE id = r.location),
+                'location_name', (SELECT dict_name FROM o_ops_dict WHERE id = r.location),
+                'status', r.status,
+                'items', (
+                    SELECT json_agg(
+                        json_build_object(
+                            'id', i.id,
+                            'name', i.name,
+                            'type', i.type,
+                            'sub_type', i.sub_type,
+                            'status', i.status,
+                            'remarks', i.remarks,
+                            'commands', i.commands,
+                            'ip_address', i.ip_address,
+                            'port', i.port
+                        )
+                    )
+                    FROM o_ebcp_exhibition_item i
+                    WHERE i.room_id = r.id
+                )
+            )
+        )
+        FROM o_ebcp_exhibition_room r
+        WHERE r.exhibition_id = e.id
+    ) AS rooms
+FROM o_ebcp_exhibition e;
+
+COMMENT ON VIEW v_ebcp_exhibition_room_item_info IS '展览信息视图';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.id IS '展览ID';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.name IS '展览名称';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.start_time IS '展览开始时间';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.end_time IS '展览结束时间';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.status IS '展览状态（1: 运行中, 2: 筹备中, 3: 已结束）';    
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.total_room_count IS '展厅总数';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.total_item_count IS '展项总数';
+COMMENT ON COLUMN v_ebcp_exhibition_room_item_info.rooms IS '展览使用的所有展厅（包含每个展厅内的展项信息）';
+
+
 CREATE VIEW v_ebcp_exhibition_area_info AS
 SELECT 
     r.id AS room_id,
@@ -918,6 +976,7 @@ COMMENT ON COLUMN v_ebcp_control_device_info.linked_item IS '直接关联的展�
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
+DROP VIEW IF EXISTS v_ebcp_exhibition_room_item_info;
 DROP TABLE IF EXISTS o_ebcp_schedule_job;
 DROP VIEW IF EXISTS v_ebcp_control_device_info;
 DROP VIEW IF EXISTS v_ebcp_player_program_info;
