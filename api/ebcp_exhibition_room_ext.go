@@ -10,6 +10,8 @@ import (
 
 func InitEbcp_exhibition_roomExtRoute(r chi.Router) {
 	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-room/static-control", StaticControlExhibitionRoomHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-room/start", StartExhibitionRoomHandler)
+	r.Post(common.BASE_CONTEXT+"/ebcp-exhibition-room/stop", StopExhibitionRoomHandler)
 }
 
 type StaticControlExhibitionRoomRequest struct {
@@ -39,4 +41,44 @@ func StaticControlExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 		common.HttpResult(w, common.OK)
+}
+// @Summary Start exhibition room
+// @Description Start an exhibition room by ID
+// @Tags 展厅
+// @Param room_id query string true "展厅ID"
+// @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-exhibition-room/start [post]
+func StartExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) {
+	roomID := r.URL.Query().Get("room_id")
+	itemType := r.URL.Query().Get("type")
+	go func() {
+		err := service.StartExhibitionRoom(roomID, itemType)
+		if err != nil {
+			common.Logger.Errorf("启动展厅 %s 失败: %v", request.RoomID, err)
+		}
+	}()
+	common.HttpResult(w, common.OK.AppendMsg("后台启动中"))
+}
+// @Summary Stop exhibition room
+// @Description Stop an exhibition room by ID
+// @Tags 展厅
+// @Param room_id query string true "展厅ID"
+// @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
+// @Produce json
+// @Success 200 {object} common.Response "Success"
+// @Failure 500 {object} common.Response "Error"
+// @Router /ebcp-exhibition-room/stop [post]
+func StopExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) {
+	roomID := r.URL.Query().Get("room_id")
+	itemType := r.URL.Query().Get("type")
+	go func() {
+		err := service.StopExhibitionRoom(roomID, itemType)
+		if err != nil {
+			common.Logger.Errorf("停止展厅 %s 失败: %v", request.RoomID, err)
+		}
+	}()
+	common.HttpResult(w, common.OK.AppendMsg("后台停止中"))
 }

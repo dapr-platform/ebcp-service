@@ -30,11 +30,13 @@ func InitEbcp_exhibition_hallExtRoute(r chi.Router) {
 // @Router /ebcp-exhibition-hall/start [post]
 func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
 	itemType := r.URL.Query().Get("type")
-	err := service.StartHall(itemType)
-	if err != nil {
-		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
-	}
-	common.HttpResult(w, common.OK)
+	go func() {
+		err := service.StartHall(itemType)
+		if err != nil {
+			common.Logger.Errorf("启动展馆 %s 失败: %v", itemType, err)
+		}
+	}()
+	common.HttpResult(w, common.OK.AppendMsg("后台启动中"))
 }
 
 // @Summary 展馆一键停止
@@ -48,9 +50,11 @@ func Ebcp_exhibition_hallStartHandler(w http.ResponseWriter, r *http.Request) {
 // @Router /ebcp-exhibition-hall/stop [post]
 func Ebcp_exhibition_hallStopHandler(w http.ResponseWriter, r *http.Request) {
 	itemType := r.URL.Query().Get("type")
-	err := service.StopHall(itemType)
-	if err != nil {
-		common.HttpResult(w, common.OK.AppendMsg(err.Error()))
-	}
-	common.HttpResult(w, common.OK)
+	go func() {
+		err := service.StopHall(itemType)
+		if err != nil {
+			common.Logger.Errorf("停止展馆 %s 失败: %v", itemType, err)
+		}
+	}()
+	common.HttpResult(w, common.OK.AppendMsg("后台停止中"))
 }

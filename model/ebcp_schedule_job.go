@@ -2,8 +2,9 @@ package model
 
 import (
 	"database/sql"
-	"github.com/dapr-platform/common"
 	"time"
+
+	"github.com/dapr-platform/common"
 )
 
 var (
@@ -17,63 +18,60 @@ DB Table Details
 -------------------------------------
 
 
-Table: o_ebcp_control_device
+Table: o_ebcp_schedule_job
 [ 0] id                                             VARCHAR(32)          null: false  primary: true   isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 1] created_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 2] created_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
 [ 3] updated_by                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [ 4] updated_time                                   TIMESTAMP            null: false  primary: false  isArray: false  auto: false  col: TIMESTAMP       len: -1      default: [CURRENT_TIMESTAMP]
-[ 5] name                                           VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 6] device_type                                    VARCHAR(50)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 50      default: []
-[ 7] ip_address                                     VARCHAR(255)         null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[ 8] port                                           INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: []
-[ 9] version                                        VARCHAR(255)         null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 255     default: []
-[10] room_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[11] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
-[12] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
-[13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[ 5] rel_id                                         VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 6] rel_type                                       VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 7] start_time                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 8] stop_time                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[ 9] start_date                                     VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[10] stop_date                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[11] week_days                                      VARCHAR(32)          null: false  primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
+[12] enabled                                        INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "QvZdApFPOOvlZqDWcGkTjRrJj",    "created_by": "RewKVtgkUuBoIFbDcTtdnmfMa",    "created_time": 59,    "updated_by": "fLVrWPspAxoMxwSsuBwUrjCgx",    "updated_time": 52,    "name": "XwKekFfFVSCSYjIFaZvwnkqSX",    "device_type": "mFxhMLjkSELNogrDXrXfSopFK",    "ip_address": "KFNBknoaKoAXoXCwRQOklFNXl",    "port": 5,    "version": "nYedATEICBcobTGkHiXJnAyrl",    "room_id": "hIpnsWyWkjfLGklhiDUlEwlLX",    "item_id": "oFClKcdnDSxcZxcxvwNntkJcL",    "status": 80,    "commands": "VgBUObsFdSPooYBlCRQXopZWR"}
+{    "id": "HVBuXALDsnulaUJSbmGaVtZjQ",    "created_by": "PJRXWAxqLVdiAEFLrNYhBpduH",    "created_time": 35,    "updated_by": "bfTaCvdJrkXojmTqcIlFcoJIn",    "updated_time": 5,    "rel_id": "lJwhxfLbPbOSTxnhWcBfAuFMI",    "rel_type": "jDTuCgyiHYvNYKVaATpIggfFp",    "start_time": "vxFYlLefVVwTccpheYUCRntwa",    "stop_time": "MELpfpQYWUBNaHbmvdYMkZjoi",    "start_date": "ZBohbfiRAZugKiBLnxfLAutlc",    "stop_date": "MIDaMQQuZcPVkwPbfMZnFMEDO",    "week_days": "qfnlTfAVPOguYRtDBOFxYifje",    "enabled": 51}
 
 
 
 */
 
 var (
-	Ebcp_control_device_FIELD_NAME_id = "id"
+	Ebcp_schedule_job_FIELD_NAME_id = "id"
 
-	Ebcp_control_device_FIELD_NAME_created_by = "created_by"
+	Ebcp_schedule_job_FIELD_NAME_created_by = "created_by"
 
-	Ebcp_control_device_FIELD_NAME_created_time = "created_time"
+	Ebcp_schedule_job_FIELD_NAME_created_time = "created_time"
 
-	Ebcp_control_device_FIELD_NAME_updated_by = "updated_by"
+	Ebcp_schedule_job_FIELD_NAME_updated_by = "updated_by"
 
-	Ebcp_control_device_FIELD_NAME_updated_time = "updated_time"
+	Ebcp_schedule_job_FIELD_NAME_updated_time = "updated_time"
 
-	Ebcp_control_device_FIELD_NAME_name = "name"
+	Ebcp_schedule_job_FIELD_NAME_rel_id = "rel_id"
 
-	Ebcp_control_device_FIELD_NAME_device_type = "device_type"
+	Ebcp_schedule_job_FIELD_NAME_rel_type = "rel_type"
 
-	Ebcp_control_device_FIELD_NAME_ip_address = "ip_address"
+	Ebcp_schedule_job_FIELD_NAME_start_time = "start_time"
 
-	Ebcp_control_device_FIELD_NAME_port = "port"
+	Ebcp_schedule_job_FIELD_NAME_stop_time = "stop_time"
 
-	Ebcp_control_device_FIELD_NAME_version = "version"
+	Ebcp_schedule_job_FIELD_NAME_start_date = "start_date"
 
-	Ebcp_control_device_FIELD_NAME_room_id = "room_id"
+	Ebcp_schedule_job_FIELD_NAME_stop_date = "stop_date"
 
-	Ebcp_control_device_FIELD_NAME_item_id = "item_id"
+	Ebcp_schedule_job_FIELD_NAME_week_days = "week_days"
 
-	Ebcp_control_device_FIELD_NAME_status = "status"
-
-	Ebcp_control_device_FIELD_NAME_commands = "commands"
+	Ebcp_schedule_job_FIELD_NAME_enabled = "enabled"
 )
 
-// Ebcp_control_device struct is a row record of the o_ebcp_control_device table in the  database
-type Ebcp_control_device struct {
+// Ebcp_schedule_job struct is a row record of the o_ebcp_schedule_job table in the  database
+type Ebcp_schedule_job struct {
 	ID string `json:"id"` //id
 
 	CreatedBy string `json:"created_by"` //created_by
@@ -84,28 +82,26 @@ type Ebcp_control_device struct {
 
 	UpdatedTime common.LocalTime `json:"updated_time"` //updated_time
 
-	Name string `json:"name"` //设备名称
+	RelID string `json:"rel_id"` //关联ID
 
-	DeviceType string `json:"device_type"` //设备类型(power,light)
+	RelType string `json:"rel_type"` //关联类型,exhibition,room
 
-	IPAddress string `json:"ip_address"` //ip_address
+	StartTime string `json:"start_time"` //启动时间,HH:mm
 
-	Port int32 `json:"port"` //port
+	StopTime string `json:"stop_time"` //停止时间,HH:mm
 
-	Version string `json:"version"` //version
+	StartDate string `json:"start_date"` //开始日期,yyyy-mm-dd
 
-	RoomID string `json:"room_id"` //所属展厅ID
+	StopDate string `json:"stop_date"` //停止日期,yyyy-mm-dd
 
-	ItemID string `json:"item_id"` //所属展项ID
+	WeekDays string `json:"week_days"` //周几,逗号分隔,1-7代表周一到周日
 
-	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
-
-	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]
+	Enabled int32 `json:"enabled"` //是否启用(0: 禁用, 1: 启用)
 
 }
 
-var Ebcp_control_deviceTableInfo = &TableInfo{
-	Name: "o_ebcp_control_device",
+var Ebcp_schedule_jobTableInfo = &TableInfo{
+	Name: "o_ebcp_schedule_job",
 	Columns: []*ColumnInfo{
 
 		&ColumnInfo{
@@ -215,115 +211,115 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 
 		&ColumnInfo{
 			Index:              5,
-			Name:               "name",
-			Comment:            `设备名称`,
+			Name:               "rel_id",
+			Comment:            `关联ID`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "Name",
+			ColumnLength:       32,
+			GoFieldName:        "RelID",
 			GoFieldType:        "string",
-			JSONFieldName:      "name",
-			ProtobufFieldName:  "name",
+			JSONFieldName:      "rel_id",
+			ProtobufFieldName:  "rel_id",
 			ProtobufType:       "string",
 			ProtobufPos:        6,
 		},
 
 		&ColumnInfo{
 			Index:              6,
-			Name:               "device_type",
-			Comment:            `设备类型(power,light)`,
+			Name:               "rel_type",
+			Comment:            `关联类型`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(50)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       50,
-			GoFieldName:        "DeviceType",
+			ColumnLength:       32,
+			GoFieldName:        "RelType",
 			GoFieldType:        "string",
-			JSONFieldName:      "device_type",
-			ProtobufFieldName:  "device_type",
+			JSONFieldName:      "rel_type",
+			ProtobufFieldName:  "rel_type",
 			ProtobufType:       "string",
 			ProtobufPos:        7,
 		},
 
 		&ColumnInfo{
 			Index:              7,
-			Name:               "ip_address",
-			Comment:            `ip_address`,
+			Name:               "start_time",
+			Comment:            `启动时间`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "IPAddress",
+			ColumnLength:       32,
+			GoFieldName:        "StartTime",
 			GoFieldType:        "string",
-			JSONFieldName:      "ip_address",
-			ProtobufFieldName:  "ip_address",
+			JSONFieldName:      "start_time",
+			ProtobufFieldName:  "start_time",
 			ProtobufType:       "string",
 			ProtobufPos:        8,
 		},
 
 		&ColumnInfo{
 			Index:              8,
-			Name:               "port",
-			Comment:            `port`,
+			Name:               "stop_time",
+			Comment:            `停止时间`,
 			Notes:              ``,
 			Nullable:           false,
-			DatabaseTypeName:   "INT4",
-			DatabaseTypePretty: "INT4",
+			DatabaseTypeName:   "VARCHAR",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
-			ColumnType:         "INT4",
-			ColumnLength:       -1,
-			GoFieldName:        "Port",
-			GoFieldType:        "int32",
-			JSONFieldName:      "port",
-			ProtobufFieldName:  "port",
-			ProtobufType:       "int32",
+			ColumnType:         "VARCHAR",
+			ColumnLength:       32,
+			GoFieldName:        "StopTime",
+			GoFieldType:        "string",
+			JSONFieldName:      "stop_time",
+			ProtobufFieldName:  "stop_time",
+			ProtobufType:       "string",
 			ProtobufPos:        9,
 		},
 
 		&ColumnInfo{
 			Index:              9,
-			Name:               "version",
-			Comment:            `version`,
+			Name:               "start_date",
+			Comment:            `开始日期`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
-			DatabaseTypePretty: "VARCHAR(255)",
+			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
 			IsAutoIncrement:    false,
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
-			ColumnLength:       255,
-			GoFieldName:        "Version",
+			ColumnLength:       32,
+			GoFieldName:        "StartDate",
 			GoFieldType:        "string",
-			JSONFieldName:      "version",
-			ProtobufFieldName:  "version",
+			JSONFieldName:      "start_date",
+			ProtobufFieldName:  "start_date",
 			ProtobufType:       "string",
 			ProtobufPos:        10,
 		},
 
 		&ColumnInfo{
 			Index:              10,
-			Name:               "room_id",
-			Comment:            `所属展厅ID`,
+			Name:               "stop_date",
+			Comment:            `停止日期`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
@@ -331,20 +327,20 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "RoomID",
+			GoFieldName:        "StopDate",
 			GoFieldType:        "string",
-			JSONFieldName:      "room_id",
-			ProtobufFieldName:  "room_id",
+			JSONFieldName:      "stop_date",
+			ProtobufFieldName:  "stop_date",
 			ProtobufType:       "string",
 			ProtobufPos:        11,
 		},
 
 		&ColumnInfo{
 			Index:              11,
-			Name:               "item_id",
-			Comment:            `所属展项ID`,
+			Name:               "week_days",
+			Comment:            `周几,逗号分隔,1-7代表周一到周日`,
 			Notes:              ``,
-			Nullable:           true,
+			Nullable:           false,
 			DatabaseTypeName:   "VARCHAR",
 			DatabaseTypePretty: "VARCHAR(32)",
 			IsPrimaryKey:       false,
@@ -352,18 +348,18 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "VARCHAR",
 			ColumnLength:       32,
-			GoFieldName:        "ItemID",
+			GoFieldName:        "WeekDays",
 			GoFieldType:        "string",
-			JSONFieldName:      "item_id",
-			ProtobufFieldName:  "item_id",
+			JSONFieldName:      "week_days",
+			ProtobufFieldName:  "week_days",
 			ProtobufType:       "string",
 			ProtobufPos:        12,
 		},
 
 		&ColumnInfo{
 			Index:              12,
-			Name:               "status",
-			Comment:            `状态(1: 正常, 2: 故障)`,
+			Name:               "enabled",
+			Comment:            `是否启用(0: 禁用, 1: 启用)`,
 			Notes:              ``,
 			Nullable:           false,
 			DatabaseTypeName:   "INT4",
@@ -373,57 +369,36 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			IsArray:            false,
 			ColumnType:         "INT4",
 			ColumnLength:       -1,
-			GoFieldName:        "Status",
+			GoFieldName:        "Enabled",
 			GoFieldType:        "int32",
-			JSONFieldName:      "status",
-			ProtobufFieldName:  "status",
+			JSONFieldName:      "enabled",
+			ProtobufFieldName:  "enabled",
 			ProtobufType:       "int32",
 			ProtobufPos:        13,
-		},
-
-		&ColumnInfo{
-			Index:              13,
-			Name:               "commands",
-			Comment:            `命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]`,
-			Notes:              ``,
-			Nullable:           true,
-			DatabaseTypeName:   "TEXT",
-			DatabaseTypePretty: "TEXT",
-			IsPrimaryKey:       false,
-			IsAutoIncrement:    false,
-			IsArray:            false,
-			ColumnType:         "TEXT",
-			ColumnLength:       -1,
-			GoFieldName:        "Commands",
-			GoFieldType:        "string",
-			JSONFieldName:      "commands",
-			ProtobufFieldName:  "commands",
-			ProtobufType:       "string",
-			ProtobufPos:        14,
 		},
 	},
 }
 
 // TableName sets the insert table name for this struct type
-func (e *Ebcp_control_device) TableName() string {
-	return "o_ebcp_control_device"
+func (e *Ebcp_schedule_job) TableName() string {
+	return "o_ebcp_schedule_job"
 }
 
 // BeforeSave invoked before saving, return an error if field is not populated.
-func (e *Ebcp_control_device) BeforeSave() error {
+func (e *Ebcp_schedule_job) BeforeSave() error {
 	return nil
 }
 
 // Prepare invoked before saving, can be used to populate fields etc.
-func (e *Ebcp_control_device) Prepare() {
+func (e *Ebcp_schedule_job) Prepare() {
 }
 
 // Validate invoked before performing action, return an error if field is not populated.
-func (e *Ebcp_control_device) Validate(action Action) error {
+func (e *Ebcp_schedule_job) Validate(action Action) error {
 	return nil
 }
 
 // TableInfo return table meta data
-func (e *Ebcp_control_device) TableInfo() *TableInfo {
-	return Ebcp_control_deviceTableInfo
+func (e *Ebcp_schedule_job) TableInfo() *TableInfo {
+	return Ebcp_schedule_jobTableInfo
 }

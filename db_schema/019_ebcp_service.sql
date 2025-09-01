@@ -254,6 +254,33 @@ COMMENT ON COLUMN o_ebcp_item_schedule.start_date IS '开始日期,暂时不用�
 COMMENT ON COLUMN o_ebcp_item_schedule.stop_date IS '停止日期,暂时不用（预留寒暑假延长时间）';
 COMMENT ON COLUMN o_ebcp_item_schedule.action_type IS '动作类型(0: 停止, 1: 播放)';
 
+
+create TABLE o_ebcp_schedule_job (
+    id VARCHAR(32) NOT NULL,
+    created_by VARCHAR(32) NOT NULL,
+    created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(32) NOT NULL,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    rel_id VARCHAR(32) NOT NULL,
+    rel_type VARCHAR(32) NOT NULL,
+    start_time VARCHAR(32) NOT NULL,
+    stop_time VARCHAR(32) NOT NULL,
+    start_date VARCHAR(32) NOT NULL DEFAULT '',
+    stop_date VARCHAR(32) NOT NULL DEFAULT '',
+    week_days VARCHAR(32) NOT NULL DEFAULT '',
+    enabled INTEGER NOT NULL DEFAULT 1,
+                         PRIMARY KEY (id)
+);
+comment on table o_ebcp_schedule_job is '定时任务表';
+comment on column o_ebcp_schedule_job.rel_id is '关联ID';
+comment on column o_ebcp_schedule_job.rel_type is '关联类型,exhibition,room';
+comment on column o_ebcp_schedule_job.start_time is '启动时间,HH:mm';
+comment on column o_ebcp_schedule_job.stop_time is '停止时间,HH:mm';
+comment on column o_ebcp_schedule_job.start_date is '开始日期,yyyy-mm-dd';
+comment on column o_ebcp_schedule_job.stop_date is '停止日期,yyyy-mm-dd';
+comment on column o_ebcp_schedule_job.week_days is '周几,逗号分隔,1-7代表周一到周日';
+comment on column o_ebcp_schedule_job.enabled is '是否启用(0: 禁用, 1: 启用)';
+
 -- 节假日日期表
 CREATE TABLE o_ebcp_holiday_date (
     id VARCHAR(32) NOT NULL,
@@ -891,6 +918,7 @@ COMMENT ON COLUMN v_ebcp_control_device_info.linked_item IS '直接关联的展�
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
+DROP TABLE IF EXISTS o_ebcp_schedule_job;
 DROP VIEW IF EXISTS v_ebcp_control_device_info;
 DROP VIEW IF EXISTS v_ebcp_player_program_info;
 DROP VIEW IF EXISTS v_ebcp_player_info;

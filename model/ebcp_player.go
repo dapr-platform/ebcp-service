@@ -37,7 +37,7 @@ Table: o_ebcp_player
 
 JSON Sample
 -------------------------------------
-{    "id": "JQdCRVCJasFsuYHsMSdgXovoA",    "created_by": "VIWsoujdrWVfwSvRVjsewtIQW",    "created_time": 91,    "updated_by": "nVUviEDxlamASnhHYvCcmjQho",    "updated_time": 70,    "name": "BbTMFdwdsBJabEkBvRHgBhVmN",    "ip_address": "AxVuNOchUxVjxwXLFShVLrdZS",    "port": 50,    "version": "OVJvRxcDOgNndhOmEyISMKXMY",    "item_id": "ZocaGLgcuHbKRtFPTlKwoUnnd",    "current_program_id": "ggIYuLgtMNHLBfTgmITWApPXC",    "current_program_state": 89,    "volume": 98,    "sound_state": 85,    "status": 22}
+{    "id": "EMhpKZhsYSrSopYWOxMXPQosx",    "created_by": "gJgoRrqaEvFIsfWPpwHBiFUBy",    "created_time": 46,    "updated_by": "uAMoJktBmyDEVeJutoFRTiqVb",    "updated_time": 24,    "name": "HcxoYZikxLtOapQcgRbSfZLjt",    "ip_address": "CLJbNPBBPymwXXcnWDPKmCmru",    "port": 87,    "version": "sVQLewcYeMxofEJWteTIEZUWL",    "item_id": "NXwtfBEferCUNuhjHQKPdgUaX",    "current_program_id": "YcewfAEntpqbdPRTFGApoGZER",    "current_program_state": 32,    "volume": 64,    "sound_state": 62,    "status": 16}
 
 
 
