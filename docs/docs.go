@@ -9096,6 +9096,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ebcp_schedule_job/{rel-id}/batch-save": {
+            "post": {
+                "description": "批量保存定时任务，删除原有任务，新增新的任务",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "批量保存定时任务",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "rel-id",
+                        "name": "rel-id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "ebcp_schedule_job",
+                        "name": "ebcp_schedule_jobs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Ebcp_schedule_job"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

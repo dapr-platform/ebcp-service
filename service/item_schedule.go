@@ -109,7 +109,7 @@ func BatchSaveEbcp_item_schedule(itemId string, ebcp_item_schedules []model.Ebcp
 	err := common.DbDeleteByOps(context.Background(), common.GetDaprClient(),
 		model.Ebcp_item_scheduleTableInfo.Name,
 		[]string{"item_id"},
-		[]string{"="},
+		[]string{"=="},
 		[]any{itemId})
 	if err != nil {
 		return fmt.Errorf("删除调度任务失败: %v", err)

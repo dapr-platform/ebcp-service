@@ -4,6 +4,7 @@ import (
 	"context"
 	"ebcp-service/model"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -28,6 +29,34 @@ func init() {
 	}()
 	stopScheduleJob = make(chan struct{})
 	go scheduleJobService(context.Background())
+
+}
+
+func BatchSaveEbcp_schedule_job(relId string, ebcp_schedule_jobs []model.Ebcp_schedule_job) error {
+	err := common.DbDeleteByOps(context.Background(), common.GetDaprClient(),
+	model.Ebcp_schedule_jobTableInfo.Name,
+	[]string{"rel_id"},
+	[]string{"=="},
+	[]any{relId})
+if err != nil {
+	return fmt.Errorf("删除定时任务失败: %v", err)
+}
+if len(ebcp_schedule_jobs) > 0 {
+	for i := range ebcp_schedule_jobs {
+		if ebcp_schedule_jobs[i].ID == "" {
+			ebcp_schedule_jobs[i].ID = common.NanoId()
+		}
+		// 确保item_id被正确设置
+		ebcp_schedule_jobs[i].RelID = relId
+	}
+	err = common.DbBatchInsert[model.Ebcp_schedule_job](context.Background(), common.GetDaprClient(),
+		ebcp_schedule_jobs, model.Ebcp_schedule_jobTableInfo.Name)
+	if err != nil {
+		return fmt.Errorf("保存定时任务失败: %v", err)
+	}
+}
+
+return nil
 }
 
 // 定时任务调度服务主循环

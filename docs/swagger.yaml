@@ -7062,4 +7062,33 @@ paths:
       summary: 批量保存展项定时任务
       tags:
       - 展项定时任务
+  /ebcp_schedule_job/{rel-id}/batch-save:
+    post:
+      consumes:
+      - application/json
+      description: 批量保存定时任务，删除原有任务，新增新的任务
+      parameters:
+      - description: rel-id
+        in: path
+        name: rel-id
+        required: true
+        type: string
+      - description: ebcp_schedule_job
+        in: body
+        name: ebcp_schedule_jobs
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/model.Ebcp_schedule_job'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 批量保存定时任务
+      tags:
+      - 定时任务
 swagger: "2.0"
