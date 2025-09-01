@@ -22,7 +22,7 @@ func InitEbcp_exhibition_extRoute(r chi.Router) {
 // @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
 // @Success 200 {object} common.Response ""
 // @Failure 500 {object} common.Response ""
-// @Router /ebcp-exhibition-hall/start [post]
+// @Router /ebcp-exhibition/start [post]
 func Ebcp_exhibition_extStartHandler(w http.ResponseWriter, r *http.Request) {
 	itemType := r.URL.Query().Get("type")
 	exhibitionId := r.URL.Query().Get("exhibition_id")
@@ -45,7 +45,7 @@ func Ebcp_exhibition_extStartHandler(w http.ResponseWriter, r *http.Request) {
 // @Param type query string true "type,1:数字展项，2:静态展项，不传默认全部"
 // @Success 200 {object} common.Response ""
 // @Failure 500 {object} common.Response ""
-// @Router /ebcp-exhibition-hall/stop [post]
+// @Router /ebcp-exhibition/stop [post]
 func Ebcp_exhibition_extStopHandler(w http.ResponseWriter, r *http.Request) {
 	itemType := r.URL.Query().Get("type")
 	exhibitionId := r.URL.Query().Get("exhibition_id")

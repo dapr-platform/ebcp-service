@@ -4725,6 +4725,96 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition/start": {
+            "post": {
+                "description": "展览一键启动",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览"
+                ],
+                "summary": "展览一键启动",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "展览ID",
+                        "name": "exhibition_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition/stop": {
+            "post": {
+                "description": "展览一键停止",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展览"
+                ],
+                "summary": "展览一键停止",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "展览ID",
+                        "name": "exhibition_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition/{id}": {
             "delete": {
                 "description": "delete",
