@@ -40,8 +40,9 @@ func StaticControlExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) 
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
 	}
-		common.HttpResult(w, common.OK)
+	common.HttpResult(w, common.OK)
 }
+
 // @Summary Start exhibition room
 // @Description Start an exhibition room by ID
 // @Tags 展厅
@@ -57,11 +58,12 @@ func StartExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		err := service.StartExhibitionRoom(roomID, itemType)
 		if err != nil {
-			common.Logger.Errorf("启动展厅 %s 失败: %v", request.RoomID, err)
+			common.Logger.Errorf("启动展厅 %s 失败: %v", roomID, err)
 		}
 	}()
 	common.HttpResult(w, common.OK.AppendMsg("后台启动中"))
 }
+
 // @Summary Stop exhibition room
 // @Description Stop an exhibition room by ID
 // @Tags 展厅
@@ -77,7 +79,7 @@ func StopExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		err := service.StopExhibitionRoom(roomID, itemType)
 		if err != nil {
-			common.Logger.Errorf("停止展厅 %s 失败: %v", request.RoomID, err)
+			common.Logger.Errorf("停止展厅 %s 失败: %v", roomID, err)
 		}
 	}()
 	common.HttpResult(w, common.OK.AppendMsg("后台停止中"))
