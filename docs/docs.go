@@ -445,18 +445,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "description": "exhibition_status",
                         "name": "exhibition_status",
                         "in": "query"
@@ -703,18 +691,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "exhibition_name",
                         "name": "exhibition_name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_start_time",
-                        "name": "exhibition_start_time",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "exhibition_end_time",
-                        "name": "exhibition_end_time",
                         "in": "query"
                     },
                     {
@@ -4361,6 +4337,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-exhibition-room/start": {
+            "post": {
+                "description": "Start an exhibition room by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展厅"
+                ],
+                "summary": "Start exhibition room",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "展厅ID",
+                        "name": "room_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp-exhibition-room/static-control": {
             "post": {
                 "description": "Static control an exhibition room by ID",
@@ -4380,6 +4398,48 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/api.StaticControlExhibitionRoomRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-room/stop": {
+            "post": {
+                "description": "Stop an exhibition room by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "展厅"
+                ],
+                "summary": "Stop exhibition room",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "展厅ID",
+                        "name": "room_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "type,1:数字展项，2:静态展项，不传默认全部",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -8223,6 +8283,468 @@ const docTemplate = `{
                 }
             }
         },
+        "/ebcp-schedule-job": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rel_id",
+                        "name": "rel_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rel_type",
+                        "name": "rel_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_time",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_time",
+                        "name": "stop_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_date",
+                        "name": "stop_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "week_days",
+                        "name": "week_days",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "enabled",
+                        "name": "enabled",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_schedule_job"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "save",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "save",
+                "parameters": [
+                    {
+                        "description": "object",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Ebcp_schedule_job"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_schedule_job"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-schedule-job/batch-delete": {
+            "post": {
+                "description": "batch delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "batch delete",
+                "parameters": [
+                    {
+                        "description": "id array",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-schedule-job/batch-upsert": {
+            "post": {
+                "description": "batch update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "batch update",
+                "parameters": [
+                    {
+                        "description": "objects array",
+                        "name": "entities",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-schedule-job/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rel_id",
+                        "name": "rel_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "rel_type",
+                        "name": "rel_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_time",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_time",
+                        "name": "stop_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "start_date",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "stop_date",
+                        "name": "stop_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "week_days",
+                        "name": "week_days",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "enabled",
+                        "name": "enabled",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_schedule_job"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-schedule-job/{id}": {
+            "delete": {
+                "description": "delete",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "定时任务"
+                ],
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "实例id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_schedule_job"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/ebcp_item_schedule/{item-id}/batch-save": {
             "post": {
                 "description": "批量保存展项定时任务，删除原有任务，新增新的任务",
@@ -8646,6 +9168,26 @@ const docTemplate = `{
                 }
             }
         },
+        "common.PageGeneric-model_Ebcp_schedule_job": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_schedule_job"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "common.Response": {
             "type": "object",
             "properties": {
@@ -8734,10 +9276,6 @@ const docTemplate = `{
                     "description": "设备类型",
                     "type": "string"
                 },
-                "exhibition_end_time": {
-                    "description": "所属展览结束时间",
-                    "type": "string"
-                },
                 "exhibition_hall_id": {
                     "description": "所属展馆ID",
                     "type": "string"
@@ -8756,10 +9294,6 @@ const docTemplate = `{
                 },
                 "exhibition_name": {
                     "description": "所属展览名称",
-                    "type": "string"
-                },
-                "exhibition_start_time": {
-                    "description": "所属展览开始时间",
                     "type": "string"
                 },
                 "exhibition_status": {
@@ -9821,6 +10355,63 @@ const docTemplate = `{
                 },
                 "updated_time": {
                     "description": "updated_time",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Ebcp_schedule_job": {
+            "type": "object",
+            "properties": {
+                "created_by": {
+                    "description": "created_by",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "enabled": {
+                    "description": "是否启用(0: 禁用, 1: 启用)",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "rel_id": {
+                    "description": "关联ID",
+                    "type": "string"
+                },
+                "rel_type": {
+                    "description": "关联类型,exhibition,room",
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "开始日期,yyyy-mm-dd",
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "启动时间,HH:mm",
+                    "type": "string"
+                },
+                "stop_date": {
+                    "description": "停止日期,yyyy-mm-dd",
+                    "type": "string"
+                },
+                "stop_time": {
+                    "description": "停止时间,HH:mm",
+                    "type": "string"
+                },
+                "updated_by": {
+                    "description": "updated_by",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "updated_time",
+                    "type": "string"
+                },
+                "week_days": {
+                    "description": "周几,逗号分隔,1-7代表周一到周日",
                     "type": "string"
                 }
             }
