@@ -123,38 +123,54 @@ func StartExhibitionItem(id string) error {
 		return fmt.Errorf("展项不存在")
 	}
 	if item.Type == "static" {
-		return startStaticItem(item)
-	}
+		err = startStaticItem(item)
+		if err != nil {
+			return fmt.Errorf("启动静态展项失败: %v", err)
+		}
+	} else {
 
-	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
-		model.Ebcp_playerTableInfo.Name,
-		"item_id="+id)
-	if err != nil {
-		return fmt.Errorf("获取播放设备信息失败: %v", err)
-	}
-	if len(players) == 0 {
-		return fmt.Errorf("播放设备不存在")
-	}
+		players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+			model.Ebcp_playerTableInfo.Name,
+			"item_id="+id)
+		if err != nil {
+			return fmt.Errorf("获取播放设备信息失败: %v", err)
+		}
+		if len(players) == 0 {
+			return fmt.Errorf("播放设备不存在")
+		}
 
-	var errors []string
-	for _, player := range players {
-		if err := PlayerPlay(&player); err != nil {
-			msg := fmt.Sprintf("播放设备 %s 播放节目失败: %v", player.ID, err)
-			common.Logger.Error(msg)
-			errors = append(errors, msg)
-			continue
+		var errors []string
+		for _, player := range players {
+			if err := PlayerPlay(&player); err != nil {
+				msg := fmt.Sprintf("播放设备 %s 播放节目失败: %v", player.ID, err)
+				common.Logger.Error(msg)
+				errors = append(errors, msg)
+				continue
+			}
+		}
+
+		if len(errors) > 0 {
+			return fmt.Errorf(strings.Join(errors, "\n"))
+		}
+
+		// 更新展项状态为启动
+		item.Status = ItemStatusStart
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
 		}
 	}
-
-	if len(errors) > 0 {
-		return fmt.Errorf(strings.Join(errors, "\n"))
+	roomid := item.RoomID
+	if roomid != "" {
+		if err := UpdateRoomStatus(roomid, ItemStatusStart); err != nil {
+			return fmt.Errorf("更新展室状态失败: %v", err)
+		}
 	}
-
-	// 更新展项状态为启动
-	item.Status = ItemStatusStart
-	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
-		return fmt.Errorf("更新展项状态失败: %v", err)
+	exhibitionid := item.ExhibitionID
+	if exhibitionid != "" {
+		if err := UpdateExhibitionStatus(exhibitionid, ItemStatusStart); err != nil {
+			return fmt.Errorf("更新展览状态失败: %v", err)
+		}
 	}
 
 	return nil
@@ -220,41 +236,44 @@ func StopExhibitionItem(id string) error {
 		return fmt.Errorf("展项不存在")
 	}
 	if item.Type == "static" {
-		return stopStaticItem(item)
-	}
+		err = stopStaticItem(item)
+		if err != nil {
+			return fmt.Errorf("停止静态展项失败: %v", err)
+		}
+	} else {
+		players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
+			model.Ebcp_playerTableInfo.Name,
+			"item_id="+id)
+		if err != nil {
+			return fmt.Errorf("获取播放设备信息失败: %v", err)
+		}
+		if len(players) == 0 {
+			return fmt.Errorf("播放设备不存在")
+		}
 
-	players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
-		model.Ebcp_playerTableInfo.Name,
-		"item_id="+id)
-	if err != nil {
-		return fmt.Errorf("获取播放设备信息失败: %v", err)
-	}
-	if len(players) == 0 {
-		return fmt.Errorf("播放设备不存在")
-	}
+		var errors []string
+		for _, player := range players {
+			if err := PlayerStop(&player); err != nil {
+				msg := fmt.Sprintf("播放设备 %s 停止节目失败: %v", player.ID, err)
+				common.Logger.Error(msg)
+				errors = append(errors, msg)
+				continue
+			}
+		}
 
-	var errors []string
-	for _, player := range players {
-		if err := PlayerStop(&player); err != nil {
-			msg := fmt.Sprintf("播放设备 %s 停止节目失败: %v", player.ID, err)
-			common.Logger.Error(msg)
-			errors = append(errors, msg)
-			continue
+		if len(errors) > 0 {
+			return fmt.Errorf(strings.Join(errors, "\n"))
+		}
+
+		// 更新展项状态为停止
+		item.Status = ItemStatusStop
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
 		}
 	}
+	return UpdateItemRoomExhibitionStopStatus(item, nil, nil)
 
-	if len(errors) > 0 {
-		return fmt.Errorf(strings.Join(errors, "\n"))
-	}
-
-	// 更新展项状态为停止
-	item.Status = ItemStatusStop
-	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
-		return fmt.Errorf("更新展项状态失败: %v", err)
-	}
-
-	return nil
 }
 
 // PauseExhibitionItem 暂停单个展项
@@ -457,5 +476,67 @@ func BatchPauseExhibitionItems(ids []string) error {
 	if len(errors) > 0 {
 		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
+	return nil
+}
+
+func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *model.Ebcp_exhibition_room, exhibition *model.Ebcp_exhibition) error {
+	if item != nil {
+		roomItems, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			model.Ebcp_exhibition_itemTableInfo.Name,
+			"room_id="+item.RoomID)
+		if err != nil {
+			return fmt.Errorf("获取展项信息失败: %v", err)
+		}
+		status := ItemStatusStop
+		for _, roomItem := range roomItems {
+			if roomItem.Status != ItemStatusStop {
+				status = ItemStatusStart
+				break
+			}
+		}
+		if status == ItemStatusStop {
+			queryRoom, err := common.DbGetOne[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+				model.Ebcp_exhibition_roomTableInfo.Name,
+				"id="+item.RoomID)
+			room = queryRoom
+			if err != nil {
+				return fmt.Errorf("获取展室信息失败: %v", err)
+			}
+			if queryRoom == nil {
+				return fmt.Errorf("展室不存在")
+			}
+			if err := UpdateRoomStatus(item.RoomID, ItemStatusStop); err != nil {
+				return fmt.Errorf("更新展室状态失败: %v", err)
+			}
+		}
+	}
+	if room != nil {
+		exhibitionRooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+			model.Ebcp_exhibition_roomTableInfo.Name,
+			"exhibition_id="+room.ExhibitionID)
+		if err != nil {
+			return fmt.Errorf("获取所有展室信息失败: %v", err)
+		}
+		exhibitionStatus := ItemStatusStop
+		for _, exhibitionRoom := range exhibitionRooms {
+			if exhibitionRoom.Status != ItemStatusStop {
+				exhibitionStatus = ItemStatusStart
+				break
+			}
+		}
+		if exhibitionStatus == ItemStatusStop {
+			err := UpdateExhibitionStatus(room.ExhibitionID, ItemStatusStop)
+			if err != nil {
+				return fmt.Errorf("更新展览状态失败: %v", err)
+			}
+		}
+	}
+	if exhibition != nil {
+		err := UpdateExhibitionStatus(exhibition.ID, ItemStatusStop)
+		if err != nil {
+			return fmt.Errorf("更新展览状态失败: %v", err)
+		}
+	}
+
 	return nil
 }
