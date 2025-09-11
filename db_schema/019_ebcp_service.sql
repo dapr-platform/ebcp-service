@@ -365,8 +365,8 @@ CREATE VIEW v_ebcp_exhibition_room_item_info AS
 SELECT 
     e.id AS id,
     e.name AS name,
-    e.start_time AS start_time,
-    e.end_time AS end_time,
+    COALESCE(e.start_time, '1970-01-01 00:00:00') AS start_time,
+    COALESCE(e.end_time,   '1970-01-01 00:00:00') AS end_time,
     e.status AS status,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_room WHERE exhibition_id = e.id) AS total_room_count,
     (SELECT COUNT(*) FROM o_ebcp_exhibition_item WHERE exhibition_id = e.id) AS total_item_count,

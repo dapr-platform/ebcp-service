@@ -5,6 +5,7 @@ import (
 	"ebcp-service/model"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/dapr-platform/common"
 )
@@ -92,6 +93,10 @@ func StartExhibition(exhibitionId string, itemType string) error {
 		return fmt.Errorf("展览 %s 部分展项启动失败:\n%v", exhibitionId, errors)
 	}
 
+	if err := updateExhibitionStatus(exhibitionId, ItemStatusStart); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
+	}
+
 	return nil
 }
 
@@ -172,5 +177,26 @@ func StopExhibition(exhibitionId string, itemType string) error {
 		return fmt.Errorf("展览 %s 部分展项停止失败:\n%v", exhibitionId, errors)
 	}
 
+	if err := updateExhibitionStatus(exhibitionId, ItemStatusStop); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
+	}
+
 	return nil
+}
+
+func updateExhibitionStatus(exhibitionId string, status int32) error {
+	exhibition, err := common.DbGetOne[model.Ebcp_exhibition](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibitionTableInfo.Name,
+		"id="+exhibitionId)
+	if err != nil {
+		return fmt.Errorf("获取展览信息失败: %v", err)
+	}
+	if exhibition == nil {
+		return fmt.Errorf("展览不存在")
+	}
+	exhibition.Status = status
+	exhibition.UpdatedBy = "system"
+	exhibition.UpdatedTime = common.LocalTime(time.Now())
+	return common.DbUpsert[model.Ebcp_exhibition](context.Background(), common.GetDaprClient(),
+		*exhibition, model.Ebcp_exhibitionTableInfo.Name, "id")
 }
