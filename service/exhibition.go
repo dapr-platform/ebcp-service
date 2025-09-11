@@ -21,6 +21,10 @@ func StartExhibition(exhibitionId string, itemType string) error {
 	if itemType != "" {
 		query = query + "&type=" + itemType
 	}
+
+	if err := updateExhibitionStatus(exhibitionId, ItemStatusStart); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
+	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 		model.Ebcp_exhibition_itemTableInfo.Name,
 		query)
@@ -93,10 +97,6 @@ func StartExhibition(exhibitionId string, itemType string) error {
 		return fmt.Errorf("展览 %s 部分展项启动失败:\n%v", exhibitionId, errors)
 	}
 
-	if err := updateExhibitionStatus(exhibitionId, ItemStatusStart); err != nil {
-		return fmt.Errorf("更新展览状态失败: %v", err)
-	}
-
 	return nil
 }
 
@@ -104,6 +104,10 @@ func StopExhibition(exhibitionId string, itemType string) error {
 	query := "exhibition_id=" + exhibitionId
 	if itemType != "" {
 		query = query + "&type=" + itemType
+	}
+
+	if err := updateExhibitionStatus(exhibitionId, ItemStatusStop); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 		model.Ebcp_exhibition_itemTableInfo.Name,
@@ -175,10 +179,6 @@ func StopExhibition(exhibitionId string, itemType string) error {
 
 	if len(errors) > 0 {
 		return fmt.Errorf("展览 %s 部分展项停止失败:\n%v", exhibitionId, errors)
-	}
-
-	if err := updateExhibitionStatus(exhibitionId, ItemStatusStop); err != nil {
-		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 
 	return nil
