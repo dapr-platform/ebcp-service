@@ -21,11 +21,19 @@ func StartExhibitionRoom(roomID string, itemType string) error {
 	if itemType != "" {
 		query = query + "&type=" + itemType
 	}
-
+	room, err := common.DbGetOne[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name,
+		"id="+roomID)
+	if err != nil {
+		return fmt.Errorf("获取展室信息失败: %v", err)
+	}
+	if room == nil {
+		return fmt.Errorf("展室不存在")
+	}
 	if err := UpdateRoomStatus(roomID, ItemStatusStart); err != nil {
 		return fmt.Errorf("更新展室状态失败: %v", err)
 	}
-	if err:=UpdateExhibitionStatus(roomID, ItemStatusStart); err != nil {
+	if err := UpdateExhibitionStatus(room.ExhibitionID, ItemStatusStart); err != nil {
 		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
@@ -108,7 +116,7 @@ func StopExhibitionRoom(roomID string, itemType string) error {
 	if itemType != "" {
 		query = query + "&type=" + itemType
 	}
-	room,err:=common.DbGetOne[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+	room, err := common.DbGetOne[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
 		model.Ebcp_exhibition_roomTableInfo.Name,
 		"id="+roomID)
 	if err != nil {
@@ -120,7 +128,7 @@ func StopExhibitionRoom(roomID string, itemType string) error {
 	if err := UpdateRoomStatus(roomID, ItemStatusStop); err != nil {
 		return fmt.Errorf("更新展室状态失败: %v", err)
 	}
-	if err:=UpdateItemRoomExhibitionStopStatus(nil, room, nil); err != nil {
+	if err := UpdateItemRoomExhibitionStopStatus(nil, room, nil); err != nil {
 		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),

@@ -525,6 +525,7 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 			}
 		}
 		if exhibitionStatus == ItemStatusStop {
+			common.Logger.Infof("更新展览状态为停止: %s", room.ExhibitionID)
 			err := UpdateExhibitionStatus(room.ExhibitionID, ItemStatusStop)
 			if err != nil {
 				return fmt.Errorf("更新展览状态失败: %v", err)
