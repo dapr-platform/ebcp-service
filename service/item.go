@@ -520,6 +520,7 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 		if err != nil {
 			return fmt.Errorf("获取所有展室信息失败: %v", err)
 		}
+		common.Logger.Infof("展览下有展厅: %d个", len(exhibitionRooms))
 		exhibitionStatus := ItemStatusStop
 		for _, exhibitionRoom := range exhibitionRooms {
 			if exhibitionRoom.Status != ItemStatusStop {
@@ -539,6 +540,8 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 		} else {
 			common.Logger.Infof("展览下有启动的展厅: %s", room.ExhibitionID)
 		}
+	} else {
+		common.Logger.Infof("room为空")
 	}
 	if exhibition != nil {
 		err := UpdateExhibitionStatus(exhibition.ID, ItemStatusStop)
