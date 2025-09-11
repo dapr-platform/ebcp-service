@@ -128,6 +128,7 @@ func StopExhibitionRoom(roomID string, itemType string) error {
 	if err := UpdateRoomStatus(roomID, ItemStatusStop); err != nil {
 		return fmt.Errorf("更新展室状态失败: %v", err)
 	}
+	common.Logger.Infof("更新展览状态为停止: %s", room.ExhibitionID)
 	if err := UpdateItemRoomExhibitionStopStatus(nil, room, nil); err != nil {
 		return fmt.Errorf("更新展览状态失败: %v", err)
 	}

@@ -508,6 +508,9 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 			if err := UpdateRoomStatus(item.RoomID, ItemStatusStop); err != nil {
 				return fmt.Errorf("更新展室状态失败: %v", err)
 			}
+			common.Logger.Infof("更新展览状态为停止: %s", room.ExhibitionID)
+		} else {
+			common.Logger.Infof("展室状态为启动: %s", item.RoomID)
 		}
 	}
 	if room != nil {
@@ -520,6 +523,7 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 		exhibitionStatus := ItemStatusStop
 		for _, exhibitionRoom := range exhibitionRooms {
 			if exhibitionRoom.Status != ItemStatusStop {
+				common.Logger.Infof("展厅状态为启动，不停止展览: %s", exhibitionRoom.ID)
 				exhibitionStatus = ItemStatusStart
 				break
 			}
@@ -529,7 +533,11 @@ func UpdateItemRoomExhibitionStopStatus(item *model.Ebcp_exhibition_item, room *
 			err := UpdateExhibitionStatus(room.ExhibitionID, ItemStatusStop)
 			if err != nil {
 				return fmt.Errorf("更新展览状态失败: %v", err)
+			} else {
+				common.Logger.Infof("更新展览状态为启动: %s", room.ExhibitionID)
 			}
+		} else {
+			common.Logger.Infof("展览下有启动的展厅: %s", room.ExhibitionID)
 		}
 	}
 	if exhibition != nil {
