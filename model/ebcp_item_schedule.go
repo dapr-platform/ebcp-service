@@ -35,7 +35,7 @@ Table: o_ebcp_item_schedule
 
 JSON Sample
 -------------------------------------
-{    "id": "nYpIHioBKDGdpifSaIfNXdpZw",    "created_by": "WhLiMSdhAdWjrUgjuriDVpsOF",    "created_time": 94,    "updated_by": "wRPRJGVchoYubuXkPlubRKKtO",    "updated_time": 43,    "item_id": "nOOYJLgoVfcdxSxCaGlTpGnPf",    "start_time": "BDFocKQNgEMxMjmTYpnJUgFfD",    "stop_time": "nrDygXVRKDlZnmatyAeUXDlSC",    "start_date": "HsPSfEtPpiEBJlDLBktwpyClu",    "stop_date": "IjHxbPPeBsFCusDPbHJpFoPwn",    "cycle_type": 55,    "action_type": 14,    "enabled": 55}
+{    "id": "oULMYPwOZCctaCeDfAQYnSdwf",    "created_by": "QXxBufTioufFnnuAtPyLLuJif",    "created_time": 13,    "updated_by": "LRSmabusbfWifZFrRFEJVdTOB",    "updated_time": 97,    "item_id": "HdLYLKvySuvTWTxgQgRAuvopP",    "start_time": "qWDeiKZuLWDLneQWdvweyiSFG",    "stop_time": "suncJqVFpltbmehdJEdpUZwFJ",    "start_date": "xXadGrXWCLgRydbOoysZngwdO",    "stop_date": "UKsYLykjwiyWvEcCcLedYOnsi",    "cycle_type": 91,    "action_type": 90,    "enabled": 25}
 
 
 

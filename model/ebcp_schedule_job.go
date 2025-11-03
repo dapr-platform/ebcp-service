@@ -2,9 +2,8 @@ package model
 
 import (
 	"database/sql"
-	"time"
-
 	"github.com/dapr-platform/common"
+	"time"
 )
 
 var (
@@ -36,7 +35,7 @@ Table: o_ebcp_schedule_job
 
 JSON Sample
 -------------------------------------
-{    "id": "HVBuXALDsnulaUJSbmGaVtZjQ",    "created_by": "PJRXWAxqLVdiAEFLrNYhBpduH",    "created_time": 35,    "updated_by": "bfTaCvdJrkXojmTqcIlFcoJIn",    "updated_time": 5,    "rel_id": "lJwhxfLbPbOSTxnhWcBfAuFMI",    "rel_type": "jDTuCgyiHYvNYKVaATpIggfFp",    "start_time": "vxFYlLefVVwTccpheYUCRntwa",    "stop_time": "MELpfpQYWUBNaHbmvdYMkZjoi",    "start_date": "ZBohbfiRAZugKiBLnxfLAutlc",    "stop_date": "MIDaMQQuZcPVkwPbfMZnFMEDO",    "week_days": "qfnlTfAVPOguYRtDBOFxYifje",    "enabled": 51}
+{    "id": "xpIvFhBsQpWAKfpsajLbbEawn",    "created_by": "XgEYfvbiEufGEqLXNCEhHVDwS",    "created_time": 98,    "updated_by": "ERTeDWUAFmDpfJSQUccXusJSK",    "updated_time": 80,    "rel_id": "OdcaniGLFGmgLFtkhBoCdFrqg",    "rel_type": "jqamoyuKGTFaQZwLWTkghuaRp",    "start_time": "jpExavyGdHqHhrIoJLbsbEYIx",    "stop_time": "hFSNSYOeTLQavCDpGFvrRaTMe",    "start_date": "LiTHYmlouIoLTNapmxdTAqDGX",    "stop_date": "VeDkfwatcvdaXWrKmGffkjSnc",    "week_days": "TRJkEPjJoobWpYIrEuPSWOMCv",    "enabled": 42}
 
 
 
@@ -84,15 +83,15 @@ type Ebcp_schedule_job struct {
 
 	RelID string `json:"rel_id"` //关联ID
 
-	RelType string `json:"rel_type"` //关联类型,exhibition,room
+	RelType string `json:"rel_type"` //关联类型
 
-	StartTime string `json:"start_time"` //启动时间,HH:mm
+	StartTime string `json:"start_time"` //启动时间
 
-	StopTime string `json:"stop_time"` //停止时间,HH:mm
+	StopTime string `json:"stop_time"` //停止时间
 
-	StartDate string `json:"start_date"` //开始日期,yyyy-mm-dd
+	StartDate string `json:"start_date"` //开始日期
 
-	StopDate string `json:"stop_date"` //停止日期,yyyy-mm-dd
+	StopDate string `json:"stop_date"` //停止日期
 
 	WeekDays string `json:"week_days"` //周几,逗号分隔,1-7代表周一到周日
 

@@ -32,11 +32,12 @@ Table: o_ebcp_control_device
 [11] item_id                                        VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [12] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 [13] commands                                       TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[14] index_num                                      INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [0]
 
 
 JSON Sample
 -------------------------------------
-{    "id": "QvZdApFPOOvlZqDWcGkTjRrJj",    "created_by": "RewKVtgkUuBoIFbDcTtdnmfMa",    "created_time": 59,    "updated_by": "fLVrWPspAxoMxwSsuBwUrjCgx",    "updated_time": 52,    "name": "XwKekFfFVSCSYjIFaZvwnkqSX",    "device_type": "mFxhMLjkSELNogrDXrXfSopFK",    "ip_address": "KFNBknoaKoAXoXCwRQOklFNXl",    "port": 5,    "version": "nYedATEICBcobTGkHiXJnAyrl",    "room_id": "hIpnsWyWkjfLGklhiDUlEwlLX",    "item_id": "oFClKcdnDSxcZxcxvwNntkJcL",    "status": 80,    "commands": "VgBUObsFdSPooYBlCRQXopZWR"}
+{    "id": "FWSUJndPyfKHIlfMmvlSQUMei",    "created_by": "jcYsUtgISbFvBnWqEeUBDNBPw",    "created_time": 88,    "updated_by": "TyaWlLCUtljBcPTEaQIvjtOYC",    "updated_time": 41,    "name": "cjMUjNLYkeACaYNiCMLbVCISH",    "device_type": "OUAimmZZgOdgGUBBVxFqfKGWs",    "ip_address": "YksDwiWcuhoEPFDpNZFCDQEgN",    "port": 29,    "version": "lkLmfVDjNRJpoWTxdbOjkuNln",    "room_id": "GkTJnyBxSwTaxetMeABDqHtOi",    "item_id": "vaYljnccHoBwxdgoTnADNlcMI",    "status": 66,    "commands": "nvEmCMhVhRaEEuuBhZVkWUcDE",    "index_num": 9}
 
 
 
@@ -70,6 +71,8 @@ var (
 	Ebcp_control_device_FIELD_NAME_status = "status"
 
 	Ebcp_control_device_FIELD_NAME_commands = "commands"
+
+	Ebcp_control_device_FIELD_NAME_index_num = "index_num"
 )
 
 // Ebcp_control_device struct is a row record of the o_ebcp_control_device table in the  database
@@ -101,6 +104,8 @@ type Ebcp_control_device struct {
 	Status int32 `json:"status"` //状态(1: 正常, 2: 故障)
 
 	Commands string `json:"commands"` //命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]
+
+	IndexNum int32 `json:"index_num"` //序号
 
 }
 
@@ -400,6 +405,27 @@ var Ebcp_control_deviceTableInfo = &TableInfo{
 			ProtobufFieldName:  "commands",
 			ProtobufType:       "string",
 			ProtobufPos:        14,
+		},
+
+		&ColumnInfo{
+			Index:              14,
+			Name:               "index_num",
+			Comment:            `序号`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "INT4",
+			DatabaseTypePretty: "INT4",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "INT4",
+			ColumnLength:       -1,
+			GoFieldName:        "IndexNum",
+			GoFieldType:        "int32",
+			JSONFieldName:      "index_num",
+			ProtobufFieldName:  "index_num",
+			ProtobufType:       "int32",
+			ProtobufPos:        15,
 		},
 	},
 }

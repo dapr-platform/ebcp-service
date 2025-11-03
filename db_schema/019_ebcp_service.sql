@@ -205,7 +205,8 @@ COMMENT ON COLUMN o_ebcp_control_device.item_id IS '所属展项ID';
 COMMENT ON COLUMN o_ebcp_control_device.status IS '状态(1: 正常, 2: 故障)';
 COMMENT ON COLUMN o_ebcp_control_device.commands IS '命令列表,json格式,例如[{"name":"开启","command":"FA 01 01"},{"name":"关闭","command":"FA 01 02"}]';
 
-
+alter table o_ebcp_control_device add column index_num INTEGER NOT NULL DEFAULT 0;
+comment on column o_ebcp_control_device.index_num is '序号';
 -- 展项中控设备关联配置表
 CREATE TABLE o_ebcp_item_device_relation (
     id VARCHAR(32) NOT NULL,
@@ -702,8 +703,10 @@ SELECT
             'ip_address', cd.ip_address,
             'port', cd.port,
             'version', cd.version,
-            'commands', cd.commands
+            'commands', cd.commands,
+            'index_num', cd.index_num
             )
+             order by cd.index_num desc
         )
         FROM o_ebcp_control_device cd 
         WHERE cd.item_id = ei.id
@@ -897,6 +900,7 @@ SELECT
     cd.created_time AS created_time,
     cd.updated_time AS updated_time,
     cd.item_id AS item_id,
+    cd.index_num AS index_num,
     (select name from o_ebcp_exhibition_item where id = cd.item_id) AS item_name,
     (select type from o_ebcp_exhibition_item where id = cd.item_id) as item_type,
     er.id AS room_id,
