@@ -31,6 +31,22 @@ func StartExhibition(exhibitionId string, itemType string) error {
 	if err != nil {
 		return fmt.Errorf("查询展项失败: %v", err)
 	}
+	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name,
+		"exhibition_id="+exhibitionId)
+	if err != nil {
+		return fmt.Errorf("查询展馆失败: %v", err)
+	}
+	for _, room := range rooms {
+		if room.Status != ItemStatusStart {
+			err := UpdateRoomStatus(room.ID, ItemStatusStart)
+			if err != nil {
+				common.Logger.Errorf("更新展馆状态失败: %v", err)
+			} else {
+				common.Logger.Infof("更新展馆状态成功: %s", room.ID)
+			}
+		}
+	}
 
 	// 过滤出需要启动的展项
 	var itemsToStart []model.Ebcp_exhibition_item
@@ -114,6 +130,22 @@ func StopExhibition(exhibitionId string, itemType string) error {
 		query)
 	if err != nil {
 		return fmt.Errorf("查询展项失败: %v", err)
+	}
+	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name,
+		"exhibition_id="+exhibitionId)
+	if err != nil {
+		return fmt.Errorf("查询展馆失败: %v", err)
+	}
+	for _, room := range rooms {
+		if room.Status != ItemStatusStop {
+			err := UpdateRoomStatus(room.ID, ItemStatusStop)
+			if err != nil {
+				common.Logger.Errorf("更新展室状态失败: %v", err)
+			} else {
+				common.Logger.Infof("更新展室状态成功: %s", room.ID)
+			}
+		}
 	}
 
 	// 过滤出需要停止的展项
