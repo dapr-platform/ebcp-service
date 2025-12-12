@@ -83,7 +83,7 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string, cmd
 				}
 				controlDevice.Status = ItemStatusStart
 				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
 			}
 		} else if cmdType == "stop" {
 			// 停止展项
@@ -96,7 +96,7 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string, cmd
 				}
 				controlDevice.Status = ItemStatusStop
 				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
 			}
 		} else if cmdType == "pause" {
 			// 暂停展项
@@ -109,7 +109,7 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string, cmd
 				}
 				controlDevice.Status = ItemStatusPause
 				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
 			}
 		}
 	}
