@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"ebcp-service/model"
 	"fmt"
 	"net"
 	"strconv"
@@ -10,7 +12,7 @@ import (
 	"github.com/dapr-platform/common"
 )
 
-func ControlDeviceCommand(deviceIP string, devicePort int32, command string) error {
+func ControlDeviceCommand(deviceIP string, devicePort int32, command string, cmdType string, deviceId string, deviceType string) error {
 
 	// 验证输入参数
 	if deviceIP == "" {
@@ -22,10 +24,65 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string) err
 	if command == "" {
 		return fmt.Errorf("控制命令不能为空")
 	}
+	if cmdType == "" {
+		return fmt.Errorf("控制命令类型不能为空")
+	}
+	if deviceId == "" {
+		return fmt.Errorf("设备ID不能为空")
+	}
+	if deviceType == "" {
+		return fmt.Errorf("设备类型不能为空")
+	}
 
 	// 发送UDP命令到设备
 	if err := SendUDPCommand(deviceIP, devicePort, command); err != nil {
 		return fmt.Errorf("向设备 %s:%d 发送命令失败: %v", deviceIP, devicePort, err)
+	}
+
+	if deviceType == "control_device" {
+		// 查询中控设备
+		controlDevice, err := common.DbGetOne[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), model.Ebcp_control_deviceTableInfo.Name, model.Ebcp_control_device_FIELD_NAME_id+"="+deviceId)
+		if err != nil {
+			return fmt.Errorf("查询中控设备失败: %v", err)
+		}
+		if cmdType == "start" {
+			// 启动中控设备
+			controlDevice.Status = ItemStatusStart
+			controlDevice.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+		} else if cmdType == "stop" {
+			// 停止中控设备
+			controlDevice.Status = ItemStatusStop
+			controlDevice.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+		} else if cmdType == "pause" {
+			// 暂停中控设备
+			controlDevice.Status = ItemStatusPause
+			controlDevice.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+		}
+	}else if deviceType == "item" {
+		// 查询展项
+		exhibitionItem, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, model.Ebcp_exhibition_item_FIELD_NAME_id+"="+deviceId)
+		if err != nil {
+			return fmt.Errorf("查询展项失败: %v", err)
+		}
+		if cmdType == "start" {
+			// 启动展项
+			exhibitionItem.Status = ItemStatusStart
+			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+		} else if cmdType == "stop" {
+			// 停止展项
+			exhibitionItem.Status = ItemStatusStop
+			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+		} else if cmdType == "pause" {
+			// 暂停展项
+			exhibitionItem.Status = ItemStatusPause
+			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
+			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+		}
 	}
 
 	common.Logger.Infof("向中控设备 %s:%d 发送控制命令成功: %s", deviceIP, devicePort, command)
