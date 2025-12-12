@@ -18,6 +18,9 @@ type StaticControlExhibitionRoomRequest struct {
 	DeviceIP   string `json:"device_ip"`
 	DevicePort int32  `json:"device_port"`
 	Command    string `json:"command"`
+	Type       string `json:"type"` //start,stop,...
+	DeviceId   string `json:"device_id"`
+	DeviceType string `json:"device_type"`
 }
 
 // @Summary Static control exhibition room
@@ -35,7 +38,7 @@ func StaticControlExhibitionRoomHandler(w http.ResponseWriter, r *http.Request) 
 		common.HttpResult(w, common.ErrParam.AppendMsg(err.Error()))
 		return
 	}
-	err = service.ControlDeviceCommand(request.DeviceIP, request.DevicePort, request.Command)
+	err = service.ControlDeviceCommand(request.DeviceIP, request.DevicePort, request.Command,request.Type,request.DeviceId,request.DeviceType)
 	if err != nil {
 		common.HttpResult(w, common.ErrService.AppendMsg(err.Error()))
 		return
