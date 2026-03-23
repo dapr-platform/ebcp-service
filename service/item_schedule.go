@@ -199,61 +199,30 @@ func processSchedules(ctx context.Context) error {
 }
 
 func processItemSchedule(ctx context.Context, itemID string, schedules []model.Ebcp_item_schedule, now time.Time) error {
-	// 首先检查是否有满足时间条件但是是停止的调度计划
 	for _, schedule := range schedules {
-		// 检查是否满足调度条件（不考虑enabled状态）
-		if matchScheduleTime(ctx, &schedule, now) {
-			// 如果满足时间条件但是被禁用，则跳过该展项的所有调度计划
-			if schedule.ActionType == ActionTypeStop {
-				common.Logger.Infof("展项 %s 存在满足条件但被停止的调度计划 %s，跳过所有调度", itemID, schedule.ID)
-				return nil
-			}
-		}
-	}
-
-	// 如果没有满足条件的禁用计划，则处理所有启用的调度计划
-	for _, schedule := range schedules {
-		if schedule.ActionType == ActionTypePlay {
-			if err := processSchedule(ctx, &schedule, now); err != nil {
-				common.Logger.Errorf("处理调度任务 %s 失败: %v", schedule.ID, err)
-				continue
-			}
+		if err := processSchedule(ctx, &schedule, now); err != nil {
+			common.Logger.Errorf("处理调度任务 %s 失败: %v", schedule.ID, err)
+			continue
 		}
 	}
 	return nil
 }
 
-// matchScheduleTime 检查调度计划是否满足时间条件（不考虑enabled状态）
-func matchScheduleTime(ctx context.Context, schedule *model.Ebcp_item_schedule, now time.Time) bool {
-	// 首先检查日期类型是否匹配
-	if !shouldScheduleWithDateType(schedule, now) {
-		return false
-	}
-
-	// 解析时间
-	startTime, err := parseScheduleTime(schedule.StartTime, now)
-	if err != nil {
-		common.Logger.Errorf("解析开始时间失败: %v", err)
-		return false
-	}
-	stopTime, err := parseScheduleTime(schedule.StopTime, now)
-	if err != nil {
-		common.Logger.Errorf("解析停止时间失败: %v", err)
-		return false
-	}
-
-	// 检查是否在时间范围内
-	return isTimeInRange(now, startTime, stopTime)
-}
-
 // 处理单个调度任务
 func processSchedule(ctx context.Context, schedule *model.Ebcp_item_schedule, now time.Time) error {
-	// 检查是否满足调度条件
-	if !matchScheduleTime(ctx, schedule, now) {
+	if !shouldScheduleWithDateType(schedule, now) {
 		return nil
 	}
 
-	// 获取展项信息
+	startTime, err := parseScheduleTime(schedule.StartTime, now)
+	if err != nil {
+		return fmt.Errorf("解析开始时间失败: %v", err)
+	}
+	stopTime, err := parseScheduleTime(schedule.StopTime, now)
+	if err != nil {
+		return fmt.Errorf("解析停止时间失败: %v", err)
+	}
+
 	item, err := common.DbGetOne[model.Ebcp_exhibition_item](ctx, common.GetDaprClient(),
 		model.Ebcp_exhibition_itemTableInfo.Name,
 		"id="+schedule.ItemID)
@@ -264,34 +233,65 @@ func processSchedule(ctx context.Context, schedule *model.Ebcp_item_schedule, no
 		return fmt.Errorf("展项不存在")
 	}
 
-	// 解析时间
-	startTime, err := parseScheduleTime(schedule.StartTime, now)
-	if err != nil {
-		return fmt.Errorf("解析开始时间失败: %v", err)
-	}
-	stopTime, err := parseScheduleTime(schedule.StopTime, now)
-	if err != nil {
-		return fmt.Errorf("解析停止时间失败: %v", err)
-	}
-
-	// 根据当前时间决定是启动还是停止
-	if isTimeInRange(now, startTime, stopTime) {
-		if item.Status != ItemStatusStart {
+	// start_time == stop_time 时作为"时间点"触发，用分钟误差匹配
+	if schedule.StartTime == schedule.StopTime {
+		if !isNearTime(now, startTime) {
+			return nil
+		}
+		if schedule.ActionType == ActionTypePlay && item.Status != ItemStatusStart {
 			if err := StartExhibitionItem(schedule.ItemID); err != nil {
 				return fmt.Errorf("启动展项失败: %v", err)
 			}
-			common.Logger.Infof("调度启动展项 %s", schedule.ItemID)
-		}
-	} else {
-		if item.Status != ItemStatusStop {
+			common.Logger.Infof("调度(时间点)启动展项 %s", schedule.ItemID)
+		} else if schedule.ActionType == ActionTypeStop && item.Status != ItemStatusStop {
 			if err := StopExhibitionItem(schedule.ItemID); err != nil {
 				return fmt.Errorf("停止展项失败: %v", err)
 			}
-			common.Logger.Infof("调度停止展项 %s", schedule.ItemID)
+			common.Logger.Infof("调度(时间点)停止展项 %s", schedule.ItemID)
+		}
+		return nil
+	}
+
+	// start_time != stop_time 时作为"时间范围"触发
+	if schedule.ActionType == ActionTypePlay {
+		if isTimeInRange(now, startTime, stopTime) {
+			if item.Status != ItemStatusStart {
+				if err := StartExhibitionItem(schedule.ItemID); err != nil {
+					return fmt.Errorf("启动展项失败: %v", err)
+				}
+				common.Logger.Infof("调度启动展项 %s", schedule.ItemID)
+			}
+		} else {
+			if item.Status != ItemStatusStop {
+				if err := StopExhibitionItem(schedule.ItemID); err != nil {
+					return fmt.Errorf("停止展项失败: %v", err)
+				}
+				common.Logger.Infof("调度停止展项 %s", schedule.ItemID)
+			}
+		}
+	} else if schedule.ActionType == ActionTypeStop {
+		if isTimeInRange(now, startTime, stopTime) {
+			if item.Status != ItemStatusStop {
+				if err := StopExhibitionItem(schedule.ItemID); err != nil {
+					return fmt.Errorf("停止展项失败: %v", err)
+				}
+				common.Logger.Infof("调度停止展项 %s", schedule.ItemID)
+			}
 		}
 	}
 
 	return nil
+}
+
+// isNearTime 判断当前时间是否在目标时间的1分钟误差内
+func isNearTime(now, target time.Time) bool {
+	currentMinute := now.Hour()*60 + now.Minute()
+	targetMinute := target.Hour()*60 + target.Minute()
+	diff := currentMinute - targetMinute
+	if diff < 0 {
+		diff = -diff
+	}
+	return diff <= 1
 }
 
 // 检查是否满足调度条件

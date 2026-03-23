@@ -85,6 +85,11 @@ func updateItemStatus(ctx context.Context, item *model.Ebcp_exhibition_item) err
 		return fmt.Errorf("展项信息为空")
 	}
 
+	// 静态展项的状态由手动操作（start/stop API）控制，不通过播放器状态推导
+	if item.Type == "static" {
+		return nil
+	}
+
 	players, err := common.DbQuery[model.Ebcp_player](ctx, common.GetDaprClient(), model.Ebcp_playerTableInfo.Name, "item_id="+item.ID)
 	if err != nil {
 		return fmt.Errorf("获取播放设备信息失败: %v", err)
@@ -127,8 +132,12 @@ func StartExhibitionItem(id string) error {
 		if err != nil {
 			return fmt.Errorf("启动静态展项失败: %v", err)
 		}
+		item.Status = ItemStatusStart
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
+		}
 	} else {
-
 		players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
 			model.Ebcp_playerTableInfo.Name,
 			"item_id="+id)
@@ -153,7 +162,6 @@ func StartExhibitionItem(id string) error {
 			return fmt.Errorf(strings.Join(errors, "\n"))
 		}
 
-		// 更新展项状态为启动
 		item.Status = ItemStatusStart
 		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
@@ -240,6 +248,11 @@ func StopExhibitionItem(id string) error {
 		if err != nil {
 			return fmt.Errorf("停止静态展项失败: %v", err)
 		}
+		item.Status = ItemStatusStop
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
+		}
 	} else {
 		players, err := common.DbQuery[model.Ebcp_player](context.Background(), common.GetDaprClient(),
 			model.Ebcp_playerTableInfo.Name,
@@ -265,7 +278,6 @@ func StopExhibitionItem(id string) error {
 			return fmt.Errorf(strings.Join(errors, "\n"))
 		}
 
-		// 更新展项状态为停止
 		item.Status = ItemStatusStop
 		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
 			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {

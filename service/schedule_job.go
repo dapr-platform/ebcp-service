@@ -133,17 +133,14 @@ func processScheduleJob(ctx context.Context, job *model.Ebcp_schedule_job, now t
 
 // 检查是否应该执行任务
 func shouldExecuteJob(job *model.Ebcp_schedule_job, now time.Time) (bool, string, error) {
-	// 检查日期范围
 	if !isInDateRange(job, now) {
 		return false, "", nil
 	}
 
-	// 检查是否在指定的星期几
 	if !isInWeekDays(job, now) {
 		return false, "", nil
 	}
 
-	// 解析开始和结束时间
 	startTime, err := parseTimeString(job.StartTime, now)
 	if err != nil {
 		return false, "", fmt.Errorf("解析开始时间失败: %v", err)
@@ -154,17 +151,23 @@ func shouldExecuteJob(job *model.Ebcp_schedule_job, now time.Time) (bool, string
 		return false, "", fmt.Errorf("解析结束时间失败: %v", err)
 	}
 
-	// 判断当前时间应该执行的动作
 	currentMinute := now.Hour()*60 + now.Minute()
 	startMinute := startTime.Hour()*60 + startTime.Minute()
 	stopMinute := stopTime.Hour()*60 + stopTime.Minute()
 
-	// 如果当前时间刚好是开始时间（误差1分钟内）
+	// start_time == stop_time 时作为时间点触发，只执行 start
+	if job.StartTime == job.StopTime {
+		if abs(currentMinute-startMinute) <= 1 {
+			return true, "start", nil
+		}
+		return false, "", nil
+	}
+
+	// start_time != stop_time 时，分别匹配开始和结束
 	if abs(currentMinute-startMinute) <= 1 {
 		return true, "start", nil
 	}
 
-	// 如果当前时间刚好是结束时间（误差1分钟内）
 	if abs(currentMinute-stopMinute) <= 1 {
 		return true, "stop", nil
 	}
