@@ -4,48 +4,22 @@ import (
 	"context"
 	"ebcp-service/model"
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/dapr-platform/common"
 )
 
-// 处理单个展项的结果
-type exhibitionItemResult struct {
-	itemID string
-	err    error
-}
-
+// StartExhibition 启动展览：启动所有展项 → 设置所有展厅为启动 → 设置展览为启动
 func StartExhibition(exhibitionId string, itemType string) error {
 	query := "exhibition_id=" + exhibitionId
 	if itemType != "" {
 		query = query + "&type=" + itemType
 	}
 
-	if err := UpdateExhibitionStatus(exhibitionId, ItemStatusStart); err != nil {
-		return fmt.Errorf("更新展览状态失败: %v", err)
-	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		model.Ebcp_exhibition_itemTableInfo.Name,
-		query)
+		model.Ebcp_exhibition_itemTableInfo.Name, query)
 	if err != nil {
 		return fmt.Errorf("查询展项失败: %v", err)
-	}
-	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
-		model.Ebcp_exhibition_roomTableInfo.Name,
-		"exhibition_id="+exhibitionId)
-	if err != nil {
-		return fmt.Errorf("查询展馆失败: %v", err)
-	}
-	for _, room := range rooms {
-		if room.Status != ItemStatusStart {
-			err := UpdateRoomStatus(room.ID, ItemStatusStart)
-			if err != nil {
-				common.Logger.Errorf("更新展馆状态失败: %v", err)
-			} else {
-				common.Logger.Infof("更新展馆状态成功: %s", room.ID)
-			}
-		}
 	}
 
 	// 过滤出需要启动的展项
@@ -56,96 +30,46 @@ func StartExhibition(exhibitionId string, itemType string) error {
 		}
 	}
 
-	if len(itemsToStart) == 0 {
+	if len(itemsToStart) > 0 {
+		startItemsBatch(exhibitionId, itemsToStart, false)
+	} else {
 		common.Logger.Infof("展览 %s 没有需要启动的展项", exhibitionId)
-		return nil
 	}
 
-	// 创建工作池
-	workers := maxWorkers
-	if len(itemsToStart) < workers {
-		workers = len(itemsToStart)
-	}
-
-	// 创建任务和结果通道
-	jobs := make(chan model.Ebcp_exhibition_item, len(itemsToStart))
-	results := make(chan exhibitionItemResult, len(itemsToStart))
-
-	// 启动工作协程
-	var wg sync.WaitGroup
-	for i := 0; i < workers; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for item := range jobs {
-				err := StartExhibitionItem(item.ID)
-				results <- exhibitionItemResult{
-					itemID: item.ID,
-					err:    err,
+	// 设置所有展厅状态为启动
+	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name, "exhibition_id="+exhibitionId)
+	if err != nil {
+		common.Logger.Errorf("查询展厅失败: %v", err)
+	} else {
+		for _, room := range rooms {
+			if room.Status != ItemStatusStart {
+				if err := UpdateRoomStatus(room.ID, ItemStatusStart); err != nil {
+					common.Logger.Errorf("更新展厅 %s 状态失败: %v", room.ID, err)
 				}
 			}
-		}()
-	}
-
-	// 发送任务
-	for _, item := range itemsToStart {
-		jobs <- item
-	}
-	close(jobs)
-
-	// 等待所有工作协程完成
-	go func() {
-		wg.Wait()
-		close(results)
-	}()
-
-	// 收集错误
-	var errors []string
-	for result := range results {
-		if result.err != nil {
-			errors = append(errors, fmt.Sprintf("启动展项 [%s] 失败: %v", result.itemID, result.err))
-		} else {
-			common.Logger.Infof("展览 [%s] 展项 [%s] 启动成功", exhibitionId, result.itemID)
 		}
 	}
 
-	if len(errors) > 0 {
-		return fmt.Errorf("展览 %s 部分展项启动失败:\n%v", exhibitionId, errors)
+	// 设置展览状态为启动
+	if err := UpdateExhibitionStatus(exhibitionId, ItemStatusStart); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 
 	return nil
 }
 
+// StopExhibition 停止展览：停止所有展项 → 设置所有展厅为停止 → 设置展览为停止
 func StopExhibition(exhibitionId string, itemType string) error {
 	query := "exhibition_id=" + exhibitionId
 	if itemType != "" {
 		query = query + "&type=" + itemType
 	}
 
-	if err := UpdateExhibitionStatus(exhibitionId, ItemStatusStop); err != nil {
-		return fmt.Errorf("更新展览状态失败: %v", err)
-	}
 	items, err := common.DbQuery[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		model.Ebcp_exhibition_itemTableInfo.Name,
-		query)
+		model.Ebcp_exhibition_itemTableInfo.Name, query)
 	if err != nil {
 		return fmt.Errorf("查询展项失败: %v", err)
-	}
-	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
-		model.Ebcp_exhibition_roomTableInfo.Name,
-		"exhibition_id="+exhibitionId)
-	if err != nil {
-		return fmt.Errorf("查询展馆失败: %v", err)
-	}
-	for _, room := range rooms {
-		if room.Status != ItemStatusStop {
-			err := UpdateRoomStatus(room.ID, ItemStatusStop)
-			if err != nil {
-				common.Logger.Errorf("更新展室状态失败: %v", err)
-			} else {
-				common.Logger.Infof("更新展室状态成功: %s", room.ID)
-			}
-		}
 	}
 
 	// 过滤出需要停止的展项
@@ -156,61 +80,30 @@ func StopExhibition(exhibitionId string, itemType string) error {
 		}
 	}
 
-	if len(itemsToStop) == 0 {
+	if len(itemsToStop) > 0 {
+		stopItemsBatch(exhibitionId, itemsToStop, false)
+	} else {
 		common.Logger.Infof("展览 %s 没有需要停止的展项", exhibitionId)
-		return nil
 	}
 
-	// 创建工作池
-	workers := maxWorkers
-	if len(itemsToStop) < workers {
-		workers = len(itemsToStop)
-	}
-
-	// 创建任务和结果通道
-	jobs := make(chan model.Ebcp_exhibition_item, len(itemsToStop))
-	results := make(chan exhibitionItemResult, len(itemsToStop))
-
-	// 启动工作协程
-	var wg sync.WaitGroup
-	for i := 0; i < workers; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for item := range jobs {
-				err := StopExhibitionItem(item.ID)
-				results <- exhibitionItemResult{
-					itemID: item.ID,
-					err:    err,
+	// 设置所有展厅状态为停止
+	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name, "exhibition_id="+exhibitionId)
+	if err != nil {
+		common.Logger.Errorf("查询展厅失败: %v", err)
+	} else {
+		for _, room := range rooms {
+			if room.Status != ItemStatusStop {
+				if err := UpdateRoomStatus(room.ID, ItemStatusStop); err != nil {
+					common.Logger.Errorf("更新展厅 %s 状态失败: %v", room.ID, err)
 				}
 			}
-		}()
-	}
-
-	// 发送任务
-	for _, item := range itemsToStop {
-		jobs <- item
-	}
-	close(jobs)
-
-	// 等待所有工作协程完成
-	go func() {
-		wg.Wait()
-		close(results)
-	}()
-
-	// 收集错误
-	var errors []string
-	for result := range results {
-		if result.err != nil {
-			errors = append(errors, fmt.Sprintf("停止展项 [%s] 失败: %v", result.itemID, result.err))
-		} else {
-			common.Logger.Infof("展览 [%s] 展项 [%s] 停止成功", exhibitionId, result.itemID)
 		}
 	}
 
-	if len(errors) > 0 {
-		return fmt.Errorf("展览 %s 部分展项停止失败:\n%v", exhibitionId, errors)
+	// 设置展览状态为停止
+	if err := UpdateExhibitionStatus(exhibitionId, ItemStatusStop); err != nil {
+		return fmt.Errorf("更新展览状态失败: %v", err)
 	}
 
 	return nil
@@ -218,8 +111,7 @@ func StopExhibition(exhibitionId string, itemType string) error {
 
 func UpdateExhibitionStatus(exhibitionId string, status int32) error {
 	exhibition, err := common.DbGetOne[model.Ebcp_exhibition](context.Background(), common.GetDaprClient(),
-		model.Ebcp_exhibitionTableInfo.Name,
-		"id="+exhibitionId)
+		model.Ebcp_exhibitionTableInfo.Name, "id="+exhibitionId)
 	if err != nil {
 		return fmt.Errorf("获取展览信息失败: %v", err)
 	}
@@ -231,4 +123,40 @@ func UpdateExhibitionStatus(exhibitionId string, status int32) error {
 	exhibition.UpdatedTime = common.LocalTime(time.Now())
 	return common.DbUpsert[model.Ebcp_exhibition](context.Background(), common.GetDaprClient(),
 		*exhibition, model.Ebcp_exhibitionTableInfo.Name, "id")
+}
+
+// SyncExhibitionStatusByRooms 根据所有展厅的状态条件性同步展览状态
+// 所有展厅都启动 → 展览=Start；所有展厅都停止 → 展览=Stop；否则不变
+func SyncExhibitionStatusByRooms(exhibitionID string) error {
+	if exhibitionID == "" {
+		return nil
+	}
+	rooms, err := common.DbQuery[model.Ebcp_exhibition_room](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_roomTableInfo.Name, "exhibition_id="+exhibitionID)
+	if err != nil {
+		return fmt.Errorf("获取展厅列表失败: %v", err)
+	}
+	if len(rooms) == 0 {
+		return nil
+	}
+	allStarted := true
+	allStopped := true
+	for _, room := range rooms {
+		if room.Status != ItemStatusStart {
+			allStarted = false
+		}
+		if room.Status != ItemStatusStop {
+			allStopped = false
+		}
+	}
+	if allStarted {
+		common.Logger.Infof("展览 %s 下所有展厅已启动，同步展览状态为启动", exhibitionID)
+		return UpdateExhibitionStatus(exhibitionID, ItemStatusStart)
+	}
+	if allStopped {
+		common.Logger.Infof("展览 %s 下所有展厅已停止，同步展览状态为停止", exhibitionID)
+		return UpdateExhibitionStatus(exhibitionID, ItemStatusStop)
+	}
+	common.Logger.Infof("展览 %s 下展厅状态不一致，不更新展览状态", exhibitionID)
+	return nil
 }
