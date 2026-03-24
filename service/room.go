@@ -53,10 +53,10 @@ func StartExhibitionRoom(roomID string, itemType string) error {
 		return fmt.Errorf("更新展室状态失败: %v", err)
 	}
 
-	// 检查展览下所有展厅是否都已启动，满足条件时同步展览状态
+	// 启动时向上无条件传播：展览也设为启动
 	if room.ExhibitionID != "" {
-		if err := SyncExhibitionStatusByRooms(room.ExhibitionID); err != nil {
-			common.Logger.Errorf("同步展览状态失败: %v", err)
+		if err := UpdateExhibitionStatus(room.ExhibitionID, ItemStatusStart); err != nil {
+			common.Logger.Errorf("更新展览状态失败: %v", err)
 		}
 	}
 
@@ -218,7 +218,7 @@ func UpdateRoomStatus(roomID string, status int32) error {
 }
 
 // SyncRoomStatusByItems 根据展厅下所有展项的状态同步展厅状态
-// 所有展项都停止 → 展厅=Stop；否则保持当前状态
+// 所有展项都启动 → 展厅=Start；所有展项都停止 → 展厅=Stop；否则不变
 func SyncRoomStatusByItems(roomID string) error {
 	if roomID == "" {
 		return nil
@@ -228,12 +228,22 @@ func SyncRoomStatusByItems(roomID string) error {
 	if err != nil {
 		return fmt.Errorf("获取展项列表失败: %v", err)
 	}
+	if len(items) == 0 {
+		return nil
+	}
+	allStarted := true
 	allStopped := true
 	for _, item := range items {
+		if item.Status != ItemStatusStart {
+			allStarted = false
+		}
 		if item.Status != ItemStatusStop {
 			allStopped = false
-			break
 		}
+	}
+	if allStarted {
+		common.Logger.Infof("展厅 %s 下所有展项已启动，同步展厅状态为启动", roomID)
+		return UpdateRoomStatus(roomID, ItemStatusStart)
 	}
 	if allStopped {
 		common.Logger.Infof("展厅 %s 下所有展项已停止，同步展厅状态为停止", roomID)

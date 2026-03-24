@@ -184,16 +184,15 @@ func StartExhibitionItem(id string) error {
 	if err := startItemCore(item); err != nil {
 		return err
 	}
-	// 启动展项后，设置展厅为启动（至少有一个展项活跃）
+	// 启动时向上无条件传播：展厅和展览都设为启动
 	if item.RoomID != "" {
 		if err := UpdateRoomStatus(item.RoomID, ItemStatusStart); err != nil {
 			common.Logger.Errorf("更新展厅状态失败: %v", err)
 		}
 	}
-	// 检查展览下所有展厅是否都已启动，满足条件时同步展览状态
 	if item.ExhibitionID != "" {
-		if err := SyncExhibitionStatusByRooms(item.ExhibitionID); err != nil {
-			common.Logger.Errorf("同步展览状态失败: %v", err)
+		if err := UpdateExhibitionStatus(item.ExhibitionID, ItemStatusStart); err != nil {
+			common.Logger.Errorf("更新展览状态失败: %v", err)
 		}
 	}
 	return nil
