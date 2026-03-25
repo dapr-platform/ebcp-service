@@ -137,8 +137,14 @@ func startItemCore(item *model.Ebcp_exhibition_item) error {
 		}
 	}
 	item.Status = ItemStatusStart
-	return common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+		return err
+	}
+	if item.Type == "static" {
+		syncControlDeviceStatus(item.ID, ItemStatusStart)
+	}
+	return nil
 }
 
 // stopItemCore 停止展项核心逻辑，仅操作展项本身并更新数据库状态，不联动上级
@@ -167,8 +173,14 @@ func stopItemCore(item *model.Ebcp_exhibition_item) error {
 		}
 	}
 	item.Status = ItemStatusStop
-	return common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
-		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id")
+	if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+		return err
+	}
+	if item.Type == "static" {
+		syncControlDeviceStatus(item.ID, ItemStatusStop)
+	}
+	return nil
 }
 
 // StartExhibitionItem 启动单个展项（API/调度级别，包含上级状态联动）
@@ -274,6 +286,27 @@ func stopStaticItem(item *model.Ebcp_exhibition_item) error {
 
 func pauseStaticItem(item *model.Ebcp_exhibition_item) error {
 	return nil
+}
+
+// syncControlDeviceStatus 同步静态展项下所有中控设备的状态
+func syncControlDeviceStatus(itemID string, status int32) {
+	devices, err := common.DbQuery[model.Ebcp_control_device](context.Background(), common.GetDaprClient(),
+		model.Ebcp_control_deviceTableInfo.Name, model.Ebcp_control_device_FIELD_NAME_item_id+"="+itemID)
+	if err != nil {
+		common.Logger.Errorf("查询展项 %s 的中控设备失败: %v", itemID, err)
+		return
+	}
+	for _, device := range devices {
+		if device.Status == status {
+			continue
+		}
+		device.Status = status
+		device.UpdatedTime = common.LocalTime(time.Now())
+		if err := common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(),
+			device, model.Ebcp_control_deviceTableInfo.Name, "id"); err != nil {
+			common.Logger.Errorf("更新中控设备 %s 状态失败: %v", device.ID, err)
+		}
+	}
 }
 
 // PauseExhibitionItem 暂停单个展项
