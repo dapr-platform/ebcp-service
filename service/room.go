@@ -217,6 +217,41 @@ func UpdateRoomStatus(roomID string, status int32) error {
 		*room, model.Ebcp_exhibition_roomTableInfo.Name, "id")
 }
 
+// updateRoomStatusBatch 并发批量更新展厅状态
+func updateRoomStatusBatch(rooms []model.Ebcp_exhibition_room, status int32) {
+	var toUpdate []model.Ebcp_exhibition_room
+	for _, room := range rooms {
+		if room.Status != status {
+			toUpdate = append(toUpdate, room)
+		}
+	}
+	if len(toUpdate) == 0 {
+		return
+	}
+	workers := maxWorkers
+	if len(toUpdate) < workers {
+		workers = len(toUpdate)
+	}
+	jobs := make(chan model.Ebcp_exhibition_room, len(toUpdate))
+	var wg sync.WaitGroup
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for r := range jobs {
+				if err := UpdateRoomStatus(r.ID, status); err != nil {
+					common.Logger.Errorf("批量更新展厅 %s 状态失败: %v", r.ID, err)
+				}
+			}
+		}()
+	}
+	for _, r := range toUpdate {
+		jobs <- r
+	}
+	close(jobs)
+	wg.Wait()
+}
+
 // SyncRoomStatusByItems 根据展厅下所有展项的状态同步展厅状态
 // 所有展项都启动 → 展厅=Start；所有展项都停止 → 展厅=Stop；否则不变
 func SyncRoomStatusByItems(roomID string) error {

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/dapr-platform/common"
@@ -296,17 +297,42 @@ func syncControlDeviceStatus(itemID string, status int32) {
 		common.Logger.Errorf("查询展项 %s 的中控设备失败: %v", itemID, err)
 		return
 	}
+
+	var toUpdate []model.Ebcp_control_device
 	for _, device := range devices {
-		if device.Status == status {
-			continue
-		}
-		device.Status = status
-		device.UpdatedTime = common.LocalTime(time.Now())
-		if err := common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(),
-			device, model.Ebcp_control_deviceTableInfo.Name, "id"); err != nil {
-			common.Logger.Errorf("更新中控设备 %s 状态失败: %v", device.ID, err)
+		if device.Status != status {
+			toUpdate = append(toUpdate, device)
 		}
 	}
+	if len(toUpdate) == 0 {
+		return
+	}
+
+	workers := maxWorkers
+	if len(toUpdate) < workers {
+		workers = len(toUpdate)
+	}
+	jobs := make(chan model.Ebcp_control_device, len(toUpdate))
+	var wg sync.WaitGroup
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for d := range jobs {
+				d.Status = status
+				d.UpdatedTime = common.LocalTime(time.Now())
+				if err := common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(),
+					d, model.Ebcp_control_deviceTableInfo.Name, "id"); err != nil {
+					common.Logger.Errorf("更新中控设备 %s 状态失败: %v", d.ID, err)
+				}
+			}
+		}()
+	}
+	for _, d := range toUpdate {
+		jobs <- d
+	}
+	close(jobs)
+	wg.Wait()
 }
 
 // PauseExhibitionItem 暂停单个展项
