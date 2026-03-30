@@ -335,6 +335,89 @@ func syncControlDeviceStatus(itemID string, status int32) {
 	wg.Wait()
 }
 
+// SyncItemStatusByDevices 根据展项下所有中控设备的状态，条件性同步展项及上级状态
+// 所有设备都停止 → 展项=Stop → 继续向上条件性传播（展厅→展览）
+func SyncItemStatusByDevices(itemID string) error {
+	if itemID == "" {
+		return nil
+	}
+	devices, err := common.DbQuery[model.Ebcp_control_device](context.Background(), common.GetDaprClient(),
+		model.Ebcp_control_deviceTableInfo.Name, model.Ebcp_control_device_FIELD_NAME_item_id+"="+itemID)
+	if err != nil {
+		return fmt.Errorf("查询中控设备失败: %v", err)
+	}
+	if len(devices) == 0 {
+		return nil
+	}
+	allStopped := true
+	for _, d := range devices {
+		if d.Status != ItemStatusStop {
+			allStopped = false
+			break
+		}
+	}
+	if !allStopped {
+		return nil
+	}
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_itemTableInfo.Name, "id="+itemID)
+	if err != nil || item == nil {
+		return fmt.Errorf("获取展项信息失败: %v", err)
+	}
+	if item.Status != ItemStatusStop {
+		item.Status = ItemStatusStop
+		item.UpdatedTime = common.LocalTime(time.Now())
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
+		}
+		common.Logger.Infof("展项 [%s] 下所有设备已停止，同步展项状态为停止", itemID)
+	}
+	if item.RoomID != "" {
+		if err := SyncRoomStatusByItems(item.RoomID); err != nil {
+			common.Logger.Errorf("同步展厅状态失败: %v", err)
+		}
+	}
+	if item.ExhibitionID != "" {
+		if err := SyncExhibitionStatusByRooms(item.ExhibitionID); err != nil {
+			common.Logger.Errorf("同步展览状态失败: %v", err)
+		}
+	}
+	return nil
+}
+
+// PropagateDeviceStartUpward 中控设备启动后，无条件向上传播：展项→展厅→展览
+func PropagateDeviceStartUpward(itemID string) error {
+	if itemID == "" {
+		return nil
+	}
+	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+		model.Ebcp_exhibition_itemTableInfo.Name, "id="+itemID)
+	if err != nil || item == nil {
+		return fmt.Errorf("获取展项信息失败: %v", err)
+	}
+	if item.Status != ItemStatusStart {
+		item.Status = ItemStatusStart
+		item.UpdatedTime = common.LocalTime(time.Now())
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),
+			*item, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
+		}
+		common.Logger.Infof("中控设备启动，无条件设展项 [%s] 为启动", itemID)
+	}
+	if item.RoomID != "" {
+		if err := UpdateRoomStatus(item.RoomID, ItemStatusStart); err != nil {
+			common.Logger.Errorf("更新展厅状态失败: %v", err)
+		}
+	}
+	if item.ExhibitionID != "" {
+		if err := UpdateExhibitionStatus(item.ExhibitionID, ItemStatusStart); err != nil {
+			common.Logger.Errorf("更新展览状态失败: %v", err)
+		}
+	}
+	return nil
+}
+
 // PauseExhibitionItem 暂停单个展项
 func PauseExhibitionItem(id string) error {
 	item, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(),

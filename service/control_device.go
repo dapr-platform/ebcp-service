@@ -40,76 +40,89 @@ func ControlDeviceCommand(deviceIP string, devicePort int32, command string, cmd
 	}
 
 	if deviceType == "control_device" {
-		// 查询中控设备
 		controlDevice, err := common.DbGetOne[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), model.Ebcp_control_deviceTableInfo.Name, model.Ebcp_control_device_FIELD_NAME_id+"="+deviceId)
 		if err != nil {
 			return fmt.Errorf("查询中控设备失败: %v", err)
 		}
-		if cmdType == "start" {
-			// 启动中控设备
-			controlDevice.Status = ItemStatusStart
-			controlDevice.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
-		} else if cmdType == "stop" {
-			// 停止中控设备
-			controlDevice.Status = ItemStatusStop
-			controlDevice.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
-		} else if cmdType == "pause" {
-			// 暂停中控设备
-			controlDevice.Status = ItemStatusPause
-			controlDevice.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+
+		var newStatus int32
+		switch cmdType {
+		case "start":
+			newStatus = ItemStatusStart
+		case "stop":
+			newStatus = ItemStatusStop
+		case "pause":
+			newStatus = ItemStatusPause
+		default:
+			return fmt.Errorf("未知命令类型: %s", cmdType)
 		}
+
+		controlDevice.Status = newStatus
+		controlDevice.UpdatedTime = common.LocalTime(time.Now())
+		if err := common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), *controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新中控设备状态失败: %v", err)
+		}
+
+		// 向上传播状态
+		if controlDevice.ItemID != "" {
+			if cmdType == "start" {
+				if err := PropagateDeviceStartUpward(controlDevice.ItemID); err != nil {
+					common.Logger.Errorf("中控设备启动向上传播失败: %v", err)
+				}
+			} else if cmdType == "stop" {
+				if err := SyncItemStatusByDevices(controlDevice.ItemID); err != nil {
+					common.Logger.Errorf("中控设备停止向上传播失败: %v", err)
+				}
+			}
+		}
+
 	} else if deviceType == "item" {
-		// 查询展项
 		exhibitionItem, err := common.DbGetOne[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), model.Ebcp_exhibition_itemTableInfo.Name, model.Ebcp_exhibition_item_FIELD_NAME_id+"="+deviceId)
 		if err != nil {
 			return fmt.Errorf("查询展项失败: %v", err)
 		}
-		controlDevices, err := common.DbQuery[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), model.Ebcp_control_deviceTableInfo.Name, model.Ebcp_control_device_FIELD_NAME_item_id+"="+deviceId)
-		if err != nil {
-			return fmt.Errorf("查询中控设备失败: %v", err)
+
+		var newStatus int32
+		switch cmdType {
+		case "start":
+			newStatus = ItemStatusStart
+		case "stop":
+			newStatus = ItemStatusStop
+		case "pause":
+			newStatus = ItemStatusPause
+		default:
+			return fmt.Errorf("未知命令类型: %s", cmdType)
 		}
 
+		exhibitionItem.Status = newStatus
+		exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
+		if err := common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id"); err != nil {
+			return fmt.Errorf("更新展项状态失败: %v", err)
+		}
+		syncControlDeviceStatus(deviceId, newStatus)
+
+		// 向上传播状态
 		if cmdType == "start" {
-			// 启动展项
-			exhibitionItem.Status = ItemStatusStart
-			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
-			for _, controlDevice := range controlDevices {
-				if controlDevice.Status == ItemStatusStart {
-					continue
+			if exhibitionItem.RoomID != "" {
+				if err := UpdateRoomStatus(exhibitionItem.RoomID, ItemStatusStart); err != nil {
+					common.Logger.Errorf("更新展厅状态失败: %v", err)
 				}
-				controlDevice.Status = ItemStatusStart
-				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
+			}
+			if exhibitionItem.ExhibitionID != "" {
+				if err := UpdateExhibitionStatus(exhibitionItem.ExhibitionID, ItemStatusStart); err != nil {
+					common.Logger.Errorf("更新展览状态失败: %v", err)
+				}
 			}
 		} else if cmdType == "stop" {
-			// 停止展项
-			exhibitionItem.Status = ItemStatusStop
-			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
-			for _, controlDevice := range controlDevices {
-				if controlDevice.Status == ItemStatusStop {
-					continue
+			if exhibitionItem.RoomID != "" {
+				if err := SyncRoomStatusByItems(exhibitionItem.RoomID); err != nil {
+					common.Logger.Errorf("同步展厅状态失败: %v", err)
 				}
-				controlDevice.Status = ItemStatusStop
-				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
 			}
-		} else if cmdType == "pause" {
-			// 暂停展项
-			exhibitionItem.Status = ItemStatusPause
-			exhibitionItem.UpdatedTime = common.LocalTime(time.Now())
-			common.DbUpsert[model.Ebcp_exhibition_item](context.Background(), common.GetDaprClient(), *exhibitionItem, model.Ebcp_exhibition_itemTableInfo.Name, "id")
-			for _, controlDevice := range controlDevices {
-				if controlDevice.Status == ItemStatusPause {
-					continue
+			if exhibitionItem.ExhibitionID != "" {
+				if err := SyncExhibitionStatusByRooms(exhibitionItem.ExhibitionID); err != nil {
+					common.Logger.Errorf("同步展览状态失败: %v", err)
 				}
-				controlDevice.Status = ItemStatusPause
-				controlDevice.UpdatedTime = common.LocalTime(time.Now())
-				common.DbUpsert[model.Ebcp_control_device](context.Background(), common.GetDaprClient(), controlDevice, model.Ebcp_control_deviceTableInfo.Name, "id")
 			}
 		}
 	}
