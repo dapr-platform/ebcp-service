@@ -104,6 +104,8 @@ func batchUpsertEbcp_exhibition_roomHandler(w http.ResponseWriter, r *http.Reque
 // @Param exhibition_id query string false "exhibition_id"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
+// @Param background query string false "background"
+// @Param monitor query string false "monitor"
 // @Produce  json
 // @Success 200 {object} common.Response{data=common.PageGeneric[model.Ebcp_exhibition_room]} "objects array"
 // @Failure 500 {object} common.Response ""
@@ -137,6 +139,8 @@ func Ebcp_exhibition_roomPageListHandler(w http.ResponseWriter, r *http.Request)
 // @Param exhibition_id query string false "exhibition_id"
 // @Param status query string false "status"
 // @Param remarks query string false "remarks"
+// @Param background query string false "background"
+// @Param monitor query string false "monitor"
 // @Produce  json
 // @Success 200 {object} common.Response{data=[]model.Ebcp_exhibition_room} "objects array"
 // @Failure 500 {object} common.Response ""

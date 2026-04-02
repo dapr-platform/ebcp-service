@@ -30,11 +30,13 @@ Table: o_ebcp_exhibition_room
 [ 9] exhibition_id                                  VARCHAR(32)          null: true   primary: false  isArray: false  auto: false  col: VARCHAR         len: 32      default: []
 [10] status                                         INT4                 null: false  primary: false  isArray: false  auto: false  col: INT4            len: -1      default: [1]
 [11] remarks                                        TEXT                 null: true   primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[12] background                                     TEXT                 null: false  primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
+[13] monitor                                        TEXT                 null: false  primary: false  isArray: false  auto: false  col: TEXT            len: -1      default: []
 
 
 JSON Sample
 -------------------------------------
-{    "id": "SLglYLYoiLZZDWwUQcNepHbfo",    "created_by": "HQuxGaQNwBNmMsPDntpvRbmXv",    "created_time": 61,    "updated_by": "PJNcMNbhMngHZcgNoKTQAiMWO",    "updated_time": 17,    "name": "MMJnyDYxhKhWDcxjELePaJDyv",    "location": "fcVobeWcuHKQhOWfiwOvwIToo",    "exhibition_hall_id": "PZrHByHSmfZTboIopxbPHqiKi",    "floor": "GACvCJkGAnMZcjvWGZEPjuHXD",    "exhibition_id": "PbbXhLrvGWeyBeSYHmGdpfFKR",    "status": 19,    "remarks": "YoBYxsWxCmkxLwLLgPbUwdeaJ"}
+{    "id": "gKFROeRvMXxMtpYKPKVeQqAUo",    "created_by": "TWQcUcwNdCMErtayDcipJIfVN",    "created_time": 38,    "updated_by": "VELpFhFJFrDPBjcCXJlnfGyVL",    "updated_time": 73,    "name": "qYrIUOFlhHSDVWJUNPIrYmGNp",    "location": "XQYqYanChLwXQddZlprxBirRd",    "exhibition_hall_id": "yWJrHDWWpHSISVJniAQBugZrv",    "floor": "qjKoeXbbEEDaGLCbBexREmLOM",    "exhibition_id": "OZMPtSKisIuUrTlMPtbcUITMP",    "status": 35,    "remarks": "GKKKSBbOalJpuqgfShrZxgFce",    "background": "lkbYNFgMElcrVfldAcNnXtmEj",    "monitor": "JmmKGPcFwhMSJvISTwnqoHWEN"}
 
 
 
@@ -64,6 +66,10 @@ var (
 	Ebcp_exhibition_room_FIELD_NAME_status = "status"
 
 	Ebcp_exhibition_room_FIELD_NAME_remarks = "remarks"
+
+	Ebcp_exhibition_room_FIELD_NAME_background = "background"
+
+	Ebcp_exhibition_room_FIELD_NAME_monitor = "monitor"
 )
 
 // Ebcp_exhibition_room struct is a row record of the o_ebcp_exhibition_room table in the  database
@@ -91,6 +97,10 @@ type Ebcp_exhibition_room struct {
 	Status int32 `json:"status"` //状态（1: 正常, 2: 未使用, 3: 维修）
 
 	Remarks string `json:"remarks"` //备注
+
+	Background string `json:"background"` //背景图
+
+	Monitor string `json:"monitor"` //监控信息
 
 }
 
@@ -348,6 +358,48 @@ var Ebcp_exhibition_roomTableInfo = &TableInfo{
 			ProtobufFieldName:  "remarks",
 			ProtobufType:       "string",
 			ProtobufPos:        12,
+		},
+
+		&ColumnInfo{
+			Index:              12,
+			Name:               "background",
+			Comment:            `背景图`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
+			GoFieldName:        "Background",
+			GoFieldType:        "string",
+			JSONFieldName:      "background",
+			ProtobufFieldName:  "background",
+			ProtobufType:       "string",
+			ProtobufPos:        13,
+		},
+
+		&ColumnInfo{
+			Index:              13,
+			Name:               "monitor",
+			Comment:            `监控信息`,
+			Notes:              ``,
+			Nullable:           false,
+			DatabaseTypeName:   "TEXT",
+			DatabaseTypePretty: "TEXT",
+			IsPrimaryKey:       false,
+			IsAutoIncrement:    false,
+			IsArray:            false,
+			ColumnType:         "TEXT",
+			ColumnLength:       -1,
+			GoFieldName:        "Monitor",
+			GoFieldType:        "string",
+			JSONFieldName:      "monitor",
+			ProtobufFieldName:  "monitor",
+			ProtobufType:       "string",
+			ProtobufPos:        14,
 		},
 	},
 }
