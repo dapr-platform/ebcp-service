@@ -187,6 +187,12 @@ const docTemplate = `{
                         "description": "commands",
                         "name": "commands",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "index_num",
+                        "name": "index_num",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -357,6 +363,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_id",
                         "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "index_num",
+                        "name": "index_num",
                         "in": "query"
                     },
                     {
@@ -607,6 +619,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "item_id",
                         "name": "item_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "index_num",
+                        "name": "index_num",
                         "in": "query"
                     },
                     {
@@ -959,6 +977,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "commands",
                         "name": "commands",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "index_num",
+                        "name": "index_num",
                         "in": "query"
                     }
                 ],
@@ -1548,6 +1572,432 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_area_info"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-floor": {
+            "get": {
+                "description": "query objects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "query objects",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "short_name",
+                        "name": "short_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort_order",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "background",
+                        "name": "background",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "monitor",
+                        "name": "monitor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ebcp_exhibition_floor"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "save",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "save",
+                "parameters": [
+                    {
+                        "description": "object",
+                        "name": "item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Ebcp_exhibition_floor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_exhibition_floor"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-floor/batch-delete": {
+            "post": {
+                "description": "batch delete",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "batch delete",
+                "parameters": [
+                    {
+                        "description": "id array",
+                        "name": "ids",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-floor/batch-upsert": {
+            "post": {
+                "description": "batch update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "batch update",
+                "parameters": [
+                    {
+                        "description": "objects array",
+                        "name": "entities",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-floor/page": {
+            "get": {
+                "description": "page query, _page(from 1 begin), _page_size, _order, and others fields, status=1, name=$like.%CAM%",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "page query",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page",
+                        "name": "_page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "_page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "_select",
+                        "name": "_select",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "created_time",
+                        "name": "created_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_by",
+                        "name": "updated_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "updated_time",
+                        "name": "updated_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "short_name",
+                        "name": "short_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "sort_order",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "background",
+                        "name": "background",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "monitor",
+                        "name": "monitor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "objects array",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/common.PageGeneric-model_Ebcp_exhibition_floor"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ebcp-exhibition-floor/{id}": {
+            "delete": {
+                "description": "delete",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "楼层"
+                ],
+                "summary": "delete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "实例id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "object",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ebcp_exhibition_floor"
                                         }
                                     }
                                 }
@@ -3690,6 +4140,18 @@ const docTemplate = `{
                         "description": "remarks",
                         "name": "remarks",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "background",
+                        "name": "background",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "monitor",
+                        "name": "monitor",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4118,7 +4580,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展览展厅展项信息视图"
+                    "展览信息视图"
                 ],
                 "summary": "query objects",
                 "parameters": [
@@ -4221,7 +4683,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "展览展厅展项信息视图"
+                    "展览信息视图"
                 ],
                 "summary": "page query",
                 "parameters": [
@@ -4524,6 +4986,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "remarks",
                         "name": "remarks",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "background",
+                        "name": "background",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "monitor",
+                        "name": "monitor",
                         "in": "query"
                     }
                 ],
@@ -9163,11 +9637,22 @@ const docTemplate = `{
                 "command": {
                     "type": "string"
                 },
+                "device_id": {
+                    "type": "string"
+                },
                 "device_ip": {
                     "type": "string"
                 },
                 "device_port": {
                     "type": "integer"
+                },
+                "device_type": {
+                    "description": "item,control_device",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "start,stop,...",
+                    "type": "string"
                 }
             }
         },
@@ -9177,11 +9662,21 @@ const docTemplate = `{
                 "command": {
                     "type": "string"
                 },
+                "device_id": {
+                    "type": "string"
+                },
                 "device_ip": {
                     "type": "string"
                 },
                 "device_port": {
                     "type": "integer"
+                },
+                "device_type": {
+                    "type": "string"
+                },
+                "type": {
+                    "description": "start,stop,...",
+                    "type": "string"
                 }
             }
         },
@@ -9267,6 +9762,26 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Ebcp_exhibition_area_info"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "common.PageGeneric-model_Ebcp_exhibition_floor": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Ebcp_exhibition_floor"
                     }
                 },
                 "page": {
@@ -9595,6 +10110,10 @@ const docTemplate = `{
                     "description": "id",
                     "type": "string"
                 },
+                "index_num": {
+                    "description": "序号",
+                    "type": "integer"
+                },
                 "ip_address": {
                     "description": "ip_address",
                     "type": "string"
@@ -9675,6 +10194,10 @@ const docTemplate = `{
                 "id": {
                     "description": "设备ID",
                     "type": "string"
+                },
+                "index_num": {
+                    "description": "index_num",
+                    "type": "integer"
                 },
                 "ip_address": {
                     "description": "IP地址",
@@ -9871,6 +10394,51 @@ const docTemplate = `{
                 "room_status": {
                     "description": "展厅状态",
                     "type": "integer"
+                }
+            }
+        },
+        "model.Ebcp_exhibition_floor": {
+            "type": "object",
+            "properties": {
+                "background": {
+                    "description": "背景图",
+                    "type": "string"
+                },
+                "created_by": {
+                    "description": "created_by",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "created_time",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "monitor": {
+                    "description": "监控信息",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "楼层名称",
+                    "type": "string"
+                },
+                "short_name": {
+                    "description": "楼层简称",
+                    "type": "string"
+                },
+                "sort_order": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "updated_by": {
+                    "description": "updated_by",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "updated_time",
+                    "type": "string"
                 }
             }
         },
@@ -10132,6 +10700,10 @@ const docTemplate = `{
         "model.Ebcp_exhibition_room": {
             "type": "object",
             "properties": {
+                "background": {
+                    "description": "背景图",
+                    "type": "string"
+                },
                 "created_by": {
                     "description": "created_by",
                     "type": "string"
@@ -10158,6 +10730,10 @@ const docTemplate = `{
                 },
                 "location": {
                     "description": "展厅位置(西侧，西北侧)",
+                    "type": "string"
+                },
+                "monitor": {
+                    "description": "监控信息",
                     "type": "string"
                 },
                 "name": {
@@ -10791,23 +11367,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "rel_type": {
-                    "description": "关联类型,exhibition,room",
+                    "description": "关联类型",
                     "type": "string"
                 },
                 "start_date": {
-                    "description": "开始日期,yyyy-mm-dd",
+                    "description": "开始日期",
                     "type": "string"
                 },
                 "start_time": {
-                    "description": "启动时间,HH:mm",
+                    "description": "启动时间",
                     "type": "string"
                 },
                 "stop_date": {
-                    "description": "停止日期,yyyy-mm-dd",
+                    "description": "停止日期",
                     "type": "string"
                 },
                 "stop_time": {
-                    "description": "停止时间,HH:mm",
+                    "description": "停止时间",
                     "type": "string"
                 },
                 "updated_by": {

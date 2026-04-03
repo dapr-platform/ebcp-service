@@ -13,19 +13,34 @@ definitions:
     properties:
       command:
         type: string
+      device_id:
+        type: string
       device_ip:
         type: string
       device_port:
         type: integer
+      device_type:
+        description: item,control_device
+        type: string
+      type:
+        description: start,stop,...
+        type: string
     type: object
   api.StaticControlExhibitionRoomRequest:
     properties:
       command:
         type: string
+      device_id:
+        type: string
       device_ip:
         type: string
       device_port:
         type: integer
+      device_type:
+        type: string
+      type:
+        description: start,stop,...
+        type: string
     type: object
   common.Page:
     properties:
@@ -81,6 +96,19 @@ definitions:
       items:
         items:
           $ref: '#/definitions/model.Ebcp_exhibition_area_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  common.PageGeneric-model_Ebcp_exhibition_floor:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_floor'
         type: array
       page:
         type: integer
@@ -297,6 +325,9 @@ definitions:
       id:
         description: id
         type: string
+      index_num:
+        description: 序号
+        type: integer
       ip_address:
         description: ip_address
         type: string
@@ -357,6 +388,9 @@ definitions:
       id:
         description: 设备ID
         type: string
+      index_num:
+        description: index_num
+        type: integer
       ip_address:
         description: IP地址
         type: string
@@ -502,6 +536,39 @@ definitions:
       room_status:
         description: 展厅状态
         type: integer
+    type: object
+  model.Ebcp_exhibition_floor:
+    properties:
+      background:
+        description: 背景图
+        type: string
+      created_by:
+        description: created_by
+        type: string
+      created_time:
+        description: created_time
+        type: string
+      id:
+        description: id
+        type: string
+      monitor:
+        description: 监控信息
+        type: string
+      name:
+        description: 楼层名称
+        type: string
+      short_name:
+        description: 楼层简称
+        type: string
+      sort_order:
+        description: 排序
+        type: integer
+      updated_by:
+        description: updated_by
+        type: string
+      updated_time:
+        description: updated_time
+        type: string
     type: object
   model.Ebcp_exhibition_hall:
     properties:
@@ -692,6 +759,9 @@ definitions:
     type: object
   model.Ebcp_exhibition_room:
     properties:
+      background:
+        description: 背景图
+        type: string
       created_by:
         description: created_by
         type: string
@@ -712,6 +782,9 @@ definitions:
         type: string
       location:
         description: 展厅位置(西侧，西北侧)
+        type: string
+      monitor:
+        description: 监控信息
         type: string
       name:
         description: 展厅名称
@@ -1177,19 +1250,19 @@ definitions:
         description: 关联ID
         type: string
       rel_type:
-        description: 关联类型,exhibition,room
+        description: 关联类型
         type: string
       start_date:
-        description: 开始日期,yyyy-mm-dd
+        description: 开始日期
         type: string
       start_time:
-        description: 启动时间,HH:mm
+        description: 启动时间
         type: string
       stop_date:
-        description: 停止日期,yyyy-mm-dd
+        description: 停止日期
         type: string
       stop_time:
-        description: 停止时间,HH:mm
+        description: 停止时间
         type: string
       updated_by:
         description: updated_by
@@ -1318,6 +1391,10 @@ paths:
         in: query
         name: commands
         type: string
+      - description: index_num
+        in: query
+        name: index_num
+        type: string
       produces:
       - application/json
       responses:
@@ -1424,6 +1501,10 @@ paths:
       - description: item_id
         in: query
         name: item_id
+        type: string
+      - description: index_num
+        in: query
+        name: index_num
         type: string
       - description: item_name
         in: query
@@ -1589,6 +1670,10 @@ paths:
       - description: item_id
         in: query
         name: item_id
+        type: string
+      - description: index_num
+        in: query
+        name: index_num
         type: string
       - description: item_name
         in: query
@@ -1849,6 +1934,10 @@ paths:
       - description: commands
         in: query
         name: commands
+        type: string
+      - description: index_num
+        in: query
+        name: index_num
         type: string
       produces:
       - application/json
@@ -2204,6 +2293,277 @@ paths:
       summary: page query
       tags:
       - 展览区域信息视图
+  /ebcp-exhibition-floor:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: short_name
+        in: query
+        name: short_name
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      - description: background
+        in: query
+        name: background
+        type: string
+      - description: monitor
+        in: query
+        name: monitor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_exhibition_floor'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - 楼层
+    post:
+      consumes:
+      - application/json
+      description: save
+      parameters:
+      - description: object
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/model.Ebcp_exhibition_floor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: object
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ebcp_exhibition_floor'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: save
+      tags:
+      - 楼层
+  /ebcp-exhibition-floor/{id}:
+    delete:
+      description: delete
+      parameters:
+      - description: 实例id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: object
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ebcp_exhibition_floor'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: delete
+      tags:
+      - 楼层
+  /ebcp-exhibition-floor/batch-delete:
+    post:
+      consumes:
+      - application/json
+      description: batch delete
+      parameters:
+      - description: id array
+        in: body
+        name: ids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: batch delete
+      tags:
+      - 楼层
+  /ebcp-exhibition-floor/batch-upsert:
+    post:
+      consumes:
+      - application/json
+      description: batch update
+      parameters:
+      - description: objects array
+        in: body
+        name: entities
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: batch update
+      tags:
+      - 楼层
+  /ebcp-exhibition-floor/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: created_by
+        in: query
+        name: created_by
+        type: string
+      - description: created_time
+        in: query
+        name: created_time
+        type: string
+      - description: updated_by
+        in: query
+        name: updated_by
+        type: string
+      - description: updated_time
+        in: query
+        name: updated_time
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: short_name
+        in: query
+        name: short_name
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      - description: background
+        in: query
+        name: background
+        type: string
+      - description: monitor
+        in: query
+        name: monitor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_floor'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - 楼层
   /ebcp-exhibition-hall:
     get:
       description: query objects
@@ -3573,6 +3933,14 @@ paths:
         in: query
         name: remarks
         type: string
+      - description: background
+        in: query
+        name: background
+        type: string
+      - description: monitor
+        in: query
+        name: monitor
+        type: string
       produces:
       - application/json
       responses:
@@ -3908,7 +4276,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: query objects
       tags:
-      - 展览展厅展项信息视图
+      - 展览信息视图
   /ebcp-exhibition-room-item-info/page:
     get:
       description: page query, _page(from 1 begin), _page_size, _order, and others
@@ -3983,7 +4351,7 @@ paths:
             $ref: '#/definitions/common.Response'
       summary: page query
       tags:
-      - 展览展厅展项信息视图
+      - 展览信息视图
   /ebcp-exhibition-room/{id}:
     delete:
       description: delete
@@ -4140,6 +4508,14 @@ paths:
       - description: remarks
         in: query
         name: remarks
+        type: string
+      - description: background
+        in: query
+        name: background
+        type: string
+      - description: monitor
+        in: query
+        name: monitor
         type: string
       produces:
       - application/json
