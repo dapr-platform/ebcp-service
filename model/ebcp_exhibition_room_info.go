@@ -40,7 +40,7 @@ Table: v_ebcp_exhibition_room_info
 
 JSON Sample
 -------------------------------------
-{    "id": "fkrcENARaZPHNhxACbBOGPqMG",    "name": "bkJhrNMWeWYGZaBRSLFQKkOFV",    "floor": "UkwdXtBEqrpMCGlBWDYvneNGj",    "floor_value": "FDCZSyubJSSSrprrwIrZwteJP",    "floor_name": "DIJReCnpZqtMWApIHHeIGLAvD",    "location": "DkQfRhREOMXVGwViRvayEpdpm",    "location_value": "qhGvCKYppXumlNmMaxtbSHMxP",    "location_name": "vsyqbNcMUaxItMQCfcoyxGuDt",    "status": 48,    "remarks": "UFaeKdFxVkmfQpqyokdcgZntO",    "exhibition_id": "SxbeTnDekkMAdLtIaikFFsDGl",    "exhibition_name": "HDLuKVmlmOucQgdncdTcDuUyJ",    "exhibition_start_time": 70,    "exhibition_end_time": 72,    "exhibition_status": 58,    "item_count": 90,    "items": 13,    "control_devices": 46}
+{    "id": "SWuTewClRDFUKrudfshLJpvtn",    "name": "OiBRoWUYHmqmmRonATYVgRsKX",    "floor": "CGqBXThLGvPHtQPDcZwffrnnB",    "floor_value": "dHRYISxswllGnWTiudgjmQchK",    "floor_name": "gwZmmiBbMFHAQRsFvCFSVyFso",    "location": "kHQPXFONTBKqDqHaqYOesMVWg",    "location_value": "gVjCgFfoNtCYdPgpTTJcOPUAM",    "location_name": "vLyMZvAmliruWTYyxpBYQuodK",    "status": 19,    "remarks": "aoPsrqCXlWVQBsIdTAxZONsmw",    "exhibition_id": "fPSrMrFtTXLoasKklrOFCbDBX",    "exhibition_name": "EVlPZNoCjfKelIOidcepTpkOs",    "exhibition_start_time": 15,    "exhibition_end_time": 40,    "exhibition_status": 74,    "item_count": 69,    "items": 64,    "control_devices": 31}
 
 
 Comments

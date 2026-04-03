@@ -117,6 +117,19 @@ definitions:
       total:
         type: integer
     type: object
+  common.PageGeneric-model_Ebcp_exhibition_floor_info:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.Ebcp_exhibition_floor_info'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
   common.PageGeneric-model_Ebcp_exhibition_hall:
     properties:
       items:
@@ -569,6 +582,21 @@ definitions:
       updated_time:
         description: updated_time
         type: string
+    type: object
+  model.Ebcp_exhibition_floor_info:
+    properties:
+      id:
+        description: id
+        type: string
+      name:
+        description: name
+        type: string
+      short_name:
+        description: short_name
+        type: string
+      sort_order:
+        description: sort_order
+        type: integer
     type: object
   model.Ebcp_exhibition_hall:
     properties:
@@ -2396,6 +2424,114 @@ paths:
       summary: save
       tags:
       - 楼层
+  /ebcp-exhibition-floor-info:
+    get:
+      description: query objects
+      parameters:
+      - description: _select
+        in: query
+        name: _select
+        type: string
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: short_name
+        in: query
+        name: short_name
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ebcp_exhibition_floor_info'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: query objects
+      tags:
+      - Ebcp_exhibition_floor_info
+  /ebcp-exhibition-floor-info/page:
+    get:
+      description: page query, _page(from 1 begin), _page_size, _order, and others
+        fields, status=1, name=$like.%CAM%
+      parameters:
+      - description: current page
+        in: query
+        name: _page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: _page_size
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: _order
+        type: string
+      - description: _select
+        in: query
+        name: _select
+        required: true
+        type: string
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: short_name
+        in: query
+        name: short_name
+        type: string
+      - description: sort_order
+        in: query
+        name: sort_order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: objects array
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/common.PageGeneric-model_Ebcp_exhibition_floor_info'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: page query
+      tags:
+      - Ebcp_exhibition_floor_info
   /ebcp-exhibition-floor/{id}:
     delete:
       description: delete
