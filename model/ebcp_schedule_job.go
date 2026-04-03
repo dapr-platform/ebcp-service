@@ -35,7 +35,7 @@ Table: o_ebcp_schedule_job
 
 JSON Sample
 -------------------------------------
-{    "id": "FTgByKdJryemcIrpNEUbSONdS",    "created_by": "AhnyXoxpjystFrCjjohdCowxp",    "created_time": 81,    "updated_by": "GQsScYIETRaSkvBJtsclsmolj",    "updated_time": 74,    "rel_id": "ZRQOAbueOvPLdtexdyDbeBUhV",    "rel_type": "cybJluUXMOoIEGdCudoIPCOQm",    "start_time": "oVyFGLXpXItdjdbyplanXxJAF",    "stop_time": "pUtNLHcplNSSRJAeUhmWpdjHk",    "start_date": "xhLNLIAJweYtTQnuGSSVSSqXZ",    "stop_date": "CRfoBQehDfLqguKwSjwFMURqf",    "week_days": "xFaQXLQSFtUrwqbJlLHZnGFrN",    "enabled": 17}
+{    "id": "uXIjuAvFwgjVwZVSdPyQrIufS",    "created_by": "JQPpZLwfOdprJOrMqiSgsvkLY",    "created_time": 72,    "updated_by": "WHMgtwhPtFmPdKjPucSjZbwMC",    "updated_time": 80,    "rel_id": "ZNvQnRClvpvckDsPevmWmlchE",    "rel_type": "CCvjBvEsyRuCIcAqlBtpBPFRQ",    "start_time": "MoScxCZUmBkkHsrRQCEAbSZjY",    "stop_time": "XOtMgcMumvFLYsSIrTZurUYIp",    "start_date": "jEoeFcEnnSRluTxAlarRaPxcw",    "stop_date": "kqfTRakTgAVIHOpOpgBvekKme",    "week_days": "PGoKZkjkswFQNPFGhoHhIicfy",    "enabled": 75}
 
 
 

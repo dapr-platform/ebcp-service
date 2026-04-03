@@ -37,7 +37,7 @@ Table: o_ebcp_control_device
 
 JSON Sample
 -------------------------------------
-{    "id": "mpIycuYWmqYTWqalukIWVSEix",    "created_by": "TYGGnXyXiYGtGbulJfghbBWfu",    "created_time": 73,    "updated_by": "soGScAgnmVoyAAaNKPwtWnBOd",    "updated_time": 24,    "name": "bROqptIQfIXiXXjMvliXYrnJR",    "device_type": "HBDipntJGMlpiCGVrTixnwmfi",    "ip_address": "jMBESsbCTZIyxmcWemyRjixAK",    "port": 39,    "version": "eMTrRxpWmcdWpTjEuVOBCRrwc",    "room_id": "BnibhIaVCIPQDvHNxNKjYEsUX",    "item_id": "ZCVOPoBoMlscRmEBulwpWIEiU",    "status": 85,    "commands": "KkJPuCgGruwuRXKfIveRUUHsO",    "index_num": 2}
+{    "id": "IemrIBRAxKWoEEfwOINqMwuhj",    "created_by": "VtVXeikEZRsdZJLxSVtUkUhFh",    "created_time": 40,    "updated_by": "RlujyhdOKMNPjijMeRpQIAwOQ",    "updated_time": 93,    "name": "nTNdrFmIcgMtafKKWiVKsmKYR",    "device_type": "cVvARorLOjmAjwXYxIZILyFKF",    "ip_address": "lBHRyGFhpYCuflYVgCXHwkdZg",    "port": 1,    "version": "mCrmVglDwnifyTYpRtxMtSBXc",    "room_id": "kTPopjxsDVTWANNpeasfYVViE",    "item_id": "ulCqRQpHfZgdhppjjbTcOyAEd",    "status": 13,    "commands": "EELWBmZcSnUAaJOehhqFAJvCT",    "index_num": 85}
 
 
 
